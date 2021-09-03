@@ -60,6 +60,7 @@ extern DataTable *cowTable;
 extern DataTable *monsterTable;
 extern DataTable *spellTable;
 extern DataTable *playerTable;
+extern DataTable *missileTable;
 
 void DiabloLoadTables(void);
 

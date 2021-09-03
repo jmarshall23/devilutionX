@@ -54,6 +54,9 @@ void InitTownerInfo(int i, const TownerInit &initData)
 		towner.position.x = cowTable->GetInt("x", cowId);
 		towner.position.y = cowTable->GetInt("y", cowId);
 		cowId++;
+
+		if (cowId >= 3)
+			cowId = 0; // stupid hack fix me!
 	} else {
 		towner.position.x = townerDataTable->GetInt("x", initData.type);
 		towner.position.y = townerDataTable->GetInt("y", initData.type);

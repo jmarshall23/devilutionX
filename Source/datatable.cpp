@@ -9,10 +9,12 @@ DataTable *cowTable = nullptr;
 DataTable *monsterTable = nullptr;
 DataTable *spellTable = nullptr;
 DataTable *playerTable = nullptr;
+DataTable *missileTable = nullptr;
 
 namespace devilution {
 	void InitMonsterTable(void);
 	void InitSpellDataTable(void);
+    void InitMissileDataTable(void);
 }
 
 void DiabloLoadTables(void)
@@ -22,9 +24,11 @@ void DiabloLoadTables(void)
 	monsterTable = new DataTable("excel\\monsters.txt");
 	spellTable = new DataTable("excel\\spells.txt");
 	playerTable = new DataTable("excel\\player.txt");
+	missileTable = new DataTable("excel\\missile.txt");
 
 	devilution::InitMonsterTable();
 	devilution::InitSpellDataTable();
+	devilution::InitMissileDataTable();
 }
 
 /*
