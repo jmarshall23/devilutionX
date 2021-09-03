@@ -1581,6 +1581,10 @@ int DiabloMain(int argc, char **argv)
 	SDL_LogSetAllPriority(SDL_LOG_PRIORITY_DEBUG);
 #endif
 
+// jmarshall
+	paths::SetBasePath("../");
+// jmarshall end
+
 	DiabloParseFlags(argc, argv);
 	InitKeymapActions();
 	LoadOptions();

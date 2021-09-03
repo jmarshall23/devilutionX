@@ -57,7 +57,7 @@ namespace {
 
 std::string GetIniPath()
 {
-	auto path = paths::ConfigPath() + std::string("diablo.ini");
+	auto path = paths::BasePath() + std::string("diablo.ini");
 	return path;
 }
 
