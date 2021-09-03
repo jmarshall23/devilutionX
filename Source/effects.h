@@ -1188,4 +1188,6 @@ void ui_sound_init();
 void effects_play_sound(const char *sndFile);
 int GetSFXLength(int nSFX);
 
+_sfx_id SfxIdFromString(std::string str);
+
 } // namespace devilution

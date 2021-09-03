@@ -217,6 +217,8 @@ struct SpellData {
 	int sStaffCost;
 };
 
-extern const SpellData spelldata[];
+extern SpellData *spelldata;
+
+devilution::missile_id MissileIdFromString(std::string str);
 
 } // namespace devilution
