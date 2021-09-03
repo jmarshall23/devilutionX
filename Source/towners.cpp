@@ -257,13 +257,15 @@ void InitDrunk(TownerStruct &towner, const TownerInit &initData)
 
 void InitCows(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 128;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_COW);
+	int delay = townerDataTable->GetInt("delay", TOWN_COW);
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_COW);
 	towner.animOrder = nullptr;
 	towner.animOrderSize = 0;
 	for (int i = 0; i < 8; i++) {
 		towner._tNAnim[i] = CelGetFrame(CowCels.get(), i);
 	}
-	NewTownerAnim(towner, towner._tNAnim[initData.dir], 12, 3);
+	NewTownerAnim(towner, towner._tNAnim[initData.dir], numframes, delay);
 	towner._tAnimFrame = GenerateRnd(11) + 1;
 	towner.name = townerDataTable->GetValue("name", TOWN_COW);
 	/*
@@ -888,7 +890,7 @@ void InitTowners()
 {
 	assert(CowCels == nullptr);
 
-	CowCels = LoadFileInMem("Towners\\Animals\\Cow.CEL");
+	CowCels = LoadFileInMem(townerDataTable->GetValue("path", TOWN_COW));
 
 	int i = 0;
 	for (const auto &townerInit : TownerInitList) {

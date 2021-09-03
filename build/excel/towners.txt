@@ -8,4 +8,4 @@ TOWN_DRUNK,Farnham the Drunk,Towners\Drunk\TwnDrunk.CEL,18,96,3,71,84
 TOWN_WITCH,Adria the Witch,Towners\TownWmn1\Witch.CEL,19,96,6,80,20
 TOWN_BMAID,Gillian the Barmaid,Towners\TownWmn1\WmnN.CEL,18,96,6,43,66
 TOWN_PEGBOY,Wirt the Peg-legged boy,Towners\TownBoy\PegKid1.CEL,20,96,6,11,53
-TOWN_COW,Cow,none,0,0,0,0,0
+TOWN_COW,Cow,Towners\Animals\Cow.CEL,12,128,3,-1,-1
