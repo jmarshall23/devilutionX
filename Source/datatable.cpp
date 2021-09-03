@@ -6,11 +6,19 @@
 
 DataTable *townerDataTable = nullptr;
 DataTable *cowTable = nullptr;
+DataTable *monsterTable = nullptr;
+
+namespace devilution {
+	void InitMonsterTable(void);
+}
 
 void DiabloLoadTables(void)
 {
 	townerDataTable = new DataTable("excel\\towners.txt");
 	cowTable = new DataTable("excel\\cows.txt");
+	monsterTable = new DataTable("excel\\monsters.txt");
+
+	devilution::InitMonsterTable();
 }
 
 /*
