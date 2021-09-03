@@ -49,54 +49,6 @@ int plrxoff2[9] = { 0, 1, 0, 1, 2, 0, 1, 2, 2 };
 /** Specifies the Y-coordinate delta from a player, used for instanced when casting resurrect. */
 int plryoff2[9] = { 0, 0, 1, 1, 0, 2, 2, 1, 2 };
 
-/** Maps from player_class to starting stat in strength. */
-int StrengthTbl[enum_size<HeroClass>::value] = {
-	30,
-	20,
-	15,
-	25,
-	20,
-	40,
-};
-/** Maps from player_class to starting stat in magic. */
-int MagicTbl[enum_size<HeroClass>::value] = {
-	// clang-format off
-	10,
-	15,
-	35,
-	15,
-	20,
-	 0,
-	// clang-format on
-};
-/** Maps from player_class to starting stat in dexterity. */
-int DexterityTbl[enum_size<HeroClass>::value] = {
-	20,
-	30,
-	15,
-	25,
-	25,
-	20,
-};
-/** Maps from player_class to starting stat in vitality. */
-int VitalityTbl[enum_size<HeroClass>::value] = {
-	25,
-	20,
-	20,
-	20,
-	20,
-	25,
-};
-/** Specifies the chance to block bonus of each player class.*/
-int BlockBonuses[enum_size<HeroClass>::value] = {
-	30,
-	20,
-	10,
-	25,
-	25,
-	30,
-};
-
 /** Specifies the experience point limit of each level. */
 uint32_t ExpLvlsTbl[MAXCHARLEVEL] = {
 	0,
@@ -2422,16 +2374,16 @@ void CreatePlayer(int playerId, HeroClass c)
 
 	player._pClass = c;
 
-	player._pBaseStr = StrengthTbl[static_cast<std::size_t>(c)];
+	player._pBaseStr = playerTable->GetInt("str", (int)c);
 	player._pStrength = player._pBaseStr;
 
-	player._pBaseMag = MagicTbl[static_cast<std::size_t>(c)];
+	player._pBaseMag = playerTable->GetInt("magic", (int)c);
 	player._pMagic = player._pBaseMag;
 
-	player._pBaseDex = DexterityTbl[static_cast<std::size_t>(c)];
+	player._pBaseDex = playerTable->GetInt("dex", (int)c);
 	player._pDexterity = player._pBaseDex;
 
-	player._pBaseVit = VitalityTbl[static_cast<std::size_t>(c)];
+	player._pBaseVit = playerTable->GetInt("vit", (int)c);
 	player._pVitality = player._pBaseVit;
 
 	player._pStatPts = 0;
@@ -2444,7 +2396,7 @@ void CreatePlayer(int playerId, HeroClass c)
 
 	player._pLevel = 1;
 
-	player._pBaseToBlk = BlockBonuses[static_cast<std::size_t>(c)];
+	player._pBaseToBlk = playerTable->GetInt("block", (int)c);
 
 	player._pHitPoints = (player._pVitality + 10) << 6;
 	if (player._pClass == HeroClass::Warrior || player._pClass == HeroClass::Barbarian) {

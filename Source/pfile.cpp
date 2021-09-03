@@ -20,6 +20,8 @@
 #include "utils/language.h"
 #include "utils/paths.h"
 
+#include "datatable.h"
+
 namespace devilution {
 
 #define PASSWORD_SPAWN_SINGLE "adslhfb1"
@@ -319,10 +321,10 @@ bool pfile_ui_set_hero_infos(bool (*uiAddHeroInfo)(_uiheroinfo *))
 
 void pfile_ui_set_class_stats(unsigned int playerClass, _uidefaultstats *classStats)
 {
-	classStats->strength = StrengthTbl[playerClass];
-	classStats->magic = MagicTbl[playerClass];
-	classStats->dexterity = DexterityTbl[playerClass];
-	classStats->vitality = VitalityTbl[playerClass];
+	classStats->strength = playerTable->GetInt("str", (int)playerClass);
+	classStats->magic = playerTable->GetInt("magic", (int)playerClass);
+	classStats->dexterity = playerTable->GetInt("dex", (int)playerClass);
+	classStats->vitality = playerTable->GetInt("vit", (int)playerClass);
 }
 
 uint32_t pfile_ui_get_first_unused_save_num()

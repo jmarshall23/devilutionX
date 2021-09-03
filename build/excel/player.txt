@@ -1,7 +1,7 @@
-name,filename
-Warrior,Warrior
-Rogue,Rogue
-Sorceror,Sorceror
-Monk,Monk,
-Bard,Rogue,
-Barbarian,Warrior
+name,filename,str,magic,dex,vit,block
+Warrior,Warrior,30,10,20,25,30
+Rogue,Rogue,20,15,30,20,20
+Sorceror,Sorceror,15,35,15,20,10
+Monk,Monk,25,15,25,20,25
+Bard,Rogue,20,20,25,20,25
+Barbarian,Warrior,40,0,20,25,30
