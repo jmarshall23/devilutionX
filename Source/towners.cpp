@@ -9,6 +9,8 @@
 #include "stores.h"
 #include "utils/language.h"
 
+#include "datatable.h"
+
 namespace devilution {
 namespace {
 
@@ -28,7 +30,6 @@ _sfx_id CowPlaying = SFX_NONE;
 
 struct TownerInit {
 	_talker_id type;
-	Point position;
 	Direction dir;
 	void (*init)(TownerStruct &towner, const TownerInit &initData);
 	void (*talk)(Player &player, TownerStruct &towner);
@@ -45,10 +46,18 @@ void NewTownerAnim(TownerStruct &towner, byte *pAnim, uint8_t numFrames, int del
 
 void InitTownerInfo(int i, const TownerInit &initData)
 {
-	auto &towner = Towners[i];
-
+	auto &towner = Towners[i];	
 	towner._ttype = initData.type;
-	towner.position = initData.position;
+
+	if (initData.type == TOWN_COW) {
+		static int cowId = 0;
+		towner.position.x = cowTable->GetInt("x", cowId);
+		towner.position.y = cowTable->GetInt("y", cowId);
+		cowId++;
+	} else {
+		towner.position.x = townerDataTable->GetInt("x", initData.type);
+		towner.position.y = townerDataTable->GetInt("y", initData.type);
+	}	
 	towner.talk = initData.talk;
 	towner.seed = AdvanceRndSeed(); // TODO: Narrowing conversion, tSeed might need to be uint16_t
 
@@ -71,7 +80,10 @@ void LoadTownerAnimations(TownerStruct &towner, const char *path, int frames, Di
  */
 void InitSmith(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_SMITH);
+	int delay = townerDataTable->GetInt("delay", TOWN_SMITH);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_SMITH);
 	static const uint8_t AnimOrder[] = {
 		// clang-format off
 		5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5,
@@ -85,13 +97,16 @@ void InitSmith(TownerStruct &towner, const TownerInit &initData)
 	};
 	towner.animOrder = AnimOrder;
 	towner.animOrderSize = sizeof(AnimOrder);
-	LoadTownerAnimations(towner, "Towners\\Smith\\SmithN.CEL", 16, initData.dir, 3);
-	towner.name = _("Griswold the Blacksmith");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_SMITH), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_SMITH);
 }
 
 void InitBarOwner(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_TAVERN);
+	int delay = townerDataTable->GetInt("delay", TOWN_TAVERN);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_TAVERN);
 	static const uint8_t AnimOrder[] = {
 		// clang-format off
 		1, 2, 3, 3, 2,  1, 16, 15, 14, 14, 15, 16,
@@ -107,22 +122,31 @@ void InitBarOwner(TownerStruct &towner, const TownerInit &initData)
 	};
 	towner.animOrder = AnimOrder;
 	towner.animOrderSize = sizeof(AnimOrder);
-	LoadTownerAnimations(towner, "Towners\\TwnF\\TwnFN.CEL", 16, initData.dir, 3);
-	towner.name = _("Ogden the Tavern owner");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_TAVERN), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_TAVERN);
 }
 
 void InitTownDead(TownerStruct &towner, const TownerInit &initData)
 {
+	int numframes = townerDataTable->GetInt("numframes", TOWN_DEADGUY);
+	int delay = townerDataTable->GetInt("delay", TOWN_DEADGUY);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_DEADGUY);
+
 	towner._tAnimWidth = 96;
 	towner.animOrder = nullptr;
 	towner.animOrderSize = 0;
-	LoadTownerAnimations(towner, "Towners\\Butch\\Deadguy.CEL", 8, initData.dir, 6);
-	towner.name = _("Wounded Townsman");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_DEADGUY), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_DEADGUY);
 }
 
 void InitWitch(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_WITCH);
+	int delay = townerDataTable->GetInt("delay", TOWN_WITCH);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_WITCH);
+
 	static const uint8_t AnimOrder[] = {
 		// clang-format off
 		 4,  4,  4,  5,  6,  6,  6,  5,  4, 15, 14, 13, 13, 13, 14, 15, 4, 5, 6, 6, 6, 5,
@@ -138,31 +162,40 @@ void InitWitch(TownerStruct &towner, const TownerInit &initData)
 	};
 	towner.animOrder = AnimOrder;
 	towner.animOrderSize = sizeof(AnimOrder);
-	LoadTownerAnimations(towner, "Towners\\TownWmn1\\Witch.CEL", 19, initData.dir, 6);
-	towner.name = _("Adria the Witch");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_WITCH), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_WITCH);
 }
 
 void InitBarmaid(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_BMAID);
+	int delay = townerDataTable->GetInt("delay", TOWN_BMAID);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_BMAID);
 	towner.animOrder = nullptr;
 	towner.animOrderSize = 0;
-	LoadTownerAnimations(towner, "Towners\\TownWmn1\\WmnN.CEL", 18, initData.dir, 6);
-	towner.name = _("Gillian the Barmaid");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_BMAID), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_BMAID);
 }
 
 void InitBoy(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_PEGBOY);
+	int delay = townerDataTable->GetInt("delay", TOWN_PEGBOY);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_PEGBOY);
 	towner.animOrder = nullptr;
 	towner.animOrderSize = 0;
-	LoadTownerAnimations(towner, "Towners\\TownBoy\\PegKid1.CEL", 20, initData.dir, 6);
-	towner.name = _("Wirt the Peg-legged boy");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_PEGBOY), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_PEGBOY);
 }
 
 void InitHealer(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_HEALER);
+	int delay = townerDataTable->GetInt("delay", TOWN_HEALER);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_HEALER);
 	static const uint8_t AnimOrder[] = {
 		// clang-format off
 		 1,  2,  3,  3,  2,  1, 20, 19, 19, 20,
@@ -178,13 +211,17 @@ void InitHealer(TownerStruct &towner, const TownerInit &initData)
 	};
 	towner.animOrder = AnimOrder;
 	towner.animOrderSize = sizeof(AnimOrder);
-	LoadTownerAnimations(towner, "Towners\\Healer\\Healer.CEL", 20, initData.dir, 6);
-	towner.name = _("Pepin the Healer");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_HEALER), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_HEALER);
 }
 
 void InitTeller(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_STORY);
+	int delay = townerDataTable->GetInt("delay", TOWN_STORY);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_STORY);
+
 	static const uint8_t AnimOrder[] = {
 		// clang-format off
 		 1,  1, 25, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15,
@@ -195,13 +232,16 @@ void InitTeller(TownerStruct &towner, const TownerInit &initData)
 	};
 	towner.animOrder = AnimOrder;
 	towner.animOrderSize = sizeof(AnimOrder);
-	LoadTownerAnimations(towner, "Towners\\Strytell\\Strytell.CEL", 25, initData.dir, 3);
-	towner.name = _("Cain the Elder");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_STORY), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_STORY);
 }
 
 void InitDrunk(TownerStruct &towner, const TownerInit &initData)
 {
-	towner._tAnimWidth = 96;
+	int numframes = townerDataTable->GetInt("numframes", TOWN_DRUNK);
+	int delay = townerDataTable->GetInt("delay", TOWN_DRUNK);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_DRUNK);
 	static const uint8_t AnimOrder[] = {
 		// clang-format off
 		 1, 1, 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 11, 11, 11, 12, 13, 14, 15, 16, 17, 18, 18,
@@ -211,8 +251,8 @@ void InitDrunk(TownerStruct &towner, const TownerInit &initData)
 	};
 	towner.animOrder = AnimOrder;
 	towner.animOrderSize = sizeof(AnimOrder);
-	LoadTownerAnimations(towner, "Towners\\Drunk\\TwnDrunk.CEL", 18, initData.dir, 3);
-	towner.name = _("Farnham the Drunk");
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_DRUNK), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_DRUNK);
 }
 
 void InitCows(TownerStruct &towner, const TownerInit &initData)
@@ -225,8 +265,8 @@ void InitCows(TownerStruct &towner, const TownerInit &initData)
 	}
 	NewTownerAnim(towner, towner._tNAnim[initData.dir], 12, 3);
 	towner._tAnimFrame = GenerateRnd(11) + 1;
-	towner.name = _("Cow");
-
+	towner.name = townerDataTable->GetValue("name", TOWN_COW);
+	/*
 	const Point position = initData.position;
 	const Point offset = position + CowOffsets[initData.dir];
 	int index = -dMonster[position.x][position.y];
@@ -236,6 +276,7 @@ void InitCows(TownerStruct &towner, const TownerInit &initData)
 		dMonster[offset.x][position.y] = index;
 	if (dMonster[offset.x][offset.y] == 0)
 		dMonster[offset.x][offset.y] = index;
+		*/
 }
 
 void InitFarmer(TownerStruct &towner, const TownerInit &initData)
@@ -763,24 +804,43 @@ void TalkToGirl(Player &player, TownerStruct &girl)
 	}
 }
 
+
+/*
+{ 62, 63 }, 
+{ 55, 79 }, 
+{ 24, 32 }, 
+{ 55, 62 }, 
+{ 62, 71 }, 
+{ 71, 84 }, 
+{ 80, 20 }, 
+{ 43, 66 }, 
+{ 11, 53 }, 
+{ 58, 16 }, 
+{ 56, 14 }, 
+{ 59, 20 }, 
+{ 61, 22 }, 
+{ 62, 16 }, 
+{ 77, 43 }, 
+*/
+
 const TownerInit TownerInitList[] = {
 	// clang-format off
 	// type         position    dir     init           talk
-	{ TOWN_SMITH,   { 62, 63 }, DIR_SW, InitSmith,     TalkToBlackSmith  },
-	{ TOWN_HEALER,  { 55, 79 }, DIR_SE, InitHealer,    TalkToHealer      },
-	{ TOWN_DEADGUY, { 24, 32 }, DIR_N,  InitTownDead,  TalkToDeadguy     },
-	{ TOWN_TAVERN,  { 55, 62 }, DIR_SW, InitBarOwner,  TalkToBarOwner    },
-	{ TOWN_STORY,   { 62, 71 }, DIR_S,  InitTeller,    TalkToStoryteller },
-	{ TOWN_DRUNK,   { 71, 84 }, DIR_S,  InitDrunk,     TalkToDrunk       },
-	{ TOWN_WITCH,   { 80, 20 }, DIR_S,  InitWitch,     TalkToWitch       },
-	{ TOWN_BMAID,   { 43, 66 }, DIR_S,  InitBarmaid,   TalkToBarmaid     },
-	{ TOWN_PEGBOY,  { 11, 53 }, DIR_S,  InitBoy,       TalkToBoy         },
-	{ TOWN_COW,     { 58, 16 }, DIR_SW, InitCows,      TalkToCow         },
-	{ TOWN_COW,     { 56, 14 }, DIR_NW, InitCows,      TalkToCow         },
-	{ TOWN_COW,     { 59, 20 }, DIR_N,  InitCows,      TalkToCow         },
-	{ TOWN_COWFARM, { 61, 22 }, DIR_SW, InitCowFarmer, TalkToCowFarmer   },
-	{ TOWN_FARMER,  { 62, 16 }, DIR_S,  InitFarmer,    TalkToFarmer      },
-	{ TOWN_GIRL,    { 77, 43 }, DIR_S,  InitGirl,      TalkToGirl        },
+	{ TOWN_SMITH,   DIR_SW, InitSmith,     TalkToBlackSmith  },
+	{ TOWN_HEALER,  DIR_SE, InitHealer,    TalkToHealer      },
+	{ TOWN_DEADGUY, DIR_N,  InitTownDead,  TalkToDeadguy     },
+	{ TOWN_TAVERN,  DIR_SW, InitBarOwner,  TalkToBarOwner    },
+	{ TOWN_STORY,   DIR_S,  InitTeller,    TalkToStoryteller },
+	{ TOWN_DRUNK,   DIR_S,  InitDrunk,     TalkToDrunk       },
+	{ TOWN_WITCH,   DIR_S,  InitWitch,     TalkToWitch       },
+	{ TOWN_BMAID,   DIR_S,  InitBarmaid,   TalkToBarmaid     },
+	{ TOWN_PEGBOY,  DIR_S,  InitBoy,       TalkToBoy         },
+	{ TOWN_COW,     DIR_SW, InitCows,      TalkToCow         },
+	{ TOWN_COW,     DIR_NW, InitCows,      TalkToCow         },
+	{ TOWN_COW,     DIR_N,  InitCows,      TalkToCow         },
+	{ TOWN_COWFARM, DIR_SW, InitCowFarmer, TalkToCowFarmer   },
+	{ TOWN_FARMER,  DIR_S,  InitFarmer,    TalkToFarmer      },
+	{ TOWN_GIRL,    DIR_S,  InitGirl,      TalkToGirl        },
 	// clang-format on
 };
 

@@ -30,8 +30,8 @@ extern "C" std::uint32_t GetLastError();
 namespace devilution {
 namespace {
 
-bool directFileAccess = false;
-std::optional<std::string> SBasePath;
+bool directFileAccess = true;
+std::string SBasePath;
 
 SdlMutex Mutex;
 
@@ -82,10 +82,10 @@ bool SFileOpenFile(const char *filename, HANDLE *phFile)
 {
 	bool result = false;
 
-	if (directFileAccess && SBasePath) {
-		std::string path = *SBasePath + filename;
-		for (std::size_t i = SBasePath->size(); i < path.size(); ++i)
-			path[i] = AsciiToLowerTable_Path[static_cast<unsigned char>(path[i])];
+	if (directFileAccess) {
+		std::string path = SBasePath + filename;
+		//for (std::size_t i = SBasePath->size(); i < path.size(); ++i)
+		//	path[i] = AsciiToLowerTable_Path[static_cast<unsigned char>(path[i])];
 		result = SFileOpenFileEx((HANDLE) nullptr, path.c_str(), SFILE_OPEN_LOCAL_FILE, phFile);
 	}
 
@@ -151,7 +151,10 @@ void SErrSetLastError(uint32_t dwErrCode)
 
 void SFileSetBasePath(string_view path)
 {
-	SBasePath.emplace(path);
+	//SBasePath.emplace(path);
+	if (SBasePath.size() > 0)
+		return;
+	SBasePath = path;
 }
 
 bool SFileEnableDirectAccess(bool enable)

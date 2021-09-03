@@ -65,6 +65,8 @@
 #include "utils/language.h"
 #include "utils/paths.h"
 
+#include "datatable.h"
+
 #ifdef GPERF_HEAP_FIRST_GAME_ITERATION
 #include <gperftools/heap-profiler.h>
 #endif
@@ -960,6 +962,8 @@ void DiabloInit()
 	ReadOnlyTest();
 
 	DiabloInitScreen();
+
+	DiabloLoadTables();
 
 	snd_init();
 	was_snd_init = true;
