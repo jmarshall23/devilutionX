@@ -1,0 +1,4 @@
+name,item_baselvl,item_2x,item_2x_scale,hit_bonus,ac_bonus,monster_maxhpscale,monster_maxhpbase,monster_mlvlbase,monster_xpmult,monster_xpbase,monster_damgemult,monster_damagebase
+Normal,0,0,0,0,0,1,0,0,1,0,1,0
+Nightmare,16,0,0,85,50,3,64,15,2,1000,2,2
+Hell,32,1,8,120,80,4,192,30,4,1000,4,6

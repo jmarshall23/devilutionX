@@ -33,6 +33,8 @@
 #include "utils/math.h"
 #include "utils/stdcompat/algorithm.hpp"
 
+#include "datatable.h"
+
 namespace devilution {
 
 /** Contains the items on ground in the current game. */
@@ -3304,6 +3306,17 @@ void GetItemAttrs(Item &item, int itemData, int lvl)
 
 	int rndv;
 	int itemlevel = ItemsGetCurrlevel();
+// jmarshall - difficulty
+	int item_baselvl = difficultyTable->GetInt("item_baselvl", sgGameInitInfo.nDifficulty);
+	rndv = 5 * (itemlevel + item_baselvl) + GenerateRnd(10 * (itemlevel + item_baselvl));
+
+	int item_2x = difficultyTable->GetInt("item_2x", sgGameInitInfo.nDifficulty);
+	int item_2x_scale = difficultyTable->GetInt("item_2x_scale", sgGameInitInfo.nDifficulty);
+	if (item_2x) {
+		rndv += rndv / item_2x_scale;
+	}
+
+	/*
 	switch (sgGameInitInfo.nDifficulty) {
 	case DIFF_NORMAL:
 		rndv = 5 * itemlevel + GenerateRnd(10 * itemlevel);
@@ -3315,8 +3328,12 @@ void GetItemAttrs(Item &item, int itemData, int lvl)
 		rndv = 5 * (itemlevel + 32) + GenerateRnd(10 * (itemlevel + 32));
 		break;
 	}
+
 	if (leveltype == DTYPE_HELL)
 		rndv += rndv / 8;
+
+*/
+// jmarshall end
 
 	item._ivalue = std::min(rndv, GOLD_MAX_LIMIT);
 	SetPlrHandGoldCurs(item);

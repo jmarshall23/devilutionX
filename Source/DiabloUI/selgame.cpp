@@ -14,6 +14,8 @@
 #include "storm/storm.h"
 #include "utils/language.h"
 
+#include "../datatable.h"
+
 namespace devilution {
 
 char selgame_Label[32];
@@ -154,9 +156,9 @@ void selgame_GameSelection_Select(int value)
 		SDL_Rect rect4 = { (Sint16)(PANEL_LEFT + 299), (Sint16)(UI_OFFSET_Y + 211), 295, 35 };
 		vecSelGameDialog.push_back(std::make_unique<UiArtText>(_("Select Difficulty"), rect4, UiFlags::AlignCenter | UiFlags::FontBig));
 
-		vecSelGameDlgItems.push_back(std::make_unique<UiListItem>(_("Normal"), DIFF_NORMAL));
-		vecSelGameDlgItems.push_back(std::make_unique<UiListItem>(_("Nightmare"), DIFF_NIGHTMARE));
-		vecSelGameDlgItems.push_back(std::make_unique<UiListItem>(_("Hell"), DIFF_HELL));
+		vecSelGameDlgItems.push_back(std::make_unique<UiListItem>(difficultyTable->GetValue("name", DIFF_NORMAL), DIFF_NORMAL));
+		vecSelGameDlgItems.push_back(std::make_unique<UiListItem>(difficultyTable->GetValue("name", DIFF_NIGHTMARE), DIFF_NIGHTMARE));
+		vecSelGameDlgItems.push_back(std::make_unique<UiListItem>(difficultyTable->GetValue("name", DIFF_HELL), DIFF_HELL));
 
 		vecSelGameDialog.push_back(std::make_unique<UiList>(vecSelGameDlgItems, PANEL_LEFT + 300, (UI_OFFSET_Y + 282), 295, 26, UiFlags::AlignCenter | UiFlags::FontMedium | UiFlags::ColorGold));
 

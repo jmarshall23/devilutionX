@@ -33,6 +33,8 @@
 #include "trigs.h"
 #include "utils/language.h"
 
+#include "datatable.h"
+
 #ifdef _DEBUG
 #include "debug.h"
 #endif
@@ -57,12 +59,6 @@ Direction right[8] = { DIR_SW, DIR_W, DIR_NW, DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_
 Direction opposite[8] = { DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_S, DIR_SW, DIR_W, DIR_NW };
 
 namespace {
-
-#define NIGHTMARE_TO_HIT_BONUS 85
-#define HELL_TO_HIT_BONUS 120
-
-#define NIGHTMARE_AC_BONUS 50
-#define HELL_AC_BONUS 80
 
 /** Tracks which missile files are already loaded */
 int totalmonsters;
@@ -226,40 +222,19 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 		monster._mmode = MonsterMode::SpecialMeleeAttack;
 	}
 
-	if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-		monster._mmaxhp = 3 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 100 : 50) << 6;
-		else
-			monster._mmaxhp += 64;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mLevel += 15;
-		monster.mExp = 2 * (monster.mExp + 1000);
-		monster.mHit += NIGHTMARE_TO_HIT_BONUS;
-		monster.mMinDamage = 2 * (monster.mMinDamage + 2);
-		monster.mMaxDamage = 2 * (monster.mMaxDamage + 2);
-		monster.mHit2 += NIGHTMARE_TO_HIT_BONUS;
-		monster.mMinDamage2 = 2 * (monster.mMinDamage2 + 2);
-		monster.mMaxDamage2 = 2 * (monster.mMaxDamage2 + 2);
-		monster.mArmorClass += NIGHTMARE_AC_BONUS;
-	} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-		monster._mmaxhp = 4 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 200 : 100) << 6;
-		else
-			monster._mmaxhp += 192;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mLevel += 30;
-		monster.mExp = 4 * (monster.mExp + 1000);
-		monster.mHit += HELL_TO_HIT_BONUS;
-		monster.mMinDamage = 4 * monster.mMinDamage + 6;
-		monster.mMaxDamage = 4 * monster.mMaxDamage + 6;
-		monster.mHit2 += HELL_TO_HIT_BONUS;
-		monster.mMinDamage2 = 4 * monster.mMinDamage2 + 6;
-		monster.mMaxDamage2 = 4 * monster.mMaxDamage2 + 6;
-		monster.mArmorClass += HELL_AC_BONUS;
-		monster.mMagicRes = monsterType.MData->mMagicRes2;
-	}
+
+	monster._mmaxhp = difficultyTable->GetInt("monster_maxhpscale", sgGameInitInfo.nDifficulty) * monster._mmaxhp;
+	monster._mmaxhp += difficultyTable->GetInt("monster_maxhpbase", sgGameInitInfo.nDifficulty);
+	monster._mhitpoints = monster._mmaxhp;
+	monster.mLevel += difficultyTable->GetInt("monster_mlvlbase", sgGameInitInfo.nDifficulty);
+	monster.mExp = difficultyTable->GetInt("monster_xpmult", sgGameInitInfo.nDifficulty) * (monster.mExp + difficultyTable->GetInt("monster_xpbase", sgGameInitInfo.nDifficulty));
+	monster.mHit += difficultyTable->GetInt("hit_bonus", sgGameInitInfo.nDifficulty);
+	monster.mMinDamage = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMinDamage + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	monster.mMaxDamage = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMaxDamage + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	monster.mHit2 += difficultyTable->GetInt("hit_bonus", sgGameInitInfo.nDifficulty);
+	monster.mMinDamage2 = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMinDamage2 + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	monster.mMaxDamage2 = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMaxDamage2 + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	monster.mArmorClass += difficultyTable->GetInt("ac_bonus", sgGameInitInfo.nDifficulty);
 }
 
 bool CanPlaceMonster(int xp, int yp)
@@ -533,34 +508,45 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 		monster._mgoal = MGOAL_INQUIRING;
 	}
 
-	if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-		monster._mmaxhp = 3 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 100 : 50) << 6;
-		else
-			monster._mmaxhp += 64;
-		monster.mLevel += 15;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mExp = 2 * (monster.mExp + 1000);
-		monster.mMinDamage = 2 * (monster.mMinDamage + 2);
-		monster.mMaxDamage = 2 * (monster.mMaxDamage + 2);
-		monster.mMinDamage2 = 2 * (monster.mMinDamage2 + 2);
-		monster.mMaxDamage2 = 2 * (monster.mMaxDamage2 + 2);
-	} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-		monster._mmaxhp = 4 * monster._mmaxhp;
-		if (gbIsHellfire)
-			monster._mmaxhp += (gbIsMultiplayer ? 200 : 100) << 6;
-		else
-			monster._mmaxhp += 192;
-		monster.mLevel += 30;
-		monster._mhitpoints = monster._mmaxhp;
-		monster.mExp = 4 * (monster.mExp + 1000);
-		monster.mMinDamage = 4 * monster.mMinDamage + 6;
-		monster.mMaxDamage = 4 * monster.mMaxDamage + 6;
-		monster.mMinDamage2 = 4 * monster.mMinDamage2 + 6;
-		monster.mMaxDamage2 = 4 * monster.mMaxDamage2 + 6;
-	}
+	//if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
+	//	monster._mmaxhp = 3 * monster._mmaxhp;
+	//	if (gbIsHellfire)
+	//		monster._mmaxhp += (gbIsMultiplayer ? 100 : 50) << 6;
+	//	else
+	//		monster._mmaxhp += 64;
+	//	monster.mLevel += 15;
+	//	monster._mhitpoints = monster._mmaxhp;
+	//	monster.mExp = 2 * (monster.mExp + 1000);
+	//	monster.mMinDamage = 2 * (monster.mMinDamage + 2);
+	//	monster.mMaxDamage = 2 * (monster.mMaxDamage + 2);
+	//	monster.mMinDamage2 = 2 * (monster.mMinDamage2 + 2);
+	//	monster.mMaxDamage2 = 2 * (monster.mMaxDamage2 + 2);
+	//} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
+	//	monster._mmaxhp = 4 * monster._mmaxhp;
+	//	if (gbIsHellfire)
+	//		monster._mmaxhp += (gbIsMultiplayer ? 200 : 100) << 6;
+	//	else
+	//		monster._mmaxhp += 192;
+	//	monster.mLevel += 30;
+	//	monster._mhitpoints = monster._mmaxhp;
+	//	monster.mExp = 4 * (monster.mExp + 1000);
+	//	monster.mMinDamage = 4 * monster.mMinDamage + 6;
+	//	monster.mMaxDamage = 4 * monster.mMaxDamage + 6;
+	//	monster.mMinDamage2 = 4 * monster.mMinDamage2 + 6;
+	//	monster.mMaxDamage2 = 4 * monster.mMaxDamage2 + 6;
+	//}
 
+	monster._mmaxhp = difficultyTable->GetInt("monster_maxhpscale", sgGameInitInfo.nDifficulty) * monster._mmaxhp;
+	monster._mmaxhp += difficultyTable->GetInt("monster_maxhpbase", sgGameInitInfo.nDifficulty);
+	monster.mLevel += difficultyTable->GetInt("monster_mlvlbase", sgGameInitInfo.nDifficulty);
+	monster._mhitpoints = monster._mmaxhp;
+	monster.mExp = difficultyTable->GetInt("monster_xpmult", sgGameInitInfo.nDifficulty) * (monster.mExp + difficultyTable->GetInt("monster_xpbase", sgGameInitInfo.nDifficulty));
+	monster.mMinDamage = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMinDamage + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	monster.mMaxDamage = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMaxDamage + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	monster.mMinDamage2 = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMinDamage2 + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	monster.mMaxDamage2 = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMaxDamage2 + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
+	
+	
 	char filestr[64];
 	sprintf(filestr, "Monsters\\Monsters\\%s.TRN", uniqueData.mTrnName);
 	LoadFileInMem(filestr, &LightTables[256 * (uniquetrans + 19)], 256);
@@ -571,22 +557,12 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 		monster.mHit = uniqueData.customHitpoints;
 		monster.mHit2 = uniqueData.customHitpoints;
 
-		if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-			monster.mHit += NIGHTMARE_TO_HIT_BONUS;
-			monster.mHit2 += NIGHTMARE_TO_HIT_BONUS;
-		} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-			monster.mHit += HELL_TO_HIT_BONUS;
-			monster.mHit2 += HELL_TO_HIT_BONUS;
-		}
+		monster.mHit += difficultyTable->GetInt("hit_bonus", sgGameInitInfo.nDifficulty);
+		monster.mHit2 += difficultyTable->GetInt("hit_bonus", sgGameInitInfo.nDifficulty);
 	}
 	if (uniqueData.customArmorClass != 0) {
 		monster.mArmorClass = uniqueData.customArmorClass;
-
-		if (sgGameInitInfo.nDifficulty == DIFF_NIGHTMARE) {
-			monster.mArmorClass += NIGHTMARE_AC_BONUS;
-		} else if (sgGameInitInfo.nDifficulty == DIFF_HELL) {
-			monster.mArmorClass += HELL_AC_BONUS;
-		}
+		monster.mArmorClass += difficultyTable->GetInt("ac_bonus", sgGameInitInfo.nDifficulty);
 	}
 
 	ActiveMonsterCount++;
