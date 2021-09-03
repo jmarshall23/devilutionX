@@ -35,6 +35,8 @@
 #include "utils/stdcompat/optional.hpp"
 #include "options.h"
 
+#include "datatable.h"
+
 #ifdef _DEBUG
 #include "debug.h"
 #endif
@@ -1368,7 +1370,7 @@ void DrawInfoBox(const Surface &out)
 			auto &target = Players[pcursplr];
 			strcpy(infostr, target._pName);
 			ClearPanel();
-			strcpy(tempstr, fmt::format(_("{:s}, Level: {:d}"), _(ClassStrTbl[static_cast<std::size_t>(target._pClass)]), target._pLevel).c_str());
+			strcpy(tempstr, fmt::format(_("{:s}, Level: {:d}"), playerTable->GetValue("name", static_cast<std::size_t>(target._pClass)), target._pLevel).c_str());
 			AddPanelString(tempstr);
 			strcpy(tempstr, fmt::format(_("Hit Points {:d} of {:d}"), target._pHitPoints >> 6, target._pMaxHP >> 6).c_str());
 			AddPanelString(tempstr);

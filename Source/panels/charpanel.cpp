@@ -11,19 +11,21 @@
 #include "engine/render/text_render.hpp"
 #include "utils/language.h"
 
+#include "../datatable.h"
+
 namespace devilution {
 
 std::optional<CelSprite> pChrButtons;
 
 /** Map of hero class names */
-const char *const ClassStrTbl[] = {
-	N_("Warrior"),
-	N_("Rogue"),
-	N_("Sorcerer"),
-	N_("Monk"),
-	N_("Bard"),
-	N_("Barbarian"),
-};
+//const char *const ClassStrTbl[] = {
+//	N_("Warrior"),
+//	N_("Rogue"),
+//	N_("Sorcerer"),
+//	N_("Monk"),
+//	N_("Bard"),
+//	N_("Barbarian"),
+//};
 
 namespace {
 
@@ -167,7 +169,7 @@ PanelEntry panelEntries[] = {
 	    []() { return StyledText { (MyPlayer->_pMana != MyPlayer->_pMaxMana ? UiFlags::ColorRed : GetMaxManaColor()), fmt::format("{:d}", MyPlayer->_pMana >> 6) }; } },
 
 	{ "", { 161, 14 }, 134, { 0, 0 }, 0, 0, 1, false, false,
-	    []() { return StyledText { UiFlags::ColorSilver, _(ClassStrTbl[static_cast<std::size_t>(MyPlayer->_pClass)]) }; } },
+	    []() { return StyledText { UiFlags::ColorSilver, playerTable->GetValue("name", static_cast<std::size_t>(MyPlayer->_pClass)) }; } },
 
 	{ N_("Experience"), { 208, 52 }, 87, { -3, 0 }, 0, 0, 1, false, false,
 	    []() { return StyledText { UiFlags::ColorSilver, fmt::format("{:d}", MyPlayer->_pExperience) }; } },

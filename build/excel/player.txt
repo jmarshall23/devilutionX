@@ -1,0 +1,7 @@
+name,filename
+Warrior,Warrior
+Rogue,Rogue
+Sorceror,Sorceror
+Monk,Monk,
+Bard,Rogue,
+Barbarian,Warrior

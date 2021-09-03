@@ -31,6 +31,8 @@
 #include "utils/language.h"
 #include "utils/log.hpp"
 
+#include "datatable.h"
+
 namespace devilution {
 
 int MyPlayerId;
@@ -210,14 +212,6 @@ int PWVel[enum_size<HeroClass>::value][3] = {
 	{ 2048, 1024, 512 },
 	{ 2048, 1024, 512 },
 	{ 2048, 1024, 512 },
-};
-const char *const ClassPathTbl[] = {
-	"Warrior",
-	"Rogue",
-	"Sorceror",
-	"Monk",
-	"Rogue",
-	"Warrior",
 };
 
 void PmChangeLightOff(Player &player)
@@ -2180,7 +2174,7 @@ void LoadPlrGFX(Player &player, player_graphic graphic)
 	int animationWidth = 96;
 
 	sprintf(prefix, "%c%c%c", CharChar[static_cast<std::size_t>(c)], ArmourChar[player._pgfxnum >> 4], WepChar[static_cast<std::size_t>(animWeaponId)]);
-	const char *cs = ClassPathTbl[static_cast<std::size_t>(c)];
+	const char *cs = playerTable->GetValue("filename",(int)c);
 
 	switch (graphic) {
 	case player_graphic::Stand:

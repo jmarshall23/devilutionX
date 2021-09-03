@@ -16,6 +16,7 @@
 #include "options.h"
 #include "pfile.h"
 #include "utils/language.h"
+#include "../datatable.h"
 
 namespace devilution {
 
@@ -164,17 +165,17 @@ void SelheroListSelect(int value)
 
 		vecSelHeroDlgItems.clear();
 		int itemH = 33;
-		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(_("Warrior"), static_cast<int>(HeroClass::Warrior)));
-		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(_("Rogue"), static_cast<int>(HeroClass::Rogue)));
-		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(_("Sorcerer"), static_cast<int>(HeroClass::Sorcerer)));
+		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(playerTable->GetValue("name", (int)HeroClass::Warrior), static_cast<int>(HeroClass::Warrior)));
+		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(playerTable->GetValue("name", (int)HeroClass::Rogue), static_cast<int>(HeroClass::Rogue)));
+		vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(playerTable->GetValue("name", (int)HeroClass::Sorcerer), static_cast<int>(HeroClass::Sorcerer)));
 		if (gbIsHellfire) {
-			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(_("Monk"), static_cast<int>(HeroClass::Monk)));
+			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(playerTable->GetValue("name", (int)HeroClass::Monk), static_cast<int>(HeroClass::Monk)));
 		}
 		if (gbBard || sgOptions.Gameplay.bTestBard) {
-			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(_("Bard"), static_cast<int>(HeroClass::Bard)));
+			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(playerTable->GetValue("name", (int)HeroClass::Bard), static_cast<int>(HeroClass::Bard)));
 		}
 		if (gbBarbarian || sgOptions.Gameplay.bTestBarbarian) {
-			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(_("Barbarian"), static_cast<int>(HeroClass::Barbarian)));
+			vecSelHeroDlgItems.push_back(std::make_unique<UiListItem>(playerTable->GetValue("name", (int)HeroClass::Barbarian), static_cast<int>(HeroClass::Barbarian)));
 		}
 		if (vecSelHeroDlgItems.size() > 4)
 			itemH = 26;
