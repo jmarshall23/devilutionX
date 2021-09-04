@@ -5549,7 +5549,7 @@ void GetObjectStr(int i)
 			    break;
 
 			case OBJ_FLAG_SHRINE:
-			    sprintf(infostr, "%s%s", ShrineNames[Objects[i]._oVar1], objectDefinition[type].name0);
+			    sprintf(infostr, "%s %s", ShrineNames[Objects[i]._oVar1], objectDefinition[type].name0);
 				break;
 
 			case OBJ_STORY_BOOK:
