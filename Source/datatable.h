@@ -70,6 +70,7 @@ extern DataTable *messagesTable;
 extern DataTable *itemsTable;
 extern DataTable *textTable;
 extern DataTable *DunMonTable;
+extern DataTable *uniqueMonsterTable;
 
 void DiabloLoadTables(void);
 

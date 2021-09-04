@@ -429,5 +429,6 @@ struct TextDataStruct {
 };
 
 extern TextDataStruct *Texts;
+_speech_id SpeechIdFromString(std::string str);
 
 } // namespace devilution

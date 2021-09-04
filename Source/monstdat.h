@@ -315,6 +315,6 @@ struct UniqMonstStruct {
 extern MonsterData *MonstersData;
 extern _monster_id *MonstConvTbl;
 extern char *MonstAvailTbl;
-extern const UniqMonstStruct UniqMonst[];
+extern UniqMonstStruct *UniqMonst;
 
 } // namespace devilution
