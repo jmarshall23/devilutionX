@@ -26,8 +26,8 @@ OBJ_BOOKCASEL,Bookcase,none,none,OBJ_FLAG_NONE
 OBJ_BOOKCASER,Bookcase,none,none,OBJ_FLAG_NONE
 OBJ_BARREL,Barrel,Pod,Urn,OBJ_FLAG_LEVEL
 OBJ_BARRELEX,Barrel,Pod,Urn,OBJ_FLAG_LEVEL
-OBJ_SHRINEL,{:s} Shrine,none,none,OBJ_FLAG_SHRINE
-OBJ_SHRINER,{:s} Shrine,none,none,OBJ_FLAG_SHRINE
+OBJ_SHRINEL,Shrine,none,none,OBJ_FLAG_SHRINE
+OBJ_SHRINER,Shrine,none,none,OBJ_FLAG_SHRINE
 OBJ_SKELBOOK,Skeleton Tome,none,none,OBJ_FLAG_NONE
 OBJ_BOOKSTAND,Library Book,none,none,OBJ_FLAG_NONE
 OBJ_BLOODFTN,Blood Fountain,none,none,OBJ_FLAG_NONE
