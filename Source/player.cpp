@@ -50,59 +50,18 @@ int plrxoff2[9] = { 0, 1, 0, 1, 2, 0, 1, 2, 2 };
 int plryoff2[9] = { 0, 0, 1, 1, 0, 2, 2, 1, 2 };
 
 /** Specifies the experience point limit of each level. */
-uint32_t ExpLvlsTbl[MAXCHARLEVEL] = {
-	0,
-	2000,
-	4620,
-	8040,
-	12489,
-	18258,
-	25712,
-	35309,
-	47622,
-	63364,
-	83419,
-	108879,
-	141086,
-	181683,
-	231075,
-	313656,
-	424067,
-	571190,
-	766569,
-	1025154,
-	1366227,
-	1814568,
-	2401895,
-	3168651,
-	4166200,
-	5459523,
-	7130496,
-	9281874,
-	12042092,
-	15571031,
-	20066900,
-	25774405,
-	32994399,
-	42095202,
-	53525811,
-	67831218,
-	85670061,
-	107834823,
-	135274799,
-	169122009,
-	210720231,
-	261657253,
-	323800420,
-	399335440,
-	490808349,
-	601170414,
-	733825617,
-	892680222,
-	1082908612,
-	1310707109,
-	1583495809
-};
+uint32_t ExpLvlsTbl[MAXCHARLEVEL];
+
+void InitPlayerExperienceTable(void)
+{
+	if (experienceTable->NumRows() != MAXCHARLEVEL) {
+		devilution::app_fatal("Experience table row count doesn't max MAXCHARLEVEL!");
+		return;
+	}
+
+	for (int i = 0; i < MAXCHARLEVEL; i++)
+		ExpLvlsTbl[i] = experienceTable->GetInt("experience", i);
+}
 
 namespace {
 
