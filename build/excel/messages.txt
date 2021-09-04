@@ -1,0 +1,56 @@
+id,text
+EMSG_NONE,No Message
+EMSG_NO_AUTOMAP_IN_TOWN,No automap available in town
+EMSG_NO_MULTIPLAYER_IN_DEMO,No multiplayer functions in demo
+EMSG_DIRECT_SOUND_FAILED,Direct Sound Creation Failed
+EMSG_NOT_IN_SHAREWARE,Not available in shareware version
+EMSG_NO_SPACE_TO_SAVE,Not enough space to save
+EMSG_NO_PAUSE_IN_TOWN,No Pause in town
+EMSG_COPY_TO_HDD,Copying to a hard disk is recommended
+EMSG_DESYNC,Multiplayer sync problem
+EMSG_NO_PAUSE_IN_MP,No pause in multiplayer
+EMSG_LOADING,Loading...
+EMSG_SAVING,Saving...
+EMSG_SHRINE_MYSTERIOUS,Some are weakened as one grows strong
+EMSG_SHRINE_HIDDEN,New strength is forged through destruction
+EMSG_SHRINE_GLOOMY,Those who defend seldom attack
+EMSG_SHRINE_WEIRD,The sword of justice is swift and sharp
+EMSG_SHRINE_MAGICAL,While the spirit is vigilant the body thrives
+EMSG_SHRINE_STONE,The powers of mana refocused renews
+EMSG_SHRINE_RELIGIOUS,Time cannot diminish the power of steel
+EMSG_SHRINE_ENCHANTED,Magic is not always what it seems to be
+EMSG_SHRINE_THAUMATURGIC,What once was opened now is closed
+EMSG_SHRINE_FASCINATING,Intensity comes at the cost of wisdom
+EMSG_SHRINE_CRYPTIC,Arcane power brings destruction
+EMSG_SHRINE_UNUSED,That which cannot be held cannot be harmed
+EMSG_SHRINE_ELDRITCH,Crimson and Azure become as the sun
+EMSG_SHRINE_EERIE,Knowledge and wisdom at the cost of self
+EMSG_SHRINE_DIVINE,Drink and be refreshed
+EMSG_SHRINE_HOLY,"Wherever you go, there you are"
+EMSG_SHRINE_SACRED,Energy comes at the cost of wisdom
+EMSG_SHRINE_SPIRITUAL,Riches abound when least expected
+EMSG_SHRINE_SPOOKY1,"Where avarice fails, patience gains reward"
+EMSG_SHRINE_SPOOKY2,Blessed by a benevolent companion!
+EMSG_SHRINE_ABANDONED,The hands of men may be guided by fate
+EMSG_SHRINE_CREEPY,Strength is bolstered by heavenly faith
+EMSG_SHRINE_QUIET,The essence of life flows from within
+EMSG_SHRINE_SECLUDED,The way is made clear when viewed from above
+EMSG_SHRINE_ORNATE,Salvation comes at the cost of wisdom
+EMSG_SHRINE_GLIMMERING,Mysteries are revealed in the light of reason
+EMSG_SHRINE_TAINTED1,Those who are last may yet be first
+EMSG_SHRINE_TAINTED2,Generosity brings its own rewards
+EMSG_REQUIRES_LVL_8,You must be at least level 8 to use this.
+EMSG_REQUIRES_LVL_13,You must be at least level 13 to use this.
+EMSG_REQUIRES_LVL_17,You must be at least level 17 to use this.
+EMSG_BONECHAMB,Arcane knowledge gained!
+EMSG_SHRINE_OILY,That which does not kill you...
+EMSG_SHRINE_GLOWING,Knowledge is power.
+EMSG_SHRINE_MENDICANT,Give and you shall receive.
+EMSG_SHRINE_SPARKLING,Some experience is gained by touch.
+EMSG_SHRINE_TOWN,There's no place like home.
+EMSG_SHRINE_SHIMMERING,Spiritual energy is restored.
+EMSG_SHRINE_SOLAR1,You feel more agile.
+EMSG_SHRINE_SOLAR2,You feel stronger.
+EMSG_SHRINE_SOLAR3,You feel wiser.
+EMSG_SHRINE_SOLAR4,You feel refreshed.
+EMSG_SHRINE_MURPHYS,That which can break will.

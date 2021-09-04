@@ -66,6 +66,7 @@ extern DataTable *musicTable;
 extern DataTable *difficultyTable;
 extern DataTable *experienceTable;
 extern DataTable *heroSpeechTable;
+extern DataTable *messagesTable;
 
 void DiabloLoadTables(void);
 

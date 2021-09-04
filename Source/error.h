@@ -68,6 +68,7 @@ enum diablo_message : uint8_t {
 	EMSG_SHRINE_SOLAR3,
 	EMSG_SHRINE_SOLAR4,
 	EMSG_SHRINE_MURPHYS,
+	EMSG_SHRINE_COUNT
 };
 
 void InitDiabloMsg(diablo_message e);

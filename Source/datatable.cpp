@@ -15,6 +15,7 @@ DataTable *musicTable = nullptr;
 DataTable *difficultyTable = nullptr;
 DataTable *experienceTable = nullptr;
 DataTable *heroSpeechTable = nullptr;
+DataTable *messagesTable = nullptr;
 
 namespace devilution {
 	void InitMonsterTable(void);
@@ -37,6 +38,7 @@ void DiabloLoadTables(void)
 	difficultyTable = new DataTable("excel\\difficulty.txt");
 	experienceTable = new DataTable("excel\\experience.txt");
 	heroSpeechTable = new DataTable("excel\\heroSpeech.txt");
+	messagesTable = new DataTable("excel\\messages.txt");
 
 	devilution::InitMonsterTable();
 	devilution::InitSpellDataTable();
@@ -62,6 +64,7 @@ DataTable::DataTable(const char *path)
 	int index = 0;
 	int row = 0;
 	int id = 0;
+	//
 	while (index < len) {
 		if (buffer[index] == '\n') {
 			if (id != columns.size() && row > 0) {
@@ -100,10 +103,15 @@ char *DataTable::GrabToken(const char *buffer, int &index, const int bufferSize)
 	int idx = 0;
 
 	memset(token, 0, sizeof(token));
-
+	bool inQuote = false;
 	while (index < bufferSize) {
+		if (buffer[index] == '"') {
+			inQuote = !inQuote;
+			index++;
+			continue;
+		}
 
-		if (buffer[index] == ',')
+		if (buffer[index] == ',' && !inQuote)
 			break;
 
 		if (buffer[index] == '\n')
