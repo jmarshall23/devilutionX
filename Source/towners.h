@@ -59,6 +59,9 @@ struct TownerStruct {
 	std::size_t animOrderSize;
 	void (*talk)(Player &player, TownerStruct &towner);
 	_talker_id _ttype;
+// jmarshall
+	_speech_id greetingSpeech;
+// jmarshall end
 };
 
 extern TownerStruct Towners[NUM_TOWNERS];

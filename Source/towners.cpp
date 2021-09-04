@@ -67,6 +67,8 @@ void InitTownerInfo(int i, const TownerInit &initData)
 	dMonster[towner.position.x][towner.position.y] = i + 1;
 
 	initData.init(towner, initData);
+
+	towner.greetingSpeech = SpeechIdFromString(townerDataTable->GetValue("greetingsfx", towner._ttype));
 }
 
 void LoadTownerAnimations(TownerStruct &towner, const char *path, int frames, Direction dir, int delay)
@@ -391,7 +393,7 @@ void TalkToBarOwner(Player &player, TownerStruct &barOwner)
 		}
 	}
 
-	TownerTalk(TEXT_OGDEN1);
+	TownerTalk(barOwner.greetingSpeech);
 	StartStore(STORE_TAVERN);
 }
 
@@ -457,11 +459,11 @@ void TalkToBlackSmith(Player &player, TownerStruct &blackSmith)
 		}
 	}
 
-	TownerTalk(TEXT_GRISWOLD1);
+	TownerTalk(blackSmith.greetingSpeech);
 	StartStore(STORE_SMITH);
 }
 
-void TalkToWitch(Player &player, TownerStruct & /*witch*/)
+void TalkToWitch(Player &player, TownerStruct &witch)
 {
 	if (Quests[Q_MUSHROOM]._qactive != QUEST_NOTAVAIL) {
 		if (Quests[Q_MUSHROOM]._qactive == QUEST_INIT && player.TryRemoveInvItemById(IDI_FUNGALTM)) {
@@ -503,11 +505,11 @@ void TalkToWitch(Player &player, TownerStruct & /*witch*/)
 		}
 	}
 
-	TownerTalk(TEXT_ADRIA1);
+	TownerTalk(witch.greetingSpeech);
 	StartStore(STORE_WITCH);
 }
 
-void TalkToBarmaid(Player &player, TownerStruct & /*barmaid*/)
+void TalkToBarmaid(Player &player, TownerStruct & barmaid)
 {
 	if (!player._pLvlVisited[21] && player.HasItem(IDI_MAPOFDOOM)) {
 		Quests[Q_GRAVE]._qactive = QUEST_ACTIVE;
@@ -517,13 +519,14 @@ void TalkToBarmaid(Player &player, TownerStruct & /*barmaid*/)
 		return;
 	}
 
-	TownerTalk(TEXT_GILLIAN1);
+	TownerTalk(barmaid.greetingSpeech);
 	StartStore(STORE_BARMAID);
 }
 
-void TalkToDrunk(Player & /*player*/, TownerStruct & /*drunk*/)
+void TalkToDrunk(Player & /*player*/, TownerStruct & drunk)
 {
-	TownerTalk(TEXT_FARNHAM1);
+	//TownerTalk(TEXT_FARNHAM1);
+	TownerTalk(drunk.greetingSpeech);
 	StartStore(STORE_DRUNK);
 }
 
@@ -554,17 +557,19 @@ void TalkToHealer(Player &player, TownerStruct &healer)
 		}
 	}
 
-	TownerTalk(TEXT_PEPIN1);
+	//TownerTalk(TEXT_PEPIN1);
+	TownerTalk(healer.greetingSpeech);
 	StartStore(STORE_HEALER);
 }
 
-void TalkToBoy(Player & /*player*/, TownerStruct & /*boy*/)
+void TalkToBoy(Player & /*player*/, TownerStruct & boy)
 {
-	TownerTalk(TEXT_WIRT1);
+	//TownerTalk(TEXT_WIRT1);
+	TownerTalk(boy.greetingSpeech);
 	StartStore(STORE_BOY);
 }
 
-void TalkToStoryteller(Player &player, TownerStruct & /*storyteller*/)
+void TalkToStoryteller(Player &player, TownerStruct & storyteller)
 {
 	auto &betrayerQuest = Quests[Q_BETRAYER];
 	if (!gbIsMultiplayer) {
@@ -595,7 +600,8 @@ void TalkToStoryteller(Player &player, TownerStruct & /*storyteller*/)
 		return;
 	}
 
-	TownerTalk(TEXT_STORY1);
+	//TownerTalk(TEXT_STORY1);
+	TownerTalk(storyteller.greetingSpeech);
 	StartStore(STORE_STORY);
 }
 
