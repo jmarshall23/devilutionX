@@ -224,11 +224,30 @@ int MonsterTable_ParseLoot(std::string str)
 	devilution::app_fatal("Invalid loot id!");
 }
 
+/**
+ * Define what version a monster type is available in
+ */
+char *MonstAvailTbl;
+
+_monster_availability MonsterAvailabilityFromString(std::string str)
+{
+	MONTABLE_STRING_TYPE(MAT_NEVER)
+	MONTABLE_STRING_TYPE(MAT_ALWAYS)
+	MONTABLE_STRING_TYPE(MAT_RETAIL)
+
+	devilution::app_fatal("Invalid monster availability!");
+
+	return MAT_NEVER;
+}
+
 void InitMonsterTable(void)
 {
 	MonstersData = new MonsterData[monsterTable->NumRows()];
+	MonstAvailTbl = new char[monsterTable->NumRows()];
 
 	for (int i = 0; i < monsterTable->NumRows(); i++) {
+		MonstAvailTbl[i] = (char)MonsterAvailabilityFromString(monsterTable->GetValue("Version", i));
+
 		BIND_MONSTER_VALUE(mName);
 		BIND_MONSTER_VALUE(GraphicType);
 		BIND_MONSTER_VALUE(sndfile);
@@ -446,149 +465,7 @@ const _monster_id MonstConvTbl[] = {
 	MT_LRDSAYTR,
 };
 
-/**
- * Define what version a monster type is available in
- */
-const char MonstAvailTbl[] = {
-	MAT_ALWAYS, // Zombie
-	MAT_ALWAYS, // Ghoul
-	MAT_ALWAYS, // Rotting Carcass
-	MAT_ALWAYS, // Black Death
-	MAT_ALWAYS, // Fallen One
-	MAT_ALWAYS, // Carver
-	MAT_ALWAYS, // Devil Kin
-	MAT_ALWAYS, // Dark One
-	MAT_ALWAYS, // Skeleton
-	MAT_ALWAYS, // Corpse Axe
-	MAT_ALWAYS, // Burning Dead
-	MAT_ALWAYS, // Horror
-	MAT_ALWAYS, // Fallen One
-	MAT_ALWAYS, // Carver
-	MAT_ALWAYS, // Devil Kin
-	MAT_ALWAYS, // Dark One
-	MAT_ALWAYS, // Scavenger
-	MAT_ALWAYS, // Plague Eater
-	MAT_ALWAYS, // Shadow Beast
-	MAT_ALWAYS, // Bone Gasher
-	MAT_ALWAYS, // Skeleton
-	MAT_ALWAYS, // Corpse Bow
-	MAT_ALWAYS, // Burning Dead
-	MAT_ALWAYS, // Horror
-	MAT_ALWAYS, // Skeleton Captain
-	MAT_ALWAYS, // Corpse Captain
-	MAT_ALWAYS, // Burning Dead Captain
-	MAT_ALWAYS, // Horror Captain
-	MAT_NEVER,  // Invisible Lord
-	MAT_RETAIL, // Hidden
-	MAT_RETAIL, // Stalker
-	MAT_RETAIL, // Unseen
-	MAT_RETAIL, // Illusion Weaver
-	MAT_RETAIL, // Satyr Lord
-	MAT_RETAIL, // Flesh Clan
-	MAT_RETAIL, // Stone Clan
-	MAT_RETAIL, // Fire Clan
-	MAT_RETAIL, // Night Clan
-	MAT_ALWAYS, // Fiend
-	MAT_ALWAYS, // Blink
-	MAT_ALWAYS, // Gloom
-	MAT_ALWAYS, // Familiar
-	MAT_RETAIL, // Flesh Clan
-	MAT_RETAIL, // Stone Clan
-	MAT_RETAIL, // Fire Clan
-	MAT_RETAIL, // Night Clan
-	MAT_RETAIL, // Acid Beast
-	MAT_RETAIL, // Poison Spitter
-	MAT_RETAIL, // Pit Beast
-	MAT_RETAIL, // Lava Maw
-	MAT_NEVER,  // Skeleton King
-	MAT_NEVER,  // The Butcher
-	MAT_RETAIL, // Overlord
-	MAT_RETAIL, // Mud Man
-	MAT_RETAIL, // Toad Demon
-	MAT_RETAIL, // Flayed One
-	MAT_NEVER,  // Wyrm
-	MAT_NEVER,  // Cave Slug
-	MAT_NEVER,  // Devil Wyrm
-	MAT_NEVER,  // Devourer
-	MAT_RETAIL, // Magma Demon
-	MAT_RETAIL, // Blood Stone
-	MAT_RETAIL, // Hell Stone
-	MAT_RETAIL, // Lava Lord
-	MAT_RETAIL, // Horned Demon
-	MAT_RETAIL, // Mud Runner
-	MAT_RETAIL, // Frost Charger
-	MAT_RETAIL, // Obsidian Lord
-	MAT_NEVER,  // Bone Demon (oldboned in Hellfire)
-	MAT_NEVER,  // Red Death
-	MAT_NEVER,  // Litch Demon
-	MAT_NEVER,  // Undead Balrog
-	MAT_NEVER,  // Incinerator
-	MAT_NEVER,  // Flame Lord
-	MAT_NEVER,  // Doom Fire
-	MAT_NEVER,  // Hell Burner
-	MAT_RETAIL, // Red Storm
-	MAT_RETAIL, // Storm Rider
-	MAT_RETAIL, // Storm Lord
-	MAT_RETAIL, // Maelstorm
-	MAT_RETAIL, // Devil Kin Brute
-	MAT_RETAIL, // Winged-Demon
-	MAT_RETAIL, // Gargoyle
-	MAT_RETAIL, // Blood Claw
-	MAT_RETAIL, // Death Wing
-	MAT_RETAIL, // Slayer
-	MAT_RETAIL, // Guardian
-	MAT_RETAIL, // Vortex Lord
-	MAT_RETAIL, // Balrog
-	MAT_RETAIL, // Cave Viper
-	MAT_RETAIL, // Fire Drake
-	MAT_RETAIL, // Gold Viper
-	MAT_RETAIL, // Azure Drake
-	MAT_RETAIL, // Black Knight
-	MAT_RETAIL, // Doom Guard
-	MAT_RETAIL, // Steel Lord
-	MAT_RETAIL, // Blood Knight
-	MAT_RETAIL, // The Shredded
-	MAT_NEVER,  // Hollow One
-	MAT_NEVER,  // Pain Master
-	MAT_NEVER,  // Reality Weaver
-	MAT_RETAIL, // Succubus
-	MAT_RETAIL, // Snow Witch
-	MAT_RETAIL, // Hell Spawn
-	MAT_RETAIL, // Soul Burner
-	MAT_RETAIL, // Counselor
-	MAT_RETAIL, // Magistrate
-	MAT_RETAIL, // Cabalist
-	MAT_RETAIL, // Advocate
-	MAT_NEVER,  // Golem
-	MAT_NEVER,  // The Dark Lord
-	MAT_NEVER,  // The Arch-Litch Malignus
-	MAT_RETAIL, // Hellboar
-	MAT_RETAIL, // Stinger
-	MAT_RETAIL, // Psychorb
-	MAT_RETAIL, // Arachnon
-	MAT_RETAIL, // Felltwin
-	MAT_RETAIL, // Hork Spawn
-	MAT_RETAIL, // Venomtail
-	MAT_RETAIL, // Necromorb
-	MAT_RETAIL, // Spider Lord
-	MAT_RETAIL, // Lashworm
-	MAT_RETAIL, // Torchant
-	MAT_NEVER,  // Hork Demon
-	MAT_NEVER,  // Hell Bug
-	MAT_RETAIL, // Gravedigger
-	MAT_RETAIL, // Tomb Rat
-	MAT_RETAIL, // Firebat
-	MAT_RETAIL, // Skullwing
-	MAT_RETAIL, // Lich
-	MAT_RETAIL, // Crypt Demon
-	MAT_RETAIL, // Hellbat
-	MAT_RETAIL, // Bone Demon
-	MAT_RETAIL, // Arch Lich
-	MAT_RETAIL, // Biclops
-	MAT_RETAIL, // Flesh Thing
-	MAT_RETAIL, // Reaper
-	MAT_NEVER,  // Na-Krul
-};
+
 /** Contains the data related to each unique monster ID. */
 const UniqMonstStruct UniqMonst[] = {
 	// clang-format off
