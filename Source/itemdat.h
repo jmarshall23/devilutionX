@@ -593,8 +593,8 @@ struct UItemStruct {
 };
 
 extern ItemData *AllItemsList;
-extern const PLStruct ItemPrefixes[];
-extern const PLStruct ItemSuffixes[];
+extern PLStruct *ItemPrefixes;
+extern PLStruct *ItemSuffixes;
 extern UItemStruct *UniqueItemList;
 
 } // namespace devilution

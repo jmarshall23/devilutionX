@@ -91,6 +91,8 @@ extern DataTable *DunMonTable;
 extern DataTable *uniqueMonsterTable;
 extern DataTable *objectTable;
 extern DataTable *uniqueItemTable;
+extern DataTable *itemPrefixTable;
+extern DataTable *itemSuffixTable;
 
 void DiabloLoadTables(void);
 
