@@ -16,12 +16,14 @@ DataTable *difficultyTable = nullptr;
 DataTable *experienceTable = nullptr;
 DataTable *heroSpeechTable = nullptr;
 DataTable *messagesTable = nullptr;
+DataTable *itemsTable = nullptr;
 
 namespace devilution {
 	void InitMonsterTable(void);
 	void InitSpellDataTable(void);
     void InitMissileDataTable(void);
     void InitSfxDataTable(void);
+    void InitItemTable(void);
     void InitPlayerExperienceTable(void);
 }
 
@@ -39,12 +41,14 @@ void DiabloLoadTables(void)
 	experienceTable = new DataTable("excel\\experience.txt");
 	heroSpeechTable = new DataTable("excel\\heroSpeech.txt");
 	messagesTable = new DataTable("excel\\messages.txt");
+	itemsTable = new DataTable("excel\\items.txt");
 
 	devilution::InitMonsterTable();
 	devilution::InitSpellDataTable();
 	devilution::InitMissileDataTable();
 	devilution::InitSfxDataTable();
 	devilution::InitPlayerExperienceTable();
+	devilution::InitItemTable();
 }
 
 /*

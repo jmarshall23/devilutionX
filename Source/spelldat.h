@@ -220,5 +220,6 @@ struct SpellData {
 extern SpellData *spelldata;
 
 devilution::missile_id MissileIdFromString(std::string str);
+spell_id SpellIdFromString(std::string str);
 
 } // namespace devilution
