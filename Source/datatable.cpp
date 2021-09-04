@@ -21,6 +21,7 @@ DataTable *textTable = nullptr;
 DataTable *DunMonTable = nullptr;
 DataTable *uniqueMonsterTable = nullptr;
 DataTable *objectTable = nullptr;
+DataTable *uniqueItemTable = nullptr;
 
 namespace devilution {
 	void InitMonsterTable(void);
@@ -52,6 +53,7 @@ void DiabloLoadTables(void)
 	DunMonTable = new DataTable("excel\\dunmontbl.txt");
 	uniqueMonsterTable = new DataTable("excel\\uniquemon.txt");
 	objectTable = new DataTable("excel\\objects.txt");
+	uniqueItemTable = new DataTable("excel\\uniqueitems.txt");
 
 	devilution::InitMonsterTable();
 	devilution::InitSpellDataTable();

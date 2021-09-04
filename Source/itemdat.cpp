@@ -310,6 +310,7 @@ namespace devilution {
 	unique_base_item UniqueBaseItemFromText(std::string str)
     {
 		ITEM_STRING_TO_ID(UITYPE_NONE)
+	    ITEM_STRING_TO_ID(UITYPE_INVALID)
 		ITEM_STRING_TO_ID(UITYPE_SHORTBOW)
 		ITEM_STRING_TO_ID(UITYPE_LONGBOW)
 		ITEM_STRING_TO_ID(UITYPE_HUNTBOW)
@@ -385,12 +386,141 @@ namespace devilution {
 	    return UITYPE_NONE;
 	}
 
+	item_effect_type ItemEffectTypeToString(std::string str)
+    {
+		ITEM_STRING_TO_ID(IPL_TOHIT)
+		ITEM_STRING_TO_ID(IPL_TOHIT_CURSE)
+		ITEM_STRING_TO_ID(IPL_DAMP)
+		ITEM_STRING_TO_ID(IPL_DAMP_CURSE)
+		ITEM_STRING_TO_ID(IPL_TOHIT_DAMP)
+		ITEM_STRING_TO_ID(IPL_TOHIT_DAMP_CURSE)
+		ITEM_STRING_TO_ID(IPL_ACP)
+		ITEM_STRING_TO_ID(IPL_ACP_CURSE)
+		ITEM_STRING_TO_ID(IPL_FIRERES)
+		ITEM_STRING_TO_ID(IPL_LIGHTRES)
+		ITEM_STRING_TO_ID(IPL_MAGICRES)
+		ITEM_STRING_TO_ID(IPL_ALLRES)
+		ITEM_STRING_TO_ID(IPL_SPLCOST)
+		ITEM_STRING_TO_ID(IPL_SPLDUR)
+		ITEM_STRING_TO_ID(IPL_SPLLVLADD)
+		ITEM_STRING_TO_ID(IPL_CHARGES)
+		ITEM_STRING_TO_ID(IPL_FIREDAM)
+		ITEM_STRING_TO_ID(IPL_LIGHTDAM)
+		ITEM_STRING_TO_ID(IPL_0x12)
+		ITEM_STRING_TO_ID(IPL_STR)
+		ITEM_STRING_TO_ID(IPL_STR_CURSE)
+		ITEM_STRING_TO_ID(IPL_MAG)
+		ITEM_STRING_TO_ID(IPL_MAG_CURSE)
+		ITEM_STRING_TO_ID(IPL_DEX)
+		ITEM_STRING_TO_ID(IPL_DEX_CURSE)
+		ITEM_STRING_TO_ID(IPL_VIT)
+		ITEM_STRING_TO_ID(IPL_VIT_CURSE)
+		ITEM_STRING_TO_ID(IPL_ATTRIBS)
+		ITEM_STRING_TO_ID(IPL_ATTRIBS_CURSE)
+		ITEM_STRING_TO_ID(IPL_GETHIT_CURSE)
+		ITEM_STRING_TO_ID(IPL_GETHIT)
+		ITEM_STRING_TO_ID(IPL_LIFE)
+		ITEM_STRING_TO_ID(IPL_LIFE_CURSE)
+		ITEM_STRING_TO_ID(IPL_MANA)
+		ITEM_STRING_TO_ID(IPL_MANA_CURSE)
+		ITEM_STRING_TO_ID(IPL_DUR)
+		ITEM_STRING_TO_ID(IPL_DUR_CURSE)
+		ITEM_STRING_TO_ID(IPL_INDESTRUCTIBLE)
+		ITEM_STRING_TO_ID(IPL_LIGHT)
+		ITEM_STRING_TO_ID(IPL_LIGHT_CURSE)
+		ITEM_STRING_TO_ID(IPL_0x28)
+		ITEM_STRING_TO_ID(IPL_MULT_ARROWS)
+		ITEM_STRING_TO_ID(IPL_FIRE_ARROWS)
+		ITEM_STRING_TO_ID(IPL_LIGHT_ARROWS)
+		ITEM_STRING_TO_ID(IPL_INVCURS)
+		ITEM_STRING_TO_ID(IPL_THORNS)
+		ITEM_STRING_TO_ID(IPL_NOMANA)
+		ITEM_STRING_TO_ID(IPL_NOHEALPLR)
+		ITEM_STRING_TO_ID(IPL_0x30)
+		ITEM_STRING_TO_ID(IPL_0x31)
+		ITEM_STRING_TO_ID(IPL_FIREBALL)
+		ITEM_STRING_TO_ID(IPL_0x33)
+		ITEM_STRING_TO_ID(IPL_ABSHALFTRAP)
+		ITEM_STRING_TO_ID(IPL_KNOCKBACK)
+		ITEM_STRING_TO_ID(IPL_NOHEALMON)
+		ITEM_STRING_TO_ID(IPL_STEALMANA)
+		ITEM_STRING_TO_ID(IPL_STEALLIFE)
+		ITEM_STRING_TO_ID(IPL_TARGAC)
+		ITEM_STRING_TO_ID(IPL_FASTATTACK)
+		ITEM_STRING_TO_ID(IPL_FASTRECOVER)
+		ITEM_STRING_TO_ID(IPL_FASTBLOCK)
+		ITEM_STRING_TO_ID(IPL_DAMMOD)
+		ITEM_STRING_TO_ID(IPL_RNDARROWVEL)
+		ITEM_STRING_TO_ID(IPL_SETDAM)
+		ITEM_STRING_TO_ID(IPL_SETDUR)
+		ITEM_STRING_TO_ID(IPL_NOMINSTR)
+		ITEM_STRING_TO_ID(IPL_SPELL)
+		ITEM_STRING_TO_ID(IPL_FASTSWING)
+		ITEM_STRING_TO_ID(IPL_ONEHAND)
+		ITEM_STRING_TO_ID(IPL_3XDAMVDEM)
+		ITEM_STRING_TO_ID(IPL_ALLRESZERO)
+		ITEM_STRING_TO_ID(IPL_0x47)
+		ITEM_STRING_TO_ID(IPL_DRAINLIFE)
+		ITEM_STRING_TO_ID(IPL_RNDSTEALLIFE)
+		ITEM_STRING_TO_ID(IPL_INFRAVISION)
+		ITEM_STRING_TO_ID(IPL_SETAC)
+		ITEM_STRING_TO_ID(IPL_ADDACLIFE)
+		ITEM_STRING_TO_ID(IPL_ADDMANAAC)
+		ITEM_STRING_TO_ID(IPL_FIRERESCLVL)
+		ITEM_STRING_TO_ID(IPL_AC_CURSE)
+		ITEM_STRING_TO_ID(IDI_LASTDIABLO)
+		ITEM_STRING_TO_ID(IPL_FIRERES_CURSE)
+		ITEM_STRING_TO_ID(IPL_LIGHTRES_CURSE)
+		ITEM_STRING_TO_ID(IPL_MAGICRES_CURSE)
+		ITEM_STRING_TO_ID(IPL_ALLRES_CURSE)
+		ITEM_STRING_TO_ID(IPL_DEVASTATION)
+		ITEM_STRING_TO_ID(IPL_DECAY)
+		ITEM_STRING_TO_ID(IPL_PERIL)
+		ITEM_STRING_TO_ID(IPL_JESTERS)
+		ITEM_STRING_TO_ID(IPL_CRYSTALLINE)
+		ITEM_STRING_TO_ID(IPL_DOPPELGANGER)
+		ITEM_STRING_TO_ID(IPL_ACDEMON)
+		ITEM_STRING_TO_ID(IPL_ACUNDEAD)
+		ITEM_STRING_TO_ID(IPL_MANATOLIFE)
+		ITEM_STRING_TO_ID(IPL_LIFETOMANA)
+		ITEM_STRING_TO_ID(IPL_INVALID)
+
+		devilution::app_fatal("Invalid item effect! %s", str.c_str());
+	    return IPL_INVALID;
+	}
+
 	ItemData *AllItemsList;
+    UItemStruct *UniqueItemList;
 
 	void InitItemTable(void)
     {
 	    AllItemsList = new ItemData[itemsTable->NumRows()];
+	    UniqueItemList = new UItemStruct[uniqueItemTable->NumRows()];
 
+		// Load in the unique item table.
+		for (int i = 0; i < uniqueItemTable->NumRows(); i++) {
+		    UniqueItemList[i].UIName = uniqueItemTable->GetValue("UIName", i);
+		    UniqueItemList[i].UIItemId = UniqueBaseItemFromText(uniqueItemTable->GetValue("UIItemId", i));
+		    UniqueItemList[i].UIMinLvl = uniqueItemTable->GetInt("UIMinLvl", i);
+		    UniqueItemList[i].UINumPL = uniqueItemTable->GetInt("UINumPL", i);
+		    UniqueItemList[i].UIValue = uniqueItemTable->GetInt("UIValue", i);
+
+			for (int d = 0; d < 6; d++) {
+			    char PowerTypeName[512];
+			    char PowerParam1Name[512];
+			    char PowerParam2Name[512];
+
+				sprintf(PowerTypeName, "ItemPower%dType", d);
+			    sprintf(PowerParam1Name, "ItemPower%dParam1", d);
+			    sprintf(PowerParam2Name, "ItemPower%dParam2", d);
+
+				UniqueItemList[i].powers[d].type = ItemEffectTypeToString(uniqueItemTable->GetValue(PowerTypeName, i));
+			    UniqueItemList[i].powers[d].param1 = uniqueItemTable->GetInt(PowerParam1Name, i);
+			    UniqueItemList[i].powers[d].param2 = uniqueItemTable->GetInt(PowerParam2Name, i);
+			}
+		}
+
+		// Load in the base item table.
 		for (int i = 0; i < itemsTable->NumRows(); i++) {
 		    AllItemsList[i].iRnd = ItemDropRateFromText(itemsTable->GetValue("iRnd", i));
 		    AllItemsList[i].iClass = ItemClassFromText(itemsTable->GetValue("iClass", i));
@@ -618,126 +748,6 @@ const PLStruct ItemSuffixes[] = {
 	// TRANSLATORS: Item suffix section end.
 	{  N_("peril"),         { IPL_PERIL,               1,        1 },        5,                       PLT_WEAP | PLT_STAFF | PLT_BOW           , GOE_ANY,  false,    true,     500,    500,       1 },
 	{  "",                  { IPL_INVALID,             0,        0 },        0, 0                                                              , GOE_ANY,  false,    false,      0,      0,       0 },
-	// clang-format on
-};
-
-/** Contains the data related to each unique item ID. */
-const UItemStruct UniqueItemList[] = {
-	// clang-format off
-	// UIName,                        UIItemId,     UIMinLvl, UINumPL, UIValue,   ItemPower[0],                          ItemPower[1],                          ItemPower[2],                          ItemPower[3],                          ItemPower[4],                          ItemPower[5]
-	// TRANSLATORS: Unique Item section
-	{  N_("The Butcher's Cleaver"),   UITYPE_CLEAVER,      1,       3,    3650, { { IPL_STR,             10,       10 }, { IPL_SETDAM,           4,       24 }, { IPL_SETDUR,          10,       10 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Undead Crown"),        UITYPE_SKCROWN,      1,       3,   16650, { { IPL_RNDSTEALLIFE,     0,        0 }, { IPL_SETAC,            8,        8 }, { IPL_INVCURS,         77,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Empyrean Band"),           UITYPE_INFRARING,    1,       4,    8000, { { IPL_ATTRIBS,          2,        2 }, { IPL_LIGHT,            2,        2 }, { IPL_FASTRECOVER,      1,        1 }, { IPL_ABSHALFTRAP,      0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Optic Amulet"),            UITYPE_OPTAMULET,    1,       5,    9750, { { IPL_LIGHT,            2,        2 }, { IPL_LIGHTRES,        20,       20 }, { IPL_GETHIT,           1,        1 }, { IPL_MAG,              5,        5 }, { IPL_INVCURS,         44,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Ring of Truth"),           UITYPE_TRING,        1,       4,    9100, { { IPL_LIFE,            10,       10 }, { IPL_GETHIT,           1,        1 }, { IPL_ALLRES,          10,       10 }, { IPL_INVCURS,         10,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Harlequin Crest"),         UITYPE_HARCREST,     1,       6,    4000, { { IPL_AC_CURSE,         3,        3 }, { IPL_GETHIT,           1,        1 }, { IPL_ATTRIBS,          2,        2 }, { IPL_LIFE,             7,        7 }, { IPL_MANA,             7,        7 }, { IPL_INVCURS,         81,        0 } } },
-	{  N_("Veil of Steel"),           UITYPE_STEELVEIL,    1,       6,   63800, { { IPL_ALLRES,          50,       50 }, { IPL_LIGHT_CURSE,      2,        2 }, { IPL_ACP,             60,       60 }, { IPL_MANA_CURSE,      30,       30 }, { IPL_STR,             15,       15 }, { IPL_VIT,             15,       15 } } },
-	{  N_("Arkaine's Valor"),         UITYPE_ARMOFVAL,     1,       4,   42000, { { IPL_SETAC,           25,       25 }, { IPL_VIT,             10,       10 }, { IPL_GETHIT,           3,        3 }, { IPL_FASTRECOVER,      3,        3 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Griswold's Edge"),         UITYPE_GRISWOLD,     1,       6,   42000, { { IPL_FIREDAM,          1,       10 }, { IPL_TOHIT,           25,       25 }, { IPL_FASTATTACK,       2,        2 }, { IPL_KNOCKBACK,        0,        0 }, { IPL_MANA,            20,       20 }, { IPL_LIFE_CURSE,      20,       20 } } },
-	{  N_("Bovine Plate"),            UITYPE_BOVINE,       1,       6,     400, { { IPL_SETAC,          150,      150 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_LIGHT,            5,        5 }, { IPL_ALLRES,          30,       30 }, { IPL_MANA_CURSE,      50,       50 }, { IPL_SPLLVLADD,       -2,       -2 } } },
-	{  N_("The Rift Bow"),            UITYPE_SHORTBOW,     1,       3,    1800, { { IPL_RNDARROWVEL,      0,        0 }, { IPL_DAMMOD,           2,        2 }, { IPL_DEX_CURSE,        3,        3 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Needler"),             UITYPE_SHORTBOW,     2,       4,    8900, { { IPL_TOHIT,           50,       50 }, { IPL_SETDAM,           1,        3 }, { IPL_FASTATTACK,       2,        2 }, { IPL_INVCURS,        158,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Celestial Bow"),       UITYPE_LONGBOW,      2,       4,    1200, { { IPL_NOMINSTR,         0,        0 }, { IPL_DAMMOD,           2,        2 }, { IPL_SETAC,            5,        5 }, { IPL_INVCURS,        133,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Deadly Hunter"),           UITYPE_COMPBOW,      3,       4,    8750, { { IPL_3XDAMVDEM,       10,       10 }, { IPL_TOHIT,           20,       20 }, { IPL_MAG_CURSE,        5,        5 }, { IPL_INVCURS,        108,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Bow of the Dead"),         UITYPE_COMPBOW,      5,       6,    2500, { { IPL_TOHIT,           10,       10 }, { IPL_DEX,              4,        4 }, { IPL_VIT_CURSE,        3,        3 }, { IPL_LIGHT_CURSE,      2,        2 }, { IPL_SETDUR,          30,       30 }, { IPL_INVCURS,        108,        0 } } },
-	{  N_("The Blackoak Bow"),        UITYPE_LONGBOW,      5,       4,    2500, { { IPL_DEX,             10,       10 }, { IPL_VIT_CURSE,       10,       10 }, { IPL_DAMP,            50,       50 }, { IPL_LIGHT_CURSE,      1,        1 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Flamedart"),               UITYPE_HUNTBOW,     10,       4,   14250, { { IPL_FIRE_ARROWS,      0,        0 }, { IPL_FIREDAM,          1,        6 }, { IPL_TOHIT,           20,       20 }, { IPL_FIRERES,         40,       40 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Fleshstinger"),            UITYPE_LONGBOW,     13,       4,   16500, { { IPL_DEX,             15,       15 }, { IPL_TOHIT,           40,       40 }, { IPL_DAMP,            80,       80 }, { IPL_DUR,              6,        6 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Windforce"),               UITYPE_WARBOW,      17,       4,   37750, { { IPL_STR,              5,        5 }, { IPL_DAMP,           200,      200 }, { IPL_KNOCKBACK,        0,        0 }, { IPL_INVCURS,        164,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Eaglehorn"),               UITYPE_BATTLEBOW,   26,       5,   42500, { { IPL_DEX,             20,       20 }, { IPL_TOHIT,           50,       50 }, { IPL_DAMP,           100,      100 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,        108,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Gonnagal's Dirk"),         UITYPE_DAGGER,       1,       5,    7040, { { IPL_DEX_CURSE,        5,        5 }, { IPL_DAMMOD,           4,        4 }, { IPL_FASTATTACK,       2,        2 }, { IPL_FIRERES,         25,       25 }, { IPL_INVCURS,         54,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Defender"),            UITYPE_SABRE,        1,       3,    2000, { { IPL_SETAC,            5,        5 }, { IPL_VIT,              5,        5 }, { IPL_TOHIT_CURSE,      5,        5 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Gryphons Claw"),           UITYPE_FALCHION,     1,       4,    1000, { { IPL_DAMP,           100,      100 }, { IPL_MAG_CURSE,        2,        2 }, { IPL_DEX_CURSE,        5,        5 }, { IPL_INVCURS,         68,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Black Razor"),             UITYPE_DAGGER,       1,       4,    2000, { { IPL_DAMP,           150,      150 }, { IPL_VIT,              2,        2 }, { IPL_SETDUR,           5,        5 }, { IPL_INVCURS,         53,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Gibbous Moon"),            UITYPE_BROADSWR,     2,       4,    6660, { { IPL_ATTRIBS,          2,        2 }, { IPL_DAMP,            25,       25 }, { IPL_MANA,            15,       15 }, { IPL_LIGHT_CURSE,      3,        3 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Ice Shank"),               UITYPE_LONGSWR,      3,       3,    5250, { { IPL_FIRERES,         40,       40 }, { IPL_SETDUR,          15,       15 }, { IPL_STR,              5,       10 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Executioner's Blade"), UITYPE_FALCHION,     3,       5,    7080, { { IPL_DAMP,           150,      150 }, { IPL_LIFE_CURSE,      10,       10 }, { IPL_LIGHT_CURSE,      1,        1 }, { IPL_DUR,            200,      200 }, { IPL_INVCURS,         58,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Bonesaw"),             UITYPE_CLAYMORE,     6,       6,    4400, { { IPL_DAMMOD,          10,       10 }, { IPL_STR,             10,       10 }, { IPL_MAG_CURSE,        5,        5 }, { IPL_DEX_CURSE,        5,        5 }, { IPL_LIFE,            10,       10 }, { IPL_MANA_CURSE,      10,       10 } } },
-	{  N_("Shadowhawk"),              UITYPE_BROADSWR,     8,       4,   13750, { { IPL_LIGHT_CURSE,      2,        2 }, { IPL_STEALLIFE,        5,        5 }, { IPL_TOHIT,           15,       15 }, { IPL_ALLRES,           5,        5 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Wizardspike"),             UITYPE_DAGGER,      11,       5,   12920, { { IPL_MAG,             15,       15 }, { IPL_MANA,            35,       35 }, { IPL_TOHIT,           25,       25 }, { IPL_ALLRES,          15,       15 }, { IPL_INVCURS,         50,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Lightsabre"),              UITYPE_SABRE,       13,       4,   19150, { { IPL_LIGHT,            2,        2 }, { IPL_LIGHTDAM,         1,       10 }, { IPL_TOHIT,           20,       20 }, { IPL_LIGHTRES,        50,       50 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Falcon's Talon"),      UITYPE_SCIMITAR,    15,       5,    7867, { { IPL_FASTATTACK,       4,        4 }, { IPL_TOHIT,           20,       20 }, { IPL_DAMP_CURSE,      33,       33 }, { IPL_DEX,             10,       10 }, { IPL_INVCURS,         68,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Inferno"),                 UITYPE_LONGSWR,     17,       4,   34600, { { IPL_FIREDAM,          2,       12 }, { IPL_LIGHT,            3,        3 }, { IPL_MANA,            20,       20 }, { IPL_FIRERES,         80,       80 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Doombringer"),             UITYPE_BASTARDSWR,  19,       5,   18250, { { IPL_TOHIT,           25,       25 }, { IPL_DAMP,           250,      250 }, { IPL_ATTRIBS_CURSE,    5,        5 }, { IPL_LIFE_CURSE,      25,       25 }, { IPL_LIGHT_CURSE,      2,        2 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Grizzly"),             UITYPE_TWOHANDSWR,  23,       6,   50000, { { IPL_STR,             20,       20 }, { IPL_VIT_CURSE,        5,        5 }, { IPL_DAMP,           200,      200 }, { IPL_KNOCKBACK,        0,        0 }, { IPL_DUR,            100,      100 }, { IPL_INVCURS,        160,        0 } } },
-	{  N_("The Grandfather"),         UITYPE_GREATSWR,    27,       6,  119800, { { IPL_ONEHAND,          0,        0 }, { IPL_ATTRIBS,          5,        5 }, { IPL_TOHIT,           20,       20 }, { IPL_DAMP,            70,       70 }, { IPL_LIFE,            20,       20 }, { IPL_INVCURS,        161,        0 } } },
-	{  N_("The Mangler"),             UITYPE_LARGEAXE,     2,       5,    2850, { { IPL_DAMP,           200,      200 }, { IPL_DEX_CURSE,        5,        5 }, { IPL_MAG_CURSE,        5,        5 }, { IPL_MANA_CURSE,      10,       10 }, { IPL_INVCURS,        144,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Sharp Beak"),              UITYPE_LARGEAXE,     2,       4,    2850, { { IPL_LIFE,            20,       20 }, { IPL_MAG_CURSE,       10,       10 }, { IPL_MANA_CURSE,      10,       10 }, { IPL_INVCURS,        143,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("BloodSlayer"),             UITYPE_BROADAXE,     3,       5,    2500, { { IPL_DAMP,           100,      100 }, { IPL_3XDAMVDEM,       50,       50 }, { IPL_ATTRIBS_CURSE,    5,        5 }, { IPL_SPLLVLADD,       -1,       -1 }, { IPL_INVCURS,        144,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Celestial Axe"),       UITYPE_BATTLEAXE,    4,       4,   14100, { { IPL_NOMINSTR,         0,        0 }, { IPL_TOHIT,           15,       15 }, { IPL_LIFE,            15,       15 }, { IPL_STR_CURSE,       15,       15 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Wicked Axe"),              UITYPE_LARGEAXE,     5,       6,   31150, { { IPL_TOHIT,           30,       30 }, { IPL_DEX,             10,       10 }, { IPL_VIT_CURSE,       10,       10 }, { IPL_GETHIT,           1,        6 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,        143,        0 } } },
-	{  N_("Stonecleaver"),            UITYPE_BROADAXE,     7,       5,   23900, { { IPL_LIFE,            30,       30 }, { IPL_TOHIT,           20,       20 }, { IPL_DAMP,            50,       50 }, { IPL_LIGHTRES,        40,       40 }, { IPL_INVCURS,        104,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Aguinara's Hatchet"),      UITYPE_SMALLAXE,    12,       3,   24800, { { IPL_SPLLVLADD,        1,        1 }, { IPL_MAG,             10,       10 }, { IPL_MAGICRES,        80,       80 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Hellslayer"),              UITYPE_BATTLEAXE,   15,       5,   26200, { { IPL_STR,              8,        8 }, { IPL_VIT,              8,        8 }, { IPL_DAMP,           100,      100 }, { IPL_LIFE,            25,       25 }, { IPL_MANA_CURSE,      25,       25 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Messerschmidt's Reaver"),  UITYPE_GREATAXE,    25,       6,   58000, { { IPL_DAMP,           200,      200 }, { IPL_DAMMOD,          15,       15 }, { IPL_ATTRIBS,          5,        5 }, { IPL_LIFE_CURSE,      50,       50 }, { IPL_FIREDAM,          2,       12 }, { IPL_INVCURS,        163,        0 } } },
-	{  N_("Crackrust"),               UITYPE_MACE,         1,       5,   11375, { { IPL_ATTRIBS,          2,        2 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_ALLRES,          15,       15 }, { IPL_DAMP,            50,       50 }, { IPL_SPLLVLADD,       -1,       -1 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Hammer of Jholm"),         UITYPE_MAUL,         1,       4,    8700, { { IPL_DAMP,             4,       10 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_STR,              3,        3 }, { IPL_TOHIT,           15,       15 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Civerb's Cudgel"),         UITYPE_MACE,         1,       3,    2000, { { IPL_3XDAMVDEM,       35,       35 }, { IPL_DEX_CURSE,        5,        5 }, { IPL_MAG_CURSE,        2,        2 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Celestial Star"),      UITYPE_FLAIL,        2,       5,    7810, { { IPL_NOMINSTR,         0,        0 }, { IPL_LIGHT,            2,        2 }, { IPL_DAMMOD,          10,       10 }, { IPL_AC_CURSE,         8,        8 }, { IPL_INVCURS,        131,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Baranar's Star"),          UITYPE_MORNSTAR,     5,       6,    6850, { { IPL_TOHIT,           12,       12 }, { IPL_DAMP,            80,       80 }, { IPL_FASTATTACK,       1,        1 }, { IPL_VIT,              4,        4 }, { IPL_DEX_CURSE,        4,        4 }, { IPL_SETDUR,          60,       60 } } },
-	{  N_("Gnarled Root"),            UITYPE_SPIKCLUB,     9,       6,    9820, { { IPL_TOHIT,           20,       20 }, { IPL_DAMP,           300,      300 }, { IPL_DEX,             10,       10 }, { IPL_MAG,              5,        5 }, { IPL_ALLRES,          10,       10 }, { IPL_AC_CURSE,        10,       10 } } },
-	{  N_("The Cranium Basher"),      UITYPE_MAUL,        12,       6,   36500, { { IPL_DAMMOD,          20,       20 }, { IPL_STR,             15,       15 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_MANA_CURSE,     150,      150 }, { IPL_ALLRES,           5,        5 }, { IPL_INVCURS,        122,        0 } } },
-	{  N_("Schaefer's Hammer"),       UITYPE_WARHAMMER,   16,       6,   56125, { { IPL_DAMP_CURSE,     100,      100 }, { IPL_LIGHTDAM,         1,       50 }, { IPL_LIFE,            50,       50 }, { IPL_TOHIT,           30,       30 }, { IPL_LIGHTRES,        80,       80 }, { IPL_LIGHT,            1,        1 } } },
-	{  N_("Dreamflange"),             UITYPE_MACE,        26,       5,   26450, { { IPL_MAG,             30,       30 }, { IPL_MANA,            50,       50 }, { IPL_MAGICRES,        50,       50 }, { IPL_LIGHT,            2,        2 }, { IPL_SPLLVLADD,        1,        1 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Staff of Shadows"),        UITYPE_LONGSTAFF,    2,       5,    1250, { { IPL_MAG_CURSE,       10,       10 }, { IPL_TOHIT,           10,       10 }, { IPL_DAMP,            60,       60 }, { IPL_LIGHT_CURSE,      2,        2 }, { IPL_FASTATTACK,       1,        1 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Immolator"),               UITYPE_LONGSTAFF,    4,       4,    3900, { { IPL_FIRERES,         20,       20 }, { IPL_FIREDAM,          4,        4 }, { IPL_MANA,            10,       10 }, { IPL_VIT_CURSE,        5,        5 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Storm Spire"),             UITYPE_WARSTAFF,     8,       4,   22500, { { IPL_LIGHTRES,        50,       50 }, { IPL_LIGHTDAM,         2,        8 }, { IPL_STR,             10,       10 }, { IPL_MAG_CURSE,       10,       10 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Gleamsong"),               UITYPE_SHORTSTAFF,   8,       4,    6520, { { IPL_MANA,            25,       25 }, { IPL_STR_CURSE,        3,        3 }, { IPL_VIT_CURSE,        3,        3 }, { IPL_SPELL,           10,       76 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Thundercall"),             UITYPE_COMPSTAFF,   14,       5,   22250, { { IPL_TOHIT,           35,       35 }, { IPL_LIGHTDAM,         1,       10 }, { IPL_SPELL,            3,       76 }, { IPL_LIGHTRES,        30,       30 }, { IPL_LIGHT,            2,        2 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Protector"),           UITYPE_SHORTSTAFF,  16,       6,   17240, { { IPL_VIT,              5,        5 }, { IPL_GETHIT,           5,        5 }, { IPL_SETAC,           40,       40 }, { IPL_SPELL,            2,       86 }, { IPL_THORNS,           1,        3 }, { IPL_INVCURS,        162,        0 } } },
-	{  N_("Naj's Puzzler"),           UITYPE_LONGSTAFF,   18,       5,   34000, { { IPL_MAG,             20,       20 }, { IPL_DEX,             10,       10 }, { IPL_ALLRES,          20,       20 }, { IPL_SPELL,           23,       57 }, { IPL_LIFE_CURSE,      25,       25 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Mindcry"),                 UITYPE_QUARSTAFF,   20,       4,   41500, { { IPL_MAG,             15,       15 }, { IPL_SPELL,           13,       69 }, { IPL_ALLRES,          15,       15 }, { IPL_SPLLVLADD,        1,        1 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Rod of Onan"),             UITYPE_WARSTAFF,    22,       3,   44167, { { IPL_SPELL,           21,       50 }, { IPL_DAMP,           100,      100 }, { IPL_ATTRIBS,          5,        5 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Helm of Sprits"),          UITYPE_HELM,         1,       2,    7525, { { IPL_STEALLIFE,        5,        5 }, { IPL_INVCURS,         77,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Thinking Cap"),            UITYPE_SKULLCAP,     6,       5,    2020, { { IPL_MANA,            30,       30 }, { IPL_SPLLVLADD,        2,        2 }, { IPL_ALLRES,          20,       20 }, { IPL_SETDUR,           1,        1 }, { IPL_INVCURS,         93,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("OverLord's Helm"),         UITYPE_HELM,         7,       6,   12500, { { IPL_STR,             20,       20 }, { IPL_DEX,             15,       15 }, { IPL_VIT,              5,        5 }, { IPL_MAG_CURSE,       20,       20 }, { IPL_SETDUR,          15,       15 }, { IPL_INVCURS,         99,        0 } } },
-	{  N_("Fool's Crest"),            UITYPE_HELM,        12,       5,   10150, { { IPL_ATTRIBS_CURSE,    4,        4 }, { IPL_LIFE,           100,      100 }, { IPL_GETHIT_CURSE,     1,        6 }, { IPL_THORNS,           1,        3 }, { IPL_INVCURS,         80,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Gotterdamerung"),          UITYPE_GREATHELM,   21,       6,   54900, { { IPL_ATTRIBS,         20,       20 }, { IPL_SETAC,           60,       60 }, { IPL_GETHIT,           4,        4 }, { IPL_ALLRESZERO,       0,        0 }, { IPL_LIGHT_CURSE,      4,        4 }, { IPL_INVCURS,         85,        0 } } },
-	{  N_("Royal Circlet"),           UITYPE_CROWN,       27,       5,   24875, { { IPL_ATTRIBS,         10,       10 }, { IPL_MANA,            40,       40 }, { IPL_SETAC,           40,       40 }, { IPL_LIGHT,            1,        1 }, { IPL_INVCURS,         79,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Torn Flesh of Souls"),     UITYPE_RAGS,         2,       5,    4825, { { IPL_SETAC,            8,        8 }, { IPL_VIT,             10,       10 }, { IPL_GETHIT,           1,        1 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,         92,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Gladiator's Bane"),    UITYPE_STUDARMOR,    6,       4,    3450, { { IPL_SETAC,           25,       25 }, { IPL_GETHIT,           2,        2 }, { IPL_DUR,            200,      200 }, { IPL_ATTRIBS_CURSE,    3,        3 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Rainbow Cloak"),       UITYPE_CLOAK,        2,       6,    4900, { { IPL_SETAC,           10,       10 }, { IPL_ATTRIBS,          1,        1 }, { IPL_ALLRES,          10,       10 }, { IPL_LIFE,             5,        5 }, { IPL_DUR,             50,       50 }, { IPL_INVCURS,        138,        0 } } },
-	{  N_("Leather of Aut"),          UITYPE_LEATHARMOR,   4,       5,   10550, { { IPL_SETAC,           15,       15 }, { IPL_STR,              5,        5 }, { IPL_MAG_CURSE,        5,        5 }, { IPL_DEX,              5,        5 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Wisdom's Wrap"),           UITYPE_ROBE,         5,       6,    6200, { { IPL_MAG,              5,        5 }, { IPL_MANA,            10,       10 }, { IPL_LIGHTRES,        25,       25 }, { IPL_SETAC,           15,       15 }, { IPL_GETHIT,           1,        1 }, { IPL_INVCURS,        138,        0 } } },
-	{  N_("Sparking Mail"),           UITYPE_CHAINMAIL,    9,       2,   15750, { { IPL_SETAC,           30,       30 }, { IPL_LIGHTDAM,         1,       10 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Scavenger Carapace"),      UITYPE_BREASTPLATE, 13,       4,   14000, { { IPL_GETHIT,          15,       15 }, { IPL_AC_CURSE,        30,       30 }, { IPL_DEX,              5,        5 }, { IPL_LIGHTRES,        40,       40 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Nightscape"),              UITYPE_CAPE,        16,       6,   11600, { { IPL_FASTRECOVER,      2,        2 }, { IPL_LIGHT_CURSE,      4,        4 }, { IPL_SETAC,           15,       15 }, { IPL_DEX,              3,        3 }, { IPL_ALLRES,          20,       20 }, { IPL_INVCURS,        138,        0 } } },
-	{  N_("Naj's Light Plate"),       UITYPE_PLATEMAIL,   19,       6,   78700, { { IPL_NOMINSTR,         0,        0 }, { IPL_MAG,              5,        5 }, { IPL_MANA,            20,       20 }, { IPL_ALLRES,          20,       20 }, { IPL_SPLLVLADD,        1,        1 }, { IPL_INVCURS,        159,        0 } } },
-	{  N_("Demonspike Coat"),         UITYPE_FULLPLATE,   25,       5,  251175, { { IPL_SETAC,          100,      100 }, { IPL_GETHIT,           6,        6 }, { IPL_STR,             10,       10 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_FIRERES,         50,       50 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("The Deflector"),           UITYPE_BUCKLER,      1,       5,    1500, { { IPL_SETAC,            7,        7 }, { IPL_ALLRES,          10,       10 }, { IPL_DAMP_CURSE,      20,       20 }, { IPL_TOHIT_CURSE,      5,        5 }, { IPL_INVCURS,         83,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Split Skull Shield"),      UITYPE_BUCKLER,      1,       6,    2025, { { IPL_SETAC,           10,       10 }, { IPL_LIFE,            10,       10 }, { IPL_STR,              2,        2 }, { IPL_LIGHT_CURSE,      1,        1 }, { IPL_SETDUR,          15,       15 }, { IPL_INVCURS,        116,        0 } } },
-	{  N_("Dragon's Breach"),         UITYPE_KITESHIELD,   2,       6,   19200, { { IPL_FIRERES,         25,       25 }, { IPL_STR,              5,        5 }, { IPL_SETAC,           20,       20 }, { IPL_MAG_CURSE,        5,        5 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,        117,        0 } } },
-	{  N_("Blackoak Shield"),         UITYPE_SMALLSHIELD,  4,       6,    5725, { { IPL_DEX,             10,       10 }, { IPL_VIT_CURSE,       10,       10 }, { IPL_SETAC,           18,       18 }, { IPL_LIGHT_CURSE,      1,        1 }, { IPL_DUR,            150,      150 }, { IPL_INVCURS,        146,        0 } } },
-	{  N_("Holy Defender"),           UITYPE_LARGESHIELD, 10,       6,   13800, { { IPL_SETAC,           15,       15 }, { IPL_GETHIT,           2,        2 }, { IPL_FIRERES,         20,       20 }, { IPL_DUR,            200,      200 }, { IPL_FASTBLOCK,        1,        1 }, { IPL_INVCURS,        146,        0 } } },
-	{  N_("Stormshield"),             UITYPE_GOTHSHIELD,  24,       6,   49000, { { IPL_SETAC,           40,       40 }, { IPL_GETHIT_CURSE,     4,        4 }, { IPL_STR,             10,       10 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_FASTBLOCK,        1,        1 }, { IPL_INVCURS,        148,        0 } } },
-	{  N_("Bramble"),                 UITYPE_RING,         1,       4,    1000, { { IPL_ATTRIBS_CURSE,    2,        2 }, { IPL_DAMMOD,           3,        3 }, { IPL_MANA,            10,       10 }, { IPL_INVCURS,          9,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Ring of Regha"),           UITYPE_RING,         1,       6,    4175, { { IPL_MAG,             10,       10 }, { IPL_MAGICRES,        10,       10 }, { IPL_LIGHT,            1,        1 }, { IPL_STR_CURSE,        3,        3 }, { IPL_DEX_CURSE,        3,        3 }, { IPL_INVCURS,         11,        0 } } },
-	{  N_("The Bleeder"),             UITYPE_RING,         2,       4,    8500, { { IPL_MAGICRES,        20,       20 }, { IPL_MANA,            30,       30 }, { IPL_LIFE_CURSE,      10,       10 }, { IPL_INVCURS,          8,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Constricting Ring"),       UITYPE_RING,         5,       3,   62000, { { IPL_ALLRES,          75,       75 }, { IPL_DRAINLIFE,        0,        0 }, { IPL_INVCURS,         14,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Ring of Engagement"),      UITYPE_RING,        11,       5,   12476, { { IPL_GETHIT,           1,        2 }, { IPL_THORNS,           1,        3 }, { IPL_SETAC,            5,        5 }, { IPL_TARGAC,           4,       12 }, { IPL_INVCURS,         13,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Giant's Knuckle"),         UITYPE_RING,         8,       3,    8000, { { IPL_STR,             60,       60 }, { IPL_DEX_CURSE,       30,       30 }, { IPL_INVCURS,        179,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Mercurial Ring"),          UITYPE_RING,         8,       3,    8000, { { IPL_DEX,             60,       60 }, { IPL_STR_CURSE,       30,       30 }, { IPL_INVCURS,        176,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Xorine's Ring"),           UITYPE_RING,         8,       3,    8000, { { IPL_MAG,             60,       60 }, { IPL_STR_CURSE,       30,       30 }, { IPL_INVCURS,        168,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Karik's Ring"),            UITYPE_RING,         8,       3,    8000, { { IPL_VIT,             60,       60 }, { IPL_MAG_CURSE,       30,       30 }, { IPL_INVCURS,        173,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Ring of Magma"),           UITYPE_RING,         8,       4,    8000, { { IPL_FIRERES,         60,       60 }, { IPL_LIGHTRES_CURSE,  30,       30 }, { IPL_MAGICRES_CURSE,  30,       30 }, { IPL_INVCURS,        184,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Ring of the Mystics"),     UITYPE_RING,         8,       4,    8000, { { IPL_MAGICRES,        60,       60 }, { IPL_FIRERES_CURSE,   30,       30 }, { IPL_LIGHTRES_CURSE,  30,       30 }, { IPL_INVCURS,        181,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Ring of Thunder"),         UITYPE_RING,         8,       4,    8000, { { IPL_LIGHTRES,        60,       60 }, { IPL_FIRERES_CURSE,   30,       30 }, { IPL_MAGICRES_CURSE,  30,       30 }, { IPL_INVCURS,        177,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Amulet of Warding"),       UITYPE_AMULET,      12,       3,   30000, { { IPL_ALLRES,          40,       40 }, { IPL_LIFE_CURSE,     100,      100 }, { IPL_INVCURS,        170,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Gnat Sting"),              UITYPE_HUNTBOW,     15,       5,   30000, { { IPL_MULT_ARROWS,      3,        3 }, { IPL_SETDAM,           1,        2 }, { IPL_FASTATTACK,       1,        1 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,        210,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Flambeau"),                UITYPE_COMPBOW,     11,       4,   30000, { { IPL_FIREBALL,        15,       20 }, { IPL_SETDAM,           0,        0 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,        209,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Armor of Gloom"),          UITYPE_FULLPLATE,   25,       5,  200000, { { IPL_NOMINSTR,         0,        0 }, { IPL_SETAC,          225,      225 }, { IPL_ALLRESZERO,       0,        0 }, { IPL_LIGHT_CURSE,      2,        2 }, { IPL_INVCURS,        203,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Blitzen"),                 UITYPE_COMPBOW,     13,       4,   30000, { { IPL_ADDACLIFE,       10,       15 }, { IPL_SETDAM,           0,        0 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,        219,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Thunderclap"),             UITYPE_WARHAMMER,   13,       6,   30000, { { IPL_ADDMANAAC,        3,        6 }, { IPL_STR,             20,       20 }, { IPL_LIGHTRES,        30,       30 }, { IPL_LIGHT,            2,        2 }, { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_INVCURS,        205,        0 } } },
-	{  N_("Shirotachi"),              UITYPE_GREATSWR,    21,       4,   36000, { { IPL_ONEHAND,          0,        0 }, { IPL_FASTATTACK,       4,        4 }, { IPL_TARGAC,           2,        2 }, { IPL_LIGHTDAM,         6,        6 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Eater of Souls"),          UITYPE_TWOHANDSWR,  23,       6,   42000, { { IPL_INDESTRUCTIBLE,   0,        0 }, { IPL_LIFE,            50,       50 }, { IPL_STEALLIFE,        5,        5 }, { IPL_STEALMANA,        5,        5 }, { IPL_DRAINLIFE,        0,        0 }, { IPL_INVCURS,        200,        0 } } },
-	{  N_("Diamondedge"),             UITYPE_LONGSWR,     17,       6,   42000, { { IPL_SETDUR,          10,       10 }, { IPL_TOHIT,           50,       50 }, { IPL_DAMP,           100,      100 }, { IPL_LIGHTRES,        50,       50 }, { IPL_SETAC,           10,       10 }, { IPL_INVCURS,        206,        0 } } },
-	{  N_("Bone Chain Armor"),        UITYPE_CHAINMAIL,   13,       3,   36000, { { IPL_SETAC,           40,       40 }, { IPL_ACUNDEAD,         0,        0 }, { IPL_INVCURS,        204,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Demon Plate Armor"),       UITYPE_FULLPLATE,   25,       3,   80000, { { IPL_SETAC,           80,       80 }, { IPL_ACDEMON,          0,        0 }, { IPL_INVCURS,        225,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  N_("Acolyte's Amulet"),        UITYPE_AMULET,      10,       2,   10000, { { IPL_MANATOLIFE,      50,       50 }, { IPL_INVCURS,        183,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	// TRANSLATORS: Unique Item section end.
-	{  N_("Gladiator's Ring"),        UITYPE_RING,        10,       2,   10000, { { IPL_LIFETOMANA,      40,       40 }, { IPL_INVCURS,        186,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
-	{  "",                            UITYPE_INVALID,      0,       0,       0, { { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 }, { IPL_INVALID,          0,        0 } } },
 	// clang-format on
 };
 
