@@ -313,7 +313,7 @@ struct UniqMonstStruct {
 };
 
 extern MonsterData *MonstersData;
-extern const _monster_id MonstConvTbl[];
+extern _monster_id *MonstConvTbl;
 extern char *MonstAvailTbl;
 extern const UniqMonstStruct UniqMonst[];
 

@@ -69,6 +69,7 @@ extern DataTable *heroSpeechTable;
 extern DataTable *messagesTable;
 extern DataTable *itemsTable;
 extern DataTable *textTable;
+extern DataTable *DunMonTable;
 
 void DiabloLoadTables(void);
 
