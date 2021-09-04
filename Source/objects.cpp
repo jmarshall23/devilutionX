@@ -31,6 +31,8 @@
 #include "utils/language.h"
 #include "utils/log.hpp"
 
+#include "datatable.h"
+
 namespace devilution {
 
 Object Objects[MAXOBJECTS];
@@ -39,6 +41,145 @@ int ActiveObjects[MAXOBJECTS];
 int ActiveObjectCount;
 bool ApplyObjectLighting;
 bool LoadingMapObjects;
+
+ObjectDefinition objectDefinition[OBJ_COUNT];
+
+#define OBJECT_STRING_TO_ID(x) if (str == #x) { return x; }
+
+_object_id ObjectIdFromStringId(std::string str) {
+	OBJECT_STRING_TO_ID(OBJ_L1LIGHT)
+	OBJECT_STRING_TO_ID(OBJ_L1LDOOR)
+	OBJECT_STRING_TO_ID(OBJ_L1RDOOR)
+	OBJECT_STRING_TO_ID(OBJ_SKFIRE)
+	OBJECT_STRING_TO_ID(OBJ_LEVER)
+	OBJECT_STRING_TO_ID(OBJ_CHEST1)
+	OBJECT_STRING_TO_ID(OBJ_CHEST2)
+	OBJECT_STRING_TO_ID(OBJ_CHEST3)
+	OBJECT_STRING_TO_ID(OBJ_CANDLE1)
+	OBJECT_STRING_TO_ID(OBJ_CANDLE2)
+	OBJECT_STRING_TO_ID(OBJ_CANDLEO)
+	OBJECT_STRING_TO_ID(OBJ_BANNERL)
+	OBJECT_STRING_TO_ID(OBJ_BANNERM)
+	OBJECT_STRING_TO_ID(OBJ_BANNERR)
+	OBJECT_STRING_TO_ID(OBJ_SKPILE)
+	OBJECT_STRING_TO_ID(OBJ_SKSTICK1)
+	OBJECT_STRING_TO_ID(OBJ_SKSTICK2)
+	OBJECT_STRING_TO_ID(OBJ_SKSTICK3)
+	OBJECT_STRING_TO_ID(OBJ_SKSTICK4)
+	OBJECT_STRING_TO_ID(OBJ_SKSTICK5)
+	OBJECT_STRING_TO_ID(OBJ_CRUX1)
+	OBJECT_STRING_TO_ID(OBJ_CRUX2)
+	OBJECT_STRING_TO_ID(OBJ_CRUX3)
+	OBJECT_STRING_TO_ID(OBJ_STAND)
+	OBJECT_STRING_TO_ID(OBJ_ANGEL)
+	OBJECT_STRING_TO_ID(OBJ_BOOK2L)
+	OBJECT_STRING_TO_ID(OBJ_BCROSS)
+	OBJECT_STRING_TO_ID(OBJ_NUDEW2R)
+	OBJECT_STRING_TO_ID(OBJ_SWITCHSKL)
+	OBJECT_STRING_TO_ID(OBJ_TNUDEM1)
+	OBJECT_STRING_TO_ID(OBJ_TNUDEM2)
+	OBJECT_STRING_TO_ID(OBJ_TNUDEM3)
+	OBJECT_STRING_TO_ID(OBJ_TNUDEM4)
+	OBJECT_STRING_TO_ID(OBJ_TNUDEW1)
+	OBJECT_STRING_TO_ID(OBJ_TNUDEW2)
+	OBJECT_STRING_TO_ID(OBJ_TNUDEW3)
+	OBJECT_STRING_TO_ID(OBJ_TORTURE1)
+	OBJECT_STRING_TO_ID(OBJ_TORTURE2)
+	OBJECT_STRING_TO_ID(OBJ_TORTURE3)
+	OBJECT_STRING_TO_ID(OBJ_TORTURE4)
+	OBJECT_STRING_TO_ID(OBJ_TORTURE5)
+	OBJECT_STRING_TO_ID(OBJ_BOOK2R)
+	OBJECT_STRING_TO_ID(OBJ_L2LDOOR)
+	OBJECT_STRING_TO_ID(OBJ_L2RDOOR)
+	OBJECT_STRING_TO_ID(OBJ_TORCHL)
+	OBJECT_STRING_TO_ID(OBJ_TORCHR)
+	OBJECT_STRING_TO_ID(OBJ_TORCHL2)
+	OBJECT_STRING_TO_ID(OBJ_TORCHR2)
+	OBJECT_STRING_TO_ID(OBJ_SARC)
+	OBJECT_STRING_TO_ID(OBJ_FLAMEHOLE)
+	OBJECT_STRING_TO_ID(OBJ_FLAMELVR)
+	OBJECT_STRING_TO_ID(OBJ_WATER)
+	OBJECT_STRING_TO_ID(OBJ_BOOKLVR)
+	OBJECT_STRING_TO_ID(OBJ_TRAPL)
+	OBJECT_STRING_TO_ID(OBJ_TRAPR)
+	OBJECT_STRING_TO_ID(OBJ_BOOKSHELF)
+	OBJECT_STRING_TO_ID(OBJ_WEAPRACK)
+	OBJECT_STRING_TO_ID(OBJ_BARREL)
+	OBJECT_STRING_TO_ID(OBJ_BARRELEX)
+	OBJECT_STRING_TO_ID(OBJ_SHRINEL)
+	OBJECT_STRING_TO_ID(OBJ_SHRINER)
+	OBJECT_STRING_TO_ID(OBJ_SKELBOOK)
+	OBJECT_STRING_TO_ID(OBJ_BOOKCASEL)
+	OBJECT_STRING_TO_ID(OBJ_BOOKCASER)
+	OBJECT_STRING_TO_ID(OBJ_BOOKSTAND)
+	OBJECT_STRING_TO_ID(OBJ_BOOKCANDLE)
+	OBJECT_STRING_TO_ID(OBJ_BLOODFTN)
+	OBJECT_STRING_TO_ID(OBJ_DECAP)
+	OBJECT_STRING_TO_ID(OBJ_TCHEST1)
+	OBJECT_STRING_TO_ID(OBJ_TCHEST2)
+	OBJECT_STRING_TO_ID(OBJ_TCHEST3)
+	OBJECT_STRING_TO_ID(OBJ_BLINDBOOK)
+	OBJECT_STRING_TO_ID(OBJ_BLOODBOOK)
+	OBJECT_STRING_TO_ID(OBJ_PEDISTAL)
+	OBJECT_STRING_TO_ID(OBJ_L3LDOOR)
+	OBJECT_STRING_TO_ID(OBJ_L3RDOOR)
+	OBJECT_STRING_TO_ID(OBJ_PURIFYINGFTN)
+	OBJECT_STRING_TO_ID(OBJ_ARMORSTAND)
+	OBJECT_STRING_TO_ID(OBJ_ARMORSTANDN)
+	OBJECT_STRING_TO_ID(OBJ_GOATSHRINE)
+	OBJECT_STRING_TO_ID(OBJ_CAULDRON)
+	OBJECT_STRING_TO_ID(OBJ_MURKYFTN)
+	OBJECT_STRING_TO_ID(OBJ_TEARFTN)
+	OBJECT_STRING_TO_ID(OBJ_ALTBOY)
+	OBJECT_STRING_TO_ID(OBJ_MCIRCLE1)
+	OBJECT_STRING_TO_ID(OBJ_MCIRCLE2)
+	OBJECT_STRING_TO_ID(OBJ_STORYBOOK)
+	OBJECT_STRING_TO_ID(OBJ_STORYCANDLE)
+	OBJECT_STRING_TO_ID(OBJ_STEELTOME)
+	OBJECT_STRING_TO_ID(OBJ_WARARMOR)
+	OBJECT_STRING_TO_ID(OBJ_WARWEAP)
+	OBJECT_STRING_TO_ID(OBJ_TBCROSS)
+	OBJECT_STRING_TO_ID(OBJ_WEAPONRACK)
+	OBJECT_STRING_TO_ID(OBJ_WEAPONRACKN)
+	OBJECT_STRING_TO_ID(OBJ_MUSHPATCH)
+	OBJECT_STRING_TO_ID(OBJ_LAZSTAND)
+	OBJECT_STRING_TO_ID(OBJ_SLAINHERO)
+	OBJECT_STRING_TO_ID(OBJ_SIGNCHEST)
+	OBJECT_STRING_TO_ID(OBJ_BOOKSHELFR)
+
+	devilution::app_fatal("Invalid object id! %s", str.c_str());
+	return OBJ_NULL;
+}
+
+ObjectDefinitionFlag ObjectDefinitionFlagFromString(std::string str)
+{
+	OBJECT_STRING_TO_ID(OBJ_FLAG_NONE)
+	OBJECT_STRING_TO_ID(OBJ_FLAG_DOOR)
+	OBJECT_STRING_TO_ID(OBJ_FLAG_SETLVL)
+	OBJECT_STRING_TO_ID(OBJ_FLAG_LEVEL)
+	OBJECT_STRING_TO_ID(OBJ_FLAG_SHRINE)
+	OBJECT_STRING_TO_ID(OBJ_STORY_BOOK)
+
+	devilution::app_fatal("Invalid object definition! %s", str.c_str());
+	return OBJ_FLAG_NONE;
+}
+
+void InitObjectDefinitionTable(void)
+{
+	memset(&objectDefinition, 0, sizeof(objectDefinition));
+
+	int numDefinitons = objectTable->NumRows();
+
+	for (int i = 0; i < numDefinitons; i++) {
+		_object_id id = ObjectIdFromStringId(objectTable->GetValue("id", i));
+
+		objectDefinition[id].hasDefinition = true;
+		objectDefinition[id].name0 = objectTable->GetValue("name0", i);
+		objectDefinition[id].name1 = objectTable->GetValue("name1", i);
+		objectDefinition[id].name2 = objectTable->GetValue("name2", i);
+		objectDefinition[id].flag = ObjectDefinitionFlagFromString(objectTable->GetValue("Flags", i));
+	}
+}
 
 namespace {
 
@@ -5372,145 +5513,51 @@ void SyncObjectAnim(Object &object)
 
 void GetObjectStr(int i)
 {
-	switch (Objects[i]._otype) {
-	case OBJ_CRUX1:
-	case OBJ_CRUX2:
-	case OBJ_CRUX3:
-		strcpy(infostr, _("Crucified Skeleton"));
-		break;
-	case OBJ_LEVER:
-	case OBJ_FLAMELVR:
-		strcpy(infostr, _("Lever"));
-		break;
-	case OBJ_L1LDOOR:
-	case OBJ_L1RDOOR:
-	case OBJ_L2LDOOR:
-	case OBJ_L2RDOOR:
-	case OBJ_L3LDOOR:
-	case OBJ_L3RDOOR:
-		if (Objects[i]._oVar4 == 1)
-			strcpy(infostr, _("Open Door"));
-		if (Objects[i]._oVar4 == 0)
-			strcpy(infostr, _("Closed Door"));
-		if (Objects[i]._oVar4 == 2)
-			strcpy(infostr, _("Blocked Door"));
-		break;
-	case OBJ_BOOK2L:
-		if (setlevel) {
-			if (setlvlnum == SL_BONECHAMB) {
-				strcpy(infostr, _("Ancient Tome"));
-			} else if (setlvlnum == SL_VILEBETRAYER) {
-				strcpy(infostr, _("Book of Vileness"));
-			}
+	int type = Objects[i]._otype;
+	if (objectDefinition[type].hasDefinition) {
+		switch (objectDefinition[type].flag) {
+			case OBJ_FLAG_NONE:
+			strcpy(infostr, objectDefinition[type].name0);
+			break;
+
+			case OBJ_FLAG_DOOR:
+			    if (Objects[i]._oVar4 == 1)
+				    strcpy(infostr, objectDefinition[type].name1);
+			    if (Objects[i]._oVar4 == 0)
+				    strcpy(infostr, objectDefinition[type].name0);
+			    if (Objects[i]._oVar4 == 2)
+				    strcpy(infostr, objectDefinition[type].name2);
+			break;
+
+			case OBJ_FLAG_SETLVL:
+			    if (setlevel) {
+				    if (setlvlnum == SL_BONECHAMB) {
+					    strcpy(infostr, objectDefinition[type].name0);
+				    } else if (setlvlnum == SL_VILEBETRAYER) {
+					    strcpy(infostr, objectDefinition[type].name1);
+				    }
+			    }
+			break;
+
+			case OBJ_FLAG_LEVEL:
+			    if (currlevel >= 17 && currlevel <= 20)      // for hive levels
+				    strcpy(infostr, objectDefinition[type].name1); //Then a barrel is called a pod
+			    else if (currlevel >= 21 && currlevel <= 24) // for crypt levels
+				    strcpy(infostr, objectDefinition[type].name2); //Then a barrel is called an urn
+			    else
+				    strcpy(infostr, objectDefinition[type].name0);
+			    break;
+
+			case OBJ_FLAG_SHRINE:
+			    sprintf(infostr, "%s%s", ShrineNames[Objects[i]._oVar1], objectDefinition[type].name0);
+				break;
+
+			case OBJ_STORY_BOOK:
+			    strcpy(infostr, _(StoryBookName[Objects[i]._oVar3]));
+				break;
 		}
-		break;
-	case OBJ_SWITCHSKL:
-		strcpy(infostr, _("Skull Lever"));
-		break;
-	case OBJ_BOOK2R:
-		strcpy(infostr, _("Mythical Book"));
-		break;
-	case OBJ_CHEST1:
-	case OBJ_TCHEST1:
-		strcpy(infostr, _("Small Chest"));
-		break;
-	case OBJ_CHEST2:
-	case OBJ_TCHEST2:
-		strcpy(infostr, _("Chest"));
-		break;
-	case OBJ_CHEST3:
-	case OBJ_TCHEST3:
-	case OBJ_SIGNCHEST:
-		strcpy(infostr, _("Large Chest"));
-		break;
-	case OBJ_SARC:
-		strcpy(infostr, _("Sarcophagus"));
-		break;
-	case OBJ_BOOKSHELF:
-		strcpy(infostr, _("Bookshelf"));
-		break;
-	case OBJ_BOOKCASEL:
-	case OBJ_BOOKCASER:
-		strcpy(infostr, _("Bookcase"));
-		break;
-	case OBJ_BARREL:
-	case OBJ_BARRELEX:
-		if (currlevel >= 17 && currlevel <= 20)      // for hive levels
-			strcpy(infostr, _("Pod"));               //Then a barrel is called a pod
-		else if (currlevel >= 21 && currlevel <= 24) // for crypt levels
-			strcpy(infostr, _("Urn"));               //Then a barrel is called an urn
-		else
-			strcpy(infostr, _("Barrel"));
-		break;
-	case OBJ_SHRINEL:
-	case OBJ_SHRINER:
-		strcpy(tempstr, fmt::format(_(/* TRANSLATORS: {:s} will be a name from the Shrine block above */ "{:s} Shrine"), _(ShrineNames[Objects[i]._oVar1])).c_str());
-		strcpy(infostr, tempstr);
-		break;
-	case OBJ_SKELBOOK:
-		strcpy(infostr, _("Skeleton Tome"));
-		break;
-	case OBJ_BOOKSTAND:
-		strcpy(infostr, _("Library Book"));
-		break;
-	case OBJ_BLOODFTN:
-		strcpy(infostr, _("Blood Fountain"));
-		break;
-	case OBJ_DECAP:
-		strcpy(infostr, _("Decapitated Body"));
-		break;
-	case OBJ_BLINDBOOK:
-		strcpy(infostr, _("Book of the Blind"));
-		break;
-	case OBJ_BLOODBOOK:
-		strcpy(infostr, _("Book of Blood"));
-		break;
-	case OBJ_PURIFYINGFTN:
-		strcpy(infostr, _("Purifying Spring"));
-		break;
-	case OBJ_ARMORSTAND:
-	case OBJ_WARARMOR:
-		strcpy(infostr, _("Armor"));
-		break;
-	case OBJ_WARWEAP:
-		strcpy(infostr, _("Weapon Rack"));
-		break;
-	case OBJ_GOATSHRINE:
-		strcpy(infostr, _("Goat Shrine"));
-		break;
-	case OBJ_CAULDRON:
-		strcpy(infostr, _("Cauldron"));
-		break;
-	case OBJ_MURKYFTN:
-		strcpy(infostr, _("Murky Pool"));
-		break;
-	case OBJ_TEARFTN:
-		strcpy(infostr, _("Fountain of Tears"));
-		break;
-	case OBJ_STEELTOME:
-		strcpy(infostr, _("Steel Tome"));
-		break;
-	case OBJ_PEDISTAL:
-		strcpy(infostr, _("Pedestal of Blood"));
-		break;
-	case OBJ_STORYBOOK:
-		strcpy(infostr, _(StoryBookName[Objects[i]._oVar3]));
-		break;
-	case OBJ_WEAPONRACK:
-		strcpy(infostr, _("Weapon Rack"));
-		break;
-	case OBJ_MUSHPATCH:
-		strcpy(infostr, _("Mushroom Patch"));
-		break;
-	case OBJ_LAZSTAND:
-		strcpy(infostr, _("Vile Stand"));
-		break;
-	case OBJ_SLAINHERO:
-		strcpy(infostr, _("Slain Hero"));
-		break;
-	default:
-		break;
 	}
+
 	if (Players[MyPlayerId]._pClass == HeroClass::Rogue) {
 		if (Objects[i]._oTrapFlag) {
 			strcpy(tempstr, fmt::format(_(/* TRANSLATORS: {:s} will either be a chest or a door */ "Trapped {:s}"), infostr).c_str());

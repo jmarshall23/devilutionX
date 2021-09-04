@@ -1,0 +1,51 @@
+id,name0,name1,name2,Flags
+OBJ_CRUX1,Crucified Skeleton,none,none,OBJ_FLAG_NONE
+OBJ_CRUX2,Crucified Skeleton,none,none,OBJ_FLAG_NONE
+OBJ_CRUX3,Crucified Skeleton,none,none,OBJ_FLAG_NONE
+OBJ_LEVER,Lever,none,none,OBJ_FLAG_NONE
+OBJ_FLAMELVR,Lever,none,none,OBJ_FLAG_NONE
+OBJ_L1LDOOR,Closed Door,Open Door,Blocked Door,OBJ_FLAG_DOOR
+OBJ_L1RDOOR,Closed Door,Open Door,Blocked Door,OBJ_FLAG_DOOR
+OBJ_L2LDOOR,Closed Door,Open Door,Blocked Door,OBJ_FLAG_DOOR
+OBJ_L2RDOOR,Closed Door,Open Door,Blocked Door,OBJ_FLAG_DOOR
+OBJ_L3LDOOR,Closed Door,Open Door,Blocked Door,OBJ_FLAG_DOOR
+OBJ_L3RDOOR,Closed Door,Open Door,Blocked Door,OBJ_FLAG_DOOR
+OBJ_BOOK2L,Ancient Tome,Book of Vileness,none,OBJ_FLAG_SETLVL
+OBJ_SWITCHSKL,Skull Lever,none,none,OBJ_FLAG_NONE
+OBJ_BOOK2R,Mythical Book,none,none,OBJ_FLAG_NONE
+OBJ_CHEST1,Small Chest,none,none,OBJ_FLAG_NONE
+OBJ_TCHEST1,Small Chest,none,none,OBJ_FLAG_NONE
+OBJ_CHEST2,Chest,none,none,OBJ_FLAG_NONE
+OBJ_TCHEST2,Chest,none,none,OBJ_FLAG_NONE
+OBJ_CHEST3,Large Chest,none,none,OBJ_FLAG_NONE
+OBJ_TCHEST3,Large Chest,none,none,OBJ_FLAG_NONE
+OBJ_SIGNCHEST,Large Chest,none,none,OBJ_FLAG_NONE
+OBJ_SARC,Sarcophagus,none,none,OBJ_FLAG_NONE
+OBJ_BOOKSHELF,Bookshelf,none,none,OBJ_FLAG_NONE
+OBJ_BOOKCASEL,Bookcase,none,none,OBJ_FLAG_NONE
+OBJ_BOOKCASER,Bookcase,none,none,OBJ_FLAG_NONE
+OBJ_BARREL,Barrel,Pod,Urn,OBJ_FLAG_LEVEL
+OBJ_BARRELEX,Barrel,Pod,Urn,OBJ_FLAG_LEVEL
+OBJ_SHRINEL,{:s} Shrine,none,none,OBJ_FLAG_SHRINE
+OBJ_SHRINER,{:s} Shrine,none,none,OBJ_FLAG_SHRINE
+OBJ_SKELBOOK,Skeleton Tome,none,none,OBJ_FLAG_NONE
+OBJ_BOOKSTAND,Library Book,none,none,OBJ_FLAG_NONE
+OBJ_BLOODFTN,Blood Fountain,none,none,OBJ_FLAG_NONE
+OBJ_DECAP,Decapitated Body,none,none,OBJ_FLAG_NONE
+OBJ_BLINDBOOK,Book of the Blind,none,none,OBJ_FLAG_NONE
+OBJ_BLOODBOOK,Book of Blood,none,none,OBJ_FLAG_NONE
+OBJ_PURIFYINGFTN,Purifying Spring,none,none,OBJ_FLAG_NONE
+OBJ_ARMORSTAND,Armor,none,none,OBJ_FLAG_NONE
+OBJ_WARARMOR,Armor,none,none,OBJ_FLAG_NONE
+OBJ_WARWEAP,Weapon Rack,none,none,OBJ_FLAG_NONE
+OBJ_GOATSHRINE,Goat Shrine,none,none,OBJ_FLAG_NONE
+OBJ_CAULDRON,Cauldron,none,none,OBJ_FLAG_NONE
+OBJ_MURKYFTN,Murky Pool,none,none,OBJ_FLAG_NONE
+OBJ_TEARFTN,Fountain of Tears,none,none,OBJ_FLAG_NONE
+OBJ_STEELTOME,Steel Tome,none,none,OBJ_FLAG_NONE
+OBJ_PEDISTAL,Pedestal of Blood,none,none,OBJ_FLAG_NONE
+OBJ_STORYBOOK,none,none,none,OBJ_STORY_BOOK
+OBJ_WEAPONRACK,Weapon Rack,none,none,OBJ_FLAG_NONE
+OBJ_MUSHPATCH,Mushroom Patch,none,none,OBJ_FLAG_NONE
+OBJ_LAZSTAND,Vile Stand,none,none,OBJ_FLAG_NONE
+OBJ_SLAINHERO,Slain Hero,none,none,OBJ_FLAG_NONE

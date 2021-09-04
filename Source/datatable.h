@@ -26,6 +26,15 @@ public:
 		return atoi(rows[row].c_str());
 	}
 
+	int FindValue(const char *name) const
+	{
+		for (int i = 0; i < rows.size(); i++) {
+			if (rows[i] == name)
+				return i;
+		}
+		return -1;
+	}
+
 	std::string name;
 	std::vector<std::string> rows;
 };
@@ -35,6 +44,15 @@ public:
 	DataTable(const char *path);
 
 	const DataColumn *FindColumn(const char *name);
+
+	int FindValueInColumn(const char *columnName, const char *value)
+	{
+		const DataColumn *col = FindColumn(columnName);
+		if (col == nullptr)
+			return -1;
+
+		return col->FindValue(value);
+	}
 
 	const char *GetValue(const char *rowName, int index)
 	{
@@ -71,6 +89,7 @@ extern DataTable *itemsTable;
 extern DataTable *textTable;
 extern DataTable *DunMonTable;
 extern DataTable *uniqueMonsterTable;
+extern DataTable *objectTable;
 
 void DiabloLoadTables(void);
 

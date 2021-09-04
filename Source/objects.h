@@ -18,6 +18,25 @@ namespace devilution {
 
 #define MAXOBJECTS 127
 
+enum ObjectDefinitionFlag {
+	OBJ_FLAG_NONE = 0,
+	OBJ_FLAG_DOOR,
+	OBJ_FLAG_SETLVL,
+	OBJ_FLAG_LEVEL,
+	OBJ_FLAG_SHRINE,
+	OBJ_STORY_BOOK
+};
+
+struct ObjectDefinition {
+	bool hasDefinition;
+	const char *name0;
+	const char *name1;
+	const char *name2;
+	ObjectDefinitionFlag flag;
+};
+
+extern ObjectDefinition objectDefinition[OBJ_COUNT];
+
 struct Object {
 	_object_id _otype;
 	Point position;

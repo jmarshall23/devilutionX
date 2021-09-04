@@ -192,6 +192,7 @@ enum _object_id : int8_t {
 	OBJ_SLAINHERO,
 	OBJ_SIGNCHEST,
 	OBJ_BOOKSHELFR,
+	OBJ_COUNT,
 	OBJ_NULL = -1,
 };
 
