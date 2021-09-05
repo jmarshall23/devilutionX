@@ -1031,6 +1031,21 @@ std::unique_ptr<MegaTile[]> LoadMegaTileText(const char *filename)
 	return buf;
 }
 
+std::unique_ptr<uint16_t[]> LoadMinTileText(const char *filename)
+{
+	DataTable *table = new DataTable(filename);
+
+	std::unique_ptr<uint16_t[]> buf { new uint16_t[table->NumRows()] };
+
+	for (int i = 0; i < table->NumRows(); i++) {
+		buf[i] = table->GetInt("blockval", i);
+	}
+
+	delete table;
+	return buf;
+}
+
+
 void LoadLvlGFX()
 {
 	assert(pDungeonCels == nullptr);
@@ -1041,11 +1056,11 @@ void LoadLvlGFX()
 		if (gbIsHellfire) {
 			pDungeonCels = LoadFileInMem("NLevels\\TownData\\Town.CEL");
 			pMegaTiles = LoadMegaTileText("NLevels\\TownData\\Town.tiltext");
-			pLevelPieces = LoadFileInMem<uint16_t>("NLevels\\TownData\\Town.MIN");
+			pLevelPieces = LoadMinTileText("NLevels\\TownData\\Town.mintext");
 		} else {
 			pDungeonCels = LoadFileInMem("Levels\\TownData\\Town.CEL");
 			pMegaTiles = LoadMegaTileText("Levels\\TownData\\Town.tiltext");
-			pLevelPieces = LoadFileInMem<uint16_t>("Levels\\TownData\\Town.MIN");
+			pLevelPieces = LoadMinTileText("Levels\\TownData\\Town.mintext");
 		}
 		pSpecialCels = LoadCel("Levels\\TownData\\TownS.CEL", SpecialCelWidth);
 		break;
