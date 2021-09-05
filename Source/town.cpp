@@ -13,6 +13,8 @@
 #include "quests.h"
 #include "trigs.h"
 
+#include "datatable.h"
+
 namespace devilution {
 
 namespace {
@@ -23,40 +25,40 @@ namespace {
  * @param xi upper left destination
  * @param yy upper left destination
  */
-void FillSector(const char *path, int xi, int yy)
+void FillSector(const char *path, int xi, int yy1)
 {
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	DataTable *dataTable = new DataTable(path);
 
-	int width = SDL_SwapLE16(dunData[0]);
-	int height = SDL_SwapLE16(dunData[1]);
+// jmarshall - text dungeon support./
+	for (int d = 0; d < dataTable->NumRows(); d++) {
+		int j = dataTable->GetInt("y", d);
+		int i = dataTable->GetInt("x", d);
+		int tileId = dataTable->GetInt("megatile", d);
 
-	const uint16_t *tileLayer = &dunData[2];
+		int v1 = 0;
+		int v2 = 0;
+		int v3 = 0;
+		int v4 = 0;
 
-	for (int j = 0; j < height; j++) {
-		int xx = xi;
-		for (int i = 0; i < width; i++) {
-			int v1 = 0;
-			int v2 = 0;
-			int v3 = 0;
-			int v4 = 0;
+		int xx = xi + (i * 2);
+		int yy = yy1 + (j * 2);
 
-			int tileId = SDL_SwapLE16(tileLayer[j * width + i]) - 1;
-			if (tileId >= 0) {
-				MegaTile mega = pMegaTiles[tileId];
-				v1 = SDL_SwapLE16(mega.micro1) + 1;
-				v2 = SDL_SwapLE16(mega.micro2) + 1;
-				v3 = SDL_SwapLE16(mega.micro3) + 1;
-				v4 = SDL_SwapLE16(mega.micro4) + 1;
-			}
-
-			dPiece[xx + 0][yy + 0] = v1;
-			dPiece[xx + 1][yy + 0] = v2;
-			dPiece[xx + 0][yy + 1] = v3;
-			dPiece[xx + 1][yy + 1] = v4;
-			xx += 2;
+		if (tileId >= 0) {
+			MegaTile mega = pMegaTiles[tileId];
+			v1 = SDL_SwapLE16(mega.micro1) + 1;
+			v2 = SDL_SwapLE16(mega.micro2) + 1;
+			v3 = SDL_SwapLE16(mega.micro3) + 1;
+			v4 = SDL_SwapLE16(mega.micro4) + 1;
 		}
-		yy += 2;
+
+		dPiece[xx + 0][yy + 0] = v1;
+		dPiece[xx + 1][yy + 0] = v2;
+		dPiece[xx + 0][yy + 1] = v3;
+		dPiece[xx + 1][yy + 1] = v4;
 	}
+
+	delete dataTable;
+// jmarshall end
 }
 
 /**
@@ -162,10 +164,10 @@ void DrlgTPass3()
 		}
 	}
 
-	FillSector("Levels\\TownData\\Sector1s.DUN", 46, 46);
-	FillSector("Levels\\TownData\\Sector2s.DUN", 46, 0);
-	FillSector("Levels\\TownData\\Sector3s.DUN", 0, 46);
-	FillSector("Levels\\TownData\\Sector4s.DUN", 0, 0);
+	FillSector("Levels\\TownData\\Sector1s.duntext", 46, 46);
+	FillSector("Levels\\TownData\\Sector2s.duntext", 46, 0);
+	FillSector("Levels\\TownData\\Sector3s.duntext", 0, 46);
+	FillSector("Levels\\TownData\\Sector4s.duntext", 0, 0);
 
 	if (!IsWarpOpen(DTYPE_CATACOMBS)) {
 		FillTile(48, 20, 320);
