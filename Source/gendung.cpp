@@ -11,6 +11,8 @@
 #include "lighting.h"
 #include "options.h"
 
+#include "datatable.h"
+
 namespace devilution {
 
 uint8_t dungeon[DMAXX][DMAXY];
@@ -64,13 +66,29 @@ THEME_LOC themeLoc[MAXTHEMES];
 
 namespace {
 
+std::unique_ptr<uint8_t[]> LoadSolTileText(const char *filename, size_t *tileCount)
+{
+	DataTable *table = new DataTable(filename);
+
+	std::unique_ptr<uint8_t[]> buf { new uint8_t[table->NumRows()] };
+
+	for (int i = 0; i < table->NumRows(); i++) {
+		buf[i] = table->GetInt("val", i);
+	}
+
+	*tileCount = table->NumRows();
+
+	delete table;
+	return buf;
+}
+
 std::unique_ptr<uint8_t[]> LoadLevelSOLData(size_t &tileCount)
 {
 	switch (leveltype) {
 	case DTYPE_TOWN:
 		if (gbIsHellfire)
-			return LoadFileInMem<uint8_t>("NLevels\\TownData\\Town.SOL", &tileCount);
-		return LoadFileInMem<uint8_t>("Levels\\TownData\\Town.SOL", &tileCount);
+			return LoadSolTileText("NLevels\\TownData\\Town.soltext", &tileCount);
+		return LoadSolTileText("Levels\\TownData\\Town.soltext", &tileCount);
 	case DTYPE_CATHEDRAL:
 		if (currlevel < 17)
 			return LoadFileInMem<uint8_t>("Levels\\L1Data\\L1.SOL", &tileCount);
