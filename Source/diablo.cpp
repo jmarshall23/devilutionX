@@ -1014,6 +1014,23 @@ void DiabloDeinit()
 		SDL_Quit();
 }
 
+std::unique_ptr<MegaTile[]> LoadMegaTileText(const char *filename)
+{
+	DataTable *table = new DataTable(filename);
+
+	std::unique_ptr<MegaTile[]> buf  { new MegaTile[table->NumRows()] };
+
+	for (int i = 0; i < table->NumRows(); i++) {
+		buf[i].micro1 = table->GetInt("top", i);
+		buf[i].micro2 = table->GetInt("right", i);
+		buf[i].micro3 = table->GetInt("left", i);
+		buf[i].micro4 = table->GetInt("bottom", i);
+	}
+
+	delete table;	
+	return buf;
+}
+
 void LoadLvlGFX()
 {
 	assert(pDungeonCels == nullptr);
@@ -1023,11 +1040,11 @@ void LoadLvlGFX()
 	case DTYPE_TOWN:
 		if (gbIsHellfire) {
 			pDungeonCels = LoadFileInMem("NLevels\\TownData\\Town.CEL");
-			pMegaTiles = LoadFileInMem<MegaTile>("NLevels\\TownData\\Town.TIL");
+			pMegaTiles = LoadMegaTileText("NLevels\\TownData\\Town.tiltext");
 			pLevelPieces = LoadFileInMem<uint16_t>("NLevels\\TownData\\Town.MIN");
 		} else {
 			pDungeonCels = LoadFileInMem("Levels\\TownData\\Town.CEL");
-			pMegaTiles = LoadFileInMem<MegaTile>("Levels\\TownData\\Town.TIL");
+			pMegaTiles = LoadMegaTileText("Levels\\TownData\\Town.tiltext");
 			pLevelPieces = LoadFileInMem<uint16_t>("Levels\\TownData\\Town.MIN");
 		}
 		pSpecialCels = LoadCel("Levels\\TownData\\TownS.CEL", SpecialCelWidth);

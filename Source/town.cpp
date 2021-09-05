@@ -33,7 +33,7 @@ void FillSector(const char *path, int xi, int yy1)
 	for (int d = 0; d < dataTable->NumRows(); d++) {
 		int j = dataTable->GetInt("y", d);
 		int i = dataTable->GetInt("x", d);
-		int tileId = dataTable->GetInt("megatile", d);
+		int tileId = dataTable->GetInt("tilid", d);
 
 		int v1 = 0;
 		int v2 = 0;
