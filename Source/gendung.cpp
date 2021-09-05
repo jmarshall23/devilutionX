@@ -91,16 +91,16 @@ std::unique_ptr<uint8_t[]> LoadLevelSOLData(size_t &tileCount)
 		return LoadSolTileText("Levels\\TownData\\Town.soltext", &tileCount);
 	case DTYPE_CATHEDRAL:
 		if (currlevel < 17)
-			return LoadFileInMem<uint8_t>("Levels\\L1Data\\L1.SOL", &tileCount);
-		return LoadFileInMem<uint8_t>("NLevels\\L5Data\\L5.SOL", &tileCount);
+			return LoadSolTileText("Levels\\L1Data\\L1.soltext", &tileCount);
+		return LoadSolTileText("NLevels\\L5Data\\L5.soltext", &tileCount);
 	case DTYPE_CATACOMBS:
-		return LoadFileInMem<uint8_t>("Levels\\L2Data\\L2.SOL", &tileCount);
+		return LoadSolTileText("Levels\\L2Data\\L2.soltext", &tileCount);
 	case DTYPE_CAVES:
 		if (currlevel < 17)
-			return LoadFileInMem<uint8_t>("Levels\\L3Data\\L3.SOL", &tileCount);
-		return LoadFileInMem<uint8_t>("NLevels\\L6Data\\L6.SOL", &tileCount);
+			return LoadSolTileText("Levels\\L3Data\\L3.soltext", &tileCount);
+		return LoadSolTileText("NLevels\\L6Data\\L6.soltext", &tileCount);
 	case DTYPE_HELL:
-		return LoadFileInMem<uint8_t>("Levels\\L4Data\\L4.SOL", &tileCount);
+		return LoadSolTileText("Levels\\L4Data\\L4.soltext", &tileCount);
 	default:
 		app_fatal("FillSolidBlockTbls");
 	}
