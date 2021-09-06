@@ -12,6 +12,8 @@
 #include "player.h"
 #include "quests.h"
 
+#include "dunload.h"
+
 namespace devilution {
 
 int UberRow;
@@ -946,13 +948,13 @@ void LoadQuestSetPieces()
 	L5setloadflag = false;
 
 	if (Quests[Q_BUTCHER].IsAvailable()) {
-		L5pSetPiece = LoadFileInMem<uint16_t>("Levels\\L1Data\\rnd6.DUN");
+		L5pSetPiece = LoadLevelSetPiece(DUNGEON_BUTCHER);
 		L5setloadflag = true;
 	} else if (Quests[Q_SKELKING].IsAvailable() && !gbIsMultiplayer) {
-		L5pSetPiece = LoadFileInMem<uint16_t>("Levels\\L1Data\\SKngDO.DUN");
+		L5pSetPiece = LoadLevelSetPiece(DUNGEON_SKELKING_ENTRANCE);
 		L5setloadflag = true;
 	} else if (Quests[Q_LTBANNER].IsAvailable()) {
-		L5pSetPiece = LoadFileInMem<uint16_t>("Levels\\L1Data\\Banner2.DUN");
+		L5pSetPiece = LoadLevelSetPiece(DUNGEON_BANNER);
 		L5setloadflag = true;
 	}
 }
@@ -2401,7 +2403,7 @@ void Pass3()
 
 } // namespace
 
-void LoadL1Dungeon(const char *path, int vx, int vy)
+void LoadL1Dungeon(DungeonLevelId levelId, int vx, int vy)
 {
 	dminx = 16;
 	dminy = 16;
@@ -2417,7 +2419,7 @@ void LoadL1Dungeon(const char *path, int vx, int vy)
 		}
 	}
 
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -2452,7 +2454,7 @@ void LoadL1Dungeon(const char *path, int vx, int vy)
 	SetMapObjects(dunData.get(), 0, 0);
 }
 
-void LoadPreL1Dungeon(const char *path)
+void LoadPreL1Dungeon(DungeonLevelId levelId)
 {
 	for (int j = 0; j < DMAXY; j++) {
 		for (int i = 0; i < DMAXX; i++) {
@@ -2466,7 +2468,7 @@ void LoadPreL1Dungeon(const char *path)
 	dmaxx = 96;
 	dmaxy = 96;
 
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);

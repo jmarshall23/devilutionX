@@ -16,6 +16,8 @@
 #include "trigs.h"
 #include "utils/language.h"
 
+#include "datatable.h"
+
 namespace devilution {
 
 /** Maps from quest level to quest level names. */
@@ -112,9 +114,9 @@ void AddVileObjs()
 	ObjectAtPosition({ 35, 36 }).InitializeLoadedObject({ { 7, 11 }, { 6, 7 } }, 3);
 }
 
-void SetmapTransparancy(const char *path)
+void SetmapTransparancy(DungeonLevelId levelId)
 {
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -158,9 +160,9 @@ void LoadSetMap()
 			Quests[Q_SKELKING]._qactive = QUEST_ACTIVE;
 			Quests[Q_SKELKING]._qvar1 = 1;
 		}
-		LoadPreL1Dungeon("Levels\\L1Data\\SklKng1.DUN");
-		LoadL1Dungeon("Levels\\L1Data\\SklKng2.DUN", 83, 45);
-		LoadPalette("Levels\\L1Data\\L1_2.pal");
+		LoadPreL1Dungeon(DUNGEON_SKELKING_PREL1);
+		LoadL1Dungeon(DUNGEON_SKELKING_L1, lvlSetPiecesTables->GetInt("StartX", DUNGEON_SKELKING_L1), lvlSetPiecesTables->GetInt("StartY", DUNGEON_SKELKING_L1));
+		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_SKELKING_L1));
 		DRLG_AreaTrans(sizeof(SkelKingTrans1) / 4, &SkelKingTrans1[0]);
 		DRLG_ListTrans(sizeof(SkelKingTrans2) / 4, &SkelKingTrans2[0]);
 		DRLG_AreaTrans(sizeof(SkelKingTrans3) / 4, &SkelKingTrans3[0]);
@@ -170,9 +172,9 @@ void LoadSetMap()
 		InitSKingTriggers();
 		break;
 	case SL_BONECHAMB:
-		LoadPreL2Dungeon("Levels\\L2Data\\Bonecha2.DUN");
-		LoadL2Dungeon("Levels\\L2Data\\Bonecha1.DUN", 69, 39);
-		LoadPalette("Levels\\L2Data\\L2_2.pal");
+		LoadPreL2Dungeon(DUNGEON_BONECHAMBER_PREL2);
+		LoadL2Dungeon(DUNGEON_BONECHAMBER_L2, lvlSetPiecesTables->GetInt("StartX", DUNGEON_BONECHAMBER_L2), lvlSetPiecesTables->GetInt("StartY", DUNGEON_BONECHAMBER_L2));
+		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_BONECHAMBER_L2));
 		DRLG_ListTrans(sizeof(SkelChamTrans1) / 4, &SkelChamTrans1[0]);
 		DRLG_AreaTrans(sizeof(SkelChamTrans2) / 4, &SkelChamTrans2[0]);
 		DRLG_ListTrans(sizeof(SkelChamTrans3) / 4, &SkelChamTrans3[0]);
@@ -181,18 +183,18 @@ void LoadSetMap()
 		InitSChambTriggers();
 		break;
 	case SL_MAZE:
-		LoadPreL1Dungeon("Levels\\L1Data\\Lv1MazeA.DUN");
-		LoadL1Dungeon("Levels\\L1Data\\Lv1MazeB.DUN", 20, 50);
-		LoadPalette("Levels\\L1Data\\L1_5.pal");
+		LoadPreL1Dungeon(DUNGEON_MAZE_PRE1);
+		LoadL1Dungeon(DUNGEON_MAZE_L1, lvlSetPiecesTables->GetInt("StartX", DUNGEON_MAZE_L1), lvlSetPiecesTables->GetInt("StartY", DUNGEON_MAZE_L1));
+		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_MAZE_L1));
 		AddL1Objs(0, 0, MAXDUNX, MAXDUNY);
-		SetmapTransparancy("Levels\\L1Data\\Lv1MazeA.DUN");
+		SetmapTransparancy(DUNGEON_MAZE_PRE1);
 		break;
 	case SL_POISONWATER:
 		if (Quests[Q_PWATER]._qactive == QUEST_INIT)
 			Quests[Q_PWATER]._qactive = QUEST_ACTIVE;
-		LoadPreL3Dungeon("Levels\\L3Data\\Foulwatr.DUN");
-		LoadL3Dungeon("Levels\\L3Data\\Foulwatr.DUN", 31, 83);
-		LoadPalette("Levels\\L3Data\\L3pfoul.pal");
+		LoadPreL3Dungeon(DUNGEON_FOULWATER_PREL3);
+		LoadL3Dungeon(DUNGEON_FOULWATER_L3, lvlSetPiecesTables->GetInt("StartX", DUNGEON_FOULWATER_L3), lvlSetPiecesTables->GetInt("StartY", DUNGEON_FOULWATER_L3));
+		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_FOULWATER_L3));
 		InitPWaterTriggers();
 		break;
 	case SL_VILEBETRAYER:
@@ -201,12 +203,12 @@ void LoadSetMap()
 		} else if (Quests[Q_BETRAYER]._qactive == QUEST_ACTIVE) {
 			Quests[Q_BETRAYER]._qvar2 = 3;
 		}
-		LoadPreL1Dungeon("Levels\\L1Data\\Vile1.DUN");
-		LoadL1Dungeon("Levels\\L1Data\\Vile2.DUN", 35, 36);
-		LoadPalette("Levels\\L1Data\\L1_2.pal");
+		LoadPreL1Dungeon(DUNGEON_VILE_PREL1);
+		LoadL1Dungeon(DUNGEON_VILE_L1, lvlSetPiecesTables->GetInt("StartX", DUNGEON_VILE_L1), lvlSetPiecesTables->GetInt("StartY", DUNGEON_VILE_L1));
+		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_VILE_L1));
 		AddL1Objs(0, 0, MAXDUNX, MAXDUNY);
 		AddVileObjs();
-		SetmapTransparancy("Levels\\L1Data\\Vile1.DUN");
+		SetmapTransparancy(DUNGEON_VILE_PREL1);
 		InitNoTriggers();
 		break;
 	case SL_NONE:

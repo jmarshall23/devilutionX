@@ -255,11 +255,11 @@ void LoadQuestSetPieces()
 {
 	setloadflag = false;
 	if (Quests[Q_WARLORD].IsAvailable()) {
-		pSetPiece = LoadFileInMem<uint16_t>("Levels\\L4Data\\Warlord.DUN");
+		pSetPiece = LoadLevelSetPiece(DUNGEON_WARLORD);
 		setloadflag = true;
 	}
 	if (currlevel == 15 && gbIsMultiplayer) {
-		pSetPiece = LoadFileInMem<uint16_t>("Levels\\L4Data\\Vile1.DUN");
+		pSetPiece = LoadLevelSetPiece(DUNGEON_VILE);
 		setloadflag = true;
 	}
 }
@@ -1160,25 +1160,25 @@ void SaveQuads()
 void LoadDiabQuads(bool preflag)
 {
 	{
-		auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\diab1.DUN");
+		auto dunData = LoadLevelSetPiece(DUNGEON_DIABLOQUAD1);
 		diabquad1x = 4 + l4holdx;
 		diabquad1y = 4 + l4holdy;
 		SetRoom(dunData.get(), diabquad1x, diabquad1y);
 	}
 	{
-		auto dunData = LoadFileInMem<uint16_t>(preflag ? "Levels\\L4Data\\diab2b.DUN" : "Levels\\L4Data\\diab2a.DUN");
+		auto dunData = LoadLevelSetPiece(preflag ? DUNGEON_DIABLOQUAD2B : DUNGEON_DIABLOQUAD2A);
 		diabquad2x = 27 - l4holdx;
 		diabquad2y = 1 + l4holdy;
 		SetRoom(dunData.get(), diabquad2x, diabquad2y);
 	}
 	{
-		auto dunData = LoadFileInMem<uint16_t>(preflag ? "Levels\\L4Data\\diab3b.DUN" : "Levels\\L4Data\\diab3a.DUN");
+		auto dunData = LoadLevelSetPiece(preflag ? DUNGEON_DIABLOQUAD3B : DUNGEON_DIABLOQUAD3A);
 		diabquad3x = 1 + l4holdx;
 		diabquad3y = 27 - l4holdy;
 		SetRoom(dunData.get(), diabquad3x, diabquad3y);
 	}
 	{
-		auto dunData = LoadFileInMem<uint16_t>(preflag ? "Levels\\L4Data\\diab4b.DUN" : "Levels\\L4Data\\diab4a.DUN");
+		auto dunData = LoadLevelSetPiece(preflag ? DUNGEON_DIABLOQUAD4B : DUNGEON_DIABLOQUAD4A);
 		diabquad4x = 28 - l4holdx;
 		diabquad4y = 28 - l4holdy;
 		SetRoom(dunData.get(), diabquad4x, diabquad4y);

@@ -7,6 +7,9 @@
 
 #include "gendung.h"
 
+#include "dunload.h"
+
+
 namespace devilution {
 
 extern int UberRow;
@@ -15,8 +18,8 @@ extern bool IsUberRoomOpened;
 extern bool IsUberLeverActivated;
 extern int UberDiabloMonsterIndex;
 
-void LoadL1Dungeon(const char *path, int vx, int vy);
-void LoadPreL1Dungeon(const char *path);
+void LoadL1Dungeon(DungeonLevelId levelId, int vx, int vy);
+void LoadPreL1Dungeon(DungeonLevelId levelId);
 void CreateL5Dungeon(uint32_t rseed, lvl_entry entry);
 
 } // namespace devilution

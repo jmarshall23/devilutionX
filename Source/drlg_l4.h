@@ -7,6 +7,9 @@
 
 #include "gendung.h"
 
+#include "dunload.h"
+
+
 namespace devilution {
 
 extern int diabquad1x;

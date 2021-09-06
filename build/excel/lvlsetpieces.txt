@@ -1,0 +1,38 @@
+id,name,path,CustomPalette,StartX,StartY
+DUNGEON_BUTCHER,The Butcher's Chamber,Levels\L1Data\rnd6.DUN,None,0,0
+DUNGEON_SKELKING_ENTRANCE,King Leoric's Tomb Entrance,Levels\L1Data\SKngDO.DUN,None,0,0
+DUNGEON_SKELKING_PREL1,King Leoric's Tomb,Levels\L1Data\SklKng1.DUN,None,0,0
+DUNGEON_SKELKING_L1,King Leoric's Tomb,Levels\L1Data\SklKng2.DUN,Levels\L1Data\L1_2.pal,83,45
+DUNGEON_FOULWATER_PREL3,Water Supply,Levels\L3Data\Foulwatr.DUN,None,0,0
+DUNGEON_FOULWATER_L3,Water Supply,Levels\L3Data\Foulwatr.DUN,Levels\L3Data\L3pfoul.pal,31,83
+DUNGEON_BANNER,Ogden's Banner,Levels\L1Data\Banner2.DUN,None,0,0
+DUNGEON_BANNER_MONSTERS,None,Levels\L1Data\Banner1.DUN,None,0,0
+DUNGEON_HALLOFBLIND,Hall of the Blind,Levels\L2Data\Blind1.DUN,None,0,0
+DUNGEON_HALLOFBLIND_MONSTERS,None,Levels\L2Data\Blind2.DUN,None,0,0
+DUNGEON_MAZE_PRE1,Maze,Levels\L1Data\Lv1MazeA.DUN,None,0,0
+DUNGEON_MAZE_L1,Maze,Levels\L1Data\Lv1MazeB.DUN,Levels\L1Data\L1_5.pal,20,50
+DUNGEON_BONECHAMBER_PREL2,Bone Chamber,Levels\L2Data\Bonecha2.DUN,None,0,0
+DUNGEON_BONECHAMBER_L2,Bone Chamber,Levels\L2Data\Bonecha1.DUN,Levels\L2Data\L2_2.pal,69,39
+DUNGEON_ANVIL_MONSTERS,None,Levels\L3Data\Anvil.DUN,None,0,0
+DUNGEON_VALOR,Valor,Levels\L2Data\Blood1.DUN,None,0,0
+DUNGEON_VALOR_MONSTERS,None,Levels\L2Data\Blood2.DUN,None,0,0
+DUNGEON_CHAMBEROFBONE,The Chamber of Bone,Levels\L2Data\Bonestr2.DUN,None,0,0
+DUNGEON_CHAMBEROFBONE2,The Chamber of Bone,Levels\L2Data\Bonestr1.DUN,None,0,0
+DUNGEON_WARLORD,The Warlord of Blood,Levels\L4Data\Warlord.DUN,None,0,0
+DUNGEON_WARLORD_MONSTERS,None,Levels\L4Data\Warlord.DUN,None,0,0
+DUNGEON_WARLORD2,None,Levels\L4Data\Warlord2.DUN,None,0,0
+DUNGEON_VILE,The Vile Betrayer,Levels\L4Data\Vile1.DUN,None,0,0
+DUNGEON_VILE_MONSTERS,None,Levels\L4Data\Vile1.DUN,None,0,0
+DUNGEON_VILE_PREL1,None,Levels\L1Data\Vile1.DUN,None,0,0
+DUNGEON_VILE_L1,The Vile Betrayer,Levels\L1Data\Vile2.DUN,Levels\L1Data\L1_2.pal,35,36
+DUNGEON_DIABLOQUAD1,Diablo Sector 1,Levels\L4Data\diab1.DUN,None,0,0
+DUNGEON_DIABLOQUAD1_MONSTERS,None,Levels\L4Data\diab1.DUN,None,0,0
+DUNGEON_DIABLOQUAD2_MONSTERS,None,Levels\L4Data\diab2a.DUN,None,0,0
+DUNGEON_DIABLOQUAD2A,Diablo Sector 2a,Levels\L4Data\diab2a.DUN,None,0,0
+DUNGEON_DIABLOQUAD2B,Diablo Sector 2b,Levels\L4Data\diab2b.DUN,None,0,0
+DUNGOEN_DIABLOQUAD3_MONSTERS,None,Levels\L4Data\diab3a.DUN,None,0,0
+DUNGEON_DIABLOQUAD3A,Diablo Sector 3a,Levels\L4Data\diab3a.DUN,None,0,0
+DUNGEON_DIABLOQUAD3B,Diablo Sector 3b,Levels\L4Data\diab3b.DUN,None,0,0
+DUNGOEN_DIABLOQUAD4_MONSTERS,None,Levels\L4Data\diab4a.DUN,None,0,0
+DUNGEON_DIABLOQUAD4A,Diablo Sector 4a,Levels\L4Data\diab4a.DUN,None,0,0
+DUNGEON_DIABLOQUAD4B,Diablo Sector 4b,Levels\L4Data\diab4b.DUN,None,0,0

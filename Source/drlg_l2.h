@@ -7,6 +7,8 @@
 
 #include "gendung.h"
 
+#include "dunload.h"
+
 namespace devilution {
 
 struct HALLNODE {
@@ -26,8 +28,8 @@ struct ROOMNODE {
 
 extern BYTE predungeon[DMAXX][DMAXY];
 
-void LoadL2Dungeon(const char *path, int vx, int vy);
-void LoadPreL2Dungeon(const char *path);
+void LoadL2Dungeon(DungeonLevelId levelId, int vx, int vy);
+void LoadPreL2Dungeon(DungeonLevelId levelId);
 void CreateL2Dungeon(uint32_t rseed, lvl_entry entry);
 
 } // namespace devilution

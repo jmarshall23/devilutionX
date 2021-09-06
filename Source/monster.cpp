@@ -39,6 +39,8 @@
 #include "debug.h"
 #endif
 
+#include "dunload.h"
+
 namespace devilution {
 
 CMonster LevelMonsterTypes[MAX_LVLMTYPES];
@@ -683,23 +685,23 @@ void PlaceQuestMonsters()
 		}
 
 		if (Quests[Q_LTBANNER].IsAvailable()) {
-			auto dunData = LoadFileInMem<uint16_t>("Levels\\L1Data\\Banner1.DUN");
+			auto dunData = LoadLevelSetPiece(DUNGEON_BANNER_MONSTERS);
 			SetMapMonsters(dunData.get(), Point { setpc_x, setpc_y } * 2);
 		}
 		if (Quests[Q_BLOOD].IsAvailable()) {
-			auto dunData = LoadFileInMem<uint16_t>("Levels\\L2Data\\Blood2.DUN");
+			auto dunData = LoadLevelSetPiece(DUNGEON_VALOR_MONSTERS);
 			SetMapMonsters(dunData.get(), Point { setpc_x, setpc_y } * 2);
 		}
 		if (Quests[Q_BLIND].IsAvailable()) {
-			auto dunData = LoadFileInMem<uint16_t>("Levels\\L2Data\\Blind2.DUN");
+			auto dunData = LoadLevelSetPiece(DUNGEON_HALLOFBLIND_MONSTERS);
 			SetMapMonsters(dunData.get(), Point { setpc_x, setpc_y } * 2);
 		}
 		if (Quests[Q_ANVIL].IsAvailable()) {
-			auto dunData = LoadFileInMem<uint16_t>("Levels\\L3Data\\Anvil.DUN");
+			auto dunData = LoadLevelSetPiece(DUNGEON_ANVIL_MONSTERS);
 			SetMapMonsters(dunData.get(), Point { setpc_x + 2, setpc_y + 2 } * 2);
 		}
 		if (Quests[Q_WARLORD].IsAvailable()) {
-			auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\Warlord.DUN");
+			auto dunData = LoadLevelSetPiece(DUNGEON_WARLORD_MONSTERS);
 			SetMapMonsters(dunData.get(), Point { setpc_x, setpc_y } * 2);
 			AddMonsterType(UniqMonst[UMT_WARLORD].mtype, PLACE_SCATTER);
 		}
@@ -716,7 +718,7 @@ void PlaceQuestMonsters()
 			PlaceUniqueMonst(UMT_LAZARUS, 0, 0);
 			PlaceUniqueMonst(UMT_RED_VEX, 0, 0);
 			PlaceUniqueMonst(UMT_BLACKJADE, 0, 0);
-			auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\Vile1.DUN");
+			auto dunData = LoadLevelSetPiece(DUNGEON_VILE_MONSTERS);
 			SetMapMonsters(dunData.get(), Point { setpc_x, setpc_y } * 2);
 		}
 
@@ -748,19 +750,19 @@ void PlaceQuestMonsters()
 void LoadDiabMonsts()
 {
 	{
-		auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\diab1.DUN");
+		auto dunData = LoadLevelSetPiece(DUNGEON_DIABLOQUAD1_MONSTERS);
 		SetMapMonsters(dunData.get(), Point { diabquad1x, diabquad1y } * 2);
 	}
 	{
-		auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\diab2a.DUN");
+		auto dunData = LoadLevelSetPiece(DUNGEON_DIABLOQUAD2_MONSTERS);
 		SetMapMonsters(dunData.get(), Point { diabquad2x, diabquad2y } * 2);
 	}
 	{
-		auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\diab3a.DUN");
+		auto dunData = LoadLevelSetPiece(DUNGOEN_DIABLOQUAD3_MONSTERS);
 		SetMapMonsters(dunData.get(), Point { diabquad3x, diabquad3y } * 2);
 	}
 	{
-		auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\diab4a.DUN");
+		auto dunData = LoadLevelSetPiece(DUNGOEN_DIABLOQUAD4_MONSTERS);
 		SetMapMonsters(dunData.get(), Point { diabquad4x, diabquad4y } * 2);
 	}
 }

@@ -16,6 +16,8 @@
 #include "quests.h"
 #include "setmaps.h"
 
+#include "dunload.h"
+
 namespace devilution {
 
 namespace {
@@ -2519,7 +2521,7 @@ void CreateL3Dungeon(uint32_t rseed, lvl_entry entry)
 	DRLG_SetPC();
 }
 
-void LoadL3Dungeon(const char *path, int vx, int vy)
+void LoadL3Dungeon(DungeonLevelId levelId, int vx, int vy)
 {
 	dminx = 16;
 	dminy = 16;
@@ -2529,7 +2531,7 @@ void LoadL3Dungeon(const char *path, int vx, int vy)
 	InitDungeonFlags();
 	DRLG_InitTrans();
 
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -2573,12 +2575,12 @@ void LoadL3Dungeon(const char *path, int vx, int vy)
 	}
 }
 
-void LoadPreL3Dungeon(const char *path)
+void LoadPreL3Dungeon(DungeonLevelId levelId)
 {
 	InitDungeonFlags();
 	DRLG_InitTrans();
 
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);

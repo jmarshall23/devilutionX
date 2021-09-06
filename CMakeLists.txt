@@ -329,6 +329,7 @@ set(libdevilutionx_SRCS
   Source/control.cpp
   Source/cursor.cpp
   Source/datatable.cpp
+  Source/dunload.cpp
   Source/dead.cpp
   Source/debug.cpp
   Source/diablo.cpp

@@ -16,6 +16,8 @@
 #include "quests.h"
 #include "setmaps.h"
 
+#include "dunload.h"
+
 namespace devilution {
 
 BYTE predungeon[DMAXX][DMAXY];
@@ -1776,15 +1778,15 @@ void LoadQuestSetPieces()
 	setloadflag = false;
 
 	if (Quests[Q_BLIND].IsAvailable()) {
-		pSetPiece = LoadFileInMem<uint16_t>("Levels\\L2Data\\Blind1.DUN");
+		pSetPiece = LoadLevelSetPiece(DUNGEON_HALLOFBLIND);
 		pSetPiece[13] = SDL_SwapLE16(154);  // Close outer wall
 		pSetPiece[100] = SDL_SwapLE16(154); // Close outer wall
 		setloadflag = true;
 	} else if (Quests[Q_BLOOD].IsAvailable()) {
-		pSetPiece = LoadFileInMem<uint16_t>("Levels\\L2Data\\Blood1.DUN");
+		pSetPiece = LoadLevelSetPiece(DUNGEON_VALOR);
 		setloadflag = true;
 	} else if (Quests[Q_SCHAMB].IsAvailable()) {
-		pSetPiece = LoadFileInMem<uint16_t>("Levels\\L2Data\\Bonestr2.DUN");
+		pSetPiece = LoadLevelSetPiece(DUNGEON_CHAMBEROFBONE);
 		setloadflag = true;
 	}
 }
@@ -3119,9 +3121,9 @@ void Pass3()
 
 } // namespace
 
-void LoadL2Dungeon(const char *path, int vx, int vy)
+void LoadL2Dungeon(DungeonLevelId levelId, int vx, int vy)
 {
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	LoadDungeonData(dunData.get());
 
@@ -3137,10 +3139,10 @@ void LoadL2Dungeon(const char *path, int vx, int vy)
 	SetMapObjects(dunData.get(), 0, 0);
 }
 
-void LoadPreL2Dungeon(const char *path)
+void LoadPreL2Dungeon(DungeonLevelId levelId)
 {
 	{
-		auto dunData = LoadFileInMem<uint16_t>(path);
+		auto dunData = LoadLevelSetPiece(levelId);
 		LoadDungeonData(dunData.get());
 	}
 

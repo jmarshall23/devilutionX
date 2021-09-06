@@ -7,10 +7,12 @@
 
 #include "gendung.h"
 
+#include "dunload.h"
+
 namespace devilution {
 
 void CreateL3Dungeon(uint32_t rseed, lvl_entry entry);
-void LoadL3Dungeon(const char *sFileName, int vx, int vy);
-void LoadPreL3Dungeon(const char *sFileName);
+void LoadL3Dungeon(DungeonLevelId levelId, int vx, int vy);
+void LoadPreL3Dungeon(DungeonLevelId levelId);
 
 } // namespace devilution

@@ -24,6 +24,8 @@
 #include "trigs.h"
 #include "utils/language.h"
 
+#include "dunload.h"
+
 namespace devilution {
 
 bool QuestLogIsOpen;
@@ -142,7 +144,7 @@ void DrawSkelKing(quest_id q, int x, int y)
 
 void DrawWarLord(int x, int y)
 {
-	auto dunData = LoadFileInMem<uint16_t>("Levels\\L4Data\\Warlord2.DUN");
+	auto dunData = LoadLevelSetPiece(DUNGEON_WARLORD2);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -164,7 +166,7 @@ void DrawWarLord(int x, int y)
 
 void DrawSChamber(quest_id q, int x, int y)
 {
-	auto dunData = LoadFileInMem<uint16_t>("Levels\\L2Data\\Bonestr1.DUN");
+	auto dunData = LoadLevelSetPiece(DUNGEON_CHAMBEROFBONE2);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -188,7 +190,7 @@ void DrawSChamber(quest_id q, int x, int y)
 
 void DrawLTBanner(int x, int y)
 {
-	auto dunData = LoadFileInMem<uint16_t>("Levels\\L1Data\\Banner1.DUN");
+	auto dunData = LoadLevelSetPiece(DUNGEON_BANNER_MONSTERS); //LoadFileInMem<uint16_t>("Levels\\L1Data\\Banner1.DUN");
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -212,7 +214,7 @@ void DrawLTBanner(int x, int y)
 
 void DrawBlind(int x, int y)
 {
-	auto dunData = LoadFileInMem<uint16_t>("Levels\\L2Data\\Blind1.DUN");
+	auto dunData = LoadLevelSetPiece(DUNGEON_HALLOFBLIND); //LoadFileInMem<uint16_t>("Levels\\L2Data\\Blind1.DUN");
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -236,7 +238,7 @@ void DrawBlind(int x, int y)
 
 void DrawBlood(int x, int y)
 {
-	auto dunData = LoadFileInMem<uint16_t>("Levels\\L2Data\\Blood2.DUN");
+	auto dunData = LoadLevelSetPiece(DUNGEON_VALOR_MONSTERS);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);

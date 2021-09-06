@@ -32,6 +32,7 @@
 #include "utils/log.hpp"
 
 #include "datatable.h"
+#include "dunload.h"
 
 namespace devilution {
 
@@ -799,12 +800,12 @@ void AddChestTraps()
 	}
 }
 
-void LoadMapObjects(const char *path, Point start, Rectangle mapRange, int leveridx)
+void LoadMapObjects(DungeonLevelId levelId, Point start, Rectangle mapRange, int leveridx)
 {
 	LoadingMapObjects = true;
 	ApplyObjectLighting = true;
 
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -833,12 +834,12 @@ void LoadMapObjects(const char *path, Point start, Rectangle mapRange, int lever
 	LoadingMapObjects = false;
 }
 
-void LoadMapObjs(const char *path, Point start)
+void LoadMapObjs(DungeonLevelId levelId, Point start)
 {
 	LoadingMapObjects = true;
 	ApplyObjectLighting = true;
 
-	auto dunData = LoadFileInMem<uint16_t>(path);
+	auto dunData = LoadLevelSetPiece(levelId);
 
 	int width = SDL_SwapLE16(dunData[0]);
 	int height = SDL_SwapLE16(dunData[1]);
@@ -867,9 +868,9 @@ void LoadMapObjs(const char *path, Point start)
 
 void AddDiabObjs()
 {
-	LoadMapObjects("Levels\\L4Data\\diab1.DUN", { 2 * diabquad1x, 2 * diabquad1y }, { { diabquad2x, diabquad2y }, { 11, 12 } }, 1);
-	LoadMapObjects("Levels\\L4Data\\diab2a.DUN", { 2 * diabquad2x, 2 * diabquad2y }, { { diabquad3x, diabquad3y }, { 11, 11 } }, 2);
-	LoadMapObjects("Levels\\L4Data\\diab3a.DUN", { 2 * diabquad3x, 2 * diabquad3y }, { { diabquad4x, diabquad4y }, { 9, 9 } }, 3);
+	LoadMapObjects(DUNGEON_DIABLOQUAD1, { 2 * diabquad1x, 2 * diabquad1y }, { { diabquad2x, diabquad2y }, { 11, 12 } }, 1);
+	LoadMapObjects(DUNGEON_DIABLOQUAD2A, { 2 * diabquad2x, 2 * diabquad2y }, { { diabquad3x, diabquad3y }, { 11, 11 } }, 2);
+	LoadMapObjects(DUNGEON_DIABLOQUAD3A, { 2 * diabquad3x, 2 * diabquad3y }, { { diabquad4x, diabquad4y }, { 9, 9 } }, 3);
 }
 
 void AddCryptObject(int i, int a2)
@@ -2717,7 +2718,7 @@ void OperatePedistal(int pnum, int i)
 		if (!deltaload)
 			PlaySfxLoc(LS_BLODSTAR, Objects[i].position);
 		ObjChangeMap(Objects[i]._oVar1, Objects[i]._oVar2, Objects[i]._oVar3, Objects[i]._oVar4);
-		LoadMapObjs("Levels\\L2Data\\Blood2.DUN", { 2 * setpc_x, 2 * setpc_y });
+		LoadMapObjs(DUNGEON_VALOR_MONSTERS, { 2 * setpc_x, 2 * setpc_y });
 		SpawnUnique(UITEM_ARMOFVAL, Point { setpc_x, setpc_y } * 2 + Displacement { 25, 19 });
 		Objects[i]._oSelFlag = 0;
 	}
@@ -4420,7 +4421,7 @@ void SyncPedestal(const Object &pedestal, Point origin, int width)
 	}
 	if (pedestal._oVar6 == 3) {
 		ObjChangeMapResync(pedestal._oVar1, pedestal._oVar2, pedestal._oVar3, pedestal._oVar4);
-		LoadMapObjs("Levels\\L2Data\\Blood2.DUN", origin * 2);
+		LoadMapObjs(DUNGEON_VALOR_MONSTERS, origin * 2);
 	}
 }
 
@@ -4664,7 +4665,7 @@ void InitObjects()
 				}
 				Quests[Q_BLIND]._qmsg = spId;
 				AddBookLever({ { setpc_x, setpc_y }, { setpc_w + 1, setpc_h + 1 } }, spId);
-				LoadMapObjs("Levels\\L2Data\\Blind2.DUN", { 2 * setpc_x, 2 * setpc_y });
+				LoadMapObjs(DUNGEON_HALLOFBLIND_MONSTERS, { 2 * setpc_x, 2 * setpc_y });
 			}
 			if (Quests[Q_BLOOD].IsAvailable()) {
 				_speech_id spId;
@@ -4723,7 +4724,7 @@ void InitObjects()
 				}
 				Quests[Q_WARLORD]._qmsg = spId;
 				AddBookLever({ { setpc_x, setpc_y }, { setpc_w, setpc_h } }, spId);
-				LoadMapObjs("Levels\\L4Data\\Warlord.DUN", { 2 * setpc_x, 2 * setpc_y });
+				LoadMapObjs(DUNGEON_WARLORD_MONSTERS, { 2 * setpc_x, 2 * setpc_y });
 			}
 			if (Quests[Q_BETRAYER].IsAvailable() && !gbIsMultiplayer)
 				AddLazStand();
