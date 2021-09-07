@@ -25,6 +25,7 @@ DataTable *uniqueItemTable = nullptr;
 DataTable *itemPrefixTable = nullptr;
 DataTable *itemSuffixTable = nullptr;
 DataTable *lvlSetPiecesTables = nullptr;
+DataTable *shrineTable = nullptr;
 
 namespace devilution {
 	void InitMonsterTable(void);
@@ -35,6 +36,7 @@ namespace devilution {
     void InitPlayerExperienceTable(void);
     void InitTextDataStruct(void);
     void InitObjectDefinitionTable(void);
+    void InitShrineTable(void);
 }
 
 void DiabloLoadTables(void)
@@ -60,6 +62,7 @@ void DiabloLoadTables(void)
 	itemPrefixTable = new DataTable("excel\\itemprefix.txt");
 	itemSuffixTable = new DataTable("excel\\itemsuffix.txt");
 	lvlSetPiecesTables = new DataTable("excel\\lvlsetpieces.txt");
+	shrineTable = new DataTable("excel\\shrines.txt");
 
 	devilution::InitMonsterTable();
 	devilution::InitSpellDataTable();
@@ -69,6 +72,7 @@ void DiabloLoadTables(void)
 	devilution::InitItemTable();
 	devilution::InitTextDataStruct();
 	devilution::InitObjectDefinitionTable();
+	devilution::InitShrineTable();
 }
 
 /*

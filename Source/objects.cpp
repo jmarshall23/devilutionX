@@ -36,6 +36,51 @@
 
 namespace devilution {
 
+/**
+ * Specifies the game type for which each shrine may appear.
+ * ShrineTypeAny - sp & mp
+ * ShrineTypeSingle - sp only
+ * ShrineTypeMulti - mp only
+ */
+enum shrine_gametype : uint8_t {
+	ShrineTypeAny,
+	ShrineTypeSingle,
+	ShrineTypeMulti,
+};
+
+struct ShrineInfo_t {
+	const char *name;
+	int minlvl;
+	int maxlevel;
+	shrine_gametype gameType;
+};
+
+ShrineInfo_t *shrineInfos;
+
+void InitShrineTable(void)
+{
+	shrineInfos = new ShrineInfo_t[shrineTable->NumRows()];
+
+	for (int i = 0; i < shrineTable->NumRows(); i++) {
+		shrineInfos[i].name = shrineTable->GetValue("name", i);
+		shrineInfos[i].minlvl = shrineTable->GetInt("minlvl", i);
+		shrineInfos[i].maxlevel = shrineTable->GetInt("maxlvl", i);
+
+		std::string str = shrineTable->GetValue("shrineavail", i);
+
+		if (str == "ShrineTypeAny") {
+			shrineInfos[i].gameType = ShrineTypeAny;
+		} else if (str == "ShrineTypeSingle") {
+			shrineInfos[i].gameType = ShrineTypeSingle;
+		} else if (str == "ShrineTypeMulti") {
+			shrineInfos[i].gameType = ShrineTypeMulti;
+		} else {
+			devilution::app_fatal("Invlaid shrine avail %s", str.c_str());
+		}
+	}
+}
+
+
 Object Objects[MAXOBJECTS];
 int AvailableObjects[MAXOBJECTS];
 int ActiveObjects[MAXOBJECTS];
@@ -237,171 +282,8 @@ int NaKrulTomeSequence;
 int bxadd[8] = { -1, 0, 1, -1, 1, -1, 0, 1 };
 /** Specifies the Y-coordinate delta between barrels. */
 int byadd[8] = { -1, -1, -1, 0, 0, 1, 1, 1 };
-/** Maps from shrine_id to shrine name. */
-const char *const ShrineNames[] = {
-	// TRANSLATORS: Shrine Name Block
-	N_("Mysterious"),
-	N_("Hidden"),
-	N_("Gloomy"),
-	N_("Weird"),
-	N_("Magical"),
-	N_("Stone"),
-	N_("Religious"),
-	N_("Enchanted"),
-	N_("Thaumaturgic"),
-	N_("Fascinating"),
-	N_("Cryptic"),
-	N_("Magical"),
-	N_("Eldritch"),
-	N_("Eerie"),
-	N_("Divine"),
-	N_("Holy"),
-	N_("Sacred"),
-	N_("Spiritual"),
-	N_("Spooky"),
-	N_("Abandoned"),
-	N_("Creepy"),
-	N_("Quiet"),
-	N_("Secluded"),
-	N_("Ornate"),
-	N_("Glimmering"),
-	N_("Tainted"),
-	N_("Oily"),
-	N_("Glowing"),
-	N_("Mendicant's"),
-	N_("Sparkling"),
-	N_("Town"),
-	N_("Shimmering"),
-	N_("Solar"),
-	// TRANSLATORS: Shrine Name Block end
-	N_("Murphy's"),
-};
-/** Specifies the minimum dungeon level on which each shrine will appear. */
-char shrinemin[] = {
-	1, // Mysterious
-	1, // Hidden
-	1, // Gloomy
-	1, // Weird
-	1, // Magical
-	1, // Stone
-	1, // Religious
-	1, // Enchanted
-	1, // Thaumaturgic
-	1, // Fascinating
-	1, // Cryptic
-	1, // Magical
-	1, // Eldritch
-	1, // Eerie
-	1, // Divine
-	1, // Holy
-	1, // Sacred
-	1, // Spiritual
-	1, // Spooky
-	1, // Abandoned
-	1, // Creepy
-	1, // Quiet
-	1, // Secluded
-	1, // Ornate
-	1, // Glimmering
-	1, // Tainted
-	1, // Oily
-	1, // Glowing
-	1, // Mendicant's
-	1, // Sparkling
-	1, // Town
-	1, // Shimmering
-	1, // Solar,
-	1, // Murphy's
-};
 
-#define MAX_LVLS 24
 
-/** Specifies the maximum dungeon level on which each shrine will appear. */
-char shrinemax[] = {
-	MAX_LVLS, // Mysterious
-	MAX_LVLS, // Hidden
-	MAX_LVLS, // Gloomy
-	MAX_LVLS, // Weird
-	MAX_LVLS, // Magical
-	MAX_LVLS, // Stone
-	MAX_LVLS, // Religious
-	8,        // Enchanted
-	MAX_LVLS, // Thaumaturgic
-	MAX_LVLS, // Fascinating
-	MAX_LVLS, // Cryptic
-	MAX_LVLS, // Magical
-	MAX_LVLS, // Eldritch
-	MAX_LVLS, // Eerie
-	MAX_LVLS, // Divine
-	MAX_LVLS, // Holy
-	MAX_LVLS, // Sacred
-	MAX_LVLS, // Spiritual
-	MAX_LVLS, // Spooky
-	MAX_LVLS, // Abandoned
-	MAX_LVLS, // Creepy
-	MAX_LVLS, // Quiet
-	MAX_LVLS, // Secluded
-	MAX_LVLS, // Ornate
-	MAX_LVLS, // Glimmering
-	MAX_LVLS, // Tainted
-	MAX_LVLS, // Oily
-	MAX_LVLS, // Glowing
-	MAX_LVLS, // Mendicant's
-	MAX_LVLS, // Sparkling
-	MAX_LVLS, // Town
-	MAX_LVLS, // Shimmering
-	MAX_LVLS, // Solar,
-	MAX_LVLS, // Murphy's
-};
-
-/**
- * Specifies the game type for which each shrine may appear.
- * ShrineTypeAny - sp & mp
- * ShrineTypeSingle - sp only
- * ShrineTypeMulti - mp only
- */
-enum shrine_gametype : uint8_t {
-	ShrineTypeAny,
-	ShrineTypeSingle,
-	ShrineTypeMulti,
-};
-
-shrine_gametype shrineavail[] = {
-	ShrineTypeAny,    // Mysterious
-	ShrineTypeAny,    // Hidden
-	ShrineTypeSingle, // Gloomy
-	ShrineTypeSingle, // Weird
-	ShrineTypeAny,    // Magical
-	ShrineTypeAny,    // Stone
-	ShrineTypeAny,    // Religious
-	ShrineTypeAny,    // Enchanted
-	ShrineTypeSingle, // Thaumaturgic
-	ShrineTypeAny,    // Fascinating
-	ShrineTypeAny,    // Cryptic
-	ShrineTypeAny,    // Magical
-	ShrineTypeAny,    // Eldritch
-	ShrineTypeAny,    // Eerie
-	ShrineTypeAny,    // Divine
-	ShrineTypeAny,    // Holy
-	ShrineTypeAny,    // Sacred
-	ShrineTypeAny,    // Spiritual
-	ShrineTypeMulti,  // Spooky
-	ShrineTypeAny,    // Abandoned
-	ShrineTypeAny,    // Creepy
-	ShrineTypeAny,    // Quiet
-	ShrineTypeAny,    // Secluded
-	ShrineTypeAny,    // Ornate
-	ShrineTypeAny,    // Glimmering
-	ShrineTypeMulti,  // Tainted
-	ShrineTypeAny,    // Oily
-	ShrineTypeAny,    // Glowing
-	ShrineTypeAny,    // Mendicant's
-	ShrineTypeAny,    // Sparkling
-	ShrineTypeAny,    // Town
-	ShrineTypeAny,    // Shimmering
-	ShrineTypeSingle, // Solar,
-	ShrineTypeAny,    // Murphy's
-};
 /** Maps from book_id to book name. */
 const char *const StoryBookName[] = {
 	N_(/* TRANSLATORS: Book Title */ "The Great Conflict"),
@@ -1366,10 +1248,10 @@ void AddShrine(int i)
 	int shrines = gbIsHellfire ? NumberOfShrineTypes : 26;
 
 	for (int j = 0; j < shrines; j++) {
-		slist[j] = currlevel >= shrinemin[j] && currlevel <= shrinemax[j];
-		if (gbIsMultiplayer && shrineavail[j] == ShrineTypeSingle) {
+		slist[j] = currlevel >= shrineInfos[j].minlvl && currlevel <= shrineInfos[j].maxlevel;
+		if (gbIsMultiplayer && shrineInfos[j].gameType == ShrineTypeSingle) {
 			slist[j] = false;
-		} else if (!gbIsMultiplayer && shrineavail[j] == ShrineTypeMulti) {
+		} else if (!gbIsMultiplayer && shrineInfos[j].gameType == ShrineTypeMulti) {
 			slist[j] = false;
 		}
 	}
@@ -3962,18 +3844,18 @@ int FindValidShrine()
 	int rv;
 	do {
 		rv = GenerateRnd(gbIsHellfire ? NumberOfShrineTypes : 26);
-		if (currlevel >= shrinemin[rv] && currlevel <= shrinemax[rv] && rv != ShrineThaumaturgic) {
+		if (currlevel >= shrineInfos[rv].minlvl && currlevel <= shrineInfos[rv].maxlevel && rv != ShrineThaumaturgic) {
 			done = true;
 		}
 		if (done) {
 			if (gbIsMultiplayer) {
-				if (shrineavail[rv] == ShrineTypeSingle) {
+				if (shrineInfos[rv].gameType == ShrineTypeSingle) {
 					done = false;
 					continue;
 				}
 			}
 			if (!gbIsMultiplayer) {
-				if (shrineavail[rv] == ShrineTypeMulti) {
+				if (shrineInfos[rv].gameType == ShrineTypeMulti) {
 					done = false;
 					continue;
 				}
@@ -5550,7 +5432,7 @@ void GetObjectStr(int i)
 			    break;
 
 			case OBJ_FLAG_SHRINE:
-			    sprintf(infostr, "%s %s", ShrineNames[Objects[i]._oVar1], objectDefinition[type].name0);
+			    sprintf(infostr, "%s %s", shrineInfos[Objects[i]._oVar1].name, objectDefinition[type].name0);
 				break;
 
 			case OBJ_STORY_BOOK:
