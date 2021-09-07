@@ -1031,14 +1031,31 @@ std::unique_ptr<MegaTile[]> LoadMegaTileText(const char *filename)
 	return buf;
 }
 
-std::unique_ptr<uint16_t[]> LoadMinTileText(const char *filename)
+std::unique_ptr<MTType[]> LoadMinTileText(const char *filename)
 {
 	DataTable *table = new DataTable(filename);
 
-	std::unique_ptr<uint16_t[]> buf { new uint16_t[table->NumRows()] };
+	std::unique_ptr<MTType[]> buf { new MTType[table->NumRows()] };
 
 	for (int i = 0; i < table->NumRows(); i++) {
-		buf[i] = table->GetInt("blockval", i);
+		std::string tileTypeStr = table->GetValue("tiletype", i);
+
+		if (tileTypeStr == "Square")
+			buf[i].type = TileType::Square;
+		else if (tileTypeStr == "TransparentSquare")
+			buf[i].type = TileType::TransparentSquare;
+		else if (tileTypeStr == "LeftTriangle")
+			buf[i].type = TileType::LeftTriangle;
+		else if (tileTypeStr == "RightTriangle")
+			buf[i].type = TileType::RightTriangle;
+		else if (tileTypeStr == "LeftTrapezoid")
+			buf[i].type = TileType::LeftTrapezoid;
+		else if (tileTypeStr == "RightTrapezoid")
+			buf[i].type = TileType::RightTrapezoid;
+		else
+			devilution::app_fatal("Invalid type type!");
+
+		buf[i].celid = table->GetInt("celid", i);
 	}
 
 	delete table;

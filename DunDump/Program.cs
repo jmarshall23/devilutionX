@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace DunDump
@@ -76,6 +76,16 @@ namespace DunDump
             }
         }
 
+		enum TileType
+		{
+			Square,
+			TransparentSquare,
+			LeftTriangle,
+			RightTriangle,
+			LeftTrapezoid,
+			RightTrapezoid,
+		}
+
         static void SaveMin(string filename)
         {
             string tilFile = filename;
@@ -87,15 +97,19 @@ namespace DunDump
             {
                 using (BinaryReader reader = new BinaryReader(File.Open(tilFile, FileMode.Open)))
                 {
-                    writer.WriteLine("index,blockval");
+                    writer.WriteLine("index,tiletype,celid");
 
-                    long numEntries = reader.BaseStream.Length / 2;
+                    long numEntries = reader.BaseStream.Length / 2;					
 
-                    for (int i = 0; i < numEntries; i++)
+					for (int i = 0; i < numEntries; i++)
                     {
-                        ushort val = reader.ReadUInt16();                        
+                        ushort val = reader.ReadUInt16();
 
-                        writer.WriteLine(i + "," + val);
+						ushort type = (ushort)((val & 0x7000) >> 12);
+						TileType tileType = (TileType)type;
+						ushort frameTable = (ushort)(val & 0xFFF);
+
+						writer.WriteLine(i + "," + tileType.ToString() + "," + frameTable);
                     }
 
                     if (reader.BaseStream.Position != reader.BaseStream.Length)

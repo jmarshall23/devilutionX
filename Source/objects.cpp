@@ -1147,11 +1147,11 @@ void ObjSetMicro(Point position, int pn)
 
 	int blocks = leveltype != DTYPE_HELL ? 10 : 16;
 
-	uint16_t *piece = &pLevelPieces[blocks * pn];
+	MTType *piece = &pLevelPieces[blocks * pn];
 	MICROS &micros = dpiece_defs_map_2[position.x][position.y];
 
 	for (int i = 0; i < blocks; i++) {
-		micros.mt[i] = SDL_SwapLE16(piece[blocks - 2 + (i & 1) - (i & 0xE)]);
+		micros.mt[i] = piece[blocks - 2 + (i & 1) - (i & 0xE)];
 	}
 }
 
@@ -1717,10 +1717,10 @@ void SetDoorPiece(Point position)
 {
 	int pn = dPiece[position.x][position.y] - 1;
 
-	uint16_t *piece = &pLevelPieces[10 * pn + 8];
+	MTType *piece = &pLevelPieces[10 * pn + 8];
 
-	dpiece_defs_map_2[position.x][position.y].mt[0] = SDL_SwapLE16(piece[0]);
-	dpiece_defs_map_2[position.x][position.y].mt[1] = SDL_SwapLE16(piece[1]);
+	dpiece_defs_map_2[position.x][position.y].mt[0] = piece[0];	
+	dpiece_defs_map_2[position.x][position.y].mt[1] = piece[1];
 }
 
 void DoorSet(Point position, bool isLeftDoor)

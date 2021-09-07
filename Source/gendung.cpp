@@ -26,7 +26,7 @@ std::unique_ptr<uint16_t[]> pSetPiece;
 bool setloadflag;
 std::optional<CelSprite> pSpecialCels;
 std::unique_ptr<MegaTile[]> pMegaTiles;
-std::unique_ptr<uint16_t[]> pLevelPieces;
+std::unique_ptr<MTType[]> pLevelPieces;
 std::unique_ptr<byte[]> pDungeonCels;
 std::array<uint8_t, MAXTILES + 1> block_lvid;
 std::array<bool, MAXTILES + 1> nBlockTable;
@@ -371,12 +371,13 @@ void SetDungeonMicros()
 			MICROS &micros = dpiece_defs_map_2[x][y];
 			if (lv != 0) {
 				lv--;
-				uint16_t *pieces = &pLevelPieces[blocks * lv];
-				for (int i = 0; i < blocks; i++)
-					micros.mt[i] = SDL_SwapLE16(pieces[blocks - 2 + (i & 1) - (i & 0xE)]);
+				MTType *pieces = &pLevelPieces[blocks * lv];
+				for (int i = 0; i < blocks; i++) {
+					micros.mt[i] = pieces[blocks - 2 + (i & 1) - (i & 0xE)];
+				}
 			} else {
 				for (int i = 0; i < blocks; i++)
-					micros.mt[i] = 0;
+					micros.mt[i].celid = 0;
 			}
 		}
 	}

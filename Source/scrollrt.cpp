@@ -50,7 +50,7 @@ int LightTableIndex;
  * frameNum  := block & 0x0FFF
  * frameType := block & 0x7000 >> 12
  */
-uint32_t level_cel_block;
+MTType level_cel_block;
 bool AutoMapShowItems;
 /**
  * Specifies the type of arches to render.
@@ -662,12 +662,12 @@ void DrawCell(const Surface &out, int x, int y, int sx, int sy)
 	cel_foliage_active = !nSolidTable[level_piece_id];
 	for (int i = 0; i < (MicroTileLen / 2); i++) {
 		level_cel_block = pMap->mt[2 * i];
-		if (level_cel_block != 0) {
+		if (level_cel_block.IsEnabled()) {
 			arch_draw_type = i == 0 ? 1 : 0;
 			RenderTile(out, sx, sy);
 		}
 		level_cel_block = pMap->mt[2 * i + 1];
-		if (level_cel_block != 0) {
+		if (level_cel_block.IsEnabled()) {
 			arch_draw_type = i == 0 ? 2 : 0;
 			RenderTile(out, sx + TILE_WIDTH / 2, sy);
 		}
@@ -691,12 +691,12 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy)
 
 	arch_draw_type = 1; // Left
 	level_cel_block = dpiece_defs_map_2[x][y].mt[0];
-	if (level_cel_block != 0) {
+	if (level_cel_block.IsEnabled()) {
 		RenderTile(out, sx, sy);
 	}
 	arch_draw_type = 2; // Right
 	level_cel_block = dpiece_defs_map_2[x][y].mt[1];
-	if (level_cel_block != 0) {
+	if (level_cel_block.IsEnabled()) {
 		RenderTile(out, sx + TILE_WIDTH / 2, sy);
 	}
 }
@@ -1232,6 +1232,7 @@ void DrawView(const Surface &out, int startX, int startY)
 	DebugCoordsMap.clear();
 #endif
 	DrawGame(out, startX, startY);
+
 	if (AutomapActive) {
 		DrawAutomap(out.subregionY(0, gnViewportHeight));
 	}
