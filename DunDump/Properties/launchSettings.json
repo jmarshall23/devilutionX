@@ -2,7 +2,7 @@
   "profiles": {
     "DunDump": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\projects\\Diablo\\build\\levels\\towndata"
+      "commandLineArgs": "D:\\projects\\Diablo\\build\\levels\\l2data"
     }
   }
 }

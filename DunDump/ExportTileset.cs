@@ -5,6 +5,31 @@ namespace DunDump
 {
 	public static class ExportTileset
 	{
+		public static void BlitImage(byte[] source, int sourceX, int sourceY, int sourceWidth, byte[] dest, int destX, int destY, int destWidth, int destHeight, int width, int height)
+		{
+			destY = destHeight - destY - height;
+
+			for (int y = 0; y < height; y++)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					int _x = x * 1;
+					int _y = y * 1;
+					int destPos = (destWidth * (_y + (destY * 1))) + (_x + (destX * 1));
+					int sourcePos = (sourceWidth * (_y + (sourceY * 1))) + (_x + (sourceX * 1));
+
+					if (source[sourcePos + 0] == 255)
+						continue;
+
+					dest[destPos + 0] = source[sourcePos + 0];
+					//dest[destPos + 1] = source[sourcePos + 1];
+					//dest[destPos + 2] = source[sourcePos + 2];
+					//dest[destPos + 3] = source[sourcePos + 3];
+				}
+			}
+		}
+
+
 		private static void WriteTGA(string filename, byte[] data, int width, int height, bool flipVertical)
 		{
 			byte[] buffer;
@@ -37,7 +62,7 @@ namespace DunDump
 		}
 
 
-		public static void Export(string filename)
+		public static void Export(string filename, string minfile, string tilPath)
 		{
 			DiabloCel cel = new DiabloCel(filename);
 
@@ -46,11 +71,21 @@ namespace DunDump
 			string tilePath = Path.GetDirectoryName(filename) + "/tiles/";
 			Directory.CreateDirectory(tilePath);
 
-			for(int i = 0; i < cel.NumFrames; i++)
-			{
-				DiabloCelBase frame = cel.GetFrame(i);
+			//for(int i = 0; i < cel.NumFrames; i++)
+			//{
+			//	DiabloCelBase frame = cel.GetFrame(i);
+			//
+			//	WriteTGA(tilePath + "tile" + i + ".tga", frame.Pixels, frame.Width, frame.Height, true);
+			//}
 
-				WriteTGA(tilePath + "tile" + i + ".tga", frame.Pixels, frame.Width, frame.Height, true);
+			D1Min min = new D1Min(minfile, cel);
+			D1Til til = new D1Til(tilPath, min);
+
+			for(int i = 0; i < til.getTileCount(); i++)
+			{				
+				byte[] buffer = til.getTileImage((ushort)i);
+
+				WriteTGA(tilePath + "tile" + i + ".tga", buffer, til.getTilePixelWidth(), til.getTilePixelHeight(), true);
 			}
 		}
 	}
