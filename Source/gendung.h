@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 #include "engine.h"
 #include "engine/cel_sprite.hpp"
@@ -227,7 +228,29 @@ extern std::optional<CelSprite> pSpecialCels;
 /** Specifies the tile definitions of the active dungeon type; (e.g. levels/l1data/l1.til). */
 extern std::unique_ptr<MegaTile[]> pMegaTiles;
 extern std::unique_ptr<MTType[]> pLevelPieces;
-extern std::unique_ptr<byte[]> pDungeonCels;
+//extern std::unique_ptr<byte[]> pDungeonCels;
+
+struct TargaImage_t {
+	void Init(int w, int h, byte *data)
+	{
+		width = w;
+		height = h;
+
+		if (buffer != nullptr) {
+			delete buffer;
+			buffer = nullptr;
+		}
+
+		buffer = data;
+	}
+
+	int width;
+	int height;
+	byte *buffer;
+};
+
+extern std::vector<TargaImage_t> pDungeonCels;
+
 /**
  * List of transparancy masks to use for dPieces
  */

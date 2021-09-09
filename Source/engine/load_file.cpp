@@ -31,6 +31,8 @@ void LoadFileData(const char *pszName, byte *buffer, size_t fileLen)
 	if (fileLen == 0)
 		app_fatal("Zero length SFILE:\n%s", pszName);
 
+	SFileSetFilePointer(file, 0, DVL_FILE_BEGIN);
+
 	SFileReadFileThreadSafe(file, buffer, fileLen);
 	SFileCloseFileThreadSafe(file);
 }

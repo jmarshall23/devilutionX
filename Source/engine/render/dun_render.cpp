@@ -439,21 +439,25 @@ template <LightType Light>
 DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLineOpaque(std::uint8_t *dst, const std::uint8_t *src, std::uint_fast8_t n, const std::uint8_t *tbl)
 {
 	if (Light == LightType::FullyDark) {
-		memset(dst, 0, n);
-	} else if (Light == LightType::FullyLit) {
-#ifndef DEBUG_RENDER_COLOR
-		memcpy(dst, src, n);
-#else
-		memset(dst, DBGCOLOR, n);
-#endif
-	} else { // Partially lit
-#ifndef DEBUG_RENDER_COLOR
 		for (size_t i = 0; i < n; i++) {
+			if (src[i] == 255)
+				continue;
+
+			dst[i] = 0;
+		}
+	} else if (Light == LightType::FullyLit) {
+		for (size_t i = 0; i < n; i++) {
+			if (src[i] == 255)
+				continue;
+
+			dst[i] = src[i];
+		}
+	} else { // Partially lit
+		for (size_t i = 0; i < n; i++) {
+			if (src[i] == 255)
+				continue;
 			dst[i] = tbl[src[i]];
 		}
-#else
-		memset(dst, tbl[DBGCOLOR], n);
-#endif
 	}
 }
 
@@ -510,26 +514,28 @@ DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLineStippled(std::uint8_t *dst, c
 }
 
 template <TransparencyType Transparency, LightType Light>
-DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLine(std::uint8_t *dst, const std::uint8_t *src, std::uint_fast8_t n, const std::uint8_t *tbl, std::uint32_t mask)
+DVL_ALWAYS_INLINE DVL_ATTRIBUTE_HOT void RenderLine(std::uint8_t *dst, const std::uint8_t *src, std::uint_fast8_t n, const std::uint8_t *tbl)
 {
-	if (Transparency == TransparencyType::Solid) {
-		RenderLineOpaque<Light>(dst, src, n, tbl);
-	} else {
-		// The number of iterations is limited by the size of the mask.
-		// So we can limit it by ANDing the mask with another mask that only keeps
-		// iterations that are lower than n. We can now avoid testing if i < n
-		// at every loop iteration.
-		assert(n != 0 && n <= sizeof(std::uint32_t) * CHAR_BIT);
-		const std::uint32_t firstNOnes = std::uint32_t(-1) << ((sizeof(std::uint32_t) * CHAR_BIT) - n);
-		mask &= firstNOnes;
-		if (mask == firstNOnes) {
-			RenderLineOpaque<Light>(dst, src, n, tbl);
-		} else if (Transparency == TransparencyType::Blended) {
-			RenderLineBlended<Light>(dst, src, n, tbl, mask);
-		} else {
-			RenderLineStippled<Light>(dst, src, tbl, mask);
-		}
-	}
+	//if (Transparency == TransparencyType::Solid) {
+	//	RenderLineOpaque<Light>(dst, src, n, tbl);
+	//} else {
+	//	// The number of iterations is limited by the size of the mask.
+	//	// So we can limit it by ANDing the mask with another mask that only keeps
+	//	// iterations that are lower than n. We can now avoid testing if i < n
+	//	// at every loop iteration.
+	//	assert(n != 0 && n <= sizeof(std::uint32_t) * CHAR_BIT);
+	//	const std::uint32_t firstNOnes = std::uint32_t(-1) << ((sizeof(std::uint32_t) * CHAR_BIT) - n);
+	//	mask &= firstNOnes;
+	//	if (mask == firstNOnes) {
+	//		RenderLineOpaque<Light>(dst, src, n, tbl);
+	//	} else if (Transparency == TransparencyType::Blended) {
+	//		RenderLineBlended<Light>(dst, src, n, tbl, mask);
+	//	} else {
+	//		RenderLineStippled<Light>(dst, src, tbl, mask);
+	//	}
+	//}
+
+	RenderLineOpaque<Light>(dst, src, n, tbl);
 }
 
 struct Clip {
@@ -554,10 +560,10 @@ Clip CalculateClip(std::int_fast16_t x, std::int_fast16_t y, std::int_fast16_t w
 }
 
 template <TransparencyType Transparency, LightType Light>
-DVL_ATTRIBUTE_HOT void RenderSquareFull(std::uint8_t *dst, int dstPitch, const std::uint8_t *src, const std::uint32_t *mask, const std::uint8_t *tbl)
+DVL_ATTRIBUTE_HOT void RenderSquareFull(std::uint8_t *dst, int dstPitch, const std::uint8_t *src, const std::uint8_t *tbl, Clip clip)
 {
-	for (auto i = 0; i < Height; ++i, dst -= dstPitch, --mask) {
-		RenderLine<Transparency, Light>(dst, src, Width, tbl, *mask);
+	for (auto i = 0; i < Height; ++i, dst -= dstPitch) {
+		RenderLine<Transparency, Light>(dst, src, Width, tbl);
 		src += Width;
 	}
 }
@@ -1308,14 +1314,25 @@ void RenderBlackTileFull(std::uint8_t *dst, int dstPitch)
 	}
 }
 
+template <TransparencyType Transparency, LightType Light>
+DVL_ATTRIBUTE_HOT void RenderSquareNew(std::uint8_t *dst, int dstPitch, const std::uint8_t *src, const std::uint8_t *tbl, Clip clip)
+{
+	for (auto i = 0; i < clip.height; ++i, dst -= dstPitch) {
+		RenderLine<Transparency, Light>(dst, src, clip.width, tbl);
+		src += clip.width;
+	}
+}
+
+
 } // namespace
+
 
 void RenderTile(const Surface &out, int x, int y)
 {
-	const auto tile = level_cel_block.type;
-	const auto *mask = GetMask(tile);
-	if (mask == nullptr)
-		return;
+	//const auto tile = level_cel_block.type;
+	//const auto *mask = GetMask(tile);
+	//if (mask == nullptr)
+	//	return;
 
 #ifdef DEBUG_RENDER_OFFSET_X
 	x += DEBUG_RENDER_OFFSET_X;
@@ -1327,43 +1344,23 @@ void RenderTile(const Surface &out, int x, int y)
 	DBGCOLOR = GetTileDebugColor(tile);
 #endif
 
-	Clip clip = CalculateClip(x, y, Width, GetTileHeight(tile), out);
+	Clip clip = CalculateClip(x, y, pDungeonCels[level_cel_block.celid - 1].width, pDungeonCels[level_cel_block.celid - 1].height, out);
 	if (clip.width <= 0 || clip.height <= 0)
 		return;
 
+
 	const std::uint8_t *tbl = &LightTables[256 * LightTableIndex];
-	const auto *pFrameTable = reinterpret_cast<const std::uint32_t *>(pDungeonCels.get());
-	const auto *src = reinterpret_cast<const std::uint8_t *>(&pDungeonCels[SDL_SwapLE32(pFrameTable[level_cel_block.celid])]);
+	//const auto *pFrameTable = reinterpret_cast<const std::uint32_t *>(pDungeonCels.get());
+	const uint8_t *src = (const uint8_t *)pDungeonCels[level_cel_block.celid - 1].buffer;
 	std::uint8_t *dst = out.at(static_cast<int>(x + clip.left), static_cast<int>(y - clip.bottom));
 	const auto dstPitch = out.pitch();
 
-	if (mask == &SolidMask[TILE_HEIGHT - 1]) {
-		if (LightTableIndex == LightsMax) {
-			RenderTileType<TransparencyType::Solid, LightType::FullyDark>(tile, dst, dstPitch, src, mask, tbl, clip);
-		} else if (LightTableIndex == 0) {
-			RenderTileType<TransparencyType::Solid, LightType::FullyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-		} else {
-			RenderTileType<TransparencyType::Solid, LightType::PartiallyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-		}
+	if (LightTableIndex == LightsMax) {
+		RenderSquareNew<TransparencyType::Solid, LightType::FullyDark>(dst, dstPitch, src, tbl, clip);
+	} else if (LightTableIndex == 0) {
+		RenderSquareNew<TransparencyType::Solid, LightType::FullyLit>(dst, dstPitch, src, tbl, clip);
 	} else {
-		mask -= clip.bottom;
-		if (sgOptions.Graphics.bBlendedTransparancy) {
-			if (LightTableIndex == LightsMax) {
-				RenderTileType<TransparencyType::Blended, LightType::FullyDark>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else if (LightTableIndex == 0) {
-				RenderTileType<TransparencyType::Blended, LightType::FullyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else {
-				RenderTileType<TransparencyType::Blended, LightType::PartiallyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			}
-		} else {
-			if (LightTableIndex == LightsMax) {
-				RenderTileType<TransparencyType::Stippled, LightType::FullyDark>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else if (LightTableIndex == 0) {
-				RenderTileType<TransparencyType::Stippled, LightType::FullyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			} else {
-				RenderTileType<TransparencyType::Stippled, LightType::PartiallyLit>(tile, dst, dstPitch, src, mask, tbl, clip);
-			}
-		}
+		RenderSquareNew<TransparencyType::Solid, LightType::PartiallyLit>(dst, dstPitch, src, tbl, clip);
 	}
 }
 

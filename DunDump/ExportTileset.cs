@@ -50,7 +50,7 @@ namespace DunDump
 			{
 				DiabloCelBase frame = cel.GetFrame(i);
 
-				WriteTGA(tilePath + "tile" + i + ".tga", frame.Pixels, frame.Width, frame.Height, false);
+				WriteTGA(tilePath + "tile" + i + ".tga", frame.Pixels, frame.Width, frame.Height, true);
 			}
 		}
 	}
