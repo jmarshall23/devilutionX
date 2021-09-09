@@ -97,7 +97,7 @@ namespace DunDump
             {
                 using (BinaryReader reader = new BinaryReader(File.Open(tilFile, FileMode.Open)))
                 {
-                    writer.WriteLine("index,tiletype,celid");
+                    writer.WriteLine("index,celid");
 
                     long numEntries = reader.BaseStream.Length / 2;					
 
@@ -109,7 +109,7 @@ namespace DunDump
 						TileType tileType = (TileType)type;
 						ushort frameTable = (ushort)(val & 0xFFF);
 
-						writer.WriteLine(i + "," + tileType.ToString() + "," + frameTable);
+						writer.WriteLine(i + "," + frameTable);
                     }
 
                     if (reader.BaseStream.Position != reader.BaseStream.Length)
