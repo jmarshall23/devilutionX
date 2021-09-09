@@ -180,6 +180,12 @@ namespace DunDump
                     SaveSol(f);
             }
 
-        }
+			// cel files
+			{
+				string[] files = System.IO.Directory.GetFiles(args[0], "*.cel");
+
+				ExportTileset.Export(files[0]);
+			}
+		}
     }
 }
