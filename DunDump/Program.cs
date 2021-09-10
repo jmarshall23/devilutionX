@@ -75,6 +75,15 @@ namespace DunDump
 
         static void Main(string[] args)
         {
+			if(args.Length > 1)
+			{
+				if(args[0] == "-cook")
+				{
+					CookTileset.CookTiles(args[1]);
+					return;
+				}
+			}
+
             // Dun files
             {
                 string[] files = System.IO.Directory.GetFiles(args[0], "*.dun");
