@@ -205,7 +205,7 @@ namespace DunDump
 
 				foreach(D1Til.ImageTemp temp in tempImages)
 				{
-					byte[] buffer = (temp.data);
+					byte[] buffer = FastFlipBuffer(temp.data);
 
 					string hash = GetHashSHA1(buffer);
 

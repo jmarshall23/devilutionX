@@ -1031,20 +1031,6 @@ std::unique_ptr<MegaTile[]> LoadMegaTileText(const char *filename)
 	return buf;
 }
 
-std::unique_ptr<MTType[]> LoadMinTileText(const char *filename)
-{
-	DataTable *table = new DataTable(filename);
-
-	std::unique_ptr<MTType[]> buf { new MTType[table->NumRows()] };
-
-	for (int i = 0; i < table->NumRows(); i++) {
-		buf[i].celid = table->GetInt("celid", i);
-	}
-
-	delete table;
-	return buf;
-}
-
 void LoadDungeonTiles(const char *name)
 {
 	for (int i = 0; i < pDungeonCels.size(); i++)
@@ -1072,8 +1058,8 @@ void LoadDungeonTiles(const char *name)
 		image.height = *(short *)((byte *)&data.get()[14]);
 		image.buffer = new byte[image.width * image.height];
 
-		for (int i = 0; i < image.width * image.height; i++) {
-			image.buffer[i] = data[18 + (i * 4) + 0];
+		for (int i = 0, d = (image.width * image.height) - 1; i < image.width * image.height; i++, d--) {
+			image.buffer[d] = data[18 + (i * 4) + 0];
 		}
 
 		pDungeonCels.push_back(image);
