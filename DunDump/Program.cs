@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using StormLibSharp;
 
 namespace DunDump
 {
@@ -73,6 +74,20 @@ namespace DunDump
             }
         }
 
+		static void ExtractAllFilesFromFolder(string path, MpqArchive archive, string[] textFileContent)
+		{
+			foreach(string s in textFileContent)
+			{
+				string newPath = s.ToLower();
+				if(s.Contains(newPath))
+				{
+					Directory.CreateDirectory("../build/" + Path.GetDirectoryName(s));
+					Console.WriteLine("Extracting " + newPath);
+					archive.ExtractFile(s, "../build/" + newPath);
+				}
+			}
+		}
+
         static void Main(string[] args)
         {
 			if(args.Length > 1)
@@ -84,8 +99,17 @@ namespace DunDump
 				}
 			}
 
-            // Dun files
-            {
+			if (args[0] == "-extract")
+			{
+				MpqArchive diabdat = new MpqArchive("../build/diabdat.mpq", FileAccess.Read);
+				string[] textFileContent = File.ReadAllLines("diablo.txt");
+				ExtractAllFilesFromFolder("level\\", diabdat, textFileContent);
+
+				return;
+			}
+
+			// Dun files
+			{
                 string[] files = System.IO.Directory.GetFiles(args[0], "*.dun");
 
                 foreach (string f in files)

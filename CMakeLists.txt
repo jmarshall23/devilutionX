@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-include(D:/projects/vcpkg/vcpkg/scripts/buildsystems/vcpkg.cmake)
+include(C:/projects/vcpkg/scripts/buildsystems/vcpkg.cmake)
 
 if(POLICY CMP0092)
   cmake_policy(SET CMP0092 NEW)

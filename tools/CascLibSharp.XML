@@ -1,0 +1,371 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CascLibSharp</name>
+    </assembly>
+    <members>
+        <member name="T:CascLibSharp.CascException">
+            <summary>
+            Represents an exception raised as part of a CASC operation.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascException.#ctor">
+            <summary>
+            Creates a new CascException based on the last Win32 error.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascException.#ctor(System.Int32)">
+            <summary>
+            Creates a new CascException based on the specified Win32 error code.
+            </summary>
+            <param name="errorCode">A Win32 error code.</param>
+        </member>
+        <member name="M:CascLibSharp.CascException.#ctor(System.String)">
+            <summary>
+            Creates a new CascException based on the specified message.
+            </summary>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:CascLibSharp.CascException.#ctor(System.Int32,System.String)">
+            <summary>
+            Creates a new CascException based on the specified Win32 error code and custom error message.
+            </summary>
+            <param name="errorCode">A Win32 error code.</param>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="T:CascLibSharp.CascFileStream">
+            <summary>
+            Provides a view of the data in a file contained within CASC storage.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFileStream.CanRead">
+            <summary>
+            Gets whether this Stream may be read.  Always returns true as long as the Stream has not been disposed.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFileStream.CanSeek">
+            <summary>
+            Gets whether this Stream may seek.  Always returns true as long as the Stream has not been disposed.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFileStream.CanWrite">
+            <summary>
+            Gets whether this Stream may write.  Always returns false.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascFileStream.Flush">
+            <summary>
+            Flushes writes to the backing store.  This method always throws because writing is not supported.
+            </summary>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
+        </member>
+        <member name="P:CascLibSharp.CascFileStream.Length">
+            <summary>
+            Gets the length of the Stream.
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the Stream has been disposed.</exception>
+        </member>
+        <member name="P:CascLibSharp.CascFileStream.Position">
+            <summary>
+            Gets or sets the current position within the Stream.
+            </summary>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the Stream has been disposed.</exception>
+            <exception cref="T:CascLibSharp.CascException">Thrown if the attempt to seek fails.</exception>
+        </member>
+        <member name="M:CascLibSharp.CascFileStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads data into the buffer.
+            </summary>
+            <param name="buffer">The destination into which the data should be read.</param>
+            <param name="offset">The offset into the buffer to read from the current position of the Stream.</param>
+            <param name="count">The number of bytes to read.</param>
+            <returns>The number of bytes actually read.</returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the Stream has been disposed.</exception>
+            <exception cref="T:CascLibSharp.CascException">Thrown if the CASC provider fails to read.</exception>
+        </member>
+        <member name="M:CascLibSharp.CascFileStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            Seeks to a specific position within the Stream.
+            </summary>
+            <param name="offset">The offset from the specified origin to seek.</param>
+            <param name="origin">The relative location (beginning, current, or end) from which to seek.</param>
+            <returns>The new position in the stream.</returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the Stream has been disposed.</exception>
+        </member>
+        <member name="M:CascLibSharp.CascFileStream.SetLength(System.Int64)">
+            <summary>
+            Sets the length of the Stream.  Always throws because writing is not supported.
+            </summary>
+            <param name="value">The new length of the Stream.</param>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
+        </member>
+        <member name="M:CascLibSharp.CascFileStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Writes the specified data to the Stream.  Always throws because writing is not supported.
+            </summary>
+            <param name="buffer">The data to write.</param>
+            <param name="offset">The starting position in the buffer.</param>
+            <param name="count">The number of bytes.</param>
+            <exception cref="T:System.NotSupportedException">Always thrown.</exception>
+        </member>
+        <member name="T:CascLibSharp.CascFoundFile">
+            <summary>
+            Represents a file found in a CASC container search.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFoundFile.FileName">
+            <summary>
+            Gets the full path to this file.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFoundFile.PlainFileName">
+            <summary>
+            Gets the plain (no directory-qualified) file name of this file.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFoundFile.EncodingKey">
+            <summary>
+            Gets the CASC encoding key for this file.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFoundFile.Locales">
+            <summary>
+            Gets the locales supported by this resource.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascFoundFile.FileSize">
+            <summary>
+            Gets the length of the file in bytes.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascFoundFile.Open">
+            <summary>
+            Opens the found file for reading.
+            </summary>
+            <returns>A CascFileStream, which acts as a Stream for a CASC stored file.</returns>
+        </member>
+        <member name="T:CascLibSharp.CascStorageContext">
+            <summary>
+            Represents a CASC storage directory.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.#ctor(System.String)">
+            <summary>
+            Creates a new CascStorageContext for the specified path.
+            </summary>
+            <param name="dataPath">The path to a game's data directory.</param>
+            <example>An example directory is <c>c:\Program Files (x86)\Heroes of the Storm\HeroesData</c>.</example>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.OpenFile(System.String,CascLibSharp.CascLocales)">
+            <summary>
+            Opens a file by its fully-qualified name.
+            </summary>
+            <param name="fileName">The name of the file.</param>
+            <param name="locale">The file's locale (defaults to English-United States).</param>
+            <returns>A CascFileStream, which implements a Stream.</returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the CascStorageContext has been disposed.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown if the file does not exist within the CASC storage container.</exception>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.OpenFileByIndexKey(System.Byte[])">
+            <summary>
+            Opens a file by its index key.
+            </summary>
+            <remarks>
+            An index key is a binary representation of a file.  I do not know what it comes from; I know that it's used to identify files inside of CASC, 
+            but I don't know how someone obtains the index key.  They are not produced in the public API of CascLib.
+            </remarks>
+            <param name="indexKey">The index key to search.</param>
+            <returns>A CascFileStream, which implements a Stream.</returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the CascStorageContext has been disposed.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown if the file does not exist within the CASC storage container.</exception>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.OpenFileByEncodingKey(System.Byte[])">
+            <summary>
+            Opens a file by its encoding key.
+            </summary>
+            <param name="encodingKey">A 16-byte key representing the file.  Encoding keys may be obtained via <see cref="M:CascLibSharp.CascStorageContext.SearchFiles(System.String,System.String)"/>.</param>
+            <returns>A CascFileStream, which implements a Stream.</returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the CascStorageContext has been disposed.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown if the file does not exist within the CASC storage container.</exception>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.SearchFiles(System.String,System.String)">
+            <summary>
+            Searches the files in the CASC container for files that match the specified pattern.
+            </summary>
+            <param name="mask">The mask to search.  * and ? are valid tokens for substitution.</param>
+            <param name="listFilePath">A path to a listfile.  Required if the CASC container is for World of Warcraft.</param>
+            <returns>An enumeration of matching file references in the CASC container.</returns>
+        </member>
+        <member name="P:CascLibSharp.CascStorageContext.HasListfile">
+            <summary>
+            Gets whether the CASC container has a listfile or if one must be supplied while searching.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascStorageContext.FileCount">
+            <summary>
+            Gets the number of files in the CASC container.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascStorageContext.GameBuild">
+            <summary>
+            Gets the build number of the game.
+            </summary>
+        </member>
+        <member name="P:CascLibSharp.CascStorageContext.GameClient">
+            <summary>
+            Gets the game client of the container, if it can be determined.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.Finalize">
+            <summary>
+            Finalizes the storage context.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.Dispose">
+            <summary>
+            Disposes the object.
+            </summary>
+        </member>
+        <member name="M:CascLibSharp.CascStorageContext.Dispose(System.Boolean)">
+            <summary>
+            Disposes the object, cleaning up the unmanaged objects.
+            </summary>
+            <param name="disposing">True if this is being called via the Dispose() method; false if it's being called by the finalizer.</param>
+        </member>
+        <member name="T:CascLibSharp.CascLocales">
+            <summary>
+            Known locales supported by CASC.
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.All">
+            <summary>
+            All available locales.
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.None">
+            <summary>
+            No locales.
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.Unknown1">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.EnUs">
+            <summary>
+            English, United States
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.KoKr">
+            <summary>
+            Korean, South Korea
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.Reserved">
+            <summary>
+            Reserved (unknown)
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.FrFr">
+            <summary>
+            French, France
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.DeDe">
+            <summary>
+            German, Germany
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.ZhCn">
+            <summary>
+            Chinese, China
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.EsEs">
+            <summary>
+            Spanish, Spain
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.ZhTw">
+            <summary>
+            Chinese, Taiwan
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.EnGb">
+            <summary>
+            English, Great Britain
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.EnCn">
+            <summary>
+            English, China
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.EnTw">
+            <summary>
+            English, Taiwan
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.EsMx">
+            <summary>
+            Spanish, Mexico
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.RuRu">
+            <summary>
+            Russian, Russia
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.PtBr">
+            <summary>
+            Portuguese, Brazil
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.ItIt">
+            <summary>
+            Italian, Italy
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascLocales.PtPt">
+            <summary>
+            Portuguese, Portugal
+            </summary>
+        </member>
+        <member name="T:CascLibSharp.CascKnownClient">
+            <summary>
+            Known clients supporting CASC
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascKnownClient.Unknown">
+            <summary>
+            The game client was unrecognized.
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascKnownClient.HeroesOfTheStorm">
+            <summary>
+            Heroes of the Storm
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascKnownClient.Diablo3">
+            <summary>
+            Diablo 3
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascKnownClient.WorldOfWarcraft">
+            <summary>
+            World of Warcraft
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascKnownClient.Overwatch">
+            <summary>
+            Overwatch
+            </summary>
+        </member>
+        <member name="F:CascLibSharp.CascKnownClient.Starcraft2">
+            <summary>
+            Starcraft 2
+            </summary>
+        </member>
+    </members>
+</doc>
