@@ -128,7 +128,7 @@ namespace DunDump
 
 			//throw new Exception("FindStartY: Image is empty!");
 
-			return -1;
+			return 0;
 		}
 
 		public static byte[] FastFlipBuffer(byte[] data)
@@ -145,8 +145,6 @@ namespace DunDump
 		public static bool ExportFixedTarga(string filename, byte[] buffer, int width, int height)
 		{
 			int startY = FindStartY(buffer, width, height);
-			if (startY == -1)
-				return false;
 
 			int newHeight = height - startY;
 			byte[] copyBuffer = new byte[width * newHeight];
