@@ -74,6 +74,37 @@ namespace DunDump
             }
         }
 
+		static void SaveTil(string filename)
+		{
+			string tilFile = filename;
+			string outFile = Path.GetDirectoryName(tilFile) + "/" + Path.GetFileNameWithoutExtension(tilFile) + ".tiltext";
+
+			Console.WriteLine("Opening til file {0}", tilFile);
+
+			using (StreamWriter writer = File.CreateText(outFile))
+			{
+				using (BinaryReader reader = new BinaryReader(File.Open(tilFile, FileMode.Open)))
+				{
+					writer.WriteLine("index,top,right,left,bottom");
+
+					long numEntries = reader.BaseStream.Length / (2 * 4);
+
+					for (int i = 0; i < numEntries; i++)
+					{
+						ushort top = reader.ReadUInt16();
+						ushort right = reader.ReadUInt16();
+						ushort left = reader.ReadUInt16();
+						ushort bottom = reader.ReadUInt16();
+
+						writer.WriteLine(i + "," + top + "," + right + "," + left + "," + bottom);
+					}
+
+					if (reader.BaseStream.Position != reader.BaseStream.Length)
+						throw new Exception("invalid til parse");
+				}
+			}
+		}
+
 		static void ExtractAllFilesFromFolder(string path, MpqArchive archive, string[] textFileContent)
 		{
 			foreach(string s in textFileContent)
@@ -123,6 +154,14 @@ namespace DunDump
                 foreach (string f in files)
                     SaveSol(f);
             }
+
+			// til files
+			{
+				string[] files = System.IO.Directory.GetFiles(args[0], "*.til");
+
+				foreach (string f in files)
+					SaveTil(f);
+			}
 
 			// cel files
 			{

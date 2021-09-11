@@ -1,5 +1,8 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace DunDump
 {
@@ -123,7 +126,9 @@ namespace DunDump
 				startY += 32;
 			}
 
-			throw new Exception("FindStartY: Image is empty!");
+			//throw new Exception("FindStartY: Image is empty!");
+
+			return -1;
 		}
 
 		public static byte[] FastFlipBuffer(byte[] data)
@@ -136,6 +141,34 @@ namespace DunDump
 
 			return buffer;
 		}
+
+		public static bool ExportFixedTarga(string filename, byte[] buffer, int width, int height)
+		{
+			int startY = FindStartY(buffer, width, height);
+			if (startY == -1)
+				return false;
+
+			int newHeight = height - startY;
+			byte[] copyBuffer = new byte[width * newHeight];
+
+			for (int d = 0; d < copyBuffer.Length; d++)
+				copyBuffer[d] = 255;
+
+			BlitImage2(buffer, 0, startY, width, copyBuffer, 0, 0, width, newHeight, width, newHeight);
+
+			WriteTGA(filename, copyBuffer, width, newHeight, false);
+
+			return true;
+		}
+		public static string GetHashSHA1(this byte[] data)
+		{
+			using (SHA1Managed sha1 = new SHA1Managed())
+			{
+				var hash = sha1.ComputeHash(data);
+				return Convert.ToBase64String(hash);
+			}
+		}
+
 		public static void Export(string filename, string minfile, string tilPath)
 		{
 			DiabloCel cel = new DiabloCel(filename);
@@ -158,21 +191,34 @@ namespace DunDump
 			byte[] tempQuadBuffer = new byte[64 * 32];
 
 			int tileIndex = 0;
+
+			List<string> hashes = new List<string>();
 			for(int i = 0; i < til.getTileCount(); i++)
-			{				
-				byte[] buffer = FastFlipBuffer(til.getTileImage((ushort)i));
+			{
+				// Export mod ready tiles
+				//byte[] buffer = FastFlipBuffer(til.getTileImage((ushort)i));
+				//
+				//ExportFixedTarga(tilePath + "tile" + i + ".tga", buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
 
-				int startY = FindStartY(buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
+				// Stop gap export for til ready rendering without min.
+				D1Til.ImageTemp[] tempImages = til.getTileImagesTemp((ushort)i);
 
-				int newHeight = til.getTilePixelHeight() - startY;
-				byte[] copyBuffer = new byte[til.getTilePixelWidth() * newHeight];
+				foreach(D1Til.ImageTemp temp in tempImages)
+				{
+					byte[] buffer = FastFlipBuffer(temp.data);
 
-				for (int d = 0; d < copyBuffer.Length; d++)
-					copyBuffer[d] = 255;
+					string hash = GetHashSHA1(buffer);
 
-				BlitImage2(buffer, 0, startY, til.getTilePixelWidth(), copyBuffer, 0, 0, til.getTilePixelWidth(), newHeight, til.getTilePixelWidth(), newHeight);
+					if(hashes.Contains(hash))
+						continue;
 
-				WriteTGA(tilePath + "tile" + i + ".tga", copyBuffer, til.getTilePixelWidth(), newHeight, false);
+					if (ExportFixedTarga(tilePath + "tile" + tileIndex + ".tga", buffer, temp.width, temp.height))
+					{
+						tileIndex++;
+					}
+
+					hashes.Add(hash);
+				}
 			}
 		}
 	}

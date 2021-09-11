@@ -2,7 +2,7 @@
   "profiles": {
     "DunDump": {
       "commandName": "Project",
-      "commandLineArgs": "-extract",
+      "commandLineArgs": "..\\build\\levels\\towndata",
       "workingDirectory": "C:\\Projects\\Diablo\\tools"
     }
   }

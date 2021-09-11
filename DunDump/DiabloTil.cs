@@ -70,7 +70,7 @@ namespace DunDump
 			return true;
 		}
 
-		struct ImageTemp
+		public struct ImageTemp
 		{
 			public byte[] data;
 			public int width;
@@ -110,6 +110,21 @@ namespace DunDump
 			ExportTileset.BlitImage(tempImages[3].data, 0, 0, tempImages[3].width, tile, 32, 32, width, height, tempImages[3].width, tempImages[3].height); ;
 
 			return tile;
+		}
+
+		public ImageTemp[] getTileImagesTemp(ushort tileIndex)
+		{
+			if (this.min == null || tileIndex >= this.subtileIndices.Count)
+			{
+				throw new Exception("Broken");
+			}
+
+			ImageTemp[] tempImages = new ImageTemp[4];
+
+			for (int i = 0; i < 4; i++)
+				tempImages[i] = LoadSubImageTemp(subtileIndices[tileIndex][i]);
+
+			return tempImages;
 		}
 
 		private D1TIL_TYPE getType()
