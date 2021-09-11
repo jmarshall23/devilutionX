@@ -26,7 +26,7 @@ std::unique_ptr<uint16_t[]> pSetPiece;
 bool setloadflag;
 std::optional<CelSprite> pSpecialCels;
 std::unique_ptr<MegaTile[]> pMegaTiles;
-std::unique_ptr<MTType[]> pLevelPieces;
+//std::unique_ptr<MTType[]> pLevelPieces;
 //std::unique_ptr<byte[]> pDungeonCels;
 std::vector<TargaImage_t> pDungeonCels;
 std::array<uint8_t, MAXTILES + 1> block_lvid;
@@ -368,18 +368,12 @@ void SetDungeonMicros()
 
 	for (int y = 0; y < MAXDUNY; y++) {
 		for (int x = 0; x < MAXDUNX; x++) {
+// jmarshall - remove min file
 			int lv = dPiece[x][y];
 			MICROS &micros = dpiece_defs_map_2[x][y];
-			if (lv != 0) {
-				lv--;
-				MTType *pieces = &pLevelPieces[blocks * lv];
-				for (int i = 0; i < blocks; i++) {
-					micros.mt[i] = pieces[blocks - 2 + (i & 1) - (i & 0xE)];
-				}
-			} else {
-				for (int i = 0; i < blocks; i++)
-					micros.mt[i].celid = 0;
-			}
+
+			micros.mt.celid = lv;
+// jmarshall end
 		}
 	}
 }

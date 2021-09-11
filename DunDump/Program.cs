@@ -77,7 +77,7 @@ namespace DunDump
 		static void SaveTil(string filename)
 		{
 			string tilFile = filename;
-			string outFile = Path.GetDirectoryName(tilFile) + "/" + Path.GetFileNameWithoutExtension(tilFile) + ".tiltext";
+			string outFile = Path.GetDirectoryName(tilFile) + "/megatiles.tiltext";
 
 			Console.WriteLine("Opening til file {0}", tilFile);
 

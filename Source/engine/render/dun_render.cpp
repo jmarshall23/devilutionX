@@ -710,6 +710,9 @@ void RenderTile(const Surface &out, int x, int y)
 	DBGCOLOR = GetTileDebugColor(tile);
 #endif
 
+	if (level_cel_block.celid - 1 >= pDungeonCels.size())
+		return;
+
 	Clip clip = CalculateClip(x, y, pDungeonCels[level_cel_block.celid - 1].width, pDungeonCels[level_cel_block.celid - 1].height, out);
 	if (clip.width <= 0 || clip.height <= 0)
 		return;

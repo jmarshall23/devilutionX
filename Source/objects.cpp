@@ -1147,12 +1147,15 @@ void ObjSetMicro(Point position, int pn)
 
 	int blocks = leveltype != DTYPE_HELL ? 10 : 16;
 
-	MTType *piece = &pLevelPieces[blocks * pn];
+	//MTType *piece = &pLevelPieces[blocks * pn];
 	MICROS &micros = dpiece_defs_map_2[position.x][position.y];
 
-	for (int i = 0; i < blocks; i++) {
-		micros.mt[i] = piece[blocks - 2 + (i & 1) - (i & 0xE)];
-	}
+// jmarshall - remove min file
+	//for (int i = 0; i < blocks; i++) {
+	//	micros.mt[i] = piece[blocks - 2 + (i & 1) - (i & 0xE)];
+	//}
+	micros.mt.celid = pn;
+// jmarshall end
 }
 
 void AddL2Door(int i, Point position, _object_id objectType)
@@ -1717,11 +1720,17 @@ void SetDoorPiece(Point position)
 {
 	int pn = dPiece[position.x][position.y] - 1;
 
-	MTType *piece = &pLevelPieces[10 * pn + 8];
+// jmarshall - remove min
+	//MTType *piece = &pLevelPieces[10 * pn + 8];
 
-	dpiece_defs_map_2[position.x][position.y].mt[0] = piece[0];	
-	dpiece_defs_map_2[position.x][position.y].mt[1] = piece[1];
+	//dpiece_defs_map_2[position.x][position.y].mt[0] = piece[0];	
+	//dpiece_defs_map_2[position.x][position.y].mt[1] = piece[1];
+
+	dpiece_defs_map_2[position.x][position.y].mt.celid = pn;
+// jmarshall end
 }
+
+
 
 void DoorSet(Point position, bool isLeftDoor)
 {

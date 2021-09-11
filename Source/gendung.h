@@ -123,7 +123,7 @@ struct MTType {
 };
 
 struct MICROS {
-	MTType mt[16];
+	MTType mt;
 };
 
 struct ShadowStruct {
@@ -158,7 +158,7 @@ extern bool setloadflag;
 extern std::optional<CelSprite> pSpecialCels;
 /** Specifies the tile definitions of the active dungeon type; (e.g. levels/l1data/l1.til). */
 extern std::unique_ptr<MegaTile[]> pMegaTiles;
-extern std::unique_ptr<MTType[]> pLevelPieces;
+//extern std::unique_ptr<MTType[]> pLevelPieces;
 //extern std::unique_ptr<byte[]> pDungeonCels;
 
 struct TargaImage_t {

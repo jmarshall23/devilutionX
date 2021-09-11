@@ -1056,7 +1056,7 @@ void LoadDungeonTiles(const char *name)
 		char path[512];
 		TargaImage_t image;
 
-		sprintf(path, "%s\\cooked\\tile%d.tga", name, pDungeonCels.size());
+		sprintf(path, "%s\\tiles\\tile%d.tga", name, pDungeonCels.size());
 
 
 		HANDLE file;
@@ -1090,11 +1090,11 @@ void LoadLvlGFX()
 		if (gbIsHellfire) {
 			LoadDungeonTiles("NLevels\\TownData");
 			pMegaTiles = LoadMegaTileText("NLevels\\TownData\\megatiles.tiltext");
-			pLevelPieces = LoadMinTileText("NLevels\\TownData\\lvlpieces.mintext");
+		//	pLevelPieces = LoadMinTileText("NLevels\\TownData\\lvlpieces.mintext");
 		} else {
 			LoadDungeonTiles("Levels\\TownData");
 			pMegaTiles = LoadMegaTileText("Levels\\TownData\\megatiles.tiltext");
-			pLevelPieces = LoadMinTileText("Levels\\TownData\\lvlpieces.mintext");
+		//	pLevelPieces = LoadMinTileText("Levels\\TownData\\lvlpieces.mintext");
 		}
 		pSpecialCels = LoadCel("Levels\\TownData\\TownS.CEL", SpecialCelWidth);
 		break;
@@ -1102,37 +1102,37 @@ void LoadLvlGFX()
 		if (currlevel < 21) {
 			LoadDungeonTiles("Levels\\L1Data");
 			pMegaTiles = LoadMegaTileText("Levels\\L1Data\\megatiles.tiltext");
-			pLevelPieces = LoadMinTileText("Levels\\L1Data\\lvlpieces.mintext");
+		//	pLevelPieces = LoadMinTileText("Levels\\L1Data\\lvlpieces.mintext");
 			pSpecialCels = LoadCel("Levels\\L1Data\\L1S.CEL", SpecialCelWidth);
 		} else {
 			LoadDungeonTiles("NLevels\\L5Data");
 			pMegaTiles = LoadMegaTileText("NLevels\\L5Data\\megatiles.tiltext");
-			pLevelPieces = LoadMinTileText("NLevels\\L5Data\\lvlpieces.mintext");
+		//	pLevelPieces = LoadMinTileText("NLevels\\L5Data\\lvlpieces.mintext");
 			pSpecialCels = LoadCel("NLevels\\L5Data\\L5S.CEL", SpecialCelWidth);
 		}
 		break;
 	case DTYPE_CATACOMBS:
 		LoadDungeonTiles("Levels\\L2Data");
 		pMegaTiles = LoadMegaTileText("Levels\\L2Data\\megatiles.tiltext");
-		pLevelPieces = LoadMinTileText("Levels\\L2Data\\lvlpieces.mintext");
+	//	pLevelPieces = LoadMinTileText("Levels\\L2Data\\lvlpieces.mintext");
 		pSpecialCels = LoadCel("Levels\\L2Data\\L2S.CEL", SpecialCelWidth);
 		break;
 	case DTYPE_CAVES:
 		if (currlevel < 17) {
 			LoadDungeonTiles("Levels\\L3Data");
 			pMegaTiles = LoadMegaTileText("Levels\\L3Data\\megatiles.tiltext");
-			pLevelPieces = LoadMinTileText("Levels\\L3Data\\lvlpieces.mintext");
+	//		pLevelPieces = LoadMinTileText("Levels\\L3Data\\lvlpieces.mintext");
 		} else {
 			LoadDungeonTiles("NLevels\\L6Data");
 			pMegaTiles = LoadMegaTileText("NLevels\\L6Data\\megatiles.tiltext");
-			pLevelPieces = LoadMinTileText("NLevels\\L6Data\\lvlpieces.mintext");
+	//		pLevelPieces = LoadMinTileText("NLevels\\L6Data\\lvlpieces.mintext");
 		}
 		pSpecialCels = LoadCel("Levels\\L1Data\\L1S.CEL", SpecialCelWidth);
 		break;
 	case DTYPE_HELL:
 		LoadDungeonTiles("Levels\\L4Data");
 		pMegaTiles = LoadMegaTileText("Levels\\L4Data\\megatiles.tiltext");
-		pLevelPieces = LoadMinTileText("Levels\\L4Data\\lvlpieces.mintext");
+	//	pLevelPieces = LoadMinTileText("Levels\\L4Data\\lvlpieces.mintext");
 		pSpecialCels = LoadCel("Levels\\L2Data\\L2S.CEL", SpecialCelWidth);
 		break;
 	default:
@@ -1591,7 +1591,7 @@ void FreeGameMem()
 	pDungeonCels.clear();
 	    //	pDungeonCels = nullptr;
 	pMegaTiles = nullptr;
-	pLevelPieces = nullptr;
+	//pLevelPieces = nullptr;
 	pSpecialCels = std::nullopt;
 
 	FreeMissiles();

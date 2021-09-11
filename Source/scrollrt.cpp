@@ -660,6 +660,11 @@ void DrawCell(const Surface &out, int x, int y, int sx, int sy)
 	level_piece_id = dPiece[x][y];
 	cel_transparency_active = nTransTable[level_piece_id] && TransList[dTransVal[x][y]];
 	cel_foliage_active = !nSolidTable[level_piece_id];
+
+// jmarshall - remove min
+	level_cel_block = pMap->mt;
+	RenderTile(out, sx, sy);
+#if 0
 	for (int i = 0; i < (MicroTileLen / 2); i++) {
 		level_cel_block = pMap->mt[2 * i];
 		if (level_cel_block.IsEnabled()) {
@@ -673,6 +678,8 @@ void DrawCell(const Surface &out, int x, int y, int sx, int sy)
 		}
 		sy -= TILE_HEIGHT;
 	}
+#endif
+// jmarshall end
 	cel_foliage_active = false;
 }
 
@@ -688,7 +695,13 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy)
 {
 	cel_transparency_active = false;
 	LightTableIndex = dLight[x][y];
+// jmarshall - remove min
+	level_cel_block = dpiece_defs_map_2[x][y].mt;
+	if (level_cel_block.IsEnabled()) {
+		RenderTile(out, sx, sy);
+	}
 
+#if 0
 	arch_draw_type = 1; // Left
 	level_cel_block = dpiece_defs_map_2[x][y].mt[0];
 	if (level_cel_block.IsEnabled()) {
@@ -699,6 +712,8 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy)
 	if (level_cel_block.IsEnabled()) {
 		RenderTile(out, sx + TILE_WIDTH / 2, sy);
 	}
+#endif
+// jmarshall end
 }
 
 /**
