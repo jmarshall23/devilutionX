@@ -1,8 +1,7 @@
-using System;
+﻿using System;
 using System.IO;
-using StormLibSharp;
 
-namespace DunDump
+namespace ConversionTool
 {
     class Program
     {
@@ -105,43 +104,11 @@ namespace DunDump
 			}
 		}
 
-		static void ExtractAllFilesFromFolder(string path, MpqArchive archive, string[] textFileContent)
+		static void ExportLevels(string path)
 		{
-			foreach(string s in textFileContent)
-			{
-				string newPath = s.ToLower();
-				if(s.Contains(newPath))
-				{
-					Directory.CreateDirectory("../build/" + Path.GetDirectoryName(s));
-					Console.WriteLine("Extracting " + newPath);
-					archive.ExtractFile(s, "../build/" + newPath);
-				}
-			}
-		}
-
-        static void Main(string[] args)
-        {
-			if(args.Length > 1)
-			{
-				if(args[0] == "-cook")
-				{
-					CookTileset.CookTiles(args[1]);
-					return;
-				}
-			}
-
-			if (args[0] == "-extract")
-			{
-				MpqArchive diabdat = new MpqArchive("../build/diabdat.mpq", FileAccess.Read);
-				string[] textFileContent = File.ReadAllLines("diablo.txt");
-				ExtractAllFilesFromFolder("level\\", diabdat, textFileContent);
-
-				return;
-			}
-
 			// Dun files
 			{
-                string[] files = System.IO.Directory.GetFiles(args[0], "*.dun");
+                string[] files = System.IO.Directory.GetFiles(path, "*.dun");
 
                 foreach (string f in files)
                     SaveDun(f);
@@ -149,7 +116,7 @@ namespace DunDump
 
             // sol files
             {
-                string[] files = System.IO.Directory.GetFiles(args[0], "*.sol");
+                string[] files = System.IO.Directory.GetFiles(path, "*.sol");
 
                 foreach (string f in files)
                     SaveSol(f);
@@ -157,7 +124,7 @@ namespace DunDump
 
 			// til files
 			{
-				string[] files = System.IO.Directory.GetFiles(args[0], "*.til");
+				string[] files = System.IO.Directory.GetFiles(path, "*.til");
 
 				foreach (string f in files)
 					SaveTil(f);
@@ -165,12 +132,22 @@ namespace DunDump
 
 			// cel files
 			{
-				string[] minfiles = System.IO.Directory.GetFiles(args[0], "*.min");
-				string[] tilfiles = System.IO.Directory.GetFiles(args[0], "*.til");
-				string[] files = System.IO.Directory.GetFiles(args[0], "*.cel");
+				string[] minfiles = System.IO.Directory.GetFiles(path, "*.min");
+				string[] tilfiles = System.IO.Directory.GetFiles(path, "*.til");
+				string[] files = System.IO.Directory.GetFiles(path, "*.cel");
 
 				ExportTileset.Export(files[0], minfiles[0], tilfiles[0]);
 			}
+		}
+
+        static void Main(string[] args)
+        {
+			Console.WriteLine("Converting Level Data...");
+			ExportLevels("build/levels/towndata");
+			ExportLevels("build/levels/l1data");
+			ExportLevels("build/levels/l2data");
+			ExportLevels("build/levels/l3data");
+			ExportLevels("build/levels/l4data");
 		}
     }
 }

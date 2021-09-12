@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-namespace DunDump
+namespace ConversionTool
 {
 	public enum D1MIN_TYPE
 	{

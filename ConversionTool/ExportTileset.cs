@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace DunDump
+namespace ConversionTool
 {
 	public static class ExportTileset
 	{

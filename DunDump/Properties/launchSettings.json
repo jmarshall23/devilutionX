@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "DunDump": {
-      "commandName": "Project",
-      "commandLineArgs": "..\\build\\levels\\towndata",
-      "workingDirectory": "C:\\Projects\\Diablo\\tools"
-    }
-  }
-}

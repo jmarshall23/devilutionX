@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace DunDump
+namespace ConversionTool
 {
 	public enum D1TIL_TYPE
 	{
