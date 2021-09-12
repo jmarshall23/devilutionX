@@ -142,9 +142,9 @@ namespace ConversionTool
 			}
 		}
 
-        static void ConvertSingleCel(string filename)
+        static void ConvertSingleCel(string filename, int width)
         {
-            DiabloCel cel = new DiabloCel("BlizzData/" + filename);
+            DiabloCel cel = new DiabloCel("BlizzData/" + filename, width);
 
 			string outputPath = "Build\\" + ExportTileset.FixExportPath(filename);
 
@@ -164,10 +164,16 @@ namespace ConversionTool
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Converting Towners...");
+			Console.WriteLine("Exporting Control Panel...");
+			foreach(ConversionTables.ConvEntry entry in ConversionTables.CtrlPan)
+			{
+				ConvertSingleCel(entry.path, entry.width);
+			}
+
+			Console.WriteLine("Converting Towners...");
             foreach(string path in ConversionTables.Towners)
             {
-                ConvertSingleCel(path);
+                ConvertSingleCel(path, 0);
             }
 
 			Console.WriteLine("Converting Level Data...");
