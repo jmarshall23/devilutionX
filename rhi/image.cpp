@@ -5,10 +5,53 @@
 #include "../source/storm/storm.h"
 #include "../source/engine/load_file.hpp"
 #include "image.h"
+#include "../source/engine/render/common_impl.h"
 
 namespace devilution
 {
+
 	std::vector<StormImage*> globalImageList;
+	/*
+	=======================
+	StormImage::ClipRenderNoLighting
+	=======================
+	*/
+	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame)
+	{
+		const ImageFrame_t& image = frames[frame - 1];
+
+		sy -= image.height;
+
+		for (int y = 0; y < image.height; y++)
+		{
+			for (int x = 0; x < image.width; x++)
+			{
+				int screenX = x + sx;
+				int screenY = y + sy;
+
+				if(screenX < 0)
+					continue;
+
+				if (screenY < 0)
+					continue;
+
+				if (screenX >= out.w())
+					continue;
+
+				if (screenY >= out.h())
+					continue;
+
+				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
+
+				if(image.buffer[sourcePos] == (byte)255)
+					continue;
+
+				std::uint8_t* dst = out.at(screenX, screenY);
+
+				*dst = (uint8_t)image.buffer[sourcePos];
+			}
+		}
+	}
 
 	/*
 	=======================

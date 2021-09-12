@@ -14,7 +14,7 @@
 namespace devilution {
 namespace {
 
-std::unique_ptr<byte[]> CowCels;
+//std::unique_ptr<byte[]> CowCels;
 int CowMsg;
 int CowClicks;
 
@@ -37,7 +37,7 @@ struct TownerInit {
 
 void NewTownerAnim(TownerStruct &towner, byte *pAnim, uint8_t numFrames, int delay)
 {
-	towner._tAnimData = pAnim;
+//	towner._tAnimData = pAnim;
 	towner._tAnimLen = numFrames;
 	towner._tAnimFrame = 1;
 	towner._tAnimCnt = 0;
@@ -73,11 +73,8 @@ void InitTownerInfo(int i, const TownerInit &initData)
 
 void LoadTownerAnimations(TownerStruct &towner, const char *path, int frames, Direction dir, int delay)
 {
-	towner.data = LoadFileInMem(path);
-	for (auto &animation : towner._tNAnim) {
-		animation = towner.data.get();
-	}
-	NewTownerAnim(towner, towner._tNAnim[dir], frames, delay);
+	towner.image = StormImage::LoadImageSequence(path, false);
+	NewTownerAnim(towner, nullptr, frames, delay);
 }
 
 /**
@@ -267,10 +264,11 @@ void InitCows(TownerStruct &towner, const TownerInit &initData)
 	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_COW);
 	towner.animOrder = nullptr;
 	towner.animOrderSize = 0;
-	for (int i = 0; i < 8; i++) {
-		towner._tNAnim[i] = CelGetFrame(CowCels.get(), i);
-	}
-	NewTownerAnim(towner, towner._tNAnim[initData.dir], numframes, delay);
+	towner.image = StormImage::LoadImageSequence(townerDataTable->GetValue("path", TOWN_COW), false);
+	//for (int i = 0; i < 8; i++) {
+	//	towner._tNAnim[i] = CelGetFrame(CowCels.get(), i);
+	//}
+	NewTownerAnim(towner, nullptr, numframes, delay);
 	towner._tAnimFrame = GenerateRnd(11) + 1;
 	towner.name = townerDataTable->GetValue("name", TOWN_COW);
 	/*
@@ -897,9 +895,9 @@ bool IsTownerPresent(_talker_id npc)
 
 void InitTowners()
 {
-	assert(CowCels == nullptr);
+//	assert(CowCels == nullptr);
 
-	CowCels = LoadFileInMem(townerDataTable->GetValue("path", TOWN_COW));
+	//CowCels = LoadFileInMem(townerDataTable->GetValue("path", TOWN_COW));
 
 	int i = 0;
 	for (const auto &townerInit : TownerInitList) {
@@ -913,11 +911,11 @@ void InitTowners()
 
 void FreeTownerGFX()
 {
-	for (auto &towner : Towners) {
-		towner.data = nullptr;
-	}
+	//for (auto &towner : Towners) {
+	//	towner.data = nullptr;
+	//}
 
-	CowCels = nullptr;
+	//CowCels = nullptr;
 }
 
 void ProcessTowners()
