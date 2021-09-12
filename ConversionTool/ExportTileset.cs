@@ -8,6 +8,13 @@ namespace ConversionTool
 {
 	public static class ExportTileset
 	{
+		public static string FixExportPath(string path)
+		{
+			string dpath = Path.GetDirectoryName(path);
+			dpath = dpath.Replace("BlizzData", "Build");
+			Directory.CreateDirectory(dpath);
+			return dpath;
+		}
 		public static void BlitImage(byte[] source, int sourceX, int sourceY, int sourceWidth, byte[] dest, int destX, int destY, int destWidth, int destHeight, int width, int height)
 		{
 			destY = destHeight - destY - height;
@@ -173,7 +180,7 @@ namespace ConversionTool
 
 			string fname = Path.GetFileNameWithoutExtension(filename);
 
-			string tilePath = Path.GetDirectoryName(filename) + "/tiles/";
+			string tilePath = ExportTileset.FixExportPath(filename) + "/tiles/";
 			Directory.CreateDirectory(tilePath);
 
 			//for(int i = 0; i < cel.NumFrames; i++)

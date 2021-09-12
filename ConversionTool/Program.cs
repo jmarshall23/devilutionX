@@ -8,7 +8,7 @@ namespace ConversionTool
         static void SaveDun(string filename)
         {
             string dunFile = filename;
-            string outFile = Path.GetDirectoryName(dunFile) + "/" + Path.GetFileNameWithoutExtension(dunFile) + ".duntext";
+            string outFile = ExportTileset.FixExportPath(filename) + "/" + Path.GetFileNameWithoutExtension(dunFile) + ".duntext";
 
             Console.WriteLine("Opening dungeon file {0}", dunFile);
 
@@ -48,7 +48,7 @@ namespace ConversionTool
         static void SaveSol(string filename)
         {
             string tilFile = filename;
-            string outFile = Path.GetDirectoryName(tilFile) + "/" + Path.GetFileNameWithoutExtension(tilFile) + ".soltext";
+            string outFile = ExportTileset.FixExportPath(filename) + "/" + Path.GetFileNameWithoutExtension(tilFile) + ".soltext";
 
             Console.WriteLine("Opening sol file {0}", tilFile);
 
@@ -76,7 +76,7 @@ namespace ConversionTool
 		static void SaveTil(string filename)
 		{
 			string tilFile = filename;
-			string outFile = Path.GetDirectoryName(tilFile) + "/megatiles.tiltext";
+			string outFile = ExportTileset.FixExportPath(filename)  + "/megatiles.tiltext";
 
 			Console.WriteLine("Opening til file {0}", tilFile);
 
@@ -106,9 +106,11 @@ namespace ConversionTool
 
 		static void ExportLevels(string path)
 		{
+			string BlizzDatapath = "BlizzData/" + path;
+
 			// Dun files
 			{
-                string[] files = System.IO.Directory.GetFiles(path, "*.dun");
+                string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.dun");
 
                 foreach (string f in files)
                     SaveDun(f);
@@ -116,7 +118,7 @@ namespace ConversionTool
 
             // sol files
             {
-                string[] files = System.IO.Directory.GetFiles(path, "*.sol");
+                string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.sol");
 
                 foreach (string f in files)
                     SaveSol(f);
@@ -124,7 +126,7 @@ namespace ConversionTool
 
 			// til files
 			{
-				string[] files = System.IO.Directory.GetFiles(path, "*.til");
+				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.til");
 
 				foreach (string f in files)
 					SaveTil(f);
@@ -132,9 +134,9 @@ namespace ConversionTool
 
 			// cel files
 			{
-				string[] minfiles = System.IO.Directory.GetFiles(path, "*.min");
-				string[] tilfiles = System.IO.Directory.GetFiles(path, "*.til");
-				string[] files = System.IO.Directory.GetFiles(path, "*.cel");
+				string[] minfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.min");
+				string[] tilfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.til");
+				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.cel");
 
 				ExportTileset.Export(files[0], minfiles[0], tilfiles[0]);
 			}
@@ -143,11 +145,11 @@ namespace ConversionTool
         static void Main(string[] args)
         {
 			Console.WriteLine("Converting Level Data...");
-			ExportLevels("build/levels/towndata");
-			ExportLevels("build/levels/l1data");
-			ExportLevels("build/levels/l2data");
-			ExportLevels("build/levels/l3data");
-			ExportLevels("build/levels/l4data");
+			ExportLevels("levels/towndata");
+			ExportLevels("levels/l1data");
+			ExportLevels("levels/l2data");
+			ExportLevels("levels/l3data");
+			ExportLevels("levels/l4data");
 		}
     }
 }
