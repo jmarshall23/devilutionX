@@ -777,13 +777,18 @@ void DrawMonsterHelper(const Surface &out, int x, int y, int oy, int sx, int sy)
 		auto &towner = Towners[mi];
 		int px = sx - CalculateWidth2(towner._tAnimWidth);
 		const Point position { px, sy };
+// jmarshall - next gen render
 		//if (mi == pcursmonst) {
 		//	CelBlitOutlineTo(out, 166, position, CelSprite(towner._tAnimData, towner._tAnimWidth), towner._tAnimFrame);
 		//}
 		//assert(towner._tAnimData);
 		//CelClippedDrawTo(out, position, CelSprite(towner._tAnimData, towner._tAnimWidth), towner._tAnimFrame);
 
+		if (mi == pcursmonst) {
+			towner.image->ClipRenderOutline(out, 166, position.x, position.y, towner._tAnimFrame);
+		}
 		towner.image->ClipRenderNoLighting(out, position.x, position.y, towner._tAnimFrame);
+// jmarshall end
 		return;
 	}
 

@@ -41,6 +41,7 @@ namespace devilution {
 		}
 
 		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame);
+		void ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame);
 	private:
 		std::string name;
 		std::vector<ImageFrame_t> frames;
