@@ -156,7 +156,9 @@ namespace ConversionTool
             {
                 DiabloCelBase frame = cel.GetFrame((short)i);
 
-                ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + i + ".tga", frame.Pixels, frame.Width, frame.Height, true);
+				byte[] fixedBuffer = ExportTileset.FastFlipHorizontalBuffer(frame.Pixels, frame.Width, frame.Height);
+
+				ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
             }
         }
 

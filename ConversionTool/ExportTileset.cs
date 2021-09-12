@@ -149,6 +149,20 @@ namespace ConversionTool
 			return buffer;
 		}
 
+		public static byte[] FastFlipHorizontalBuffer(byte[] data, int width, int height)
+		{
+			byte[] buffer = new byte[data.Length];
+			for(int y = 0; y < height; y++)
+			{
+				for(int x = 0; x < width; x++)
+				{
+					buffer[y * width + x] = data[y * width + (width - x - 1)];
+				}
+			}
+
+			return buffer;
+		}
+
 		public static bool ExportFixedTarga(string filename, byte[] buffer, int width, int height)
 		{
 			int startY = FindStartY(buffer, width, height);
