@@ -13,6 +13,8 @@
 #include "options.h"
 #include "utils/attributes.h"
 
+#include "../../rhi/image.h"
+
 namespace devilution {
 
 namespace {
@@ -710,17 +712,16 @@ void RenderTile(const Surface &out, int x, int y)
 	DBGCOLOR = GetTileDebugColor(tile);
 #endif
 
-	if (level_cel_block.celid>= pDungeonCels.size())
-		return;
+	const ImageFrame_t &dunFrame = pDungeonCels->GetFrame(level_piece_id);
 
-	Clip clip = CalculateClip(x, y, pDungeonCels[level_cel_block.celid - 1].width, pDungeonCels[level_cel_block.celid - 1].height, out);
+	Clip clip = CalculateClip(x, y, dunFrame.width, dunFrame.height, out);
 	if (clip.width <= 0 || clip.height <= 0)
 		return;
 
 
 	const std::uint8_t *tbl = &LightTables[256 * LightTableIndex];
 	//const auto *pFrameTable = reinterpret_cast<const std::uint32_t *>(pDungeonCels.get());
-	const uint8_t *src = (const uint8_t *)pDungeonCels[level_cel_block.celid - 1].buffer;
+	const uint8_t *src = (const uint8_t *)dunFrame.buffer;
 	std::uint8_t *dst = out.at(static_cast<int>(x + clip.left), static_cast<int>(y - clip.bottom));
 	const auto dstPitch = out.pitch();
 

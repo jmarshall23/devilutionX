@@ -161,26 +161,8 @@ extern std::unique_ptr<MegaTile[]> pMegaTiles;
 //extern std::unique_ptr<MTType[]> pLevelPieces;
 //extern std::unique_ptr<byte[]> pDungeonCels;
 
-struct TargaImage_t {
-	void Init(int w, int h, byte *data)
-	{
-		width = w;
-		height = h;
-
-		if (buffer != nullptr) {
-			delete buffer;
-			buffer = nullptr;
-		}
-
-		buffer = data;
-	}
-
-	int width;
-	int height;
-	byte *buffer;
-};
-
-extern std::vector<TargaImage_t> pDungeonCels;
+class StormImage;
+extern StormImage *pDungeonCels;
 
 /**
  * List of transparancy masks to use for dPieces

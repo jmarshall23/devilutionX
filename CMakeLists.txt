@@ -322,6 +322,8 @@ add_library(PKWare STATIC
 target_include_directories(PKWare PUBLIC 3rdParty/PKWare)
 
 set(libdevilutionx_SRCS
+  rhi/image.cpp
+
   Source/appfat.cpp
   Source/automap.cpp
   Source/capture.cpp

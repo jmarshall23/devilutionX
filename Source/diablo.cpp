@@ -67,6 +67,8 @@
 
 #include "datatable.h"
 
+#include "../rhi/image.h"
+
 #ifdef GPERF_HEAP_FIRST_GAME_ITERATION
 #include <gperftools/heap-profiler.h>
 #endif
@@ -1033,37 +1035,7 @@ std::unique_ptr<MegaTile[]> LoadMegaTileText(const char *filename)
 
 void LoadDungeonTiles(const char *name)
 {
-	for (int i = 0; i < pDungeonCels.size(); i++)
-		delete pDungeonCels[i].buffer;
-
-	pDungeonCels.clear();
-
-	while (true) {
-		char path[512];
-		TargaImage_t image;
-
-		sprintf(path, "%s\\tiles\\tile%d.tga", name, pDungeonCels.size());
-
-
-		HANDLE file;
-		if (!SFileOpenFile(path, &file)) {
-			break;
-		}		
-
-		SFileCloseFile(file);
-
-		std::unique_ptr<byte[]> data = LoadFileInMem(path);
-
-		image.width = *(short *)((byte *)&data.get()[12]);
-		image.height = *(short *)((byte *)&data.get()[14]);
-		image.buffer = new byte[image.width * image.height];
-
-		for (int i = 0, d = (image.width * image.height) - 1; i < image.width * image.height; i++, d--) {
-			image.buffer[d] = data[18 + (i * 4) + 0];
-		}
-
-		pDungeonCels.push_back(image);
-	}
+	pDungeonCels = StormImage::LoadImageSequence(name, true);
 }
 
 void LoadLvlGFX()
@@ -1571,10 +1543,10 @@ void FreeGameMem()
 {
 	music_stop();
 
-	for (int i = 0; i < pDungeonCels.size(); i++)
-		delete pDungeonCels[i].buffer;
-
-	pDungeonCels.clear();
+	//for (int i = 0; i < pDungeonCels.size(); i++)
+	//	delete pDungeonCels[i].buffer;
+	//
+	//pDungeonCels.clear();
 	    //	pDungeonCels = nullptr;
 	pMegaTiles = nullptr;
 	//pLevelPieces = nullptr;
