@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace ConversionTool
@@ -142,8 +142,32 @@ namespace ConversionTool
 			}
 		}
 
+        static void ConvertSingleCel(string filename)
+        {
+            DiabloCel cel = new DiabloCel("BlizzData/" + filename);
+
+			string outputPath = "Build\\" + ExportTileset.FixExportPath(filename);
+
+			Directory.CreateDirectory(outputPath);
+
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
+
+            for(int i = 0; i < cel.NumFrames; i++)
+            {
+                DiabloCelBase frame = cel.GetFrame((short)i);
+
+                ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + i + ".tga", frame.Pixels, frame.Width, frame.Height, true);
+            }
+        }
+
         static void Main(string[] args)
         {
+            Console.WriteLine("Converting Towners...");
+            foreach(string path in ConversionTables.Towners)
+            {
+                ConvertSingleCel(path);
+            }
+
 			Console.WriteLine("Converting Level Data...");
 			ExportLevels("levels/towndata");
 			ExportLevels("levels/l1data");

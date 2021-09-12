@@ -19,6 +19,57 @@ namespace ConversionTool
 			load(pixels);
 		}
 
+		int computeWidthFromHeader(byte[] rawFrameData )
+		{
+			BinaryReader file = new BinaryReader(new MemoryStream(rawFrameData));
+
+			// Reading the frame header
+
+			int[] celFrameHeader = new int[5];
+			int[] celFrameWidth = new int[] { 0, 0, 0, 0 };
+			int pixelCount = 0;
+			int  readByte = 0;
+
+			// Read the {CEL FRAME HEADER}
+			for (int i = 0; i < 5; i++)
+				celFrameHeader[i] = file.ReadUInt16();
+
+			// Read the five 32 pixel-lines block to calculate the image width
+			for (int i = 0; i < 4; i++)
+			{
+				if (celFrameHeader[i + 1] == 0)
+					break;
+
+				for (int j = celFrameHeader[i]; j < celFrameHeader[i + 1]; j++)
+				{
+					readByte = rawFrameData[j];
+
+					if (readByte > 0x7F)
+					{
+						pixelCount += (256 - readByte);
+					}
+					else
+					{
+						pixelCount += readByte;
+						j += readByte;
+					}
+				}
+
+				celFrameWidth[i] = pixelCount / 32;
+				pixelCount = 0;
+			}
+
+			// The calculated width has to be the identical for each 32 pixel-line block
+			// If it's not the case, 0 is returned
+			for (int i = 0; i < 3; i++)
+			{
+				if (celFrameWidth[i + 1] != 0 && celFrameWidth[i] != celFrameWidth[i + 1])
+					return 0;
+			}
+
+			return celFrameWidth[0];
+		}
+
 		private void load(byte[] rawData)
 		{
 			uint frameDataStartOffset = 0;
@@ -35,27 +86,19 @@ namespace ConversionTool
 			// If the frame size wasnt provided then it needs to be calculated
 			if (_width == 0)
 			{
-				throw new Exception("Invalid width!");
 				// Checking the presence of the {CEL FRAME HEADER}
-				//if (rawData[0] == 0x0A && rawData[1] == 0x00)
-				//{
-				//	frameDataStartOffset += 0x0A;
-				//	// If header is present, try to compute frame width from frame header
-				//	this.width = this.computeWidthFromHeader(rawData);
-				//}
-				//
-				//// If width could not be calculated with frame header,
-				//// attempt to calculate it from the frame data (by identifying pixel groups line wraps)
-				//if (this.width == 0)
-				//{
-				//	this.width = this.computeWidthFromData(rawData);
-				//}
-				//
-				//// if CEL width was not found, return false
-				//if (this.width == 0)
-				//{
-				//	return false;
-				//}
+				if (rawData[0] == 0x0A && rawData[1] == 0x00)
+				{
+					frameDataStartOffset += 0x0A;
+					// If header is present, try to compute frame width from frame header
+					_width = computeWidthFromHeader(rawData);
+				}
+				
+				// if CEL width was not found, return false
+				if (_width == 0)
+				{
+					throw new Exception("Invalid width!");
+				}
 			}
 
 			// READ {CEL FRAME DATA}
@@ -195,7 +238,7 @@ namespace ConversionTool
 
 				if (_height == 0)
 				{
-					throw new Exception("invlaid height!");
+					_height = _pixels.Count / _width;
 				}
 			}
 		}

@@ -47,10 +47,10 @@ namespace ConversionTool
 			return frames[index];
 		}
 
-		public DiabloCel(string fileName)
+		public DiabloCel(string fileName, int width = 0, int height = 0)
 		{
 			byte[] buffer = File.ReadAllBytes(fileName);
-			Parse(new BinaryReader(new MemoryStream(buffer)));
+			Parse(new BinaryReader(new MemoryStream(buffer)), width, height);
 		}
 
 		public static readonly bool[] D1CEL_LEVEL_FRAME_TYPE_2 = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
@@ -173,7 +173,7 @@ namespace ConversionTool
 		}
 
 
-		private void Parse(BinaryReader reader)
+		private void Parse(BinaryReader reader, int width, int height)
 		{
 			uint firstDword = 0;
 			uint fileSizeDword = 0;
@@ -313,7 +313,7 @@ namespace ConversionTool
 				// If it's not a level CEL
 				if (type != D1CEL_TYPE.V1_LEVEL)
 				{
-					frames.Add(new DiabloCelBase(celFrameRawData, 0, 0, D1CEL_FRAME_TYPE.REGULAR));
+					frames.Add(new DiabloCelBase(celFrameRawData, width, height, D1CEL_FRAME_TYPE.REGULAR));
 				}
 				// If it's a level CEL
 				else
