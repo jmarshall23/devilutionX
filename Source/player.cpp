@@ -2382,26 +2382,12 @@ void CreatePlayer(int playerId, HeroClass c)
 	player._pLightRad = 10;
 	player._pInfraFlag = false;
 
+	
+
+	spell_id startSkill = SpellIdFromString(playerTable->GetValue("startskill", (int)c));
 	player._pRSplType = RSPLTYPE_SKILL;
-	if (c == HeroClass::Warrior) {
-		player._pAblSpells = GetSpellBitmask(SPL_REPAIR);
-		player._pRSpell = SPL_REPAIR;
-	} else if (c == HeroClass::Rogue) {
-		player._pAblSpells = GetSpellBitmask(SPL_DISARM);
-		player._pRSpell = SPL_DISARM;
-	} else if (c == HeroClass::Sorcerer) {
-		player._pAblSpells = GetSpellBitmask(SPL_RECHARGE);
-		player._pRSpell = SPL_RECHARGE;
-	} else if (c == HeroClass::Monk) {
-		player._pAblSpells = GetSpellBitmask(SPL_SEARCH);
-		player._pRSpell = SPL_SEARCH;
-	} else if (c == HeroClass::Bard) {
-		player._pAblSpells = GetSpellBitmask(SPL_IDENTIFY);
-		player._pRSpell = SPL_IDENTIFY;
-	} else if (c == HeroClass::Barbarian) {
-		player._pAblSpells = GetSpellBitmask(SPL_BLODBOIL);
-		player._pRSpell = SPL_BLODBOIL;
-	}
+	player._pAblSpells = GetSpellBitmask(startSkill);
+	player._pRSpell = startSkill;
 
 	if (c == HeroClass::Sorcerer) {
 		player._pMemSpells = GetSpellBitmask(SPL_FIREBOLT);
@@ -2669,19 +2655,8 @@ void InitPlayer(Player &player, bool firstTime)
 		player._pvid = AddVision(player.position.tile, player._pLightRad, &player == &myPlayer);
 	}
 
-	if (player._pClass == HeroClass::Warrior) {
-		player._pAblSpells = GetSpellBitmask(SPL_REPAIR);
-	} else if (player._pClass == HeroClass::Rogue) {
-		player._pAblSpells = GetSpellBitmask(SPL_DISARM);
-	} else if (player._pClass == HeroClass::Sorcerer) {
-		player._pAblSpells = GetSpellBitmask(SPL_RECHARGE);
-	} else if (player._pClass == HeroClass::Monk) {
-		player._pAblSpells = GetSpellBitmask(SPL_SEARCH);
-	} else if (player._pClass == HeroClass::Bard) {
-		player._pAblSpells = GetSpellBitmask(SPL_IDENTIFY);
-	} else if (player._pClass == HeroClass::Barbarian) {
-		player._pAblSpells = GetSpellBitmask(SPL_BLODBOIL);
-	}
+	spell_id startSkill = SpellIdFromString(playerTable->GetValue("startskill", (int)player._pClass));
+	player._pAblSpells = GetSpellBitmask(startSkill);
 
 #ifdef _DEBUG
 	if (debug_mode_key_inverted_v && firstTime) {
