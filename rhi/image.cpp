@@ -270,7 +270,7 @@ namespace devilution
 			frame.buffer = new byte[frame.width * frame.height];
 
 			for (int i = 0, d = (frame.width * frame.height) - 1; i < frame.width * frame.height; i++, d--) {
-				frame.buffer[d] = data[18 + (i * 4) + 0];
+				frame.buffer[d] = data[18 + i];
 			}
 
 			image->frames.push_back(frame);

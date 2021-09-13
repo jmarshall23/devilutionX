@@ -84,36 +84,30 @@ namespace ConversionTool
 		{
 			byte[] buffer;
 			int i, d;
-			int bufferSize = width * height * 4 + 18;
+			int bufferSize = width * height + 18;
 			int imgStart = 18;
 
 			buffer = new byte[bufferSize];			
-			buffer[2] = 2; // uncompressed type
+			buffer[2] = 3; // uncompressed type
 			buffer[12] = (byte)(width & 255);
 			buffer[13] = (byte)(width >> 8);
 			buffer[14] = (byte)(height & 255);
 			buffer[15] = (byte)(height >> 8);
-			buffer[16] = 32; // pixel size
+			buffer[16] = 8; // pixel size
 			buffer[17] = (byte)(1 << 5); // flip bit, for normal top to bottom raster order
 
 			if (!flipVertical)
 			{
 				for (i = 0; i < width * height; i++)
 				{
-					buffer[imgStart + (i * 4) + 0] = data[i]; // blue
-					buffer[imgStart + (i * 4) + 1] = data[i]; // blue
-					buffer[imgStart + (i * 4) + 2] = data[i]; // blue
-					buffer[imgStart + (i * 4) + 3] = 255;
+					buffer[imgStart + i] = data[i];
 				}
 			}
 			else
 			{
 				for (i = width * height - 1, d = 0; i >= 0; i--, d++)
 				{
-					buffer[imgStart + (i * 4) + 0] = data[d]; // blue
-					buffer[imgStart + (i * 4) + 1] = data[d]; // blue
-					buffer[imgStart + (i * 4) + 2] = data[d]; // blue
-					buffer[imgStart + (i * 4) + 3] = 255;
+					buffer[imgStart + i] = data[d];
 				}
 			}
 			
