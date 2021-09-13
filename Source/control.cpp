@@ -97,7 +97,6 @@ std::optional<CelSprite> pPanelButtons;
 std::optional<CelSprite> pChrPanel;
 std::optional<CelSprite> pGBoxBuff;
 std::optional<CelSprite> pSBkBtnCel;
-std::optional<CelSprite> pSBkIconCels;
 std::optional<CelSprite> pSpellBkCel;
 StormImage *pSpellCels;
 
@@ -998,7 +997,6 @@ void InitControlPan()
 	} else {
 		pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", 76);
 	}
-	pSBkIconCels = LoadCel("Data\\SpellI2.CEL", 37);
 	sbooktab = 0;
 	sbookflag = false;
 
@@ -1310,7 +1308,6 @@ void FreeControlPan()
 	pQLogCel = std::nullopt;
 	pSpellBkCel = std::nullopt;
 	pSBkBtnCel = std::nullopt;
-	pSBkIconCels = std::nullopt;
 	pGBoxBuff = std::nullopt;
 }
 
