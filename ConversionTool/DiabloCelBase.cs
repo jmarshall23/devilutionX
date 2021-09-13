@@ -100,6 +100,11 @@ namespace ConversionTool
 					throw new Exception("Invalid width!");
 				}
 			}
+			else if(_type == DiabloCel.D1CEL_FRAME_TYPE.REGULAR_DATASKIP)
+			{
+				frameDataStartOffset += 0x0A;
+				_type = DiabloCel.D1CEL_FRAME_TYPE.REGULAR;
+			}
 
 			// READ {CEL FRAME DATA}
 			// if it is a CEL level frame

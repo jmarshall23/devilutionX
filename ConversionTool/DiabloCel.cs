@@ -9,6 +9,7 @@ namespace ConversionTool
 		public enum D1CEL_FRAME_TYPE
 		{
 			REGULAR,      // == LEVEL_TYPE_1
+			REGULAR_DATASKIP,
 			LEVEL_TYPE_0, // 0x400 full opaque
 			LEVEL_TYPE_2, // 0x220 left transparency
 			LEVEL_TYPE_3, // 0x220 right transparency
@@ -47,10 +48,10 @@ namespace ConversionTool
 			return frames[index];
 		}
 
-		public DiabloCel(string fileName, int width = 0, int height = 0)
+		public DiabloCel(string fileName, int width = 0, int height = 0, int[] widthTable = null, int[] heightTable = null)
 		{
 			byte[] buffer = File.ReadAllBytes(fileName);
-			Parse(new BinaryReader(new MemoryStream(buffer)), width, height);
+			Parse(new BinaryReader(new MemoryStream(buffer)), width, height, widthTable, heightTable);
 		}
 
 		public static readonly bool[] D1CEL_LEVEL_FRAME_TYPE_2 = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
@@ -173,7 +174,7 @@ namespace ConversionTool
 		}
 
 
-		private void Parse(BinaryReader reader, int width, int height)
+		private void Parse(BinaryReader reader, int width, int height, int[] widthTable, int[] heightTable)
 		{
 			uint firstDword = 0;
 			uint fileSizeDword = 0;
@@ -313,7 +314,14 @@ namespace ConversionTool
 				// If it's not a level CEL
 				if (type != D1CEL_TYPE.V1_LEVEL)
 				{
-					frames.Add(new DiabloCelBase(celFrameRawData, width, height, D1CEL_FRAME_TYPE.REGULAR));
+					if (widthTable != null)
+					{
+						frames.Add(new DiabloCelBase(celFrameRawData, widthTable[i], heightTable[i], D1CEL_FRAME_TYPE.REGULAR_DATASKIP));
+					}
+					else
+					{
+						frames.Add(new DiabloCelBase(celFrameRawData, width, height, D1CEL_FRAME_TYPE.REGULAR));
+					}
 				}
 				// If it's a level CEL
 				else
