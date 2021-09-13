@@ -14,7 +14,7 @@ namespace devilution
 	R_CopyImage
 	==============
 	*/
-	void R_CopyImage(byte* source, int sourceX, int sourceY, int sourceWidth, byte* dest, int destX, int destY, int destWidth, int destHeight, int width, int height, bool allowTrans, bool allowFlip)
+	void R_CopyImage(byte* source, int sourceX, int sourceY, int sourceWidth, byte* dest, int destX, int destY, int destWidth, int destHeight, int width, int height, bool allowTrans, bool allowFlip, byte *remapTable)
 	{
 		for (int y = 0; y < height; y++)
 		{
@@ -40,7 +40,14 @@ namespace devilution
 				if (destPos >= destWidth * destHeight)
 					continue;
 
-				dest[destPos] = source[sourcePos];
+				if (remapTable)
+				{
+					dest[destPos] = remapTable[(int)source[sourcePos]];
+				}
+				else
+				{
+					dest[destPos] = source[sourcePos];
+				}
 			}
 		}
 	}
@@ -179,7 +186,7 @@ namespace devilution
 		{
 			customHeight = image->frames[sourceFrame].height - sourcey;
 		}
-		R_CopyImage(image->frames[sourceFrame].buffer, sourcex, sourcey, image->frames[sourceFrame].width, frames[destFrame].buffer, x, y, frames[destFrame].width, frames[destFrame].height, image->frames[sourceFrame].width - sourcex, customHeight, allowTrans, true);
+		R_CopyImage(image->frames[sourceFrame].buffer, sourcex, sourcey, image->frames[sourceFrame].width, frames[destFrame].buffer, x, y, frames[destFrame].width, frames[destFrame].height, image->frames[sourceFrame].width - sourcex, customHeight, allowTrans, true, nullptr);
 	}
 
 	/*
@@ -187,10 +194,10 @@ namespace devilution
 	StormImage::Draw
 	=======================
 	*/
-	void StormImage::Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowtrans, bool allowflip)
+	void StormImage::Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowtrans, bool allowflip, byte *remapTable)
 	{
 		sourceFrame = sourceFrame - 1;
-		R_CopyImage(frames[sourceFrame].buffer, sourcex, sourcey, frames[sourceFrame].width, (byte *)out.at(0, 0), x, y, out.w(), out.h(), frames[sourceFrame].width - sourcex, frames[sourceFrame].height - sourcey, allowtrans, allowflip);
+		R_CopyImage(frames[sourceFrame].buffer, sourcex, sourcey, frames[sourceFrame].width, (byte *)out.at(0, 0), x, y, out.w(), out.h(), frames[sourceFrame].width - sourcex, frames[sourceFrame].height - sourcey, allowtrans, allowflip, remapTable);
 	}
 
 	/*

@@ -99,7 +99,7 @@ std::optional<CelSprite> pGBoxBuff;
 std::optional<CelSprite> pSBkBtnCel;
 std::optional<CelSprite> pSBkIconCels;
 std::optional<CelSprite> pSpellBkCel;
-std::optional<CelSprite> pSpellCels;
+StormImage *pSpellCels;
 
 bool PanelButtons[8];
 int PanelButtonIndex;
@@ -259,9 +259,10 @@ void CalculatePanelAreas(void)
  * @param cel The CEL sprite
  * @param nCel Index of the cel frame to draw. 0 based.
  */
-void DrawSpellCel(const Surface &out, Point position, const CelSprite &cel, int nCel)
+void DrawSpellCel(const Surface &out, Point position, int nCel)
 {
-	CelDrawLightTo(out, position, cel, nCel, SplTransTbl);
+	position.y -= pSpellCels->GetFrame(nCel).height;
+	pSpellCels->Draw(out, position.x, position.y, 0, 0, nCel, false, true, (byte *)SplTransTbl);
 }
 
 void SetSpellTrans(spell_type t)
@@ -693,7 +694,7 @@ void DrawSpell(const Surface &out)
 	SetSpellTrans(st);
 	const int nCel = (spl != SPL_INVALID) ? SpellITbl[spl] : 27;
 	const Point position { PANEL_X + 565, PANEL_Y + 119 };
-	DrawSpellCel(out, position, *pSpellCels, nCel);
+	DrawSpellCel(out, position, nCel);
 }
 
 void DrawSpellList(const Surface &out)
@@ -717,18 +718,20 @@ void DrawSpellList(const Surface &out)
 		}
 
 		SetSpellTrans(transType);
-		DrawSpellCel(out, spellListItem.location, *pSpellCels, SpellITbl[static_cast<size_t>(spellListItem.id)]);
+		//pSpellCels->Draw(out, spellListItem.location.x, spellListItem.location.y, 0, 0, SpellITbl[static_cast<size_t>(spellListItem.id)], false, false, (byte *)SplTransTbl);
+		DrawSpellCel(out, spellListItem.location, SpellITbl[static_cast<size_t>(spellListItem.id)]);
+
 
 		if (!spellListItem.isSelected)
 			continue;
 
 		switch (spellListItem.type) {
 		case RSPLTYPE_SKILL:
-			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 3);
+			DrawSpellCel(out, spellListItem.location, SPLICONLAST + 3);
 			strcpy(infostr, fmt::format(_("{:s} Skill"), _(spellDataItem.sSkillText)).c_str());
 			break;
 		case RSPLTYPE_SPELL:
-			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 4);
+			DrawSpellCel(out, spellListItem.location, SPLICONLAST + 4);
 			strcpy(infostr, fmt::format(_("{:s} Spell"), _(spellDataItem.sNameText)).c_str());
 			if (spellListItem.id == SPL_HBOLT) {
 				strcpy(tempstr, _("Damages undead only"));
@@ -741,7 +744,7 @@ void DrawSpellList(const Surface &out)
 			AddPanelString(tempstr);
 			break;
 		case RSPLTYPE_SCROLL: {
-			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 1);
+			DrawSpellCel(out, spellListItem.location, SPLICONLAST + 1);
 			strcpy(infostr, fmt::format(_("Scroll of {:s}"), _(spellDataItem.sNameText)).c_str());
 			int v = 0;
 			for (int t = 0; t < myPlayer._pNumInv; t++) {
@@ -762,7 +765,7 @@ void DrawSpellList(const Surface &out)
 			AddPanelString(tempstr);
 		} break;
 		case RSPLTYPE_CHARGES: {
-			DrawSpellCel(out, spellListItem.location, *pSpellCels, SPLICONLAST + 2);
+			DrawSpellCel(out, spellListItem.location, SPLICONLAST + 2);
 			strcpy(infostr, fmt::format(_("Staff of {:s}"), _(spellDataItem.sNameText)).c_str());
 			int charges = myPlayer.InvBody[INVLOC_HAND_LEFT]._iCharges;
 			strcpy(tempstr, fmt::format(ngettext("{:d} Charge", "{:d} Charges", charges), charges).c_str());
@@ -941,9 +944,10 @@ void InitControlPan()
 
 	pChrPanel = LoadCel("Data\\Char.CEL", SPANEL_WIDTH);
 	if (!gbIsHellfire)
-		pSpellCels = LoadCel("CtrlPan\\SpelIcon.CEL", SPLICONLENGTH);
+		pSpellCels = StormImage::LoadImageSequence("CtrlPan\\SpelIcon", false);
 	else
-		pSpellCels = LoadCel("Data\\SpelIcon.CEL", SPLICONLENGTH);
+		pSpellCels = StormImage::LoadImageSequence("Data\\SpelIcon", false);
+
 	SetSpellTrans(RSPLTYPE_SKILL);
 	//CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) - 1 }, LoadCel("CtrlPan\\Panel8.CEL", PANEL_WIDTH), 1);
 
@@ -1298,7 +1302,6 @@ void CheckBtnUp()
 void FreeControlPan()
 {
 	pChrPanel = std::nullopt;
-	pSpellCels = std::nullopt;
 	pPanelButtons = std::nullopt;
 	multiButtons = std::nullopt;
 	talkButtons = std::nullopt;
@@ -1515,10 +1518,10 @@ void DrawSpellBook(const Surface &out)
 			spell_type st = GetSBookTrans(sn, true);
 			SetSpellTrans(st);
 			const Point spellCellPosition = GetPanelPosition(UiPanels::Spell, { 11, yp });
-			DrawSpellCel(out, spellCellPosition, *pSBkIconCels, SpellITbl[sn]);
+			DrawSpellCel(out, spellCellPosition, SpellITbl[sn]);
 			if (sn == myPlayer._pRSpell && st == myPlayer._pRSplType) {
 				SetSpellTrans(RSPLTYPE_SKILL);
-				DrawSpellCel(out, spellCellPosition, *pSBkIconCels, SPLICONLAST);
+				DrawSpellCel(out, spellCellPosition, SPLICONLAST);
 			}
 			PrintSBookStr(out, { 10, yp - 23 }, _(spelldata[sn].sNameText));
 			switch (GetSBookTrans(sn, false)) {

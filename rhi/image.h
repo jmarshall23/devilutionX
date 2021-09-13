@@ -42,7 +42,7 @@ namespace devilution {
 		}
 
 		void Blit(StormImage* image, int x, int y, int sourcex, int sourcey, int sourceFrame, int destFrame, bool allowTrans, int customHeight = -1);
-		void Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowTrans, bool allowflip);
+		void Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowTrans, bool allowflip, byte *remapTable = nullptr);
 
 		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame);
 		void ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame);
