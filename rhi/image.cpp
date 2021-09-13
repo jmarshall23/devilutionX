@@ -9,6 +9,41 @@
 
 namespace devilution
 {
+	/*
+	==============
+	R_CopyImage
+	==============
+	*/
+	void R_CopyImage(byte* source, int sourceX, int sourceY, int sourceWidth, byte* dest, int destX, int destY, int destWidth, int destHeight, int width, int height, bool allowTrans, bool allowFlip)
+	{
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				int _x = x * 1;
+				int _desty = y;
+				int destPos = (destWidth * (_desty + (destY * 1))) + ((_x) + (destX * 1)); // Game drew bottom up.
+
+				if (allowFlip)
+				{
+					_desty = (height - y - 1);
+					destPos = (destWidth * (_desty + (destY * 1))) + ((width - _x - 1) + (destX * 1));
+				}
+
+				int sourcePos = (sourceWidth * (y + (sourceY * 1))) + (_x + (sourceX * 1));
+
+				if (source[sourcePos] == (byte)255 && !allowTrans)
+				{
+					continue;
+				}
+
+				if (destPos >= destWidth * destHeight)
+					continue;
+
+				dest[destPos] = source[sourcePos];
+			}
+		}
+	}
 
 	std::vector<StormImage*> globalImageList;
 	/*
@@ -129,6 +164,62 @@ namespace devilution
 				*dst = (uint8_t)color;
 			}
 		}
+	}
+
+	/*
+	=======================
+	StormImage::LoadImageSequence
+	=======================
+	*/
+	void StormImage::Blit(StormImage* image, int x, int y, int sourcex, int sourcey, int sourceFrame, int destFrame, bool allowTrans, int customHeight)
+	{
+		sourceFrame = sourceFrame - 1;
+		destFrame = destFrame - 1;
+		if (customHeight == -1)
+		{
+			customHeight = image->frames[sourceFrame].height - sourcey;
+		}
+		R_CopyImage(image->frames[sourceFrame].buffer, sourcex, sourcey, image->frames[sourceFrame].width, frames[destFrame].buffer, x, y, frames[destFrame].width, frames[destFrame].height, image->frames[sourceFrame].width - sourcex, customHeight, allowTrans, true);
+	}
+
+	/*
+	=======================
+	StormImage::Draw
+	=======================
+	*/
+	void StormImage::Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowtrans, bool allowflip)
+	{
+		sourceFrame = sourceFrame - 1;
+		R_CopyImage(frames[sourceFrame].buffer, sourcex, sourcey, frames[sourceFrame].width, (byte *)out.at(0, 0), x, y, out.w(), out.h(), frames[sourceFrame].width - sourcex, frames[sourceFrame].height - sourcey, allowtrans, allowflip);
+	}
+
+	/*
+	=======================
+	StormImage::LoadImageSequence
+	=======================
+	*/
+	StormImage* StormImage::AllocateSytemImage(const char* path, int width, int height)
+	{
+		// Check to see if the image is already loaded.
+		for (int i = 0; i < globalImageList.size(); i++)
+		{
+			if (globalImageList[i]->name == path)
+				return globalImageList[i];
+		}
+
+		StormImage* image = new StormImage();
+		image->name = path;
+
+		ImageFrame_t frame;
+		frame.buffer = new byte[width * height];
+		memset(frame.buffer, 255, width * height);
+		frame.width = width;
+		frame.height = height;
+
+		image->frames.push_back(frame);
+		globalImageList.push_back(image);
+
+		return image;
 	}
 
 	/*

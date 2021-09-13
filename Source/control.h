@@ -68,6 +68,7 @@ void ToggleSpell(int slot);
 
 void AddPanelString(const char *str);
 void ClearPanel();
+void DrawPlayerHud(const Surface &out);
 void DrawPanelBox(const Surface &out, SDL_Rect srcRect, Point targetPosition);
 Point GetPanelPosition(UiPanels panel, Point offset = { 0, 0 });
 

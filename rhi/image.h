@@ -29,6 +29,7 @@ namespace devilution {
 	class StormImage {
 	public:
 		static StormImage* LoadImageSequence(const char* path, bool isTiles);
+		static StormImage* AllocateSytemImage(const char* path, int width, int height);
 
 		int NumFrames()
 		{
@@ -39,6 +40,9 @@ namespace devilution {
 		{
 			return frames[index - 1];
 		}
+
+		void Blit(StormImage* image, int x, int y, int sourcex, int sourcey, int sourceFrame, int destFrame, bool allowTrans, int customHeight = -1);
+		void Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowTrans, bool allowflip);
 
 		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame);
 		void ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame);

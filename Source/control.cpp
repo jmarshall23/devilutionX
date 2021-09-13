@@ -37,6 +37,8 @@
 
 #include "datatable.h"
 
+#include "../rhi/image.h"
+
 #ifdef _DEBUG
 #include "debug.h"
 #endif
@@ -84,10 +86,10 @@ Rectangle ChrBtnsRect[4] = {
 };
 
 namespace {
+StormImage *P8Bulbs;
+StormImage *panel8;
+StormImage *pBottomBuffer;
 
-std::optional<OwnedSurface> pBtmBuff;
-std::optional<OwnedSurface> pLifeBuff;
-std::optional<OwnedSurface> pManaBuff;
 std::optional<CelSprite> talkButtons;
 std::optional<CelSprite> pDurIcons;
 std::optional<CelSprite> multiButtons;
@@ -330,6 +332,7 @@ void PrintSBookHotkey(const Surface &out, Point position, const std::string &tex
 	DrawString(out, text, position, UiFlags::ColorSilver);
 }
 
+#if 0
 /**
  * Draws a section of the empty flask cel on top of the panel to create the illusion
  * of the flask getting empty. This function takes a cel and draws a
@@ -401,6 +404,7 @@ void DrawFlaskLower(const Surface &out, const Surface &sourceBuffer, int offset,
 	if (filled > 0)
 		DrawPanelBox(out, { offset, 85 - filled, 88, filled }, { PANEL_X + offset, PANEL_Y + 69 - filled });
 }
+#endif
 
 void SetButtonStateDown(int btnId)
 {
@@ -879,33 +883,49 @@ Point GetPanelPosition(UiPanels panel, Point offset)
 	}
 }
 
+void DrawPlayerHud(const Surface &out)
+{
+	constexpr int LifeFlaskUpperOffset = 98;
+	constexpr int ManaFlaskUpperOffset = 464;
+
+	float lifeHeight, manaHeight;
+
+	float lifeFilled = Players[MyPlayerId]._pHPPer;
+	float manaFilled = Players[MyPlayerId]._pManaPer;
+
+	lifeHeight = (lifeFilled / 80) * P8Bulbs->GetFrame(1).height;
+	manaHeight = (manaFilled / 80) * P8Bulbs->GetFrame(2).height;
+
+	pBottomBuffer->Blit(panel8, 0, 0, 0, 0, 1, 1, true);
+	pBottomBuffer->Blit(P8Bulbs, LifeFlaskUpperOffset, 0, 0, lifeHeight, 1, 1, true);
+	pBottomBuffer->Blit(P8Bulbs, ManaFlaskUpperOffset, 0, 0, manaHeight, 2, 1, true);
+
+	pBottomBuffer->Draw(out, PANEL_X, PANEL_Y - 16, 0, 0, 1, false, false);
+
+	DrawSpell(out);
+
+	DrawInvBelt(out);
+
+	DrawInfoBox(out);
+
+	for (int i = 0; i < 6; i++) {
+		if (PanelButtons[i])
+			CelDrawTo(out, { PanBtnPos[i].x + PANEL_X, PanBtnPos[i].y + PANEL_Y + 18 }, *pPanelButtons, i + 1);
+	}
+
+	if (PanelButtonIndex == 8) {
+		CelDrawTo(out, { 87 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[6] ? 2 : 1);
+		if (gbFriendlyMode)
+			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 4 : 3);
+		else
+			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 6 : 5);
+	}
+}
+
 void DrawPanelBox(const Surface &out, SDL_Rect srcRect, Point targetPosition)
 {
-	out.BlitFrom(*pBtmBuff, srcRect, targetPosition);
-}
+	
 
-void DrawLifeFlaskUpper(const Surface &out)
-{
-	constexpr int LifeFlaskUpperOffset = 109;
-	DrawFlaskUpper(out, *pLifeBuff, LifeFlaskUpperOffset, Players[MyPlayerId]._pHPPer);
-}
-
-void DrawManaFlaskUpper(const Surface &out)
-{
-	constexpr int ManaFlaskUpperOffset = 475;
-	DrawFlaskUpper(out, *pManaBuff, ManaFlaskUpperOffset, Players[MyPlayerId]._pManaPer);
-}
-
-void DrawLifeFlaskLower(const Surface &out)
-{
-	constexpr int LifeFlaskLowerOffset = 96;
-	DrawFlaskLower(out, *pLifeBuff, LifeFlaskLowerOffset, Players[MyPlayerId]._pHPPer);
-}
-
-void DrawManaFlaskLower(const Surface &out)
-{
-	constexpr int ManaFlaskLowerOffeset = 464;
-	DrawFlaskLower(out, *pManaBuff, ManaFlaskLowerOffeset, Players[MyPlayerId]._pManaPer);
 }
 
 void control_update_life_mana()
@@ -916,9 +936,8 @@ void control_update_life_mana()
 
 void InitControlPan()
 {
-	pBtmBuff.emplace(PANEL_WIDTH, (PANEL_HEIGHT + 16) * (IsChatAvailable() ? 2 : 1));
-	pManaBuff.emplace(88, 88);
-	pLifeBuff.emplace(88, 88);
+	//pBtmBuff.emplace(PANEL_WIDTH, (PANEL_HEIGHT + 16) * (IsChatAvailable() ? 2 : 1));
+	pBottomBuffer = StormImage::AllocateSytemImage("BottomBuffer", PANEL_WIDTH, (PANEL_HEIGHT + 16) * (IsChatAvailable() ? 2 : 1));
 
 	pChrPanel = LoadCel("Data\\Char.CEL", SPANEL_WIDTH);
 	if (!gbIsHellfire)
@@ -926,16 +945,17 @@ void InitControlPan()
 	else
 		pSpellCels = LoadCel("Data\\SpelIcon.CEL", SPLICONLENGTH);
 	SetSpellTrans(RSPLTYPE_SKILL);
-	CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) - 1 }, LoadCel("CtrlPan\\Panel8.CEL", PANEL_WIDTH), 1);
-	{
-		const Point bulbsPosition { 0, 87 };
-		const CelSprite statusPanel = LoadCel("CtrlPan\\P8Bulbs.CEL", 88);
-		CelDrawUnsafeTo(*pLifeBuff, bulbsPosition, statusPanel, 1);
-		CelDrawUnsafeTo(*pManaBuff, bulbsPosition, statusPanel, 2);
-	}
+	//CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) - 1 }, LoadCel("CtrlPan\\Panel8.CEL", PANEL_WIDTH), 1);
+
+	panel8 = StormImage::LoadImageSequence("CtrlPan\\Panel8", false);
+	P8Bulbs = StormImage::LoadImageSequence("CtrlPan\\P8Bulbs", false); // 1 life, 2 mana
+
 	talkflag = false;
+
 	if (IsChatAvailable()) {
-		CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) * 2 - 1 }, LoadCel("CtrlPan\\TalkPanl.CEL", PANEL_WIDTH), 1);
+// jmarshall - chat todo
+		//	CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) * 2 - 1 }, LoadCel("CtrlPan\\TalkPanl.CEL", PANEL_WIDTH), 1);
+// jmarshall end
 		multiButtons = LoadCel("CtrlPan\\P8But2.CEL", 33);
 		talkButtons = LoadCel("CtrlPan\\TalkButt.CEL", 61);
 		sgbPlrTalkTbl = 0;
@@ -1001,29 +1021,6 @@ void InitControlPan()
 	initialDropGoldIndex = 0;
 
 	CalculatePanelAreas();
-}
-
-void DrawCtrlPan(const Surface &out)
-{
-	DrawPanelBox(out, { 0, sgbPlrTalkTbl + 16, PANEL_WIDTH, PANEL_HEIGHT }, { PANEL_X, PANEL_Y });
-	DrawInfoBox(out);
-}
-
-void DrawCtrlBtns(const Surface &out)
-{
-	for (int i = 0; i < 6; i++) {
-		if (!PanelButtons[i])
-			DrawPanelBox(out, { PanBtnPos[i].x, PanBtnPos[i].y + 16, 71, 20 }, { PanBtnPos[i].x + PANEL_X, PanBtnPos[i].y + PANEL_Y });
-		else
-			CelDrawTo(out, { PanBtnPos[i].x + PANEL_X, PanBtnPos[i].y + PANEL_Y + 18 }, *pPanelButtons, i + 1);
-	}
-	if (PanelButtonIndex == 8) {
-		CelDrawTo(out, { 87 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[6] ? 2 : 1);
-		if (gbFriendlyMode)
-			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 4 : 3);
-		else
-			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 6 : 5);
-	}
 }
 
 void DoSpeedBook()
@@ -1300,9 +1297,6 @@ void CheckBtnUp()
 
 void FreeControlPan()
 {
-	pBtmBuff = std::nullopt;
-	pManaBuff = std::nullopt;
-	pLifeBuff = std::nullopt;
 	pChrPanel = std::nullopt;
 	pSpellCels = std::nullopt;
 	pPanelButtons = std::nullopt;

@@ -1354,8 +1354,6 @@ void DrawView(const Surface &out, int startX, int startY)
 	doom_draw(out);
 	DrawInfoBox(out);
 	control_update_life_mana(); // Update life/mana totals before rendering any portion of the flask.
-	DrawLifeFlaskUpper(out);
-	DrawManaFlaskUpper(out);
 }
 
 /**
@@ -1792,22 +1790,26 @@ void DrawAndBlit()
 	nthread_UpdateProgressToNextGameTick();
 
 	DrawView(out, ViewX, ViewY);
-	if (ctrlPan) {
-		DrawCtrlPan(out);
-	}
-	if (drawhpflag) {
-		DrawLifeFlaskLower(out);
-	}
-	if (drawmanaflag) {
-		DrawManaFlaskLower(out);
 
-		DrawSpell(out);
-	}
+	DrawPlayerHud(out);
+
+	//if (ctrlPan) {
+	//	DrawCtrlPan(out);
+	//}
+	//if (drawhpflag) {
+	//	DrawLifeFlaskLower(out);
+	//}
+	//if (drawmanaflag) {
+	//	DrawManaFlaskLower(out);
+	//
+	//	
+	//}
+
 	if (drawbtnflag) {
-		DrawCtrlBtns(out);
+	//	DrawCtrlBtns(out);
 	}
 	if (drawsbarflag) {
-		DrawInvBelt(out);
+	//	DrawInvBelt(out);
 	}
 	if (talkflag) {
 		DrawTalkPan(out);
