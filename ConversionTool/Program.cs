@@ -164,6 +164,12 @@ namespace ConversionTool
 
         static void Main(string[] args)
         {
+			Console.WriteLine("Exporting GenData Images...");
+			foreach (ConversionTables.ConvEntry entry in ConversionTables.GenDataImages)
+			{
+				ConvertSingleCel(entry.path, entry.width, null, null);
+			}
+
 			Console.WriteLine("Exporting Data Inv...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.DataInv)
 			{

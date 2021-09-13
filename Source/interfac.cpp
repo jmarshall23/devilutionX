@@ -29,7 +29,7 @@ namespace devilution {
 
 namespace {
 
-std::optional<CelSprite> sgpBackCel;
+StormImage *sgpBackCel;
 
 uint32_t sgdwProgress;
 int progress_id = 1;
@@ -41,7 +41,7 @@ const int BarPos[3][2] = { { 53, 37 }, { 53, 421 }, { 53, 37 } };
 
 void FreeInterface()
 {
-	sgpBackCel = std::nullopt;
+
 }
 
 Cutscenes PickCutscene(interface_mode uMsg)
@@ -104,8 +104,7 @@ void InitCutscene(interface_mode uMsg)
 	celPath = cutsceneTable->GetValue("image", cutId);
 	palPath = cutsceneTable->GetValue("palette", cutId);
 
-	assert(!sgpBackCel);
-	sgpBackCel = LoadCel(celPath, 640);
+	sgpBackCel = StormImage::LoadImageSequence(celPath, false);
 	LoadPalette(palPath);
 
 	sgdwProgress = 0;
@@ -115,7 +114,9 @@ void DrawCutscene()
 {
 	lock_buf(1);
 	const Surface &out = GlobalBackBuffer();
-	CelDrawTo(out, { PANEL_X, 480 - 1 + UI_OFFSET_Y }, *sgpBackCel, 1);
+	//CelDrawTo(out, { PANEL_X, 480 - 1 + UI_OFFSET_Y }, *sgpBackCel, 1);
+	int height = sgpBackCel->GetFrame(1).height;
+	sgpBackCel->Draw(out, PANEL_X, 480 - 1 + UI_OFFSET_Y - height, 0, 0, 1, false, true);
 
 	constexpr int ProgressHeight = 22;
 	SDL_Rect rect = MakeSdlRect(

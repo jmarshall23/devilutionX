@@ -100,6 +100,21 @@ namespace ConversionTool
 			new ConvEntry("Data\\inv\\objcurs.cel", InvItemWidth1, InvItemHeight1)
 		};
 
+		public static readonly ConvEntry[] GenDataImages =
+		{
+			new ConvEntry("Gendata\\Cutstart.cel", 640),
+			new ConvEntry("Gendata\\Cuttt.cel", 640),
+			new ConvEntry("Gendata\\Cutl1d.cel", 640),
+			new ConvEntry("Gendata\\Cut2.cel", 640),
+			new ConvEntry("Gendata\\Cut3.cel", 640),
+			new ConvEntry("Gendata\\Cut4.cel", 640),
+			//new ConvEntry("Nlevels\\Cutl5.cel", 640),
+			//new ConvEntry("Nlevels\\Cutl6.cel", 640),
+			new ConvEntry("Gendata\\Cutportl.cel", 640),
+			new ConvEntry("Gendata\\Cutportr.cel", 640),
+			new ConvEntry("Gendata\\Cutgate.cel", 640)
+		};
+
 		public static readonly string[] Towners = {
             "Towners\\Smith\\SmithN.CEL",
             "Towners\\Healer\\Healer.CEL",
