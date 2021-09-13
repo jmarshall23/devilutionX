@@ -1,0 +1,12 @@
+id,image,palette
+CutStart,Gendata\Cutstart.cel,Gendata\Cutstart.pal
+CutTown,Gendata\Cuttt.cel,Gendata\Cuttt.pal
+CutLevel1,Gendata\Cutl1d.cel,Gendata\Cutl1d.pal
+CutLevel2,Gendata\Cut2.cel,Gendata\Cut2.pal
+CutLevel3,Gendata\Cut3.cel,Gendata\Cut3.pal
+CutLevel4,Gendata\Cut4.cel,Gendata\Cut4.pal
+CutLevel5,Nlevels\Cutl5.cel,Nlevels\Cutl5.pal
+CutLevel6,Nlevels\Cutl6.cel,Nlevels\Cutl6.pal
+CutPortal,Gendata\Cutportl.cel,Gendata\Cutportl.pal
+CutPortalRed,Gendata\Cutportr.cel,Gendata\Cutportr.pal
+CutGate,Gendata\Cutgate.cel,Gendata\Cutgate.pal

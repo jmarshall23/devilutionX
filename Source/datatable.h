@@ -95,6 +95,7 @@ extern DataTable *itemPrefixTable;
 extern DataTable *itemSuffixTable;
 extern DataTable *lvlSetPiecesTables;
 extern DataTable *shrineTable;
+extern DataTable *cutsceneTable;
 
 void DiabloLoadTables(void);
 

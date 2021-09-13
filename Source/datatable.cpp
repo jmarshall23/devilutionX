@@ -26,6 +26,7 @@ DataTable *itemPrefixTable = nullptr;
 DataTable *itemSuffixTable = nullptr;
 DataTable *lvlSetPiecesTables = nullptr;
 DataTable *shrineTable = nullptr;
+DataTable *cutsceneTable = nullptr;
 
 namespace devilution {
 	void InitMonsterTable(void);
@@ -63,6 +64,7 @@ void DiabloLoadTables(void)
 	itemSuffixTable = new DataTable("excel\\itemsuffix.txt");
 	lvlSetPiecesTables = new DataTable("excel\\lvlsetpieces.txt");
 	shrineTable = new DataTable("excel\\shrines.txt");
+	cutsceneTable = new DataTable("excel\\cutscenes.txt");
 
 	devilution::InitMonsterTable();
 	devilution::InitSpellDataTable();
