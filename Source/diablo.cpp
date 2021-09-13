@@ -148,7 +148,6 @@ void StartGame(interface_mode uMsg)
 	zoomflag = true;
 	CalcViewportGeometry();
 	cineflag = false;
-	InitCursor();
 #ifdef _DEBUG
 	LoadDebugGFX();
 #endif
@@ -1622,6 +1621,7 @@ int DiabloMain(int argc, char **argv)
 	LoadOptions();
 	DiabloInit();
 	DiabloSplash();
+	InitCursor();
 	mainmenu_loop();
 	DiabloDeinit();
 

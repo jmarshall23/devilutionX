@@ -24,6 +24,8 @@
 #include "utils/sdl_geometry.h"
 #include "utils/stdcompat/optional.hpp"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 bool invflag;
@@ -184,9 +186,9 @@ void AddItemToInvGrid(Player &player, int invGridIndex, int invListIndex, Size i
 Size GetInventorySize(const Item &item)
 {
 	int itemSizeIndex = item._iCurs + CURSOR_FIRSTITEM;
-	auto size = GetInvItemSize(itemSizeIndex);
+	const ImageFrame_t *frame = GetInvItemSprite(itemSizeIndex);
 
-	return { size.width / InventorySlotSizeInPixels.width, size.height / InventorySlotSizeInPixels.height };
+	return { frame->width / InventorySlotSizeInPixels.width, frame->height / InventorySlotSizeInPixels.height };
 }
 
 /**
@@ -1139,26 +1141,24 @@ void DrawInv(const Surface &out)
 
 			int frame = myPlayer.InvBody[slot]._iCurs + CURSOR_FIRSTITEM;
 
-			auto frameSize = GetInvItemSize(frame);
+			const ImageFrame_t *imageFrame = GetInvItemSprite(frame);
 
 			// calc item offsets for weapons smaller than 2x3 slots
 			if (slot == INVLOC_HAND_LEFT) {
-				screenX += frameSize.width == InventorySlotSizeInPixels.width ? INV_SLOT_HALF_SIZE_PX : 0;
-				screenY += frameSize.height == (3 * InventorySlotSizeInPixels.height) ? 0 : -INV_SLOT_HALF_SIZE_PX;
+				screenX += imageFrame->width == InventorySlotSizeInPixels.width ? INV_SLOT_HALF_SIZE_PX : 0;
+				screenY += imageFrame->height == (3 * InventorySlotSizeInPixels.height) ? 0 : -INV_SLOT_HALF_SIZE_PX;
 			} else if (slot == INVLOC_HAND_RIGHT) {
-				screenX += frameSize.width == InventorySlotSizeInPixels.width ? (INV_SLOT_HALF_SIZE_PX - 1) : 1;
-				screenY += frameSize.height == (3 * InventorySlotSizeInPixels.height) ? 0 : -INV_SLOT_HALF_SIZE_PX;
+				screenX += imageFrame->width == InventorySlotSizeInPixels.width ? (INV_SLOT_HALF_SIZE_PX - 1) : 1;
+				screenY += imageFrame->height == (3 * InventorySlotSizeInPixels.height) ? 0 : -INV_SLOT_HALF_SIZE_PX;
 			}
 
-			const auto &cel = GetInvItemSprite(frame);
-			const int celFrame = GetInvItemFrame(frame);
+			const int celFrame = frame;
 			const Point position = GetPanelPosition(UiPanels::Inventory, { screenX, screenY });
 
 			if (pcursinvitem == slot) {
-				CelBlitOutlineTo(out, GetOutlineColor(myPlayer.InvBody[slot], true), position, cel, celFrame, false);
+				RenderItemSpriteOutline(out, GetOutlineColor(myPlayer.InvBody[slot], true), celFrame, position.x, position.y);
 			}
-
-			CelDrawItem(myPlayer.InvBody[slot], out, position, cel, celFrame);
+			RenderItemSprite(out, celFrame, position.x, position.y);
 
 			if (slot == INVLOC_HAND_LEFT) {
 				if (myPlayer.InvBody[slot]._iLoc == ILOC_TWOHAND) {
@@ -1169,9 +1169,12 @@ void DrawInv(const Surface &out)
 						LightTableIndex = 0;
 						cel_transparency_active = true;
 
-						const int dstX = RightPanel.position.x + slotPos[INVLOC_HAND_RIGHT].x + (frameSize.width == InventorySlotSizeInPixels.width ? INV_SLOT_HALF_SIZE_PX : 0) - 1;
+						const ImageFrame_t *imageFrame = GetInvItemSprite(celFrame);
+
+						const int dstX = RightPanel.position.x + slotPos[INVLOC_HAND_RIGHT].x + (imageFrame->width == InventorySlotSizeInPixels.width ? INV_SLOT_HALF_SIZE_PX : 0) - 1;
 						const int dstY = RightPanel.position.y + slotPos[INVLOC_HAND_RIGHT].y;
-						CelClippedBlitLightTransTo(out, { dstX, dstY }, cel, celFrame);
+						//CelClippedBlitLightTransTo(out, { dstX, dstY }, cel, celFrame);
+						RenderItemSprite(out, celFrame, dstX, dstY);
 
 						cel_transparency_active = false;
 					}
@@ -1194,22 +1197,14 @@ void DrawInv(const Surface &out)
 			int ii = myPlayer.InvGrid[j] - 1;
 			int frame = myPlayer.InvList[ii]._iCurs + CURSOR_FIRSTITEM;
 
-			const auto &cel = GetInvItemSprite(frame);
-			const int celFrame = GetInvItemFrame(frame);
+			//const auto &cel = GetInvItemSprite(frame);
+			//const int celFrame = GetInvItemFrame(frame);
 			const Point position = GetPanelPosition(UiPanels::Inventory, InvRect[j + SLOTXY_INV_FIRST]) + Displacement { 0, -1 };
 			if (pcursinvitem == ii + INVITEM_INV_FIRST) {
-				CelBlitOutlineTo(
-				    out,
-				    GetOutlineColor(myPlayer.InvList[ii], true),
-				    position,
-				    cel, celFrame, false);
+				RenderItemSpriteOutline(out, GetOutlineColor(myPlayer.InvList[ii], true), frame, position.x, position.y);
 			}
 
-			CelDrawItem(
-			    myPlayer.InvList[ii],
-			    out,
-			    position,
-			    cel, celFrame);
+			RenderItemSprite(out, frame, position.x, position.y);
 		}
 	}
 }
@@ -1233,16 +1228,16 @@ void DrawInvBelt(const Surface &out)
 		InvDrawSlotBack(out, position, InventorySlotSizeInPixels);
 		int frame = myPlayer.SpdList[i]._iCurs + CURSOR_FIRSTITEM;
 
-		const auto &cel = GetInvItemSprite(frame);
-		const int celFrame = GetInvItemFrame(frame);
+		//const auto &cel = GetInvItemSprite(frame);
+		//const int celFrame = GetInvItemFrame(frame);
 
 		if (pcursinvitem == i + INVITEM_BELT_FIRST) {
 			if (!sgbControllerActive || invflag) {
-				CelBlitOutlineTo(out, GetOutlineColor(myPlayer.SpdList[i], true), position, cel, celFrame, false);
+				RenderItemSpriteOutline(out, GetOutlineColor(myPlayer.SpdList[i], true), frame, position.x, position.y);
 			}
 		}
 
-		CelDrawItem(myPlayer.SpdList[i], out, position, cel, celFrame);
+		RenderItemSprite(out, frame, position.x, position.y);
 
 		if (AllItemsList[myPlayer.SpdList[i].IDidx].iUsable
 		    && myPlayer.SpdList[i]._iStatFlag

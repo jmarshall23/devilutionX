@@ -58,13 +58,11 @@ inline bool IsItemSprite(int cursId)
 
 void CelDrawCursor(const Surface &out, Point position, int cursId);
 
+class ImageFrame_t;
 /** Returns the sprite for the given inventory index. */
-const CelSprite &GetInvItemSprite(int i);
+const ImageFrame_t *GetInvItemSprite(int i);
 
-/** Returns the CEL frame index for the given inventory index. */
-int GetInvItemFrame(int i);
-
-/** Returns the width and height for an inventory index. */
-Size GetInvItemSize(int cursId);
+void RenderItemSprite(const Surface &out, int cursId, int x, int y);
+void RenderItemSpriteOutline(const Surface &out, int color, int cursId, int x, int y);
 
 } // namespace devilution

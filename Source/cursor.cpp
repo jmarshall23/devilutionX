@@ -22,82 +22,12 @@
 #include "trigs.h"
 #include "utils/language.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 namespace {
 /** Cursor images CEL */
-std::optional<CelSprite> pCursCels;
-std::optional<CelSprite> pCursCels2;
-constexpr int InvItems1Size = 180;
-
-/** Maps from objcurs.cel frame number to frame width. */
-const int InvItemWidth1[] = {
-	// clang-format off
-	// Cursors
-	0, 33, 32, 32, 32, 32, 32, 32, 32, 32, 32, 23,
-	// Items
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-};
-const int InvItemWidth2[] = {
-	0,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	2 * 28, 2 * 28, 1 * 28, 1 * 28, 1 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28
-	// clang-format on
-};
-
-/** Maps from objcurs.cel frame number to frame height. */
-const int InvItemHeight1[] = {
-	// clang-format off
-	// Cursors
-	0, 29, 32, 32, 32, 32, 32, 32, 32, 32, 32, 35,
-	// Items
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28, 2 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-};
-const int InvItemHeight2[] = {
-	0,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28, 1 * 28,
-	2 * 28, 2 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
-	3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28
-	// clang-format on
-};
+StormImage *pCursCels;
 
 } // namespace
 
@@ -127,47 +57,45 @@ int pcurs;
 
 void InitCursor()
 {
-	assert(!pCursCels);
-	pCursCels = LoadCel("Data\\Inv\\Objcurs.CEL", InvItemWidth1);
-	if (gbIsHellfire)
-		pCursCels2 = LoadCel("Data\\Inv\\Objcurs2.CEL", InvItemWidth2);
+	pCursCels = StormImage::LoadImageSequence("Data\\Inv\\Objcurs", false);
 	ClearCursor();
 }
 
 void FreeCursor()
 {
-	pCursCels = std::nullopt;
-	pCursCels2 = std::nullopt;
 	ClearCursor();
 }
 
-const CelSprite &GetInvItemSprite(int i)
+const ImageFrame_t *GetInvItemSprite(int i)
 {
-	return i < InvItems1Size ? *pCursCels : *pCursCels2;
+	return &pCursCels->GetFrame(i);
 }
 
-int GetInvItemFrame(int i)
+void RenderItemSprite(const Surface &out, int cursId, int x, int y)
 {
-	return i < InvItems1Size ? i : i - (InvItems1Size - 1);
+	const ImageFrame_t *frame = GetInvItemSprite(cursId);
+	pCursCels->ClipRenderNoLighting(out, x, y, cursId);
 }
 
-Size GetInvItemSize(int cursId)
+void RenderItemSpriteOutline(const Surface &out, int color, int cursId, int x, int y)
 {
-	if (cursId >= InvItems1Size)
-		return { InvItemWidth2[cursId - (InvItems1Size - 1)], InvItemHeight2[cursId - (InvItems1Size - 1)] };
-	return { InvItemWidth1[cursId], InvItemHeight1[cursId] };
+	pCursCels->ClipRenderOutline(out, color, x, y, cursId);
 }
 
 void SetICursor(int cursId)
 {
-	icursSize = GetInvItemSize(cursId);
+	const ImageFrame_t *frame = GetInvItemSprite(cursId);
+
+	icursSize = { frame->width, frame->height };
 	icursSize28 = icursSize / 28;
 }
 
 void NewCursor(int cursId)
 {
+	const ImageFrame_t *frame = GetInvItemSprite(cursId);
+
 	pcurs = cursId;
-	cursSize = GetInvItemSize(cursId);
+	cursSize = { frame->width, frame->height };
 	SetICursor(cursId);
 	if (IsHardwareCursorEnabled() && GetCurrentCursorInfo() != CursorInfo::GameCursor(cursId) && cursId != CURSOR_NONE) {
 		SetHardwareCursor(CursorInfo::GameCursor(cursId));
@@ -176,14 +104,12 @@ void NewCursor(int cursId)
 
 void CelDrawCursor(const Surface &out, Point position, int cursId)
 {
-	const auto &sprite = GetInvItemSprite(cursId);
-	const int frame = GetInvItemFrame(cursId);
 	if (IsItemSprite(cursId)) {
-		const auto &heldItem = Players[MyPlayerId].HoldItem;
-		CelBlitOutlineTo(out, GetOutlineColor(heldItem, true), position, sprite, frame, false);
-		CelDrawItem(heldItem, out, position, sprite, frame);
+		Item heldItem = Players[MyPlayerId].HoldItem;
+		RenderItemSpriteOutline(out, GetOutlineColor(heldItem, true), cursId, position.x, position.y);
+		RenderItemSprite(out, cursId, position.x, position.y);
 	} else {
-		CelClippedDrawTo(out, position, sprite, frame);
+		RenderItemSprite(out, cursId, position.x, position.y);
 	}
 }
 

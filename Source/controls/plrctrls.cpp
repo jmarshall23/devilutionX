@@ -587,7 +587,9 @@ Size GetItemSizeOnSlot(int slot, char &itemInvId)
 
 			Item &item = myPlayer.InvList[iv - 1];
 			if (!item.isEmpty()) {
-				auto size = GetInvItemSize(item._iCurs + CURSOR_FIRSTITEM);
+				const ImageFrame_t *imageFrame = GetInvItemSprite(item._iCurs + CURSOR_FIRSTITEM);
+
+				Size size = { imageFrame->width, imageFrame->height };
 				size.width /= InventorySlotSizeInPixels.width;
 				size.height /= InventorySlotSizeInPixels.height;
 

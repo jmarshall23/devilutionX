@@ -18,6 +18,8 @@
 #include "utils/sdl_bilinear_scale.hpp"
 #include "utils/sdl_wrap.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 namespace {
 CursorInfo CurrentCursorInfo;
@@ -104,7 +106,9 @@ bool SetHardwareCursorFromSprite(int pcurs)
 
 	const int outlineWidth = isItem ? 1 : 0;
 
-	auto size = GetInvItemSize(pcurs);
+	const ImageFrame_t *imageFrame = GetInvItemSprite(pcurs);
+
+	Size size = { imageFrame->width, imageFrame->height };
 	size.width += 2 * outlineWidth;
 	size.height += 2 * outlineWidth;
 
@@ -116,7 +120,7 @@ bool SetHardwareCursorFromSprite(int pcurs)
 
 	// Transparent color must not be used in the sprite itself.
 	// Colors 1-127 are outside of the UI palette so are safe to use.
-	constexpr std::uint8_t TransparentColor = 1;
+	constexpr std::uint8_t TransparentColor = 255;
 	SDL_FillRect(out.surface, nullptr, TransparentColor);
 	SDL_SetColorKey(out.surface, 1, TransparentColor);
 	CelDrawCursor(out, { outlineWidth, size.height - outlineWidth }, pcurs);
