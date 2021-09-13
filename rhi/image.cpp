@@ -251,9 +251,9 @@ namespace devilution
 			ImageFrame_t frame;
 
 			if (isTiles)
-				sprintf(framePath, "%s\\tiles\\tile%d.tga", path, image->frames.size());
+				sprintf(framePath, "%s\\tiles\\tile_%d.tga", path, image->frames.size());
 			else
-				sprintf(framePath, "%s%d.tga", path, image->frames.size());
+				sprintf(framePath, "%s_%d.tga", path, image->frames.size());
 
 
 			HANDLE file;

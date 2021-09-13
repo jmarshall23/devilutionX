@@ -225,7 +225,7 @@ namespace ConversionTool
 					if(hashes.Contains(hash))
 						continue;
 
-					if (ExportFixedTarga(tilePath + "tile" + tileIndex + ".tga", buffer, temp.width, temp.height))
+					if (ExportFixedTarga(tilePath + "tile_" + tileIndex + ".tga", buffer, temp.width, temp.height))
 					{
 						tileIndex++;
 					}
