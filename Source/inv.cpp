@@ -25,6 +25,7 @@
 #include "utils/stdcompat/optional.hpp"
 
 #include "../rhi/image.h"
+#include "datatable.h"
 
 namespace devilution {
 
@@ -132,7 +133,7 @@ const Point InvRect[] = {
 
 namespace {
 
-std::optional<CelSprite> pInvCels;
+StormImage *pInvCels;
 
 void InvDrawSlotBack(const Surface &out, Point targetPosition, Size size)
 {
@@ -1081,27 +1082,12 @@ void StartGoldDrop()
 
 void FreeInvGFX()
 {
-	pInvCels = std::nullopt;
+
 }
 
 void InitInv()
 {
-	switch (Players[MyPlayerId]._pClass) {
-	case HeroClass::Warrior:
-	case HeroClass::Barbarian:
-		pInvCels = LoadCel("Data\\Inv\\Inv.CEL", SPANEL_WIDTH);
-		break;
-	case HeroClass::Rogue:
-	case HeroClass::Bard:
-		pInvCels = LoadCel("Data\\Inv\\Inv_rog.CEL", SPANEL_WIDTH);
-		break;
-	case HeroClass::Sorcerer:
-		pInvCels = LoadCel("Data\\Inv\\Inv_Sor.CEL", SPANEL_WIDTH);
-		break;
-	case HeroClass::Monk:
-		pInvCels = LoadCel(!gbIsSpawn ? "Data\\Inv\\Inv_Sor.CEL" : "Data\\Inv\\Inv.CEL", SPANEL_WIDTH);
-		break;
-	}
+	pInvCels = StormImage::LoadImageSequence(playerTable->GetValue("invgraphic", (int)Players[MyPlayerId]._pClass), false);
 
 	invflag = false;
 	drawsbarflag = false;
@@ -1109,7 +1095,9 @@ void InitInv()
 
 void DrawInv(const Surface &out)
 {
-	CelDrawTo(out, GetPanelPosition(UiPanels::Inventory, { 0, 351 }), *pInvCels, 1);
+	Point pt = GetPanelPosition(UiPanels::Inventory, { 0, 351 });
+	pt.y -= pInvCels->GetFrame(1).height;
+	pInvCels->Draw(out, pt.x, pt.y, 0, 0, 1, false, true);
 
 	Size slotSize[] = {
 		{ 2, 2 }, //head

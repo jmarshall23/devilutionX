@@ -94,6 +94,9 @@ namespace ConversionTool
 
 		public static readonly ConvEntry[] DataInv =
 		{
+			new ConvEntry("Data\\inv\\inv.cel", 320),
+			new ConvEntry("Data\\inv\\inv_rog.cel", 320),
+			new ConvEntry("Data\\inv\\inv_sor.cel", 320),
 			new ConvEntry("Data\\inv\\objcurs.cel", InvItemWidth1, InvItemHeight1)
 		};
 
