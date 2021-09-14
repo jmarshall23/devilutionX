@@ -2389,10 +2389,12 @@ void CreatePlayer(int playerId, HeroClass c)
 	player._pAblSpells = GetSpellBitmask(startSkill);
 	player._pRSpell = startSkill;
 
-	if (c == HeroClass::Sorcerer) {
-		player._pMemSpells = GetSpellBitmask(SPL_FIREBOLT);
+	spell_id startSpell = SpellIdFromString(playerTable->GetValue("startspell", (int)c));
+
+	if (startSpell != SPL_INVALID) {
+		player._pMemSpells = GetSpellBitmask(startSpell);
 		player._pRSplType = RSPLTYPE_SPELL;
-		player._pRSpell = SPL_FIREBOLT;
+		player._pRSpell = startSpell;
 	} else {
 		player._pMemSpells = 0;
 	}

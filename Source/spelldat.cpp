@@ -34,6 +34,7 @@ namespace devilution {
 
 	devilution::spell_id SpellIdFromString(std::string str)
     {
+	    SPELL_STRING_TO_ID(SPL_INVALID)
 	    SPELL_STRING_TO_ID(SPL_NULL)
 	    SPELL_STRING_TO_ID(SPL_FIREBOLT)
 	    SPELL_STRING_TO_ID(SPL_HEAL)
