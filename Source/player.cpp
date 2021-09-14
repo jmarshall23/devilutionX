@@ -2405,8 +2405,8 @@ void CreatePlayer(int playerId, HeroClass c)
 
 	player._pSpellFlags = 0;
 
-	if (player._pClass == HeroClass::Sorcerer) {
-		player._pSplLvl[SPL_FIREBOLT] = 2;
+	if (startSpell != SPL_INVALID) {
+		player._pSplLvl[startSpell] = playerTable->GetInt("startspellvl", (int)c);
 	}
 
 	// interestingly, only the first three hotkeys are reset
