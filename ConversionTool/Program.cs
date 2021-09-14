@@ -142,50 +142,94 @@ namespace ConversionTool
 			}
 		}
 
-        static void ConvertSingleCel(string filename, int width, int[] widthTable, int[] heightTable)
-        {
-            DiabloCel cel = new DiabloCel("BlizzData/" + filename, width, 0, widthTable, heightTable);
+		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable)
+		{
+			DiabloCel cel = null;
+
+			bool isCl2 = filename.ToLower().Contains(".cl2");
+
+			if (isCl2)
+			{
+				cel = new DiabloCL2("BlizzData/" + filename);
+			}
+			else
+			{
+				cel = new DiabloCel("BlizzData/" + filename, width, 0, widthTable, heightTable);
+			}
 
 			string outputPath = "Build\\" + ExportTileset.FixExportPath(filename);
 
 			Directory.CreateDirectory(outputPath);
 
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
+			string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
 
-            for(int i = 0; i < cel.NumFrames; i++)
-            {
-                DiabloCelBase frame = cel.GetFrame((short)i);
 
-				byte[] fixedBuffer = ExportTileset.FastFlipHorizontalBuffer(frame.Pixels, frame.Width, frame.Height);
+			if (!isCl2)
+			{
+				for (int i = 0; i < cel.NumFrames; i++)
+				{
+					DiabloCelBase frame = cel.GetFrame((short)i);
 
-				ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + "_" + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
-            }
-        }
+					byte[] fixedBuffer = ExportTileset.FastFlipHorizontalBuffer(frame.Pixels, frame.Width, frame.Height);
 
-        static void Main(string[] args)
+					ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + "_" + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
+				}
+			}
+			else
+			{
+				DiabloCelBase baseFrame = cel.GetFrame(0);
+
+				// These have to be atlased or they create too many files and it would be slow to load off disk
+				int destWidth = (cel.NumFrames * baseFrame.Width);
+				byte[] tempBuffer = new byte[destWidth * baseFrame.Height];
+
+				for (int i = 0; i < cel.NumFrames; i++)
+				{
+					DiabloCelBase frame = cel.GetFrame((short)i);
+
+					byte[] fixedBuffer = ExportTileset.FastFlipHorizontalBuffer(frame.Pixels, frame.Width, frame.Height);
+					ExportTileset.BlitImage2(fixedBuffer, 0, 0, frame.Width, tempBuffer, (i * baseFrame.Width), 0, destWidth, baseFrame.Height, frame.Width, frame.Height, true);
+				}
+
+				ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + ".tga", tempBuffer, destWidth, baseFrame.Height, true);
+			}
+		}
+
+		static void Main(string[] args)
         {
+			Console.WriteLine("Exporting Player Gfx...");
+			{
+				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\plrgfx\\", "*.cl2", SearchOption.AllDirectories);
+				foreach(string file in playerCl2Files)
+				{
+					string f = file.Remove(0, new string("BlizzData/").Length);
+					Console.WriteLine("Processing:" + f);
+					ConvertSingleImage(f, 0, null, null);
+				}
+			}
+
 			Console.WriteLine("Exporting GenData Images...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.GenDataImages)
 			{
-				ConvertSingleCel(entry.path, entry.width, null, null);
+				ConvertSingleImage(entry.path, entry.width, null, null);
 			}
 
 			Console.WriteLine("Exporting Data Inv...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.DataInv)
 			{
-				ConvertSingleCel(entry.path, entry.width, entry.widthTable, entry.heightTable);
+				ConvertSingleImage(entry.path, entry.width, entry.widthTable, entry.heightTable);
 			}
 
 			Console.WriteLine("Exporting Control Panel...");
 			foreach(ConversionTables.ConvEntry entry in ConversionTables.CtrlPan)
 			{
-				ConvertSingleCel(entry.path, entry.width, null, null);
+				ConvertSingleImage(entry.path, entry.width, null, null);
 			}
 
 			Console.WriteLine("Converting Towners...");
             foreach(string path in ConversionTables.Towners)
             {
-                ConvertSingleCel(path, 0, null, null);
+				ConvertSingleImage(path, 0, null, null);
             }
 
 			Console.WriteLine("Converting Level Data...");

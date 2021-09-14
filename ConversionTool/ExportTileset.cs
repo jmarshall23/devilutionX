@@ -39,7 +39,7 @@ namespace ConversionTool
 			}
 		}
 
-		public static void BlitImage2(byte[] source, int sourceX, int sourceY, int sourceWidth, byte[] dest, int destX, int destY, int destWidth, int destHeight, int width, int height)
+		public static void BlitImage2(byte[] source, int sourceX, int sourceY, int sourceWidth, byte[] dest, int destX, int destY, int destWidth, int destHeight, int width, int height, bool allowTrans = false)
 		{
 			for (int y = 0; y < height; y++)
 			{
@@ -50,7 +50,7 @@ namespace ConversionTool
 					int destPos = (destWidth * (_y + (destY * 1))) + (_x + (destX * 1));
 					int sourcePos = (sourceWidth * (_y + (sourceY * 1))) + (_x + (sourceX * 1));
 
-					if (source[sourcePos + 0] == 255)
+					if (source[sourcePos + 0] == 255 && !allowTrans)
 						continue;
 
 					dest[destPos + 0] = source[sourcePos + 0];
