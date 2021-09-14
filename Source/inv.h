@@ -81,7 +81,7 @@ enum item_color : uint8_t {
 
 extern bool invflag;
 extern bool drawsbarflag;
-extern const Point InvRect[73];
+extern Point InvRect[73];
 
 /**
  * @brief Function type which performs an operation on the given item.

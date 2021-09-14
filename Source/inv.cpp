@@ -52,7 +52,7 @@ bool drawsbarflag;
  * 65 66 67 68 69 70 71 72
  * @see graphics/inv/inventory.png
  */
-const Point InvRect[] = {
+Point InvRect[] = {
 	// clang-format off
 	//  X,   Y
 	{ 132,  31 }, // helmet
@@ -120,16 +120,24 @@ const Point InvRect[] = {
 	{ 220, 337 }, // inv row 4
 	{ 249, 337 }, // inv row 4
 	{ 278, 337 }, // inv row 4
-	{ 205,  33 }, // belt
-	{ 234,  33 }, // belt
-	{ 263,  33 }, // belt
-	{ 292,  33 }, // belt
-	{ 321,  33 }, // belt
-	{ 350,  33 }, // belt
-	{ 379,  33 }, // belt
-	{ 408,  33 }  // belt
+	{ -1,  -1 }, // belt
+	{ -1,  -1 }, // belt
+	{ -1,  -1 }, // belt
+	{ -1,  -1 }, // belt
+	{ -1,  -1 }, // belt
+	{ -1,  -1 }, // belt
+	{ -1,  -1 }, // belt
+	{ -1,  -1 }  // belt
 	// clang-format on
 };
+
+void InitInventoryBeltTable(void)
+{
+	for (int i = 0; i < SLOTXY_BELT_LAST - SLOTXY_BELT_FIRST; i++) {
+		InvRect[SLOTXY_BELT_FIRST + i].x = invBeltTable->GetInt("x", i);
+		InvRect[SLOTXY_BELT_FIRST + i].y = invBeltTable->GetInt("y", i);
+	}
+}
 
 namespace {
 
