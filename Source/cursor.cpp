@@ -57,7 +57,7 @@ int pcurs;
 
 void InitCursor()
 {
-	pCursCels = StormImage::LoadImageSequence("Data\\Inv\\Objcurs", false);
+	pCursCels = StormImage::LoadImageSequence("Data\\Inv\\Objcurs", false, false);
 	ClearCursor();
 }
 

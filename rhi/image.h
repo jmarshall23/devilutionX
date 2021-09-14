@@ -28,7 +28,7 @@ namespace devilution {
 
 	class StormImage {
 	public:
-		static StormImage* LoadImageSequence(const char* path, bool isTiles);
+		static StormImage* LoadImageSequence(const char* path, bool isTiles, bool isAtlas);
 		static StormImage* AllocateSytemImage(const char* path, int width, int height);
 
 		int NumFrames()
@@ -47,6 +47,8 @@ namespace devilution {
 		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame);
 		void ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame);
 	private:
+		void CreateImagesFromAtlas(ImageFrame_t& atlasImage, int numFrames);
+
 		std::string name;
 		std::vector<ImageFrame_t> frames;
 	};

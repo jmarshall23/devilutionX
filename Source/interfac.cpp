@@ -104,7 +104,7 @@ void InitCutscene(interface_mode uMsg)
 	celPath = cutsceneTable->GetValue("image", cutId);
 	palPath = cutsceneTable->GetValue("palette", cutId);
 
-	sgpBackCel = StormImage::LoadImageSequence(celPath, false);
+	sgpBackCel = StormImage::LoadImageSequence(celPath, false, false);
 	LoadPalette(palPath);
 
 	sgdwProgress = 0;

@@ -73,7 +73,7 @@ void InitTownerInfo(int i, const TownerInit &initData)
 
 void LoadTownerAnimations(TownerStruct &towner, const char *path, int frames, Direction dir, int delay)
 {
-	towner.image = StormImage::LoadImageSequence(path, false);
+	towner.image = StormImage::LoadImageSequence(path, false, false);
 	NewTownerAnim(towner, nullptr, frames, delay);
 }
 
@@ -264,7 +264,7 @@ void InitCows(TownerStruct &towner, const TownerInit &initData)
 	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_COW);
 	towner.animOrder = nullptr;
 	towner.animOrderSize = 0;
-	towner.image = StormImage::LoadImageSequence(townerDataTable->GetValue("path", TOWN_COW), false);
+	towner.image = StormImage::LoadImageSequence(townerDataTable->GetValue("path", TOWN_COW), false, false);
 	//for (int i = 0; i < 8; i++) {
 	//	towner._tNAnim[i] = CelGetFrame(CowCels.get(), i);
 	//}

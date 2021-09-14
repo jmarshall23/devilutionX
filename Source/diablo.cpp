@@ -1034,7 +1034,7 @@ std::unique_ptr<MegaTile[]> LoadMegaTileText(const char *filename)
 
 void LoadDungeonTiles(const char *name)
 {
-	pDungeonCels = StormImage::LoadImageSequence(name, true);
+	pDungeonCels = StormImage::LoadImageSequence(name, true, false);
 }
 
 void LoadLvlGFX()

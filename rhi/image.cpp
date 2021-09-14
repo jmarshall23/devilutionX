@@ -231,10 +231,32 @@ namespace devilution
 
 	/*
 	=======================
+	StormImage::CreateImagesFromAtlas
+	=======================
+	*/
+	void StormImage::CreateImagesFromAtlas(ImageFrame_t& atlasImage, int numFrames) {
+		int subImageWidth = atlasImage.width / numFrames;
+
+		for (int i = 0; i < numFrames; i++)
+		{
+			ImageFrame_t subImage;
+
+			subImage.width = subImageWidth;
+			subImage.height = atlasImage.height;
+
+			subImage.buffer = new byte[subImage.width * subImage.height];
+
+			R_CopyImage(atlasImage.buffer, i * subImageWidth, 0, atlasImage.width, subImage.buffer, 0, 0, subImage.width, subImage.height, subImage.width, subImage.height, true, false, nullptr);
+			frames.push_back(subImage);
+		}
+	}
+
+	/*
+	=======================
 	StormImage::LoadImageSequence
 	=======================
 	*/
-	StormImage* StormImage::LoadImageSequence(const char* path, bool isTiles)
+	StormImage* StormImage::LoadImageSequence(const char* path, bool isTiles, bool isAtlas)
 	{
 		// Check to see if the image is already loaded.
 		for (int i = 0; i < globalImageList.size(); i++)
@@ -246,34 +268,58 @@ namespace devilution
 		StormImage* image = new StormImage();
 		image->name = path;
 
-		while (true) {
-			char framePath[512];
-			ImageFrame_t frame;
+		if (isAtlas)
+		{
+			char atlasPath[512];
+			char descripPath[512];
 
-			if (isTiles)
-				sprintf(framePath, "%s\\tiles\\tile_%d.tga", path, image->frames.size());
-			else
-				sprintf(framePath, "%s_%d.tga", path, image->frames.size());
+			sprintf(atlasPath, "%s.tga", path);
+			sprintf(descripPath, "%s.txt", path);
+
+			std::unique_ptr<byte[]> descripData = LoadFileInMem(descripPath);
+
+			int numFrames = atoi((const char *)descripData.get());
+
+			std::unique_ptr<byte[]> data = LoadFileInMem(atlasPath);
+
+			ImageFrame_t atlasImage;
+			atlasImage.width = *(short*)((byte*)&data.get()[12]);
+			atlasImage.height = *(short*)((byte*)&data.get()[14]);
+			atlasImage.buffer = new byte[atlasImage.width * atlasImage.height];
+
+			image->CreateImagesFromAtlas(atlasImage, numFrames);
+		}
+		else
+		{
+			while (true) {
+				char framePath[512];
+				ImageFrame_t frame;
+
+				if (isTiles)
+					sprintf(framePath, "%s\\tiles\\tile_%d.tga", path, image->frames.size());
+				else
+					sprintf(framePath, "%s_%d.tga", path, image->frames.size());
 
 
-			HANDLE file;
-			if (!SFileOpenFile(framePath, &file)) {
-				break;
+				HANDLE file;
+				if (!SFileOpenFile(framePath, &file)) {
+					break;
+				}
+
+				SFileCloseFile(file);
+
+				std::unique_ptr<byte[]> data = LoadFileInMem(framePath);
+
+				frame.width = *(short*)((byte*)&data.get()[12]);
+				frame.height = *(short*)((byte*)&data.get()[14]);
+				frame.buffer = new byte[frame.width * frame.height];
+
+				for (int i = 0, d = (frame.width * frame.height) - 1; i < frame.width * frame.height; i++, d--) {
+					frame.buffer[d] = data[18 + i];
+				}
+
+				image->frames.push_back(frame);
 			}
-
-			SFileCloseFile(file);
-
-			std::unique_ptr<byte[]> data = LoadFileInMem(framePath);
-
-			frame.width = *(short*)((byte*)&data.get()[12]);
-			frame.height = *(short*)((byte*)&data.get()[14]);
-			frame.buffer = new byte[frame.width * frame.height];
-
-			for (int i = 0, d = (frame.width * frame.height) - 1; i < frame.width * frame.height; i++, d--) {
-				frame.buffer[d] = data[18 + i];
-			}
-
-			image->frames.push_back(frame);
 		}
 
 		globalImageList.push_back(image);

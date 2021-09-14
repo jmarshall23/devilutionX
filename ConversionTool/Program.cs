@@ -192,6 +192,9 @@ namespace ConversionTool
 				}
 
 				ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + ".tga", tempBuffer, destWidth, baseFrame.Height, true);
+
+				string description = "" + cel.NumFrames;
+				File.WriteAllText(outputPath + "/" + fileNameWithoutExtension + ".txt", description);
 			}
 		}
 

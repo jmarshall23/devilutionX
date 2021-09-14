@@ -943,15 +943,15 @@ void InitControlPan()
 
 	pChrPanel = LoadCel("Data\\Char.CEL", SPANEL_WIDTH);
 	if (!gbIsHellfire)
-		pSpellCels = StormImage::LoadImageSequence("CtrlPan\\SpelIcon", false);
+		pSpellCels = StormImage::LoadImageSequence("CtrlPan\\SpelIcon", false, false);
 	else
-		pSpellCels = StormImage::LoadImageSequence("Data\\SpelIcon", false);
+		pSpellCels = StormImage::LoadImageSequence("Data\\SpelIcon", false, false);
 
 	SetSpellTrans(RSPLTYPE_SKILL);
 	//CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) - 1 }, LoadCel("CtrlPan\\Panel8.CEL", PANEL_WIDTH), 1);
 
-	panel8 = StormImage::LoadImageSequence("CtrlPan\\Panel8", false);
-	P8Bulbs = StormImage::LoadImageSequence("CtrlPan\\P8Bulbs", false); // 1 life, 2 mana
+	panel8 = StormImage::LoadImageSequence("CtrlPan\\Panel8", false, false);
+	P8Bulbs = StormImage::LoadImageSequence("CtrlPan\\P8Bulbs", false, false); // 1 life, 2 mana
 
 	talkflag = false;
 

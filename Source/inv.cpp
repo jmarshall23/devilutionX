@@ -1102,7 +1102,7 @@ void FreeInvGFX()
 
 void InitInv()
 {
-	pInvCels = StormImage::LoadImageSequence(playerTable->GetValue("invgraphic", (int)Players[MyPlayerId]._pClass), false);
+	pInvCels = StormImage::LoadImageSequence(playerTable->GetValue("invgraphic", (int)Players[MyPlayerId]._pClass), false, false);
 
 	invflag = false;
 	drawsbarflag = false;
