@@ -55,71 +55,71 @@ bool drawsbarflag;
 Point InvRect[] = {
 	// clang-format off
 	//  X,   Y
-	{ 132,  31 }, // helmet
-	{ 160,  31 }, // helmet
-	{ 132,  59 }, // helmet
-	{ 160,  59 }, // helmet
-	{  45, 205 }, // left ring
-	{ 247, 205 }, // right ring
-	{ 204,  59 }, // amulet
-	{  17, 104 }, // left hand
-	{  46, 104 }, // left hand
-	{  17, 132 }, // left hand
-	{  46, 132 }, // left hand
-	{  17, 160 }, // left hand
-	{  46, 160 }, // left hand
-	{ 247, 104 }, // right hand
-	{ 276, 104 }, // right hand
-	{ 247, 132 }, // right hand
-	{ 276, 132 }, // right hand
-	{ 247, 160 }, // right hand
-	{ 276, 160 }, // right hand
-	{ 132, 104 }, // chest
-	{ 160, 104 }, // chest
-	{ 132, 132 }, // chest
-	{ 160, 132 }, // chest
-	{ 132, 160 }, // chest
-	{ 160, 160 }, // chest
-	{  17, 250 }, // inv row 1
-	{  46, 250 }, // inv row 1
-	{  75, 250 }, // inv row 1
-	{ 104, 250 }, // inv row 1
-	{ 133, 250 }, // inv row 1
-	{ 162, 250 }, // inv row 1
-	{ 191, 250 }, // inv row 1
-	{ 220, 250 }, // inv row 1
-	{ 249, 250 }, // inv row 1
-	{ 278, 250 }, // inv row 1
-	{  17, 279 }, // inv row 2
-	{  46, 279 }, // inv row 2
-	{  75, 279 }, // inv row 2
-	{ 104, 279 }, // inv row 2
-	{ 133, 279 }, // inv row 2
-	{ 162, 279 }, // inv row 2
-	{ 191, 279 }, // inv row 2
-	{ 220, 279 }, // inv row 2
-	{ 249, 279 }, // inv row 2
-	{ 278, 279 }, // inv row 2
-	{  17, 308 }, // inv row 3
-	{  46, 308 }, // inv row 3
-	{  75, 308 }, // inv row 3
-	{ 104, 308 }, // inv row 3
-	{ 133, 308 }, // inv row 3
-	{ 162, 308 }, // inv row 3
-	{ 191, 308 }, // inv row 3
-	{ 220, 308 }, // inv row 3
-	{ 249, 308 }, // inv row 3
-	{ 278, 308 }, // inv row 3
-	{  17, 337 }, // inv row 4
-	{  46, 337 }, // inv row 4
-	{  75, 337 }, // inv row 4
-	{ 104, 337 }, // inv row 4
-	{ 133, 337 }, // inv row 4
-	{ 162, 337 }, // inv row 4
-	{ 191, 337 }, // inv row 4
-	{ 220, 337 }, // inv row 4
-	{ 249, 337 }, // inv row 4
-	{ 278, 337 }, // inv row 4
+	{ -1,  -1 }, // helmet
+	{ -1,  -1 }, // helmet
+	{ -1,  -1 }, // helmet
+	{ -1,  -1 }, // helmet
+	{ -1,  -1 }, // left ring
+	{ -1,  -1 }, // right ring
+	{ -1,  -1 }, // amulet
+	{ -1,  -1 }, // left hand
+	{ -1,  -1 }, // left hand
+	{ -1,  -1 }, // left hand
+	{ -1,  -1 }, // left hand
+	{ -1,  -1 }, // left hand
+	{ -1,  -1 }, // left hand
+	{ -1,  -1 }, // right hand
+	{ -1,  -1 }, // right hand
+	{ -1,  -1 }, // right hand
+	{ -1,  -1 }, // right hand
+	{ -1,  -1 }, // right hand
+	{ -1,  -1 }, // right hand
+	{ -1,  -1 }, // chest
+	{ -1,  -1 }, // chest
+	{ -1,  -1 }, // chest
+	{ -1,  -1 }, // chest
+	{ -1,  -1 }, // chest
+	{ -1,  -1 }, // chest
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 1
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 2
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 3
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
+	{ -1,  -1 }, // inv row 4
 	{ -1,  -1 }, // belt
 	{ -1,  -1 }, // belt
 	{ -1,  -1 }, // belt
@@ -130,6 +130,13 @@ Point InvRect[] = {
 	{ -1,  -1 }  // belt
 	// clang-format on
 };
+void InitInventoryTable(void)
+{
+	for (int i = 0; i < SLOTXY_INV_LAST; i++) {
+		InvRect[i].x = invTable->GetInt("x", i);
+		InvRect[i].y = invTable->GetInt("y", i);
+	}
+}
 
 void InitInventoryBeltTable(void)
 {
