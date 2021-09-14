@@ -13,10 +13,12 @@
 
 namespace devilution {
 
+class StormImage;
+
 static constexpr unsigned MaxDead = 31;
 
 struct DeadStruct {
-	std::array<const byte *, 8> data;
+	const StormImage *data[8];
 	int frame;
 	int width;
 	uint8_t translationPaletteIndex;

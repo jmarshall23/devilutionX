@@ -31,6 +31,8 @@
 
 #include "datatable.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 bool gbIsHellfireSaveGame;

@@ -131,8 +131,8 @@ enum class LeaderRelation : uint8_t {
 };
 
 struct AnimStruct {
-	std::unique_ptr<byte[]> CMem;
-	std::array<std::optional<CelSprite>, 8> CelSpritesForDirections;
+//	std::unique_ptr<byte[]> CMem;
+	const StormImage *CelSpritesForDirections[8];
 	int Frames;
 	int Rate;
 };

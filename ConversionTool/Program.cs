@@ -142,7 +142,7 @@ namespace ConversionTool
 			}
 		}
 
-		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable)
+		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable, bool forceAtlas = false, bool forceFrameHeaderSkip = false)
 		{
 			DiabloCel cel = null;
 
@@ -151,10 +151,16 @@ namespace ConversionTool
 			if (isCl2)
 			{
 				cel = new DiabloCL2("BlizzData/" + filename);
+
+				if (cel.NumFrames == 0)
+				{
+					Console.WriteLine("Warning invalid cl2 file!");
+					return;
+				}
 			}
 			else
 			{
-				cel = new DiabloCel("BlizzData/" + filename, width, 0, widthTable, heightTable);
+				cel = new DiabloCel("BlizzData/" + filename, width, 0, widthTable, heightTable, forceFrameHeaderSkip);
 			}
 
 			string outputPath = "Build\\" + ExportTileset.FixExportPath(filename);
@@ -164,7 +170,7 @@ namespace ConversionTool
 			string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filename);
 
 
-			if (!isCl2)
+			if (!isCl2 && !forceAtlas)
 			{
 				for (int i = 0; i < cel.NumFrames; i++)
 				{
@@ -200,6 +206,34 @@ namespace ConversionTool
 
 		static void Main(string[] args)
         {
+			Console.WriteLine("Exporting Missiles...");
+			{
+				string[] missileFiles = System.IO.Directory.GetFiles("BlizzData\\missiles\\", "*.cl2", SearchOption.AllDirectories);
+				foreach (string file in missileFiles)
+				{
+					string f = file.Remove(0, new string("BlizzData/").Length);
+					Console.WriteLine("Processing:" + f);
+					ConvertSingleImage(f, 0, null, null);
+				}
+			}
+
+			Console.WriteLine("Exporting Items...");
+			foreach (ConversionTables.ConvEntry entry in ConversionTables.ItemPaths)
+			{
+				ConvertSingleImage(entry.path, entry.width, null, null, true, true);
+			}
+
+			Console.WriteLine("Exporting Monsters...");
+			{
+				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\monsters\\", "*.cl2", SearchOption.AllDirectories);
+				foreach (string file in playerCl2Files)
+				{
+					string f = file.Remove(0, new string("BlizzData/").Length);
+					Console.WriteLine("Processing:" + f);
+					ConvertSingleImage(f, 0, null, null);
+				}
+			}
+
 			Console.WriteLine("Exporting Player Gfx...");
 			{
 				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\plrgfx\\", "*.cl2", SearchOption.AllDirectories);

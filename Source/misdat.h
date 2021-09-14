@@ -132,6 +132,8 @@ enum class MissileDataFlags {
 	// clang-format on
 };
 
+class StormImage;
+
 struct MissileFileData {
 	const char *name;
 	uint8_t animName;
@@ -141,7 +143,7 @@ struct MissileFileData {
 	std::array<uint8_t, 16> animLen = {};
 	int16_t animWidth;
 	int16_t animWidth2;
-	std::array<std::unique_ptr<byte[]>, 16> animData;
+	StormImage *animData[16];
 
 	MissileFileData(const char *name, uint8_t animName, uint8_t animFAmt, MissileDataFlags flags,
 	    std::initializer_list<uint8_t> animDelay, std::initializer_list<uint8_t> animLen,
@@ -151,7 +153,7 @@ struct MissileFileData {
 
 	void FreeGFX()
 	{
-		animData = {};
+		//animData = {};
 	}
 };
 

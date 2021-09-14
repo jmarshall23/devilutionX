@@ -53,10 +53,10 @@ namespace ConversionTool
 
 		}
 
-		public DiabloCel(string fileName, int width = 0, int height = 0, int[] widthTable = null, int[] heightTable = null)
+		public DiabloCel(string fileName, int width = 0, int height = 0, int[] widthTable = null, int[] heightTable = null, bool forceFrameHeaderSkip = false)
 		{
 			byte[] buffer = File.ReadAllBytes(fileName);
-			Parse(new BinaryReader(new MemoryStream(buffer)), width, height, widthTable, heightTable);
+			Parse(new BinaryReader(new MemoryStream(buffer)), width, height, widthTable, heightTable, forceFrameHeaderSkip);
 		}
 
 		public static readonly bool[] D1CEL_LEVEL_FRAME_TYPE_2 = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
@@ -179,7 +179,7 @@ namespace ConversionTool
 		}
 
 
-		private void Parse(BinaryReader reader, int width, int height, int[] widthTable, int[] heightTable)
+		private void Parse(BinaryReader reader, int width, int height, int[] widthTable, int[] heightTable, bool forceFrameHeaderSkip)
 		{
 			uint firstDword = 0;
 			uint fileSizeDword = 0;
@@ -325,7 +325,14 @@ namespace ConversionTool
 					}
 					else
 					{
-						frames.Add(new DiabloCelBase(celFrameRawData, width, height, D1CEL_FRAME_TYPE.REGULAR));
+						if(forceFrameHeaderSkip)
+						{
+							frames.Add(new DiabloCelBase(celFrameRawData, width, height, D1CEL_FRAME_TYPE.REGULAR_DATASKIP));
+						}
+						else
+						{
+							frames.Add(new DiabloCelBase(celFrameRawData, width, height, D1CEL_FRAME_TYPE.REGULAR));
+						}
 					}
 				}
 				// If it's a level CEL

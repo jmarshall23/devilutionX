@@ -23,6 +23,8 @@
 #include "spells.h"
 #include "trigs.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 int ActiveMissiles[MAXMISSILES];
@@ -600,7 +602,7 @@ void SetMissAnim(Missile &missile, int animtype)
 
 	missile._miAnimType = animtype;
 	missile._miAnimFlags = MissileSpriteData[animtype].flags;
-	missile._miAnimData = MissileSpriteData[animtype].animData[dir].get();
+	missile._miAnimData = MissileSpriteData[animtype].animData[dir];
 	missile._miAnimDelay = MissileSpriteData[animtype].animDelay[dir];
 	missile._miAnimLen = MissileSpriteData[animtype].animLen[dir];
 	missile._miAnimWidth = MissileSpriteData[animtype].animWidth;
@@ -2241,12 +2243,12 @@ void InitMissileAnimationFromMonster(Missile &mis, Direction midir, const Monste
 	const AnimStruct &anim = mon.MType->GetAnimData(graphic);
 	mis._mimfnum = midir;
 	mis._miAnimFlags = MissileDataFlags::None;
-	const auto &celSprite = *anim.CelSpritesForDirections[midir];
-	mis._miAnimData = celSprite.Data();
+	const auto *celSprite = anim.CelSpritesForDirections[midir];
+	mis._miAnimData = celSprite;
 	mis._miAnimDelay = anim.Rate;
 	mis._miAnimLen = anim.Frames;
-	mis._miAnimWidth = celSprite.Width();
-	mis._miAnimWidth2 = CalculateWidth2(celSprite.Width());
+	mis._miAnimWidth = celSprite->Width();
+	mis._miAnimWidth2 = CalculateWidth2(celSprite->Width());
 	mis._miAnimAdd = 1;
 	mis.var1 = 0;
 	mis.var2 = 0;
@@ -4351,7 +4353,7 @@ void missiles_process_charge()
 		int mi = ActiveMissiles[i];
 		auto &missile = Missiles[mi];
 
-		missile._miAnimData = MissileSpriteData[missile._miAnimType].animData[missile._mimfnum].get();
+		missile._miAnimData = MissileSpriteData[missile._miAnimType].animData[missile._mimfnum];
 		if (missile._mitype != MIS_RHINO)
 			continue;
 
@@ -4365,7 +4367,7 @@ void missiles_process_charge()
 		} else {
 			graphic = MonsterGraphic::Walk;
 		}
-		missile._miAnimData = mon->GetAnimData(graphic).CelSpritesForDirections[missile._mimfnum]->Data();
+		missile._miAnimData = mon->GetAnimData(graphic).CelSpritesForDirections[missile._mimfnum];
 	}
 }
 

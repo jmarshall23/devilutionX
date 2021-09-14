@@ -10,6 +10,8 @@
 #include "misdat.h"
 #include "monster.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 DeadStruct Dead[MaxDead];
@@ -20,8 +22,11 @@ void InitDeadAnimationFromMonster(DeadStruct &dead, const CMonster &mon)
 {
 	int i = 0;
 	const auto &animData = mon.GetAnimData(MonsterGraphic::Death);
-	for (const auto &celSprite : animData.CelSpritesForDirections)
-		dead.data[i++] = celSprite->Data();
+
+	for (int i = 0; i < 8; i++) {
+		dead.data[i++] = animData.CelSpritesForDirections[i];
+	}
+
 	dead.frame = animData.Frames;
 	dead.width = animData.CelSpritesForDirections[0]->Width();
 }
@@ -47,8 +52,8 @@ void InitDead()
 
 	nd++; // Unused blood spatter
 
-	for (auto &dead : Dead[nd].data)
-		dead = MissileSpriteData[MFILE_SHATTER1].animData[0].get();
+	for (int i = 0; i < 8; i++)
+		Dead[nd].data[i] = MissileSpriteData[MFILE_SHATTER1].animData[0];
 
 	Dead[nd].frame = 12;
 	Dead[nd].width = 128;

@@ -58,7 +58,7 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame)
+	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame) const
 	{
 		const ImageFrame_t& image = frames[frame - 1];
 
@@ -100,7 +100,100 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame)
+	void StormImage::ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, int light) const
+	{
+		const ImageFrame_t& image = frames[frame - 1];
+
+		uint8_t *lightTable = GetLightTable(light);
+
+		sy -= image.height;
+
+		for (int y = 0; y < image.height; y++)
+		{
+			for (int x = 0; x < image.width; x++)
+			{
+				int screenX = x + sx;
+				int screenY = y + sy;
+
+				if (screenX < 0)
+					continue;
+
+				if (screenY < 0)
+					continue;
+
+				if (screenX >= out.w())
+					continue;
+
+				if (screenY >= out.h())
+					continue;
+
+				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
+
+				if (image.buffer[sourcePos] == (byte)255)
+					continue;
+
+				std::uint8_t* dst = out.at(screenX, screenY);
+
+				*dst = lightTable[(uint8_t)image.buffer[sourcePos]];
+			}
+		}
+	}
+
+	/*
+	=======================
+	StormImage::ClipRenderNoLighting
+	=======================
+	*/
+	void StormImage::ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame) const
+	{
+		if (LightTableIndex == 0) {
+			ClipRenderNoLighting(out, sx, sy, frame);
+			return;
+		}
+
+		const ImageFrame_t& image = frames[frame - 1];
+
+		uint8_t* lightTable = &LightTables[LightTableIndex * 256];
+
+		sy -= image.height;
+
+		for (int y = 0; y < image.height; y++)
+		{
+			for (int x = 0; x < image.width; x++)
+			{
+				int screenX = x + sx;
+				int screenY = y + sy;
+
+				if (screenX < 0)
+					continue;
+
+				if (screenY < 0)
+					continue;
+
+				if (screenX >= out.w())
+					continue;
+
+				if (screenY >= out.h())
+					continue;
+
+				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
+
+				if (image.buffer[sourcePos] == (byte)255)
+					continue;
+
+				std::uint8_t* dst = out.at(screenX, screenY);
+
+				*dst = lightTable[(uint8_t)image.buffer[sourcePos]];
+			}
+		}
+	}
+
+	/*
+	=======================
+	StormImage::ClipRenderNoLighting
+	=======================
+	*/
+	void StormImage::ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame) const
 	{
 		const ImageFrame_t& image = frames[frame - 1];
 
@@ -256,7 +349,7 @@ namespace devilution
 	StormImage::LoadImageSequence
 	=======================
 	*/
-	StormImage* StormImage::LoadImageSequence(const char* path, bool isTiles, bool isAtlas)
+	StormImage* StormImage::LoadImageSequence(const char* path, bool isTiles, bool isAtlas, int instanceStride)
 	{
 		// Check to see if the image is already loaded.
 		for (int i = 0; i < globalImageList.size(); i++)
@@ -287,7 +380,16 @@ namespace devilution
 			atlasImage.height = *(short*)((byte*)&data.get()[14]);
 			atlasImage.buffer = new byte[atlasImage.width * atlasImage.height];
 
+
+			byte* sourceData = data.get();
+			for (int i = 0; i < atlasImage.width * atlasImage.height; i++)
+			{
+				atlasImage.buffer[i] = sourceData[(atlasImage.width * atlasImage.height) - i - 1];
+			}
+
 			image->CreateImagesFromAtlas(atlasImage, numFrames);
+
+			delete atlasImage.buffer;
 		}
 		else
 		{
@@ -319,6 +421,35 @@ namespace devilution
 				}
 
 				image->frames.push_back(frame);
+			}
+		}
+
+		// Create image instances.
+		if (instanceStride == -1)
+		{
+			for (int i = 0; i < image->frames.size(); i++)
+			{
+				StormImage instanceImage;
+
+				instanceImage.name = image->name + "_instance";
+				instanceImage.frames.push_back(image->frames[i]);
+				image->imageInstances.push_back(instanceImage);
+			}
+		}
+		else
+		{
+			int numImagesPerStride = image->frames.size() / instanceStride;
+			int imageId = 0;
+			for (int i = 0; i < instanceStride; i++)
+			{
+				StormImage instanceImage;
+				instanceImage.name = image->name + "_instance";
+				for (int d = 0; d < numImagesPerStride; d++)
+				{
+					instanceImage.frames.push_back(image->frames[imageId++]);
+				}
+				image->imageInstances.push_back(instanceImage);
+				
 			}
 		}
 

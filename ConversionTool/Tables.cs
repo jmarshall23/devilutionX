@@ -100,6 +100,45 @@ namespace ConversionTool
 			new ConvEntry("Data\\inv\\objcurs.cel", InvItemWidth1, InvItemHeight1)
 		};
 
+		public static readonly ConvEntry[] ItemPaths =
+		{
+			new ConvEntry("items\\Armor2.cel",96),
+			new ConvEntry("items\\Axe.cel",96),
+			new ConvEntry("items\\FBttle.cel",96),
+			new ConvEntry("items\\Bow.cel",96),
+			new ConvEntry("items\\GoldFlip.cel",96),
+			new ConvEntry("items\\Helmut.cel",96),
+			new ConvEntry("items\\Mace.cel",96),
+			new ConvEntry("items\\Shield.cel",96),
+			new ConvEntry("items\\SwrdFlip.cel",96),
+			new ConvEntry("items\\Rock.cel",96),
+			new ConvEntry("items\\Cleaver.cel",96),
+			new ConvEntry("items\\Staff.cel",96),
+			new ConvEntry("items\\Ring.cel",96),
+			new ConvEntry("items\\CrownF.cel",96),
+			new ConvEntry("items\\LArmor.cel",96),
+			new ConvEntry("items\\WShield.cel",96),
+			new ConvEntry("items\\Scroll.cel",96),
+			new ConvEntry("items\\FPlateAr.cel",96),
+			new ConvEntry("items\\FBook.cel",96),
+			new ConvEntry("items\\Food.cel",96),
+			new ConvEntry("items\\FBttleBB.cel",96),
+			new ConvEntry("items\\FBttleDY.cel",96),
+			new ConvEntry("items\\FBttleOR.cel",96),
+			new ConvEntry("items\\FBttleBR.cel",96),
+			new ConvEntry("items\\FBttleBL.cel",96),
+			new ConvEntry("items\\FBttleBY.cel",96),
+			new ConvEntry("items\\FBttleWH.cel",96),
+			new ConvEntry("items\\FBttleDB.cel",96),
+			new ConvEntry("items\\FEar.cel",96),
+			new ConvEntry("items\\FBrain.cel",96),
+			new ConvEntry("items\\FMush.cel",96),
+			new ConvEntry("items\\Innsign.cel",96),
+			new ConvEntry("items\\Bldstn.cel",96),
+			new ConvEntry("items\\Fanvil.cel",96),
+			new ConvEntry("items\\FLazStaf.cel",96)
+		};
+
 		public static readonly ConvEntry[] GenDataImages =
 		{
 			new ConvEntry("Gendata\\Cutstart.cel", 640),

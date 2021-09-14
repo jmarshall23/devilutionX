@@ -96,7 +96,7 @@ struct Missile {
 	bool _miDelFlag; // Indicate whether the missile should be deleted
 	uint8_t _miAnimType;
 	MissileDataFlags _miAnimFlags;
-	const byte *_miAnimData;
+	const class StormImage *_miAnimData;
 	int _miAnimDelay; // Tick length of each frame in the current animation
 	int _miAnimLen;   // Number of frames in current animation
 	int _miAnimWidth;

@@ -146,6 +146,8 @@ enum action_id : int8_t {
 	// clang-format on
 };
 
+class StormImage;
+
 /**
  * @brief Contains Data (CelSprites) for a player graphic (player_graphic)
  */
@@ -153,12 +155,7 @@ struct PlayerAnimationData {
 	/**
 	 * @brief CelSprites for the different directions
 	 */
-	std::array<std::optional<CelSprite>, 8> CelSpritesForDirections;
-	/**
-	 * @brief Raw Data (binary) of the CL2 file.
-	 *        Is referenced from CelSprite in CelSpritesForDirections
-	 */
-	std::unique_ptr<byte[]> RawData;
+	const StormImage *CelSpritesForDirections[8];
 };
 
 struct Player {

@@ -306,21 +306,26 @@ void DrawMissilePrivate(const Surface &out, const Missile &missile, int sx, int 
 		return;
 	}
 	int nCel = missile._miAnimFrame;
-	const auto *frameTable = reinterpret_cast<const uint32_t *>(missile._miAnimData);
-	int frames = SDL_SwapLE32(frameTable[0]);
-	if (nCel < 1 || frames > 50 || nCel > frames) {
-		Log("Draw Missile 2: frame {} of {}, missile type=={}", nCel, frames, missile._mitype);
-		return;
-	}
+	//const auto *frameTable = reinterpret_cast<const uint32_t *>(missile._miAnimData);
+	//int frames = SDL_SwapLE32(frameTable[0]);
+	//if (nCel < 1 || frames > 50 || nCel > frames) {
+	//	Log("Draw Missile 2: frame {} of {}, missile type=={}", nCel, frames, missile._mitype);
+	//	return;
+	//}
 	int mx = sx + missile.position.offsetForRendering.deltaX - missile._miAnimWidth2;
 	int my = sy + missile.position.offsetForRendering.deltaY;
-	CelSprite cel { missile._miAnimData, missile._miAnimWidth };
-	if (missile._miUniqTrans != 0)
-		Cl2DrawLightTbl(out, mx, my, cel, missile._miAnimFrame, missile._miUniqTrans + 3);
-	else if (missile._miLightFlag)
-		Cl2DrawLight(out, mx, my, cel, missile._miAnimFrame);
-	else
-		Cl2Draw(out, mx, my, cel, missile._miAnimFrame);
+	//CelSprite cel { missile._miAnimData, missile._miAnimWidth };
+	if (missile._miUniqTrans != 0) {
+		//Cl2DrawLightTbl(out, mx, my, cel, missile._miAnimFrame, missile._miUniqTrans + 3);
+		missile._miAnimData->ClipRenderWithLighting(out, mx, my, missile._miAnimFrame, missile._miUniqTrans + 3);
+	} else if (missile._miLightFlag) {
+		//Cl2DrawLight(out, mx, my, cel, missile._miAnimFrame);
+		missile._miAnimData->ClipRenderWithLighting(out, mx, my, missile._miAnimFrame);
+	} else {
+		//Cl2Draw(out, mx, my, cel, missile._miAnimFrame);
+		missile._miAnimData->ClipRenderNoLighting(out, mx, my, missile._miAnimFrame);
+	}
+		
 }
 
 /**
@@ -418,6 +423,7 @@ void DrawMonster(const Surface &out, int x, int y, int mx, int my, const Monster
 	};
 
 	int nCel = monster.AnimInfo.GetFrameToUseForRendering();
+	/*
 	const auto *frameTable = reinterpret_cast<const uint32_t *>(monster.AnimInfo.pCelSprite->Data());
 	int frames = SDL_SwapLE32(frameTable[0]);
 	if (nCel < 1 || frames > 50 || nCel > frames) {
@@ -430,11 +436,13 @@ void DrawMonster(const Surface &out, int x, int y, int mx, int my, const Monster
 		    frames);
 		return;
 	}
+	*/
 
 	const auto &cel = *monster.AnimInfo.pCelSprite;
 
 	if ((dFlags[x][y] & BFLAG_LIT) == 0) {
-		Cl2DrawLightTbl(out, mx, my, cel, nCel, 1);
+		//Cl2DrawLightTbl(out, mx, my, cel, nCel, 1);
+		cel.ClipRenderWithLighting(out, mx, my, nCel, 1);
 		return;
 	}
 	int trans = 0;
@@ -444,10 +452,13 @@ void DrawMonster(const Surface &out, int x, int y, int mx, int my, const Monster
 		trans = 2;
 	if (Players[MyPlayerId]._pInfraFlag && LightTableIndex > 8)
 		trans = 1;
-	if (trans != 0)
-		Cl2DrawLightTbl(out, mx, my, cel, nCel, trans);
-	else
-		Cl2DrawLight(out, mx, my, cel, nCel);
+	if (trans != 0) {
+		//Cl2DrawLightTbl(out, mx, my, cel, nCel, trans);
+		cel.ClipRenderWithLighting(out, mx, my, nCel, trans);
+	} else {
+		//Cl2DrawLight(out, mx, my, cel, nCel);
+		cel.ClipRenderWithLighting(out, mx, my, nCel);
+	}
 }
 
 /**
@@ -458,21 +469,22 @@ void DrawPlayerIconHelper(const Surface &out, int pnum, missile_graphic_id missi
 	x += CalculateWidth2(Players[pnum].AnimInfo.pCelSprite->Width()) - MissileSpriteData[missileGraphicId].animWidth2;
 
 	int width = MissileSpriteData[missileGraphicId].animWidth;
-	byte *pCelBuff = MissileSpriteData[missileGraphicId].animData[0].get();
-
-	CelSprite cel { pCelBuff, width };
+	StormImage *pCelBuff = MissileSpriteData[missileGraphicId].animData[0];
 
 	if (pnum == MyPlayerId) {
-		Cl2Draw(out, x, y, cel, 1);
+		pCelBuff->ClipRenderNoLighting(out, x, y, 1);
+		//Cl2Draw(out, x, y, cel, 1);
 		return;
 	}
 
 	if (lighting) {
-		Cl2DrawLightTbl(out, x, y, cel, 1, 1);
+		pCelBuff->ClipRenderWithLighting(out, x, y, 1, 1);
+		//Cl2DrawLightTbl(out, x, y, cel, 1, 1);
 		return;
 	}
 
-	Cl2DrawLight(out, x, y, cel, 1);
+	//Cl2DrawLight(out, x, y, cel, 1);
+	pCelBuff->ClipRenderWithLighting(out, x, y, 1);
 }
 
 /**
@@ -519,7 +531,7 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 		Log("Drawing player {} \"{}\": NULL CelSprite", pnum, player._pName);
 		return;
 	}
-
+	/*
 	int frames = SDL_SwapLE32(*reinterpret_cast<const DWORD *>(pCelSprite->Data()));
 	if (nCel < 1 || frames > 50 || nCel > frames) {
 		const char *szMode = "unknown action";
@@ -535,18 +547,23 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 		    frames);
 		return;
 	}
+	*/
 
-	if (pnum == pcursplr)
-		Cl2DrawOutline(out, 165, px, py, *pCelSprite, nCel);
+	if (pnum == pcursplr) {
+		//Cl2DrawOutline(out, 165, px, py, *pCelSprite, nCel);
+		pCelSprite->ClipRenderOutline(out, 165, px, py, nCel);
+	}
 
 	if (pnum == MyPlayerId) {
-		Cl2Draw(out, px, py, *pCelSprite, nCel);
+		//Cl2Draw(out, px, py, *pCelSprite, nCel);
+		pCelSprite->ClipRenderNoLighting(out, px, py, nCel);
 		DrawPlayerIcons(out, pnum, px, py, true);
 		return;
 	}
 
 	if ((dFlags[x][y] & BFLAG_LIT) == 0 || (Players[MyPlayerId]._pInfraFlag && LightTableIndex > 8)) {
-		Cl2DrawLightTbl(out, px, py, *pCelSprite, nCel, 1);
+		//Cl2DrawLightTbl(out, px, py, *pCelSprite, nCel, 1);
+		pCelSprite->ClipRenderWithLighting(out, px, py, nCel, 1);
 		DrawPlayerIcons(out, pnum, px, py, true);
 		return;
 	}
@@ -557,7 +574,8 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 	else
 		LightTableIndex -= 5;
 
-	Cl2DrawLight(out, px, py, *pCelSprite, nCel);
+	pCelSprite->ClipRenderWithLighting(out, px, py, nCel);
+	//Cl2DrawLight(out, px, py, *pCelSprite, nCel);
 	DrawPlayerIcons(out, pnum, px, py, false);
 
 	LightTableIndex = l;
@@ -743,18 +761,22 @@ void DrawItem(const Surface &out, int x, int y, int sx, int sy, bool pre)
 	}
 
 	int nCel = item.AnimInfo.GetFrameToUseForRendering();
+	/*
 	int frames = SDL_SwapLE32(*(DWORD *)cel->Data());
 	if (nCel < 1 || frames > 50 || nCel > frames) {
 		Log("Draw \"{}\" Item 1: frame {} of {}, item type=={}", item._iIName, nCel, frames, item._itype);
 		return;
 	}
+	*/
 
 	int px = sx - CalculateWidth2(cel->Width());
 	const Point position { px, sy };
 	if (bItem - 1 == pcursitem || AutoMapShowItems) {
-		CelBlitOutlineTo(out, GetOutlineColor(item, false), position, *cel, nCel);
+		//CelBlitOutlineTo(out, GetOutlineColor(item, false), position, *cel, nCel);
+		cel->ClipRenderOutline(out, GetOutlineColor(item, false), position.x, position.y, nCel);
 	}
-	CelClippedDrawLightTo(out, position, *cel, nCel);
+	//CelClippedDrawLightTo(out, position, *cel, nCel);
+	cel->ClipRenderWithLighting(out, position.x, position.y, nCel);
 	if (item.AnimInfo.CurrentFrame == item.AnimInfo.NumberOfFrames || item._iCurs == ICURS_MAGIC_ROCK)
 		AddItemToLabelQueue(bItem - 1, px, sy);
 }
@@ -810,17 +832,18 @@ void DrawMonsterHelper(const Surface &out, int x, int y, int oy, int sx, int sy)
 		return;
 	}
 
-	const CelSprite &cel = *monster.AnimInfo.pCelSprite;
+	const StormImage *cel = monster.AnimInfo.pCelSprite;
 
 	Displacement offset = monster.position.offset;
 	if (monster.IsWalking()) {
 		offset = GetOffsetForWalking(monster.AnimInfo, monster._mdir);
 	}
 
-	int px = sx + offset.deltaX - CalculateWidth2(cel.Width());
+	int px = sx + offset.deltaX - CalculateWidth2(cel->Width());
 	int py = sy + offset.deltaY;
 	if (mi == pcursmonst) {
-		Cl2DrawOutline(out, 233, px, py, cel, monster.AnimInfo.GetFrameToUseForRendering());
+		cel->ClipRenderOutline(out, 233, px, py, monster.AnimInfo.GetFrameToUseForRendering());
+		//Cl2DrawOutline(out, 233, px, py, cel, monster.AnimInfo.GetFrameToUseForRendering());
 	}
 	DrawMonster(out, x, y, px, py, monster);
 }
@@ -899,19 +922,13 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 			DeadStruct *pDeadGuy = &Dead[(bDead & 0x1F) - 1];
 			auto dd = static_cast<Direction>((bDead >> 5) & 7);
 			int px = dx - CalculateWidth2(pDeadGuy->width);
-			const byte *pCelBuff = pDeadGuy->data[dd];
+			const StormImage *pCelBuff = pDeadGuy->data[dd];
 			assert(pCelBuff != nullptr);
-			const auto *frameTable = reinterpret_cast<const uint32_t *>(pCelBuff);
-			int frames = SDL_SwapLE32(frameTable[0]);
 			int nCel = pDeadGuy->frame;
-			if (nCel < 1 || frames > 50 || nCel > frames) {
-				Log("Unclipped dead: frame {} of {}, deadnum=={}", nCel, frames, (bDead & 0x1F) - 1);
-				break;
-			}
 			if (pDeadGuy->translationPaletteIndex != 0) {
-				Cl2DrawLightTbl(out, px, dy, CelSprite(pCelBuff, pDeadGuy->width), nCel, pDeadGuy->translationPaletteIndex);
+				pCelBuff->ClipRenderWithLighting(out, px, dy, nCel, pDeadGuy->translationPaletteIndex);
 			} else {
-				Cl2DrawLight(out, px, dy, CelSprite(pCelBuff, pDeadGuy->width), nCel);
+				pCelBuff->ClipRenderWithLighting(out, px, dy, nCel);
 			}
 		} while (false);
 	}

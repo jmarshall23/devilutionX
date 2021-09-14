@@ -41,6 +41,8 @@
 
 #include "dunload.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 CMonster LevelMonsterTypes[MAX_LVLMTYPES];
@@ -136,6 +138,8 @@ char animletter[7] = "nwahds";
 
 void InitMonsterTRN(CMonster &monst)
 {
+// jmarshall - trn support todo
+	/*
 	std::array<uint8_t, 256> colorTranslations;
 	LoadFileInMem(monst.MData->TransFile, colorTranslations);
 
@@ -154,6 +158,8 @@ void InitMonsterTRN(CMonster &monst)
 			    monst.Anims[i].Frames);
 		}
 	}
+	*/
+// jamrshall end
 }
 
 void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
@@ -172,7 +178,7 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 	monster.MType = &monsterType;
 	monster.MData = monsterType.MData;
 	monster.AnimInfo = {};
-	monster.AnimInfo.pCelSprite = animData.CelSpritesForDirections[rd] ? &*animData.CelSpritesForDirections[rd] : nullptr;
+	monster.AnimInfo.pCelSprite = animData.CelSpritesForDirections[rd];// ? &*animData.CelSpritesForDirections[rd] : nullptr;
 	monster.AnimInfo.TicksPerFrame = animData.Rate;
 	monster.AnimInfo.TickCounterOfCurrentFrame = GenerateRnd(monster.AnimInfo.TicksPerFrame - 1);
 	monster.AnimInfo.NumberOfFrames = animData.Frames;
@@ -218,7 +224,7 @@ void InitMonster(Monster &monster, Direction rd, int mtype, Point position)
 	monster.mtalkmsg = TEXT_NONE;
 
 	if (monster._mAi == AI_GARG) {
-		monster.AnimInfo.pCelSprite = &*monsterType.GetAnimData(MonsterGraphic::Special).CelSpritesForDirections[rd];
+		monster.AnimInfo.pCelSprite = monsterType.GetAnimData(MonsterGraphic::Special).CelSpritesForDirections[rd];
 		monster.AnimInfo.CurrentFrame = 1;
 		monster._mFlags |= MFLAG_ALLOW_SPECIAL;
 		monster._mmode = MonsterMode::SpecialMeleeAttack;
@@ -338,7 +344,7 @@ void PlaceGroup(int mtype, int num, UniqueMonsterPack uniqueMonsterPack, int lea
 				}
 
 				if (minion._mAi != AI_GARG) {
-					minion.AnimInfo.pCelSprite = &*minion.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[minion._mdir];
+					minion.AnimInfo.pCelSprite = minion.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[minion._mdir];
 					minion.AnimInfo.CurrentFrame = GenerateRnd(minion.AnimInfo.NumberOfFrames - 1) + 1;
 					minion._mFlags &= ~MFLAG_ALLOW_SPECIAL;
 					minion._mmode = MonsterMode::Stand;
@@ -574,7 +580,7 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 	}
 
 	if (monster._mAi != AI_GARG) {
-		monster.AnimInfo.pCelSprite = &*monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[monster._mdir];
+		monster.AnimInfo.pCelSprite = monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[monster._mdir];
 		monster.AnimInfo.CurrentFrame = GenerateRnd(monster.AnimInfo.NumberOfFrames - 1) + 1;
 		monster._mFlags &= ~MFLAG_ALLOW_SPECIAL;
 		monster._mmode = MonsterMode::Stand;
@@ -776,7 +782,7 @@ void DeleteMonster(int i)
 void NewMonsterAnim(Monster &monster, MonsterGraphic graphic, Direction md, AnimationDistributionFlags flags = AnimationDistributionFlags::None, int numSkippedFrames = 0, int distributeFramesBeforeFrame = 0)
 {
 	const auto &animData = monster.MType->GetAnimData(graphic);
-	const auto *pCelSprite = &*animData.CelSpritesForDirections[md];
+	const StormImage *pCelSprite = animData.CelSpritesForDirections[md];
 	monster.AnimInfo.SetNewAnimation(pCelSprite, animData.Frames, animData.Rate, flags, numSkippedFrames, distributeFramesBeforeFrame);
 	monster._mFlags &= ~(MFLAG_LOCK_ANIMATION | MFLAG_ALLOW_SPECIAL);
 	monster._mdir = md;
@@ -1291,7 +1297,7 @@ void StartFadeout(Monster &monster, Direction md, bool backwards)
 
 void StartHeal(Monster &monster)
 {
-	monster.AnimInfo.pCelSprite = &*monster.MType->GetAnimData(MonsterGraphic::Special).CelSpritesForDirections[monster._mdir];
+	monster.AnimInfo.pCelSprite = monster.MType->GetAnimData(MonsterGraphic::Special).CelSpritesForDirections[monster._mdir];
 	monster.AnimInfo.CurrentFrame = monster.MType->GetAnimData(MonsterGraphic::Special).Frames;
 	monster._mFlags |= MFLAG_LOCK_ANIMATION;
 	monster._mmode = MonsterMode::Heal;
@@ -1310,9 +1316,9 @@ void SyncLightPosition(Monster &monster)
 bool MonsterIdle(Monster &monster)
 {
 	if (monster.MType->mtype == MT_GOLEM)
-		monster.AnimInfo.pCelSprite = &*monster.MType->GetAnimData(MonsterGraphic::Walk).CelSpritesForDirections[monster._mdir];
+		monster.AnimInfo.pCelSprite = monster.MType->GetAnimData(MonsterGraphic::Walk).CelSpritesForDirections[monster._mdir];
 	else
-		monster.AnimInfo.pCelSprite = &*monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[monster._mdir];
+		monster.AnimInfo.pCelSprite = monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[monster._mdir];
 
 	if (monster.AnimInfo.CurrentFrame == monster.AnimInfo.NumberOfFrames)
 		UpdateEnemy(monster);
@@ -1827,7 +1833,7 @@ bool MonsterSpecialStand(Monster &monster)
 
 bool MonsterDelay(Monster &monster)
 {
-	monster.AnimInfo.pCelSprite = &*monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[GetMonsterDirection(monster)];
+	monster.AnimInfo.pCelSprite = monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[GetMonsterDirection(monster)];
 	if (monster._mAi == AI_LAZARUS) {
 		if (monster._mVar2 > 8 || monster._mVar2 < 0)
 			monster._mVar2 = 8;
@@ -2876,7 +2882,7 @@ void SneakAi(int i)
 	}
 	if (monster._mmode == MonsterMode::Stand) {
 		if (abs(mx) >= 2 || abs(my) >= 2 || v >= 4 * monster._mint + 10)
-			monster.AnimInfo.pCelSprite = &*monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[md];
+			monster.AnimInfo.pCelSprite = monster.MType->GetAnimData(MonsterGraphic::Stand).CelSpritesForDirections[md];
 		else
 			StartAttack(monster);
 	}
@@ -3676,21 +3682,15 @@ void InitMonsterGFX(int monst)
 			char strBuff[256];
 			sprintf(strBuff, MonstersData[mtype].GraphicType, animletter[anim]);
 
-			byte *celBuf;
-			{
-				auto celData = LoadFileInMem(strBuff);
-				celBuf = celData.get();
-				LevelMonsterTypes[monst].Anims[anim].CMem = std::move(celData);
-			}
-
 			if (LevelMonsterTypes[monst].mtype != MT_GOLEM || (animletter[anim] != 's' && animletter[anim] != 'd')) {
+				StormImage *cel = StormImage::LoadImageSequence(strBuff, false, true, 8);
 				for (int i = 0; i < 8; i++) {
-					byte *pCelStart = CelGetFrame(celBuf, i);
-					LevelMonsterTypes[monst].Anims[anim].CelSpritesForDirections[i].emplace(pCelStart, width);
+					LevelMonsterTypes[monst].Anims[anim].CelSpritesForDirections[i] = cel->GetFrameInstance(i); 
 				}
 			} else {
+				StormImage *cel = StormImage::LoadImageSequence(strBuff, false, true);
 				for (int i = 0; i < 8; i++) {
-					LevelMonsterTypes[monst].Anims[anim].CelSpritesForDirections[i].emplace(celBuf, width);
+					LevelMonsterTypes[monst].Anims[anim].CelSpritesForDirections[i] = cel;
 				}
 			}
 		}
@@ -4373,7 +4373,7 @@ void FreeMonsters()
 		int mtype = LevelMonsterTypes[i].mtype;
 		for (int j = 0; j < 6; j++) {
 			if (animletter[j] != 's' || MonstersData[mtype].has_special) {
-				LevelMonsterTypes[i].Anims[j].CMem = nullptr;
+			//	LevelMonsterTypes[i].Anims[j].CMem = nullptr;
 			}
 		}
 	}

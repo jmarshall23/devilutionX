@@ -33,6 +33,8 @@
 
 #include "datatable.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 int MyPlayerId;
@@ -287,17 +289,6 @@ void StartWalk(int pnum, Displacement vel, Direction dir, bool pmWillBeCalled)
 
 	HandleWalkMode(pnum, vel, dir);
 	StartWalkAnimation(player, dir, pmWillBeCalled);
-}
-
-void SetPlayerGPtrs(const char *path, std::unique_ptr<byte[]> &data, std::array<std::optional<CelSprite>, 8> &anim, int width)
-{
-	data = nullptr;
-	data = LoadFileInMem(path);
-
-	for (int i = 0; i < 8; i++) {
-		byte *pCelStart = CelGetFrame(data.get(), i);
-		anim[i].emplace(pCelStart, width);
-	}
 }
 
 void ClearStateVariables(Player &player)
@@ -2158,9 +2149,14 @@ void LoadPlrGFX(Player &player, player_graphic graphic)
 		app_fatal("PLR:2");
 	}
 
-	sprintf(pszName, R"(PlrGFX\%s\%s\%s%s.CL2)", cs, prefix, prefix, szCel);
+	sprintf(pszName, "PlrGFX\\%s\\%s\\%s%s", cs, prefix, prefix, szCel);
 	auto &animationData = player.AnimationData[static_cast<size_t>(graphic)];
-	SetPlayerGPtrs(pszName, animationData.RawData, animationData.CelSpritesForDirections, animationWidth);
+	//SetPlayerGPtrs(pszName, animationData.CelSpritesForDirections, animationWidth);
+
+	StormImage *image = StormImage::LoadImageSequence(pszName, false, true, 8);
+	for (int i = 0; i < 8; i++) {
+		animationData.CelSpritesForDirections[i] = image->GetFrameInstance(i);
+	}
 }
 
 void InitPlayerGFX(Player &player)
@@ -2182,21 +2178,21 @@ void InitPlayerGFX(Player &player)
 void ResetPlayerGFX(Player &player)
 {
 	player.AnimInfo.pCelSprite = nullptr;
-	for (auto &animData : player.AnimationData) {
-		for (auto &celSprite : animData.CelSpritesForDirections)
-			celSprite = std::nullopt;
-		animData.RawData = nullptr;
-	}
+	//for (auto &animData : player.AnimationData) {
+	//	for (auto &celSprite : animData.CelSpritesForDirections)
+	//		celSprite = std::nullopt;
+	//	animData.RawData = nullptr;
+	//}
 }
 
 void NewPlrAnim(Player &player, player_graphic graphic, Direction dir, int numberOfFrames, int delayLen, AnimationDistributionFlags flags /*= AnimationDistributionFlags::None*/, int numSkippedFrames /*= 0*/, int distributeFramesBeforeFrame /*= 0*/)
 {
-	if (player.AnimationData[static_cast<size_t>(graphic)].RawData == nullptr)
+	if (player.AnimationData[static_cast<size_t>(graphic)].CelSpritesForDirections[0] == nullptr)
 		LoadPlrGFX(player, graphic);
 
 	auto &celSprites = player.AnimationData[static_cast<size_t>(graphic)].CelSpritesForDirections;
 
-	CelSprite *pCelSprite = nullptr;
+	const StormImage *pCelSprite = nullptr;
 	if (celSprites[dir])
 		pCelSprite = &*celSprites[dir];
 

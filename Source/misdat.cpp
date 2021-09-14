@@ -11,6 +11,8 @@
 
 #include "datatable.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 	#define MILLISLE_STRING_TO_ID(x) if (str == #x) { return x; }
@@ -510,12 +512,13 @@ void MissileFileData::LoadGFX()
 
 	char pszName[256];
 	if (animFAmt == 1) {
-		sprintf(pszName, "Missiles\\%s.CL2", name);
-		animData[0] = LoadFileInMem(pszName);
+		sprintf(pszName, "Missiles\\%s", name);
+		animData[0] = StormImage::LoadImageSequence(pszName, false, true);
+//		LoadFileInMem(pszName);
 	} else {
 		for (unsigned i = 0; i < animFAmt; i++) {
-			sprintf(pszName, "Missiles\\%s%u.CL2", name, i + 1);
-			animData[i] = LoadFileInMem(pszName);
+			sprintf(pszName, "Missiles\\%s%u", name, i + 1);
+			animData[i] = StormImage::LoadImageSequence(pszName, false, true);
 		}
 	}
 }

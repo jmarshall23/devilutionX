@@ -35,6 +35,8 @@
 
 #include "datatable.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 /** Contains the items on ground in the current game. */
@@ -123,7 +125,7 @@ _sfx_id ItemInvSnds[] = {
 
 namespace {
 
-std::optional<CelSprite> itemanims[ITEMTYPES];
+StormImage *itemanims[ITEMTYPES];
 
 enum class PlayerArmorGraphic : uint8_t {
 	// clang-format off
@@ -2579,8 +2581,8 @@ void InitItemGFX()
 
 	int itemTypes = gbIsHellfire ? ITEMTYPES : 35;
 	for (int i = 0; i < itemTypes; i++) {
-		sprintf(arglist, "Items\\%s.CEL", ItemDropNames[i]);
-		itemanims[i] = LoadCel(arglist, ItemAnimWidth);
+		sprintf(arglist, "Items\\%s", ItemDropNames[i]);
+		itemanims[i] = StormImage::LoadImageSequence(arglist, false, true); //LoadCel(arglist, ItemAnimWidth);
 	}
 	memset(UniqueItemFlags, 0, sizeof(UniqueItemFlags));
 }
@@ -3753,9 +3755,7 @@ void ProcessItems()
 
 void FreeItemGFX()
 {
-	for (auto &itemanim : itemanims) {
-		itemanim = std::nullopt;
-	}
+
 }
 
 void GetItemFrm(Item &item)
