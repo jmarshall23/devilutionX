@@ -8,6 +8,11 @@ namespace ConversionTool
 {
 	class DiabloCelBase
 	{
+		protected DiabloCelBase()
+		{
+
+		}	
+
 		private const int transparentIndex = 255;
 
 		public DiabloCelBase(byte[] pixels, int width, int height, DiabloCel.D1CEL_FRAME_TYPE type)
@@ -19,7 +24,7 @@ namespace ConversionTool
 			load(pixels);
 		}
 
-		int computeWidthFromHeader(byte[] rawFrameData )
+		protected virtual int computeWidthFromHeader(byte[] rawFrameData )
 		{
 			BinaryReader file = new BinaryReader(new MemoryStream(rawFrameData));
 
@@ -70,7 +75,7 @@ namespace ConversionTool
 			return celFrameWidth[0];
 		}
 
-		private void load(byte[] rawData)
+		protected virtual void load(byte[] rawData)
 		{
 			uint frameDataStartOffset = 0;
 			byte readByte = 0;
@@ -281,9 +286,9 @@ namespace ConversionTool
 			}
 		}
 
-		int _width;
-		int _height;
-		List<byte> _pixels = new List<byte>();
+		protected int _width;
+		protected int _height;
+		protected List<byte> _pixels = new List<byte>();
 		DiabloCel.D1CEL_FRAME_TYPE _type;
 	}
 }

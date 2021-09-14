@@ -27,13 +27,13 @@ namespace ConversionTool
 			V2_MULTIPLE_GROUPS
 		};
 
-		List<Tuple<UInt16, UInt16>> groupFrameIndices = new List<Tuple<ushort, ushort>>();
-		List<Tuple<UInt32, UInt32>> frameOffsets = new List<Tuple<uint, uint>>();
-		List<DiabloCelBase> frames = new List<DiabloCelBase>();
+		protected List<Tuple<UInt16, UInt16>> groupFrameIndices = new List<Tuple<ushort, ushort>>();
+		protected List<Tuple<UInt32, UInt32>> frameOffsets = new List<Tuple<uint, uint>>();
+		protected List<DiabloCelBase> frames = new List<DiabloCelBase>();
 
-		D1CEL_TYPE type = D1CEL_TYPE.NONE;
-		uint groupCount = 0;
-		int frameCount = 0;
+		protected D1CEL_TYPE type = D1CEL_TYPE.NONE;
+		protected uint groupCount = 0;
+		protected int frameCount = 0;
 
 		public int NumFrames
 		{
@@ -46,6 +46,11 @@ namespace ConversionTool
 		public DiabloCelBase GetFrame(int index)
 		{
 			return frames[index];
+		}
+
+		protected DiabloCel()
+		{
+
 		}
 
 		public DiabloCel(string fileName, int width = 0, int height = 0, int[] widthTable = null, int[] heightTable = null)
