@@ -72,7 +72,7 @@ struct QuestDataStruct {
 };
 
 extern bool QuestLogIsOpen;
-extern std::optional<CelSprite> pQLogCel;
+extern class StormImage *pQLogCel;
 extern Quest Quests[MAXQUESTS];
 extern int ReturnLvlX;
 extern int ReturnLvlY;

@@ -97,8 +97,8 @@ std::optional<CelSprite> pDurIcons;
 std::optional<CelSprite> multiButtons;
 std::optional<CelSprite> pPanelButtons;
 std::optional<CelSprite> pGBoxBuff;
-std::optional<CelSprite> pSBkBtnCel;
-std::optional<CelSprite> pSpellBkCel;
+StormImage *pSBkBtnCel;
+StormImage *pSpellBkCel;
 StormImage *pSpellCels;
 
 bool PanelButtons[8];
@@ -990,14 +990,10 @@ void InitControlPan()
 	drawmanaflag = true;
 	chrflag = false;
 	spselflag = false;
-	pSpellBkCel = LoadCel("Data\\SpellBk.CEL", SPANEL_WIDTH);
+	//pSpellBkCel = LoadCel("Data\\SpellBk.CEL", SPANEL_WIDTH);
+	pSpellBkCel = StormImage::LoadImageSequence("Data\\SpellBk", false, false);
+	pSBkBtnCel = StormImage::LoadImageSequence("Data\\SpellBkB", false, false);
 
-	if (gbIsHellfire) {
-		static const int SBkBtnHellfireWidths[] = { 0, 61, 61, 61, 61, 61, 76 };
-		pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", SBkBtnHellfireWidths);
-	} else {
-		pSBkBtnCel = LoadCel("Data\\SpellBkB.CEL", 76);
-	}
 	sbooktab = 0;
 	sbookflag = false;
 
@@ -1016,7 +1012,7 @@ void InitControlPan()
 	} else if (myPlayer._pClass == HeroClass::Barbarian) {
 		SpellPages[0][0] = SPL_BLODBOIL;
 	}
-	pQLogCel = LoadCel("Data\\Quest.CEL", SPANEL_WIDTH);
+	pQLogCel = StormImage::LoadImageSequence("Data\\Quest", false, false); //LoadCel("Data\\Quest.CEL", SPANEL_WIDTH);
 	pGBoxBuff = LoadCel("CtrlPan\\Golddrop.cel", 261);
 	dropGoldFlag = false;
 	dropGoldValue = 0;
@@ -1306,9 +1302,8 @@ void FreeControlPan()
 	talkButtons = std::nullopt;
 	pChrButtons = std::nullopt;
 	pDurIcons = std::nullopt;
-	pQLogCel = std::nullopt;
-	pSpellBkCel = std::nullopt;
-	pSBkBtnCel = std::nullopt;
+	//pSpellBkCel = std::nullopt;
+	//pSBkBtnCel = std::nullopt;
 	pGBoxBuff = std::nullopt;
 }
 
@@ -1495,16 +1490,27 @@ void RedBack(const Surface &out)
 
 void DrawSpellBook(const Surface &out)
 {
-	CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { 0, 351 }), *pSpellBkCel, 1);
+	//CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { 0, 351 }), *pSpellBkCel, 1);
+
+	Point point = GetPanelPosition(UiPanels::Spell, { 0, 351 });
+	//point.y -= pSpellBkCel->Height();
+	pSpellBkCel->ClipRenderNoLighting(out, point.x, point.y, 1);
+
 	if (gbIsHellfire && sbooktab < 5) {
-		CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { 61 * sbooktab + 7, 348 }), *pSBkBtnCel, sbooktab + 1);
+		Point point = GetPanelPosition(UiPanels::Spell, { 61 * sbooktab + 7, 348 });
+
+		pSBkBtnCel->ClipRenderNoLighting(out, point.x, point.y, sbooktab + 1);
+		//CelDrawTo(out, , *pSBkBtnCel, sbooktab + 1);
 	} else {
 		// BUGFIX: rendering of page 3 and page 4 buttons are both off-by-one pixel (fixed).
 		int sx = 76 * sbooktab + 7;
 		if (sbooktab == 2 || sbooktab == 3) {
 			sx++;
 		}
-		CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { sx, 348 }), *pSBkBtnCel, sbooktab + 1);
+		Point point = GetPanelPosition(UiPanels::Spell, { sx, 348 });
+
+		pSBkBtnCel->ClipRenderNoLighting(out, point.x, point.y, sbooktab + 1);
+		//CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { sx, 348 }), *pSBkBtnCel, sbooktab + 1);
 	}
 	auto &myPlayer = Players[MyPlayerId];
 	uint64_t spl = myPlayer._pMemSpells | myPlayer._pISpells | myPlayer._pAblSpells;

@@ -29,7 +29,7 @@
 namespace devilution {
 
 bool QuestLogIsOpen;
-std::optional<CelSprite> pQLogCel;
+StormImage *pQLogCel;
 /** Contains the quests of the current game. */
 Quest Quests[MAXQUESTS];
 int ReturnLvlX;
@@ -753,7 +753,10 @@ void DrawQuestLog(const Surface &out)
 		selectedEntry = l;
 	}
 	const auto x = panelInnerRect.position.x;
-	CelDrawTo(out, GetPanelPosition(UiPanels::Quest, { 0, 351 }), *pQLogCel, 1);
+	//CelDrawTo(out, GetPanelPosition(UiPanels::Quest, { 0, 351 }), *pQLogCel, 1);
+	Point position = GetPanelPosition(UiPanels::Quest, { 0, 351 });
+	pQLogCel->ClipRenderNoLighting(out, position.x, position.y, 1);
+
 	int y = panelInnerRect.position.y + topY;
 	for (int i = 0; i < qlistCnt; i++) {
 		if (i == firstFinishedEntry) {
