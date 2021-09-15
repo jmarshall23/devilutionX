@@ -24,7 +24,7 @@ void InitDeadAnimationFromMonster(DeadStruct &dead, const CMonster &mon)
 	const auto &animData = mon.GetAnimData(MonsterGraphic::Death);
 
 	for (int i = 0; i < 8; i++) {
-		dead.data[i++] = animData.CelSpritesForDirections[i];
+		dead.data[i] = animData.CelSpritesForDirections[i];
 	}
 
 	dead.frame = animData.Frames;
