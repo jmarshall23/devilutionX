@@ -206,6 +206,17 @@ namespace ConversionTool
 
 		static void Main(string[] args)
         {
+			Console.WriteLine("Exporting Objects...");
+			{
+				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\objects\\", "*.cel", SearchOption.AllDirectories);
+				foreach (string file in playerCl2Files)
+				{
+					string f = file.Remove(0, new string("BlizzData/").Length);
+					Console.WriteLine("Processing:" + f);
+					ConvertSingleImage(f, 0, null, null, true);
+				}
+			}
+
 			Console.WriteLine("Exporting Missiles...");
 			{
 				string[] missileFiles = System.IO.Directory.GetFiles("BlizzData\\missiles\\", "*.cl2", SearchOption.AllDirectories);

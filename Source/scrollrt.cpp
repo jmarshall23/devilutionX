@@ -67,6 +67,8 @@ bool cel_foliage_active = false;
  */
 int level_piece_id;
 
+StormImage *GetObjectImage(int objectId);
+
 // DevilutionX extension.
 extern void DrawControllerModifierHints(const Surface &out);
 
@@ -637,26 +639,27 @@ void DrawObject(const Surface &out, int x, int y, int ox, int oy, bool pre)
 
 	assert(bv >= 0 && bv < MAXOBJECTS);
 
-	byte *pCelBuff = Objects[bv]._oAnimData;
+	StormImage *pCelBuff = GetObjectImage(Objects[bv].objectCelid);
 	if (pCelBuff == nullptr) {
 		Log("Draw Object type {}: NULL Cel Buffer", Objects[bv]._otype);
 		return;
 	}
 
 	uint32_t nCel = Objects[bv]._oAnimFrame;
-	uint32_t frames = LoadLE32(pCelBuff);
+	uint32_t frames = pCelBuff->NumFrames();
 	if (nCel < 1 || frames > 50 || nCel > frames) {
 		Log("Draw Object: frame {} of {}, object type=={}", nCel, frames, Objects[bv]._otype);
 		return;
 	}
 
-	CelSprite cel { Objects[bv]._oAnimData, Objects[bv]._oAnimWidth };
-	if (bv == pcursobj)
-		CelBlitOutlineTo(out, 194, objectPosition, cel, Objects[bv]._oAnimFrame);
+	//CelSprite cel { Objects[bv]._oAnimData, Objects[bv]._oAnimWidth };
+	if (bv == pcursobj) {
+		pCelBuff->ClipRenderOutline(out, 194, objectPosition.x, objectPosition.y, nCel);
+	}
 	if (Objects[bv]._oLight) {
-		CelClippedDrawLightTo(out, objectPosition, cel, Objects[bv]._oAnimFrame);
+		pCelBuff->ClipRenderWithLighting(out, objectPosition.x, objectPosition.y, nCel);
 	} else {
-		CelClippedDrawTo(out, objectPosition, cel, Objects[bv]._oAnimFrame);
+		pCelBuff->ClipRenderNoLighting(out, objectPosition.x, objectPosition.y, nCel);
 	}
 }
 

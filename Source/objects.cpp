@@ -36,6 +36,13 @@
 
 namespace devilution {
 
+StormImage *pObjCels[40];
+
+StormImage *GetObjectImage(int objectId)
+{
+	return pObjCels[objectId];
+}
+
 /**
  * Specifies the game type for which each shrine may appear.
  * ShrineTypeAny - sp & mp
@@ -269,7 +276,7 @@ enum shrine_type : uint8_t {
 
 int trapid;
 int trapdir;
-std::unique_ptr<byte[]> pObjCels[40];
+
 object_graphic_id ObjFileList[40];
 /** Specifies the number of active objects. */
 int leverid;
@@ -847,7 +854,7 @@ void SetupObject(int i, Point position, _object_id ot)
 
 	const int j = std::distance(std::begin(ObjFileList), found);
 
-	Objects[i]._oAnimData = pObjCels[j].get();
+	Objects[i].objectCelid = j;
 	Objects[i]._oAnimFlag = AllObjects[ot].oAnimFlag;
 	if (AllObjects[ot].oAnimFlag != 0) {
 		Objects[i]._oAnimDelay = AllObjects[ot].oAnimDelay;
@@ -4427,12 +4434,13 @@ void InitObjectGFX()
 		if (fileload[i]) {
 			ObjFileList[numobjfiles] = static_cast<object_graphic_id>(i);
 			char filestr[32];
-			sprintf(filestr, "Objects\\%s.CEL", ObjMasterLoadList[i]);
+			sprintf(filestr, "Objects\\%s", ObjMasterLoadList[i]);
 			if (currlevel >= 17 && currlevel < 21)
-				sprintf(filestr, "Objects\\%s.CEL", ObjHiveLoadList[i]);
+				sprintf(filestr, "Objects\\%s", ObjHiveLoadList[i]);
 			else if (currlevel >= 21)
-				sprintf(filestr, "Objects\\%s.CEL", ObjCryptLoadList[i]);
-			pObjCels[numobjfiles] = LoadFileInMem(filestr);
+				sprintf(filestr, "Objects\\%s", ObjCryptLoadList[i]);
+			pObjCels[numobjfiles] = StormImage::LoadImageSequence(filestr, false, true);
+//			LoadFileInMem(filestr);
 			numobjfiles++;
 		}
 	}
@@ -4674,7 +4682,8 @@ void SetMapObjects(const uint16_t *dunData, int startx, int starty)
 
 		ObjFileList[numobjfiles] = (object_graphic_id)i;
 		sprintf(filestr, "Objects\\%s.CEL", ObjMasterLoadList[i]);
-		pObjCels[numobjfiles] = LoadFileInMem(filestr);
+		pObjCels[numobjfiles] = StormImage::LoadImageSequence(filestr, false, true); 
+		LoadFileInMem(filestr);
 		numobjfiles++;
 	}
 
@@ -5366,7 +5375,8 @@ void SyncObjectAnim(Object &object)
 
 	const int i = std::distance(std::begin(ObjFileList), found);
 
-	object._oAnimData = pObjCels[i].get();
+	object.objectCelid = i;
+	//pObjCels[i].get();
 	switch (object._otype) {
 	case OBJ_L1LDOOR:
 	case OBJ_L1RDOOR:
