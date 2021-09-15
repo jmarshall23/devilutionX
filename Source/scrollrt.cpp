@@ -10,7 +10,6 @@
 #include "doom.h"
 #include "dx.h"
 #include "engine/render/cel_render.hpp"
-#include "engine/render/cl2_render.hpp"
 #include "engine/render/dun_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "panels/charpanel.hpp"

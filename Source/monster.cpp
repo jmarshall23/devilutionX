@@ -19,7 +19,6 @@
 #include "engine/cel_header.hpp"
 #include "engine/load_file.hpp"
 #include "engine/random.hpp"
-#include "engine/render/cl2_render.hpp"
 #include "init.h"
 #include "lighting.h"
 #include "minitext.h"
