@@ -951,7 +951,8 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 				cel_transparency_active = false; // Turn transparency off here for debugging
 			}
 #endif
-			CelClippedBlitLightTransTo(out, { dx, dy }, *pSpecialCels, bArch);
+		//	CelClippedBlitLightTransTo(out, { dx, dy }, *pSpecialCels, bArch);
+			pSpecialCels->ClipRenderWithLightingTrans(out, dx, dy, bArch);
 #ifdef _DEBUG
 			if (GetAsyncKeyState(DVL_VK_MENU)) {
 				cel_transparency_active = TransList[bMap]; // Turn transparency back to its normal state
@@ -965,7 +966,8 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 		if (sx > 0 && sy > 0 && dy > TILE_HEIGHT) {
 			char bArch = dSpecial[sx - 1][sy - 1];
 			if (bArch != 0) {
-				CelDrawTo(out, { dx, dy - TILE_HEIGHT }, *pSpecialCels, bArch);
+				//CelDrawTo(out, { dx, dy - TILE_HEIGHT }, *pSpecialCels, bArch);
+				pSpecialCels->ClipRenderNoLighting(out, dx, dy - TILE_HEIGHT, bArch);
 			}
 		}
 	}

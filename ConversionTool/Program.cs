@@ -141,10 +141,18 @@ namespace ConversionTool
 				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.cel");
 
 				ExportTileset.Export(files[0], minfiles[0], tilfiles[0]);
+
+				if (files.Length > 1)
+				{
+					if (files[1].Contains("town"))
+						ConvertSingleImage(files[1].Remove(0, new string("BlizzData/").Length), 64, null, null, false, false, "special");
+					else
+						ConvertSingleImage(files[1].Remove(0, new string("BlizzData/").Length), 64, null, null, false, true, "special");
+				}
 			}
 		}
 
-		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable, bool forceAtlas = false, bool forceFrameHeaderSkip = false)
+		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable, bool forceAtlas = false, bool forceFrameHeaderSkip = false, string newOutputFolder = "")
 		{
 			DiabloCel cel = null;
 
@@ -166,6 +174,11 @@ namespace ConversionTool
 			}
 
 			string outputPath = "Build\\" + ExportTileset.FixExportPath(filename);
+
+			if(newOutputFolder != "")
+			{
+				outputPath += "\\" + newOutputFolder;
+			}
 
 			Directory.CreateDirectory(outputPath);
 

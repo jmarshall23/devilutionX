@@ -155,7 +155,7 @@ extern int setpc_h;
 extern std::unique_ptr<uint16_t[]> pSetPiece;
 /** Specifies whether a single player quest DUN has been loaded. */
 extern bool setloadflag;
-extern std::optional<CelSprite> pSpecialCels;
+extern class StormImage *pSpecialCels;
 /** Specifies the tile definitions of the active dungeon type; (e.g. levels/l1data/l1.til). */
 extern std::unique_ptr<MegaTile[]> pMegaTiles;
 //extern std::unique_ptr<MTType[]> pLevelPieces;

@@ -365,7 +365,7 @@ namespace devilution
 	StormImage::LoadImageSequence
 	=======================
 	*/
-	StormImage* StormImage::LoadImageSequence(const char* path, bool isTiles, bool isAtlas, int instanceStride)
+	StormImage* StormImage::LoadImageSequence(const char* path, bool isTiles, bool isAtlas, int instanceStride, const char* specialName)
 	{
 		// Check to see if the image is already loaded.
 		for (int i = 0; i < globalImageList.size(); i++)
@@ -414,9 +414,20 @@ namespace devilution
 				ImageFrame_t frame;
 
 				if (isTiles)
-					sprintf(framePath, "%s\\tiles\\tile_%d.tga", path, image->frames.size());
+				{
+					if (specialName != nullptr)
+					{
+						sprintf(framePath, "%s\\%s_%d.tga", path, specialName, image->frames.size());
+					}
+					else
+					{
+						sprintf(framePath, "%s\\tiles\\tile_%d.tga", path, image->frames.size());
+					}
+				}
 				else
+				{
 					sprintf(framePath, "%s_%d.tga", path, image->frames.size());
+				}
 
 
 				HANDLE file;

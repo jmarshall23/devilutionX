@@ -24,7 +24,7 @@ int setpc_w;
 int setpc_h;
 std::unique_ptr<uint16_t[]> pSetPiece;
 bool setloadflag;
-std::optional<CelSprite> pSpecialCels;
+StormImage *pSpecialCels;
 std::unique_ptr<MegaTile[]> pMegaTiles;
 //std::unique_ptr<MTType[]> pLevelPieces;
 //std::unique_ptr<byte[]> pDungeonCels;

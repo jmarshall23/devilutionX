@@ -1053,26 +1053,26 @@ void LoadLvlGFX()
 			pMegaTiles = LoadMegaTileText("Levels\\TownData\\megatiles.tiltext");
 		//	pLevelPieces = LoadMinTileText("Levels\\TownData\\lvlpieces.mintext");
 		}
-		pSpecialCels = LoadCel("Levels\\TownData\\TownS.CEL", SpecialCelWidth);
+		pSpecialCels = StormImage::LoadImageSequence("Levels\\TownData\\special", true, false, -1, "towns");
 		break;
 	case DTYPE_CATHEDRAL:
 		if (currlevel < 21) {
 			LoadDungeonTiles("Levels\\L1Data");
 			pMegaTiles = LoadMegaTileText("Levels\\L1Data\\megatiles.tiltext");
 		//	pLevelPieces = LoadMinTileText("Levels\\L1Data\\lvlpieces.mintext");
-			pSpecialCels = LoadCel("Levels\\L1Data\\L1S.CEL", SpecialCelWidth);
+			pSpecialCels = StormImage::LoadImageSequence("Levels\\L1Data\\special", true, false, -1, "L1S");
 		} else {
 			LoadDungeonTiles("NLevels\\L5Data");
 			pMegaTiles = LoadMegaTileText("NLevels\\L5Data\\megatiles.tiltext");
 		//	pLevelPieces = LoadMinTileText("NLevels\\L5Data\\lvlpieces.mintext");
-			pSpecialCels = LoadCel("NLevels\\L5Data\\L5S.CEL", SpecialCelWidth);
+			pSpecialCels = StormImage::LoadImageSequence("NLevels\\L5Data\\special", true, false);
 		}
 		break;
 	case DTYPE_CATACOMBS:
 		LoadDungeonTiles("Levels\\L2Data");
 		pMegaTiles = LoadMegaTileText("Levels\\L2Data\\megatiles.tiltext");
 	//	pLevelPieces = LoadMinTileText("Levels\\L2Data\\lvlpieces.mintext");
-		pSpecialCels = LoadCel("Levels\\L2Data\\L2S.CEL", SpecialCelWidth);
+		pSpecialCels = StormImage::LoadImageSequence("Levels\\L2Data\\special", true, false, -1, "L2S");
 		break;
 	case DTYPE_CAVES:
 		if (currlevel < 17) {
@@ -1084,13 +1084,13 @@ void LoadLvlGFX()
 			pMegaTiles = LoadMegaTileText("NLevels\\L6Data\\megatiles.tiltext");
 	//		pLevelPieces = LoadMinTileText("NLevels\\L6Data\\lvlpieces.mintext");
 		}
-		pSpecialCels = LoadCel("Levels\\L1Data\\L1S.CEL", SpecialCelWidth);
+		pSpecialCels = StormImage::LoadImageSequence("Levels\\L1Data\\special", true, false, -1, "L1S");
 		break;
 	case DTYPE_HELL:
 		LoadDungeonTiles("Levels\\L4Data");
 		pMegaTiles = LoadMegaTileText("Levels\\L4Data\\megatiles.tiltext");
 	//	pLevelPieces = LoadMinTileText("Levels\\L4Data\\lvlpieces.mintext");
-		pSpecialCels = LoadCel("Levels\\L2Data\\L2S.CEL", SpecialCelWidth);
+		pSpecialCels = StormImage::LoadImageSequence("Levels\\L2Data\\special", true, false, -1, "L2S");
 		break;
 	default:
 		app_fatal("LoadLvlGFX");
@@ -1549,7 +1549,6 @@ void FreeGameMem()
 	    //	pDungeonCels = nullptr;
 	pMegaTiles = nullptr;
 	//pLevelPieces = nullptr;
-	pSpecialCels = std::nullopt;
 
 	FreeMissiles();
 	FreeMonsters();

@@ -28,7 +28,7 @@ namespace devilution {
 
 	class StormImage {
 	public:
-		static StormImage* LoadImageSequence(const char* path, bool isTiles, bool isAtlas, int instanceStride = -1);
+		static StormImage* LoadImageSequence(const char* path, bool isTiles, bool isAtlas, int instanceStride = -1, const char *specialName = nullptr);
 		static StormImage* AllocateSytemImage(const char* path, int width, int height);
 
 		int NumFrames()
@@ -61,6 +61,10 @@ namespace devilution {
 		void ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame) const;
 		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame) const;
 		void ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame) const;
+
+		void ClipRenderWithLightingTrans(const Surface& out, int sx, int sy, int frame) const {
+			ClipRenderWithLighting(out, sx, sy, frame);
+		}
 
 		int Width() const {
 			return frames[0].width;
