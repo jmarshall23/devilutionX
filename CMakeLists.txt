@@ -570,7 +570,7 @@ target_link_libraries(${BIN_TARGET} PRIVATE libdevilutionx)
 
 # Copy the font and devilutionx.mpq to the build directory to it works from the build directory
 file(COPY "Packaging/resources/CharisSILB.ttf" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-file(COPY "Packaging/resources/devilutionx.mpq" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+#file(COPY "Packaging/resources/devilutionx.mpq" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 # Use file GENERATE instead of configure_file because configure_file
 # does not support generator expressions.
@@ -585,9 +585,9 @@ file(GENERATE OUTPUT ${CONFIG_PATH} CONTENT
 "#pragma once
 #define PROJECT_NAME \"${PROJECT_NAME}\"
 #define PROJECT_VERSION \"${PROJECT_VERSION}${VERSION_SUFFIX}\"
-#define PROJECT_VERSION_MAJOR ${PROJECT_VERSION_MAJOR}
-#define PROJECT_VERSION_MINOR ${PROJECT_VERSION_MINOR}
-#define PROJECT_VERSION_PATCH ${PROJECT_VERSION_PATCH}
+#define PROJECT_VERSION_MAJOR 1
+#define PROJECT_VERSION_MINOR 0
+#define PROJECT_VERSION_PATCH 0
 ")
 
 if(RUN_TESTS)
@@ -1102,9 +1102,9 @@ if(CPACK)
     set(CPACK_GENERATOR "DragNDrop")
   endif()
 
-  set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
-  set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
-  set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+  set(CPACK_PACKAGE_VERSION_MAJOR 1)
+  set(CPACK_PACKAGE_VERSION_MINOR 0)
+  set(CPACK_PACKAGE_VERSION_PATCH 0)
   include(CPack)
 endif()
 

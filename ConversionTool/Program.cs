@@ -10,7 +10,9 @@ namespace ConversionTool
             string dunFile = filename;
             string outFile = ExportTileset.FixExportPath(filename) + "/" + Path.GetFileNameWithoutExtension(dunFile) + ".duntext";
 
-            Console.WriteLine("Opening dungeon file {0}", dunFile);
+			Directory.CreateDirectory(Path.GetDirectoryName(outFile));
+
+			Console.WriteLine("Opening dungeon file {0}", dunFile);
 
             using (StreamWriter writer = File.CreateText(outFile))
             {

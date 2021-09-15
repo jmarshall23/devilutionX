@@ -215,7 +215,7 @@ void init_archives()
 		app_fatal(nullptr);
 	}
 
-	devilutionx_mpq = LoadMPQ(paths, "devilutionx.mpq");
+	//devilutionx_mpq = LoadMPQ(paths, "devilutionx.mpq");
 }
 
 void init_create_window()

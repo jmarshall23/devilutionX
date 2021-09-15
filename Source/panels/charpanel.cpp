@@ -12,10 +12,12 @@
 #include "utils/language.h"
 
 #include "../datatable.h"
+#include "../../rhi/image.h"
 
 namespace devilution {
 
 std::optional<CelSprite> pChrButtons;
+extern StormImage *pChrPanel;
 
 /** Map of hero class names */
 //const char *const ClassStrTbl[] = {
@@ -209,27 +211,6 @@ PanelEntry panelEntries[] = {
 
 };
 
-Art PanelParts[6];
-Art PanelFull;
-
-void DrawPanelFieldLow(const Surface &out, Point pos, int len)
-{
-	DrawArt(out, pos, &PanelParts[0]);
-	pos.x += PanelParts[0].w();
-	DrawArt(out, pos, &PanelParts[1], 0, len);
-	pos.x += len;
-	DrawArt(out, pos, &PanelParts[2]);
-}
-
-void DrawPanelFieldHigh(const Surface &out, Point pos, int len)
-{
-	DrawArt(out, pos, &PanelParts[3]);
-	pos.x += PanelParts[3].w();
-	DrawArt(out, pos, &PanelParts[4], 0, len);
-	pos.x += len;
-	DrawArt(out, pos, &PanelParts[5]);
-}
-
 void DrawShadowString(const Surface &out, const PanelEntry &entry)
 {
 	if (entry.label == "")
@@ -258,6 +239,7 @@ void DrawShadowString(const Surface &out, const PanelEntry &entry)
 	DrawString(out, text, { finalPos, { width, 0 } }, style | UiFlags::ColorSilver, spacing, 10);
 }
 
+/*
 void LoadCharPanel()
 {
 	LoadArt("data\\charbg.pcx", &PanelFull);
@@ -284,6 +266,7 @@ void LoadCharPanel()
 		gfx.Unload();
 	}
 }
+*/
 
 bool CharPanelLoaded = false;
 
@@ -305,12 +288,13 @@ void DrawStatButtons(const Surface &out)
 
 void DrawChr(const Surface &out)
 {
-	if (!CharPanelLoaded) {
-		LoadCharPanel();
-		CharPanelLoaded = true;
-	}
+	//if (!CharPanelLoaded) {
+	//	LoadCharPanel();
+	//	CharPanelLoaded = true;
+	//}
 	Point pos = GetPanelPosition(UiPanels::Character, { 0, 0 });
-	DrawArt(out, pos, &PanelFull);
+	//DrawArt(out, pos, &PanelFull);
+	pChrPanel->ClipRenderNoLighting(out, pos.x, pos.y + pChrPanel->Height(), 1);
 	for (auto &entry : panelEntries) {
 		if (entry.statDisplayFunc != nullptr) {
 			StyledText tmp = entry.statDisplayFunc();

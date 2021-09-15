@@ -12,7 +12,7 @@ namespace ConversionTool
 		{
 			string dpath = Path.GetDirectoryName(path);
 			dpath = dpath.Replace("BlizzData", "Build");
-			Directory.CreateDirectory(dpath);
+		//	Directory.CreateDirectory(dpath);
 			return dpath;
 		}
 		public static void BlitImage(byte[] source, int sourceX, int sourceY, int sourceWidth, byte[] dest, int destX, int destY, int destWidth, int destHeight, int width, int height)

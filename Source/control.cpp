@@ -85,6 +85,8 @@ Rectangle ChrBtnsRect[4] = {
 	{ { 137, 223 }, { 41, 22 } }
 };
 
+StormImage *pChrPanel;
+
 namespace {
 StormImage *P8Bulbs;
 StormImage *panel8;
@@ -94,7 +96,6 @@ std::optional<CelSprite> talkButtons;
 std::optional<CelSprite> pDurIcons;
 std::optional<CelSprite> multiButtons;
 std::optional<CelSprite> pPanelButtons;
-std::optional<CelSprite> pChrPanel;
 std::optional<CelSprite> pGBoxBuff;
 std::optional<CelSprite> pSBkBtnCel;
 std::optional<CelSprite> pSpellBkCel;
@@ -941,7 +942,7 @@ void InitControlPan()
 	//pBtmBuff.emplace(PANEL_WIDTH, (PANEL_HEIGHT + 16) * (IsChatAvailable() ? 2 : 1));
 	pBottomBuffer = StormImage::AllocateSytemImage("BottomBuffer", PANEL_WIDTH, (PANEL_HEIGHT + 16) * (IsChatAvailable() ? 2 : 1));
 
-	pChrPanel = LoadCel("Data\\Char.CEL", SPANEL_WIDTH);
+	pChrPanel = StormImage::LoadImageSequence("Data\\Char", false, false); //LoadCel("Data\\Char.CEL", SPANEL_WIDTH);
 	if (!gbIsHellfire)
 		pSpellCels = StormImage::LoadImageSequence("CtrlPan\\SpelIcon", false, false);
 	else
@@ -1299,7 +1300,7 @@ void CheckBtnUp()
 
 void FreeControlPan()
 {
-	pChrPanel = std::nullopt;
+//	pChrPanel = std::nullopt;
 	pPanelButtons = std::nullopt;
 	multiButtons = std::nullopt;
 	talkButtons = std::nullopt;
