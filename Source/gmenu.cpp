@@ -18,14 +18,16 @@
 #include "utils/stdcompat/optional.hpp"
 #include "utils/ui_fwd.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 namespace {
 
-std::optional<CelSprite> optbar_cel;
-std::optional<CelSprite> PentSpin_cel;
-std::optional<CelSprite> option_cel;
-std::optional<CelSprite> sgpLogo;
+StormImage *optbar_cel;
+StormImage *PentSpin_cel;
+StormImage *option_cel;
+StormImage *sgpLogo;
 bool mouseNavigation;
 TMenuItem *sgpCurrItem;
 int LogoAnim_tick;
@@ -104,20 +106,23 @@ void GmenuDrawMenuItem(const Surface &out, TMenuItem *pItem, int y)
 	int w = GmenuGetLineWidth(pItem);
 	if ((pItem->dwFlags & GMENU_SLIDER) != 0) {
 		int x = 16 + w / 2;
-		CelDrawTo(out, { x + PANEL_LEFT, y - 10 }, *optbar_cel, 1);
+		//CelDrawTo(out, { x + PANEL_LEFT, y - 10 }, *optbar_cel, 1);
+		optbar_cel->ClipRenderNoLighting(out, x + PANEL_LEFT, y - 10, 1);
+
 		uint16_t step = pItem->dwFlags & 0xFFF;
 		uint16_t steps = std::max<uint16_t>((pItem->dwFlags & 0xFFF000) >> 12, 2);
 		uint16_t pos = step * 256 / steps;
 		GmenuClearBuffer(out, x + 2 + PANEL_LEFT, y - 12, pos + 13, 28);
-		CelDrawTo(out, { x + 2 + pos + PANEL_LEFT, y - 12 }, *option_cel, 1);
+		//CelDrawTo(out, { x + 2 + pos + PANEL_LEFT, y - 12 }, *option_cel, 1);
+		option_cel->ClipRenderNoLighting(out, x + 2 + pos + PANEL_LEFT, y - 12, 1);
 	}
 
 	int x = (gnScreenWidth - w) / 2;
 	UiFlags style = (pItem->dwFlags & GMENU_ENABLED) != 0 ? UiFlags::ColorSilver : UiFlags::ColorBlack;
 	DrawString(out, _(pItem->pszStr), Point { x, y }, style | UiFlags::FontHuge, 2);
 	if (pItem == sgpCurrItem) {
-		CelDrawTo(out, { x - 54, y + 1 }, *PentSpin_cel, PentSpn2Spin());
-		CelDrawTo(out, { x + 4 + w, y + 1 }, *PentSpin_cel, PentSpn2Spin());
+		PentSpin_cel->ClipRenderNoLighting(out, x - 54, y + 1, PentSpn2Spin());
+		PentSpin_cel->ClipRenderNoLighting(out, x + 4 + w, y + 1, PentSpn2Spin());
 	}
 }
 
@@ -169,10 +174,7 @@ void gmenu_draw_pause(const Surface &out)
 
 void FreeGMenu()
 {
-	sgpLogo = std::nullopt;
-	PentSpin_cel = std::nullopt;
-	option_cel = std::nullopt;
-	optbar_cel = std::nullopt;
+
 }
 
 void gmenu_init_menu()
@@ -184,12 +186,12 @@ void gmenu_init_menu()
 	sgCurrentMenuIdx = 0;
 	mouseNavigation = false;
 	if (gbIsHellfire)
-		sgpLogo = LoadCel("Data\\hf_logo3.CEL", 430);
+		sgpLogo = StormImage::LoadImageSequence("Data\\hf_logo3", false, false);
 	else
-		sgpLogo = LoadCel("Data\\Diabsmal.CEL", 296);
-	PentSpin_cel = LoadCel("Data\\PentSpin.CEL", 48);
-	option_cel = LoadCel("Data\\option.CEL", 27);
-	optbar_cel = LoadCel("Data\\optbar.CEL", 287);
+		sgpLogo = StormImage::LoadImageSequence("Data\\Diabsmal", false, false);
+	PentSpin_cel = StormImage::LoadImageSequence("Data\\PentSpin", false, false);
+	option_cel = StormImage::LoadImageSequence("Data\\option", false, false);
+	optbar_cel = StormImage::LoadImageSequence("Data\\optbar", false, false);
 }
 
 bool gmenu_is_active()
@@ -232,7 +234,9 @@ void gmenu_draw(const Surface &out)
 				LogoAnim_tick = ticks;
 			}
 		}
-		CelDrawTo(out, { (gnScreenWidth - sgpLogo->Width()) / 2, 102 + UI_OFFSET_Y }, *sgpLogo, LogoAnim_frame);
+		//CelDrawTo(out, { (gnScreenWidth - sgpLogo->Width()) / 2, 102 + UI_OFFSET_Y }, *sgpLogo, LogoAnim_frame);
+		sgpLogo->ClipRenderNoLighting(out, (gnScreenWidth / 2) - (sgpLogo->Width() / 2), 102 + UI_OFFSET_Y, LogoAnim_frame);
+
 		int y = 160 + UI_OFFSET_Y;
 		TMenuItem *i = sgpCurrentMenu;
 		if (sgpCurrentMenu->fnMenu != nullptr) {

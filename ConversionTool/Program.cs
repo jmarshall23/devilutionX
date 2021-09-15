@@ -208,6 +208,12 @@ namespace ConversionTool
 
 		static void Main(string[] args)
         {
+			Console.WriteLine("Exporting In Game Menu Items...");
+			foreach (ConversionTables.ConvEntry entry in ConversionTables.InGameMenuAssets)
+			{
+				ConvertSingleImage(entry.path, entry.width, null, null);
+			}
+
 			Console.WriteLine("Exporting misc control items...");
 			DiabloCel.indexedCelArrayHack = true;
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.MiscControlUI)
