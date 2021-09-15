@@ -38,6 +38,9 @@ namespace devilution {
 
 		const ImageFrame_t& GetFrame(int index)
 		{
+			if (index == 0)
+				return frames[0];
+
 			return frames[index - 1];
 		}
 

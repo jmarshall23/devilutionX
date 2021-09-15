@@ -344,7 +344,7 @@ namespace devilution
 			{
 				for (int x = 0; x < subImageWidth; x++)
 				{
-					int sourcePos = (y * atlasImage.width) + (x + frameOffset) - 16;
+					int sourcePos = (y * atlasImage.width) + (x + frameOffset) - (subImageWidth / 6);
 					int destPos = (y * subImage.width) + x;
 
 					if (sourcePos < 0)
