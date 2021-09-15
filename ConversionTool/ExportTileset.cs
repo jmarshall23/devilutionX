@@ -218,7 +218,7 @@ namespace ConversionTool
 
 				foreach(D1Til.ImageTemp temp in tempImages)
 				{
-					byte[] buffer = FastFlipBuffer(temp.data);
+					byte[] buffer = FastFlipHorizontalBuffer(FastFlipBuffer(temp.data), temp.width, temp.height);
 
 					string hash = GetHashSHA1(buffer);
 

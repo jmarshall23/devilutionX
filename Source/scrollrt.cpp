@@ -10,7 +10,6 @@
 #include "doom.h"
 #include "dx.h"
 #include "engine/render/cel_render.hpp"
-#include "engine/render/dun_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "panels/charpanel.hpp"
 #include "error.h"
@@ -663,6 +662,20 @@ void DrawObject(const Surface &out, int x, int y, int ox, int oy, bool pre)
 
 static void DrawDungeon(const Surface & /*out*/, int /*sx*/, int /*sy*/, int /*dx*/, int /*dy*/);
 
+void RenderTile(const Surface &out, int x, int y, bool forceBlack)
+{
+	if (forceBlack)
+		return;
+
+	if (LightTableIndex == LightsMax) {
+		pDungeonCels->ClipRenderOutline(out, 0, x, y, level_piece_id); // Fully Black
+	} else if (LightTableIndex == 0) {
+		pDungeonCels->ClipRenderNoLighting(out, x, y, level_piece_id);
+	} else {
+		pDungeonCels->ClipRenderWithLighting(out, x, y, level_piece_id);
+	}
+}
+
 /**
  * @brief Render a cell
  * @param out Target buffer
@@ -680,22 +693,7 @@ void DrawCell(const Surface &out, int x, int y, int sx, int sy)
 
 // jmarshall - remove min
 	level_cel_block = pMap->mt;
-	RenderTile(out, sx, sy);
-#if 0
-	for (int i = 0; i < (MicroTileLen / 2); i++) {
-		level_cel_block = pMap->mt[2 * i];
-		if (level_cel_block.IsEnabled()) {
-			arch_draw_type = i == 0 ? 1 : 0;
-			RenderTile(out, sx, sy);
-		}
-		level_cel_block = pMap->mt[2 * i + 1];
-		if (level_cel_block.IsEnabled()) {
-			arch_draw_type = i == 0 ? 2 : 0;
-			RenderTile(out, sx + TILE_WIDTH / 2, sy);
-		}
-		sy -= TILE_HEIGHT;
-	}
-#endif
+	RenderTile(out, sx, sy, false);
 // jmarshall end
 	cel_foliage_active = false;
 }
@@ -715,21 +713,8 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy)
 // jmarshall - remove min
 	level_cel_block = dpiece_defs_map_2[x][y].mt;
 	if (level_cel_block.IsEnabled()) {
-		RenderTile(out, sx, sy);
+		RenderTile(out, sx, sy, false);
 	}
-
-#if 0
-	arch_draw_type = 1; // Left
-	level_cel_block = dpiece_defs_map_2[x][y].mt[0];
-	if (level_cel_block.IsEnabled()) {
-		RenderTile(out, sx, sy);
-	}
-	arch_draw_type = 2; // Right
-	level_cel_block = dpiece_defs_map_2[x][y].mt[1];
-	if (level_cel_block.IsEnabled()) {
-		RenderTile(out, sx + TILE_WIDTH / 2, sy);
-	}
-#endif
 // jmarshall end
 }
 
@@ -1003,10 +988,10 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy, int rows, int c
 					if (!nSolidTable[level_piece_id])
 						DrawFloor(out, x, y, sx, sy);
 				} else {
-					world_draw_black_tile(out, sx, sy);
+					RenderTile(out, sx, sy, true); // black
 				}
 			} else {
-				world_draw_black_tile(out, sx, sy);
+				RenderTile(out, sx, sy, true); // black
 			}
 			ShiftGrid(&x, &y, 1, 0);
 			sx += TILE_WIDTH;

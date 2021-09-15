@@ -413,7 +413,6 @@ set(libdevilutionx_SRCS
   Source/engine/random.cpp
   Source/engine/render/automap_render.cpp
   Source/engine/render/cel_render.cpp
-  Source/engine/render/dun_render.cpp
   Source/engine/render/text_render.cpp
   Source/engine/surface.cpp
   Source/qol/autopickup.cpp

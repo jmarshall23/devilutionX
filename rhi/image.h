@@ -69,7 +69,6 @@ namespace devilution {
 		int Height() const {
 			return frames[0].height;
 		}
-
 	private:
 		void CreateImagesFromAtlas(ImageFrame_t& atlasImage, int numFrames);
 
