@@ -21,16 +21,15 @@ namespace devilution
 			for (int x = 0; x < width; x++)
 			{
 				int _x = x * 1;
-				int _desty = y;
-				int destPos = (destWidth * (_desty + (destY * 1))) + ((_x) + (destX * 1)); // Game drew bottom up.
+				int destPos = (destWidth * (y + destY)) + (_x + destX); // Game drew bottom up.
+				int sourcePos = (sourceWidth * (y + sourceY)) + (_x + sourceX);
 
 				if (allowFlip)
 				{
-					_desty = (height - y - 1);
-					destPos = (destWidth * (_desty + (destY * 1))) + ((width - _x - 1) + (destX * 1));
+					int flipY = (height - y - 1);
+					destPos = (destWidth * (flipY + destY)) + (_x + destX);
+					sourcePos = (sourceWidth * (y + sourceY)) + (width - (_x + sourceX) - 1);
 				}
-
-				int sourcePos = (sourceWidth * (y + (sourceY * 1))) + (_x + (sourceX * 1));
 
 				if (source[sourcePos] == (byte)255 && !allowTrans)
 				{
@@ -335,11 +334,28 @@ namespace devilution
 			ImageFrame_t subImage;
 
 			subImage.width = subImageWidth;
-			subImage.height = atlasImage.height;
+			subImage.height = atlasImage.height - 1;
 
 			subImage.buffer = new byte[subImage.width * subImage.height];
 
-			R_CopyImage(atlasImage.buffer, i * subImageWidth, 0, atlasImage.width, subImage.buffer, 0, 0, subImage.width, subImage.height, subImage.width, subImage.height, true, false, nullptr);
+			int frameOffset = subImageWidth * i;
+
+			for (int y = 0; y < subImage.height; y++)
+			{
+				for (int x = 0; x < subImageWidth; x++)
+				{
+					int sourcePos = (y * atlasImage.width) + (x + frameOffset) - 16;
+					int destPos = (y * subImage.width) + x;
+
+					if (sourcePos < 0)
+						sourcePos = 0;
+
+					subImage.buffer[destPos] = atlasImage.buffer[sourcePos];
+				}
+			}
+
+			//R_CopyImage(atlasImage.buffer, i * subImageWidth, 0, atlasImage.width, subImage.buffer, 0, 0, subImage.width, subImage.height, subImage.width, subImage.height, true, false, nullptr);
+
 			frames.push_back(subImage);
 		}
 	}
