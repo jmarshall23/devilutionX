@@ -4681,7 +4681,7 @@ void SetMapObjects(const uint16_t *dunData, int startx, int starty)
 			continue;
 
 		ObjFileList[numobjfiles] = (object_graphic_id)i;
-		sprintf(filestr, "Objects\\%s.CEL", ObjMasterLoadList[i]);
+		sprintf(filestr, "Objects\\%s", ObjMasterLoadList[i]);
 		pObjCels[numobjfiles] = StormImage::LoadImageSequence(filestr, false, true); 
 		LoadFileInMem(filestr);
 		numobjfiles++;
