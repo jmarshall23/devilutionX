@@ -5,7 +5,9 @@ using System.Collections.Generic;
 namespace ConversionTool
 {
 	class DiabloCel
-	{		
+	{
+		public static bool indexedCelArrayHack = false;
+
 		public enum D1CEL_FRAME_TYPE
 		{
 			REGULAR,      // == LEVEL_TYPE_1
@@ -321,7 +323,14 @@ namespace ConversionTool
 				{
 					if (widthTable != null)
 					{
-						frames.Add(new DiabloCelBase(celFrameRawData, widthTable[i], heightTable[i], D1CEL_FRAME_TYPE.REGULAR_DATASKIP));
+						if(!indexedCelArrayHack)
+						{
+							frames.Add(new DiabloCelBase(celFrameRawData, widthTable[i], heightTable[i], D1CEL_FRAME_TYPE.REGULAR_DATASKIP));
+						}
+						else
+						{
+							frames.Add(new DiabloCelBase(celFrameRawData, widthTable[i], heightTable[i], D1CEL_FRAME_TYPE.REGULAR));
+						}
 					}
 					else
 					{

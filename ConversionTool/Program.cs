@@ -206,6 +206,13 @@ namespace ConversionTool
 
 		static void Main(string[] args)
         {
+			Console.WriteLine("Exporting misc control items...");
+			DiabloCel.indexedCelArrayHack = true;
+			foreach (ConversionTables.ConvEntry entry in ConversionTables.MiscControlUI)
+			{
+				ConvertSingleImage(entry.path, entry.width, entry.widthTable, entry.heightTable, false, entry.skipHeader);
+			}
+			DiabloCel.indexedCelArrayHack = false;
 			Console.WriteLine("Exporting Objects...");
 			{
 				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\objects\\", "*.cel", SearchOption.AllDirectories);

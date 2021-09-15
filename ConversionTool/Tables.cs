@@ -12,6 +12,16 @@ namespace ConversionTool
 				this.width = width;
 				widthTable = null;
 				heightTable = null;
+				skipHeader = false;
+			}
+
+			public ConvEntry(string path, int width, bool skipheader)
+			{
+				this.path = path;
+				this.width = width;
+				widthTable = null;
+				heightTable = null;
+				this.skipHeader = skipheader;
 			}
 
 			public ConvEntry(string path, int[] widthTable, int[] heightTable)
@@ -20,6 +30,7 @@ namespace ConversionTool
 				this.width = -1;
 				this.widthTable = widthTable;
 				this.heightTable = heightTable;
+				skipHeader = false;
 			}
 
 			public int width;
@@ -27,6 +38,8 @@ namespace ConversionTool
 
 			public int[] widthTable;
 			public int[] heightTable;
+
+			public bool skipHeader;
 		}
 
 		/** Maps from objcurs.cel frame number to frame width. */
@@ -77,6 +90,20 @@ namespace ConversionTool
 			3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
 			3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
 			3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28, 3 * 28,
+		};
+
+		private static readonly int[] CharButsWidth = { 95, 41, 41, 41, 41, 41, 41,41,41,41 };
+		private static readonly int[] CharButsHeight = { 22, 22, 22, 22, 22, 22, 22, 22, 22,22,22 };
+
+		public static readonly ConvEntry[] MiscControlUI =
+		{
+			new ConvEntry("Data\\Char.cel", 320),
+			new ConvEntry("Data\\CharBut.cel", CharButsWidth, CharButsHeight),
+			new ConvEntry("Items\\DurIcons.cel", 32),
+			new ConvEntry("Data\\SpellBk.cel", 320),
+			new ConvEntry("Data\\SpellBkB.cel", 76),
+			new ConvEntry("Data\\Quest.cel", 320),
+			new ConvEntry("CtrlPan\\golddrop.cel", 261)
 		};
 
 		public static readonly ConvEntry[] CtrlPan =
