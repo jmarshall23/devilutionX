@@ -42,10 +42,16 @@ SDL_Surface *GetOutputSurface();
 bool OutputRequiresScaling();
 
 // Scales rect if necessary.
-void ScaleOutputRect(SDL_Rect *rect);
+inline void ScaleOutputRect(SDL_Rect *rect)
+{
+
+}
 
 // If the output requires software scaling, replaces the given surface with a scaled one.
-SDLSurfaceUniquePtr ScaleSurfaceToOutput(SDLSurfaceUniquePtr surface);
+inline SDLSurfaceUniquePtr ScaleSurfaceToOutput(SDLSurfaceUniquePtr surface)
+{
+	return surface;
+}
 
 // Convert from output coordinates to logical (resolution-independent) coordinates.
 template <

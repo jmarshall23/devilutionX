@@ -322,6 +322,13 @@ add_library(PKWare STATIC
 target_include_directories(PKWare PUBLIC 3rdParty/PKWare)
 
 set(libdevilutionx_SRCS
+  rhi/imgui/imgui.cpp
+  rhi/imgui/imgui_draw.cpp
+  rhi/imgui/imgui_impl_opengl3.cpp
+  rhi/imgui/imgui_tables.cpp
+  rhi/imgui/imgui_widgets.cpp
+  rhi/imgui/imgui_impl_sdl.cpp
+  rhi/gl_render.cpp
   rhi/image.cpp
 
   Source/appfat.cpp

@@ -35,6 +35,8 @@
 #include "debug.h"
 #endif
 
+#include "../rhi/gl_render.h"
+
 namespace devilution {
 
 /**
@@ -1835,7 +1837,15 @@ void DrawAndBlit()
 
 	DrawMain(hgt, ddsdesc, drawhpflag, drawmanaflag, drawsbarflag, drawbtnflag);
 
-	RenderPresent();
+
+	//LimitFrameRate();
+
+	//if (!gbActive) {
+	//	return;
+	//}
+
+	GL_EndFrame((unsigned char *)out.surface->pixels, (unsigned char *)&system_palette[0]);
+	GL_BeginFrame();
 
 	drawhpflag = false;
 	drawmanaflag = false;

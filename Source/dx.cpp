@@ -15,6 +15,8 @@
 #include "utils/sdl_mutex.h"
 #include "utils/sdl_wrap.h"
 
+#include "../rhi/gl_render.h"
+
 #ifdef __3DS__
 #include <3ds.h>
 #endif
@@ -308,47 +310,14 @@ void RenderPresent()
 {
 	SDL_Surface *surface = GetOutputSurface();
 
-	if (!gbActive) {
-		LimitFrameRate();
+	LimitFrameRate();
+
+	if (!gbActive) {		
 		return;
 	}
 
-#ifndef USE_SDL1
-	if (renderer != nullptr) {
-		if (SDL_UpdateTexture(texture, nullptr, surface->pixels, surface->pitch) <= -1) { //pitch is 2560
-			ErrSdl();
-		}
-
-		// Clear buffer to avoid artifacts in case the window was resized
-		if (SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255) <= -1) { // TODO only do this if window was resized
-			ErrSdl();
-		}
-
-		if (SDL_RenderClear(renderer) <= -1) {
-			ErrSdl();
-		}
-		if (SDL_RenderCopy(renderer, texture, nullptr, nullptr) <= -1) {
-			ErrSdl();
-		}
-		SDL_RenderPresent(renderer);
-
-		if (!sgOptions.Graphics.bVSync) {
-			LimitFrameRate();
-		}
-	} else {
-		if (SDL_UpdateWindowSurface(ghMainWnd) <= -1) {
-			ErrSdl();
-		}
-		LimitFrameRate();
-	}
-#else
-	if (SDL_Flip(surface) <= -1) {
-		ErrSdl();
-	}
-	if (RenderDirectlyToOutputSurface)
-		pal_surface = GetOutputSurface();
-	LimitFrameRate();
-#endif
+	GL_EndFrame((unsigned char *)surface->pixels, (unsigned char *)&system_palette[0]);
+	GL_BeginFrame();
 }
 
 void PaletteGetEntries(int dwNumEntries, SDL_Color *lpEntries)

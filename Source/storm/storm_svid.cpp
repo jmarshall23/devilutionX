@@ -24,6 +24,8 @@
 #include "utils/sdl_compat.h"
 #include "utils/stdcompat/optional.hpp"
 
+#include "../../rhi/gl_render.h"
+
 namespace devilution {
 namespace {
 
@@ -40,7 +42,8 @@ bool SVidLoop;
 smk SVidSMK;
 SDL_Color SVidPreviousPalette[256];
 SDL_Palette *SVidPalette;
-SDL_Surface *SVidSurface;
+unsigned int SVidSurface = -1;
+
 
 #ifndef DEVILUTIONX_STORM_FILE_WRAPPER_AVAILABLE
 std::unique_ptr<uint8_t[]> SVidBuffer;
@@ -224,23 +227,11 @@ bool SVidPlayBegin(const char *filename, int flags)
 #endif
 	std::memcpy(SVidPreviousPalette, orig_palette, sizeof(SVidPreviousPalette));
 
-	// Copy frame to buffer
-	SVidSurface = SDL_CreateRGBSurfaceWithFormatFrom(
-	    (unsigned char *)smk_get_video(SVidSMK),
-	    SVidWidth,
-	    SVidHeight,
-	    8,
-	    SVidWidth,
-	    SDL_PIXELFORMAT_INDEX8);
-	if (SVidSurface == nullptr) {
-		ErrSdl();
-	}
+	if (SVidSurface == -1)
+		SVidSurface = GL_CreateTexture2D(NULL, SVidWidth, SVidHeight, 32);
 
 	SVidPalette = SDL_AllocPalette(256);
 	if (SVidPalette == nullptr) {
-		ErrSdl();
-	}
-	if (SDLC_SetSurfaceColors(SVidSurface, SVidPalette) <= -1) {
 		ErrSdl();
 	}
 
@@ -248,6 +239,8 @@ bool SVidPlayBegin(const char *filename, int flags)
 	SDL_FillRect(GetOutputSurface(), nullptr, 0x000000);
 	return true;
 }
+
+byte tempVideoBuffer[1220 * 768 * 4];
 
 bool SVidPlayContinue()
 {
@@ -259,27 +252,28 @@ bool SVidPlayContinue()
 			colors[i].r = paletteData[i * 3 + 0];
 			colors[i].g = paletteData[i * 3 + 1];
 			colors[i].b = paletteData[i * 3 + 2];
-#ifndef USE_SDL1
 			colors[i].a = SDL_ALPHA_OPAQUE;
-#endif
 
 			orig_palette[i].r = paletteData[i * 3 + 0];
 			orig_palette[i].g = paletteData[i * 3 + 1];
 			orig_palette[i].b = paletteData[i * 3 + 2];
 		}
-		memcpy(logical_palette, orig_palette, sizeof(logical_palette));
 
-		if (SDLC_SetSurfaceAndPaletteColors(SVidSurface, SVidPalette, colors, 0, 256) <= -1) {
-			Log("{}", SDL_GetError());
-			return false;
-		}
+		memcpy(logical_palette, orig_palette, sizeof(logical_palette));
+	}
+
+	const unsigned char *frame = smk_get_video(SVidSMK);
+	for (int i = 0; i < SVidWidth * SVidHeight; i++) {
+		tempVideoBuffer[(i * 4) + 0] = (byte)orig_palette[(frame[i]) + 0].r;
+		tempVideoBuffer[(i * 4) + 1] = (byte)orig_palette[(frame[i]) + 1].g;
+		tempVideoBuffer[(i * 4) + 2] = (byte)orig_palette[(frame[i]) + 2].b;
+		tempVideoBuffer[(i * 4) + 3] = (byte)255;
 	}
 
 	if (SDL_GetTicks() * 1000.0 >= SVidFrameEnd) {
 		return SVidLoadNextFrame(); // Skip video and audio if the system is to slow
 	}
 
-#ifndef NOSOUND
 	if (HasAudio()) {
 		const auto len = smk_get_audio_size(SVidSMK, 0);
 		const unsigned char *buf = smk_get_audio(SVidSMK, 0);
@@ -289,63 +283,16 @@ bool SVidPlayContinue()
 			SVidAudioDecoder->PushSamples(reinterpret_cast<const std::uint8_t *>(buf), len);
 		}
 	}
-#endif
 
 	if (SDL_GetTicks() * 1000.0 >= SVidFrameEnd) {
 		return SVidLoadNextFrame(); // Skip video if the system is to slow
 	}
 
-#ifndef USE_SDL1
-	if (renderer != nullptr) {
-		if (SDL_BlitSurface(SVidSurface, nullptr, GetOutputSurface(), nullptr) <= -1) {
-			Log("{}", SDL_GetError());
-			return false;
-		}
-	} else
-#endif
-	{
-		SDL_Surface *outputSurface = GetOutputSurface();
-#ifdef USE_SDL1
-		const bool isIndexedOutputFormat = SDLBackport_IsPixelFormatIndexed(outputSurface->format);
-#else
-		const Uint32 wndFormat = SDL_GetWindowPixelFormat(ghMainWnd);
-		const bool isIndexedOutputFormat = SDL_ISPIXELFORMAT_INDEXED(wndFormat);
-#endif
-		SDL_Rect outputRect;
-		if (isIndexedOutputFormat) {
-			// Cannot scale if the output format is indexed (8-bit palette).
-			outputRect.w = static_cast<int>(SVidWidth);
-			outputRect.h = static_cast<int>(SVidHeight);
-		} else if (IsLandscapeFit(SVidWidth, SVidHeight, outputSurface->w, outputSurface->h)) {
-			outputRect.w = outputSurface->w;
-			outputRect.h = SVidHeight * outputSurface->w / SVidWidth;
-		} else {
-			outputRect.w = SVidWidth * outputSurface->h / SVidHeight;
-			outputRect.h = outputSurface->h;
-		}
-		outputRect.x = (outputSurface->w - outputRect.w) / 2;
-		outputRect.y = (outputSurface->h - outputRect.h) / 2;
+	SDL_Surface *outputSurface = GetOutputSurface();
 
-		if (isIndexedOutputFormat
-		    || outputSurface->w == static_cast<int>(SVidWidth)
-		    || outputSurface->h == static_cast<int>(SVidHeight)) {
-			if (SDL_BlitSurface(SVidSurface, nullptr, outputSurface, &outputRect) <= -1) {
-				ErrSdl();
-			}
-		} else {
-			// The source surface is always 8-bit, and the output surface is never 8-bit in this branch.
-			// We must convert to the output format before calling SDL_BlitScaled.
-#ifdef USE_SDL1
-			SDLSurfaceUniquePtr converted { SDL_ConvertSurface(SVidSurface, ghMainWnd->format, 0) };
-#else
-			SDLSurfaceUniquePtr converted { SDL_ConvertSurfaceFormat(SVidSurface, wndFormat, 0) };
-#endif
-			if (SDL_BlitScaled(converted.get(), nullptr, outputSurface, &outputRect) <= -1) {
-				Log("{}", SDL_GetError());
-				return false;
-			}
-		}
-	}
+	GL_UploadTexture(SVidSurface, (unsigned char *)tempVideoBuffer, SVidWidth, SVidHeight, 32);
+
+	GL_RenderImage(SVidSurface, 0, 0, outputSurface->w, outputSurface->h);
 
 	RenderPresent();
 
@@ -376,8 +323,8 @@ void SVidPlayEnd()
 	SDL_FreePalette(SVidPalette);
 	SVidPalette = nullptr;
 
-	SDL_FreeSurface(SVidSurface);
-	SVidSurface = nullptr;
+	//SDL_FreeSurface(SVidSurface);
+	//SVidSurface = nullptr;
 
 	memcpy(orig_palette, SVidPreviousPalette, sizeof(orig_palette));
 #ifndef USE_SDL1
