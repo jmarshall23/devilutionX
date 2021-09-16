@@ -6,9 +6,11 @@
 #include "../source/engine/load_file.hpp"
 #include "image.h"
 #include "../source/engine/render/common_impl.h"
+#include "gl_render.h"
 
 namespace devilution
 {
+	const char* pal_name = nullptr;
 	/*
 	==============
 	R_CopyImage
@@ -63,35 +65,7 @@ namespace devilution
 
 		sy -= image.height;
 
-		for (int y = 0; y < image.height; y++)
-		{
-			for (int x = 0; x < image.width; x++)
-			{
-				int screenX = x + sx;
-				int screenY = y + sy;
-
-				if(screenX < 0)
-					continue;
-
-				if (screenY < 0)
-					continue;
-
-				if (screenX >= out.w())
-					continue;
-
-				if (screenY >= out.h())
-					continue;
-
-				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
-
-				if(image.buffer[sourcePos] == (byte)255)
-					continue;
-
-				std::uint8_t* dst = out.at(screenX, screenY);
-
-				*dst = (uint8_t)image.buffer[sourcePos];
-			}
-		}
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 	}
 
 	/*
@@ -107,35 +81,7 @@ namespace devilution
 
 		sy -= image.height;
 
-		for (int y = 0; y < image.height; y++)
-		{
-			for (int x = 0; x < image.width; x++)
-			{
-				int screenX = x + sx;
-				int screenY = y + sy;
-
-				if (screenX < 0)
-					continue;
-
-				if (screenY < 0)
-					continue;
-
-				if (screenX >= out.w())
-					continue;
-
-				if (screenY >= out.h())
-					continue;
-
-				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
-
-				if (image.buffer[sourcePos] == (byte)255)
-					continue;
-
-				std::uint8_t* dst = out.at(screenX, screenY);
-
-				*dst = lightTable[(uint8_t)image.buffer[sourcePos]];
-			}
-		}
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 	}
 
 	/*
@@ -156,35 +102,7 @@ namespace devilution
 
 		sy -= image.height;
 
-		for (int y = 0; y < image.height; y++)
-		{
-			for (int x = 0; x < image.width; x++)
-			{
-				int screenX = x + sx;
-				int screenY = y + sy;
-
-				if (screenX < 0)
-					continue;
-
-				if (screenY < 0)
-					continue;
-
-				if (screenX >= out.w())
-					continue;
-
-				if (screenY >= out.h())
-					continue;
-
-				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
-
-				if (image.buffer[sourcePos] == (byte)255)
-					continue;
-
-				std::uint8_t* dst = out.at(screenX, screenY);
-
-				*dst = lightTable[(uint8_t)image.buffer[sourcePos]];
-			}
-		}
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 	}
 
 	/*
@@ -336,7 +254,7 @@ namespace devilution
 			subImage.width = subImageWidth;
 			subImage.height = atlasImage.height - 1;
 
-			subImage.buffer = new byte[subImage.width * subImage.height];
+			subImage.buffer = new byte[subImage.width * subImage.height * 4];
 
 			int frameOffset = subImageWidth * i;
 
@@ -350,7 +268,8 @@ namespace devilution
 					if (sourcePos < 0)
 						sourcePos = 0;
 
-					subImage.buffer[destPos] = atlasImage.buffer[sourcePos];
+					for(int d = 0; d < 4; d++)
+						subImage.buffer[(destPos * 4) + d] = atlasImage.buffer[(sourcePos * 4) + d];
 				}
 			}
 
@@ -394,14 +313,11 @@ namespace devilution
 			ImageFrame_t atlasImage;
 			atlasImage.width = *(short*)((byte*)&data.get()[12]);
 			atlasImage.height = *(short*)((byte*)&data.get()[14]);
-			atlasImage.buffer = new byte[atlasImage.width * atlasImage.height];
+			atlasImage.buffer = new byte[atlasImage.width * atlasImage.height * 4];
 
 
 			byte* sourceData = data.get();
-			for (int i = 0; i < atlasImage.width * atlasImage.height; i++)
-			{
-				atlasImage.buffer[i] = sourceData[(atlasImage.width * atlasImage.height) - i - 1];
-			}
+			memcpy(atlasImage.buffer, &data[18], atlasImage.width * atlasImage.height * 4);
 
 			image->CreateImagesFromAtlas(atlasImage, numFrames);
 
@@ -421,7 +337,7 @@ namespace devilution
 					}
 					else
 					{
-						sprintf(framePath, "%s\\tiles\\tile_%d.tga", path, image->frames.size());
+						sprintf(framePath, "%s\\tiles_%s\\tile_%d.tga", path, pal_name, image->frames.size());
 					}
 				}
 				else
@@ -441,14 +357,29 @@ namespace devilution
 
 				frame.width = *(short*)((byte*)&data.get()[12]);
 				frame.height = *(short*)((byte*)&data.get()[14]);
-				frame.buffer = new byte[frame.width * frame.height];
+				frame.buffer = new byte[frame.width * frame.height * 4];
 
-				for (int i = 0, d = (frame.width * frame.height) - 1; i < frame.width * frame.height; i++, d--) {
-					frame.buffer[d] = data[18 + i];
-				}
+				memcpy(frame.buffer, &data[18], frame.width * frame.height * 4);
 
 				image->frames.push_back(frame);
 			}
+		}
+
+		static byte* temp = new byte[4096 * 8192 * 4];
+
+		// Create the hardware image.
+		for (int i = 0; i < image->frames.size(); i++)
+		{
+
+			for (int d = 0; d < image->frames[i].width * image->frames[i].height; d++)
+			{
+				temp[(d * 4) + 0] = image->frames[i].buffer[(d * 4) + 2];
+				temp[(d * 4) + 1] = image->frames[i].buffer[(d * 4) + 1];
+				temp[(d * 4) + 2] = image->frames[i].buffer[(d * 4) + 0];
+				temp[(d * 4) + 3] = image->frames[i].buffer[(d * 4) + 3];
+			}
+
+			image->frames[i].glHandle = GL_CreateTexture2D((::byte *)temp, image->frames[i].width, image->frames[i].height, 32);
 		}
 
 		// Create image instances.

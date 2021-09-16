@@ -1037,10 +1037,44 @@ void LoadDungeonTiles(const char *name)
 	pDungeonCels = StormImage::LoadImageSequence(name, true, false);
 }
 
+
+void SetLevelPalette(void)
+{
+	switch (leveltype) {
+	case DTYPE_TOWN:
+		LoadRndLvlPal(DTYPE_TOWN);
+		break;
+	case DTYPE_CATHEDRAL:
+		if (currlevel < 21) {
+			LoadRndLvlPal(DTYPE_CATHEDRAL);
+		} else {
+			LoadRndLvlPal(DTYPE_CRYPT);
+		}
+		break;
+	case DTYPE_CATACOMBS:
+		LoadRndLvlPal(DTYPE_CATACOMBS);
+		break;
+	case DTYPE_CAVES:
+		if (currlevel < 17) {
+			LoadRndLvlPal(DTYPE_CAVES);
+		} else {
+			LoadRndLvlPal(DTYPE_NEST);
+		}
+		break;
+	case DTYPE_HELL:
+		LoadRndLvlPal(DTYPE_HELL);
+		break;
+	default:
+		app_fatal("CreateLevel");
+	}
+}
+
 void LoadLvlGFX()
 {
 //	assert(pDungeonCels == nullptr);
 	constexpr int SpecialCelWidth = 64;
+
+	SetLevelPalette();
 
 	switch (leveltype) {
 	case DTYPE_TOWN:
@@ -1116,39 +1150,26 @@ void CreateLevel(lvl_entry lvldir)
 	case DTYPE_TOWN:
 		CreateTown(lvldir);
 		InitTownTriggers();
-		LoadRndLvlPal(DTYPE_TOWN);
 		break;
 	case DTYPE_CATHEDRAL:
 		CreateL5Dungeon(glSeedTbl[currlevel], lvldir);
 		InitL1Triggers();
 		Freeupstairs();
-		if (currlevel < 21) {
-			LoadRndLvlPal(DTYPE_CATHEDRAL);
-		} else {
-			LoadRndLvlPal(DTYPE_CRYPT);
-		}
 		break;
 	case DTYPE_CATACOMBS:
 		CreateL2Dungeon(glSeedTbl[currlevel], lvldir);
 		InitL2Triggers();
 		Freeupstairs();
-		LoadRndLvlPal(DTYPE_CATACOMBS);
 		break;
 	case DTYPE_CAVES:
 		CreateL3Dungeon(glSeedTbl[currlevel], lvldir);
 		InitL3Triggers();
 		Freeupstairs();
-		if (currlevel < 17) {
-			LoadRndLvlPal(DTYPE_CAVES);
-		} else {
-			LoadRndLvlPal(DTYPE_NEST);
-		}
 		break;
 	case DTYPE_HELL:
 		CreateL4Dungeon(glSeedTbl[currlevel], lvldir);
 		InitL4Triggers();
 		Freeupstairs();
-		LoadRndLvlPal(DTYPE_HELL);
 		break;
 	default:
 		app_fatal("CreateLevel");

@@ -412,7 +412,7 @@ void CheckQuests()
 		    && Quests[Q_PWATER]._qactive != QUEST_DONE) {
 			Quests[Q_PWATER]._qactive = QUEST_DONE;
 			PlaySfxLoc(IS_QUESTDN, Players[MyPlayerId].position.tile);
-			LoadPalette("Levels\\L3Data\\L3pwater.pal", false);
+			LoadPalette("L3pwater", false);
 			UpdatePWaterPalette();
 			WaterDone = 32;
 		}
@@ -601,9 +601,9 @@ void LoadPWaterPalette()
 		return;
 
 	if (Quests[Q_PWATER]._qactive == QUEST_DONE)
-		LoadPalette("Levels\\L3Data\\L3pwater.pal");
+		LoadPalette("L3pwater");
 	else
-		LoadPalette("Levels\\L3Data\\L3pfoul.pal");
+		LoadPalette("L3pfoul");
 }
 
 void UpdatePWaterPalette()

@@ -190,48 +190,20 @@ void palette_init()
 
 void LoadPalette(const char *pszFileName, bool blend /*= true*/)
 {
-	assert(pszFileName);
-
-	struct Color {
-		uint8_t r;
-		uint8_t g;
-		uint8_t b;
-	};
-
-	std::array<Color, 256> palData;
-
-	LoadFileInMem(pszFileName, palData);
-
-	for (unsigned i = 0; i < palData.size(); i++) {
-		orig_palette[i].r = palData[i].r;
-		orig_palette[i].g = palData[i].g;
-		orig_palette[i].b = palData[i].b;
-#ifndef USE_SDL1
-		orig_palette[i].a = SDL_ALPHA_OPAQUE;
-#endif
-	}
-
-	if (blend && sgOptions.Graphics.bBlendedTransparancy) {
-		if (leveltype == DTYPE_CAVES || leveltype == DTYPE_CRYPT) {
-			GenerateBlendedLookupTable(orig_palette, 1, 31);
-		} else if (leveltype == DTYPE_NEST) {
-			GenerateBlendedLookupTable(orig_palette, 1, 15);
-		} else {
-			GenerateBlendedLookupTable(orig_palette, -1, -1);
-		}
-	}
+	extern const char *pal_name;
+	pal_name = pszFileName;
 }
 
 void LoadRndLvlPal(dungeon_type l)
 {
 	if (l == DTYPE_TOWN) {
-		LoadPalette("Levels\\TownData\\Town.pal");
+		LoadPalette("Town");
 		return;
 	}
 
 	int rv = GenerateRnd(4) + 1;
 	if (l == DTYPE_CRYPT) {
-		LoadPalette("NLevels\\L5Data\\L5Base.PAL");
+		LoadPalette("L5Base");
 		return;
 	}
 
@@ -240,9 +212,9 @@ void LoadRndLvlPal(dungeon_type l)
 		if (!gbNestArt) {
 			rv++;
 		}
-		sprintf(szFileName, "NLevels\\L%iData\\L%iBase%i.PAL", 6, 6, rv);
+		sprintf(szFileName, "L%iBase%i",  6, rv);
 	} else {
-		sprintf(szFileName, "Levels\\L%iData\\L%i_%i.PAL", l, l, rv);
+		sprintf(szFileName, "L%i_%i.PAL", l, rv);
 	}
 	LoadPalette(szFileName);
 }

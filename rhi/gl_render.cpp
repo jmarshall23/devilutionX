@@ -18,7 +18,7 @@ SDL_GLContext glContext;
 SDL_Window* glWindow;
 int screen_width, screen_height;
 
-unsigned int texture_table[4096];
+unsigned int texture_table[30000];
 int numTextures = 0;
 byte* outputbuffer;
 SDL_Surface *uiSurface; // hd texture surface.

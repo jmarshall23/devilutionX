@@ -24,6 +24,7 @@ namespace devilution {
 		int width;
 		int height;
 		byte* buffer;
+		unsigned int glHandle;
 	};
 
 	class StormImage {
