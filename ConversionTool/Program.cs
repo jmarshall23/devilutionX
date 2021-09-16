@@ -140,7 +140,14 @@ namespace ConversionTool
 				string[] tilfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.til");
 				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.cel");
 
-				ExportTileset.Export(files[0], minfiles[0], tilfiles[0]);
+				string[] pal = System.IO.Directory.GetFiles(BlizzDatapath, "*.pal");
+
+				foreach(string p in pal)
+				{
+					ExportTileset.SetColorPalette(p);					
+					ExportTileset.Export(files[0], minfiles[0], tilfiles[0]);
+				}
+				
 
 				if (files.Length > 1)
 				{
@@ -221,6 +228,8 @@ namespace ConversionTool
 
 		static void Main(string[] args)
         {
+			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
+
 			Console.WriteLine("Exporting In Game Menu Items...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.InGameMenuAssets)
 			{
@@ -309,6 +318,7 @@ namespace ConversionTool
             }
 
 			Console.WriteLine("Converting Level Data...");
+			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
 			ExportLevels("levels/towndata");
 			ExportLevels("levels/l1data");
 			ExportLevels("levels/l2data");
