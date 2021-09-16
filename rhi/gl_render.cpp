@@ -21,6 +21,7 @@ int screen_width, screen_height;
 unsigned int texture_table[4096];
 int numTextures = 0;
 byte* outputbuffer;
+SDL_Surface *uiSurface; // hd texture surface.
 int mainScreenBufferTex = 0;
 
 #define GL_CLAMP_TO_EDGE 0x812F
@@ -29,6 +30,11 @@ int mainScreenBufferTex = 0;
 namespace devilution
 {
 	void app_fatal(const char* pszFmt, ...);
+
+	SDL_Surface* DiabloUiSurface()
+	{
+		return uiSurface;
+	}
 }
 
 /*
@@ -93,6 +99,8 @@ void GL_Init(const char* name, void* sdl_window, HWND hwnd, int width, int heigh
 	memset(outputbuffer, 255, screen_width * screen_height * 4);
 	mainScreenBufferTex = GL_CreateTexture2D(outputbuffer, width, height, 32);
 
+	uiSurface = SDL_CreateRGBSurfaceWithFormat(SDL_SWSURFACE, width, height, 1, SDL_PIXELFORMAT_RGBA8888);
+
 	GL_BeginFrame();
 }
 
@@ -139,20 +147,34 @@ void GL_BeginFrame(void) {
 }
 
 void GL_EndFrame(unsigned char*finalScreenBuffer, unsigned char*palette) {
-	for (int i = 0; i < screen_width * screen_height; i++)
+	if (palette)
 	{
-		outputbuffer[(i * 4) + 0] = palette[(finalScreenBuffer[i] * 4) + 0];
-		outputbuffer[(i * 4) + 1] = palette[(finalScreenBuffer[i] * 4) + 1];
-		outputbuffer[(i * 4) + 2] = palette[(finalScreenBuffer[i] * 4) + 2];
-		outputbuffer[(i * 4) + 3] = 255;
-	}
+		for (int i = 0; i < screen_width * screen_height; i++)
+		{
+			outputbuffer[(i * 4) + 0] = palette[(finalScreenBuffer[i] * 4) + 0];
+			outputbuffer[(i * 4) + 1] = palette[(finalScreenBuffer[i] * 4) + 1];
+			outputbuffer[(i * 4) + 2] = palette[(finalScreenBuffer[i] * 4) + 2];
+			outputbuffer[(i * 4) + 3] = 255;
+		}
 
-	GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);
+		GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);
+	}
+	else
+	{
+		for (int i = 0; i < screen_width * screen_height; i++)
+		{
+			outputbuffer[(i * 4) + 0] = finalScreenBuffer[(i * 4) + 2] * 10;
+			outputbuffer[(i * 4) + 1] = finalScreenBuffer[(i * 4) + 1] * 10;
+			outputbuffer[(i * 4) + 2] = finalScreenBuffer[(i * 4) + 0] * 10;
+			outputbuffer[(i * 4) + 3] = finalScreenBuffer[(i * 4) + 3];
+		}
+		GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);
+	}
 
 	// Rendering
 	ImGui::Render();
 	glViewport(0, 0, screen_width, screen_height);
-	glClearColor(1, 0, 0, 1);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(glWindow);

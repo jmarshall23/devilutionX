@@ -44,7 +44,11 @@ bool OutputRequiresScaling();
 // Scales rect if necessary.
 inline void ScaleOutputRect(SDL_Rect *rect)
 {
-
+	const SDL_Surface *surface = GetOutputSurface();
+	rect->x = rect->x * surface->w / gnScreenWidth;
+	rect->y = rect->y * surface->h / gnScreenHeight;
+	rect->w = rect->w * surface->w / gnScreenWidth;
+	rect->h = rect->h * surface->h / gnScreenHeight;
 }
 
 // If the output requires software scaling, replaces the given surface with a scaled one.

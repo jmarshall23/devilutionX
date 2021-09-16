@@ -35,6 +35,10 @@
 #include "platform/ctr/keyboard.h"
 #endif
 
+#include "../../rhi/gl_render.h"
+#undef max
+#undef min
+
 namespace devilution {
 
 std::size_t SelectedItemMax;
@@ -61,6 +65,13 @@ int UiTextInputLen;
 bool textInputActive = true;
 
 std::size_t SelectedItem = 0;
+
+void DiabloUIPresent(void)
+{
+	SDL_Surface *surface = DiabloUiSurface();
+	GL_EndFrame((unsigned char *)surface->pixels, NULL);
+	GL_BeginFrame();
+}
 
 namespace {
 
@@ -627,7 +638,7 @@ void LoadBackgroundArt(const char *pszFile, int frames)
 	SDL_FillRect(DiabloUiSurface(), nullptr, 0x000000);
 	if (DiabloUiSurface() == pal_surface)
 		BltFast(nullptr, nullptr);
-	RenderPresent();
+	DiabloUIPresent();
 }
 
 void UiAddBackground(std::vector<std::unique_ptr<UiItemBase>> *vecDialog)
@@ -664,7 +675,7 @@ void UiFadeIn()
 
 	if (DiabloUiSurface() == pal_surface)
 		BltFast(nullptr, nullptr);
-	RenderPresent();
+	DiabloUIPresent();
 }
 
 void DrawSelector(const SDL_Rect &rect)
