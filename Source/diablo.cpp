@@ -94,7 +94,7 @@ bool gbBarbarian;
 bool gbQuietMode = false;
 clicktype sgbMouseDown;
 uint16_t gnTickDelay = 50;
-char gszProductName[64] = "DevilutionX vUnknown";
+char gszProductName[64] = "DevilutionX(IcedBranch) " __DATE__ " " __TIME__;
 Keymapper keymapper;
 std::array<Keymapper::ActionIndex, 4> quickSpellActionIndexes;
 
@@ -922,8 +922,8 @@ void DiabloInitScreen()
 
 void SetApplicationVersions()
 {
-	snprintf(gszProductName, sizeof(gszProductName) / sizeof(char), "%s v%s", PROJECT_NAME, PROJECT_VERSION);
-	strncpy(gszVersionNumber, fmt::format(_("version {:s}"), PROJECT_VERSION).c_str(), sizeof(gszVersionNumber) / sizeof(char));
+	//snprintf(gszProductName, sizeof(gszProductName) / sizeof(char), "%s v%s", PROJECT_NAME, PROJECT_VERSION);
+	//strncpy(gszVersionNumber, fmt::format(_("version {:s}"), PROJECT_VERSION).c_str(), sizeof(gszVersionNumber) / sizeof(char));
 }
 
 void DiabloInit()
