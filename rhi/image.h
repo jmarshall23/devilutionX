@@ -32,7 +32,7 @@ namespace devilution {
 		static StormImage* LoadImageSequence(const char* path, bool isTiles, bool isAtlas, int instanceStride = -1, const char *specialName = nullptr);
 		static StormImage* AllocateSytemImage(const char* path, int width, int height);
 
-		int NumFrames()
+		int NumFrames() const
 		{
 			return frames.size() + 1;
 		}
@@ -55,12 +55,12 @@ namespace devilution {
 			return &imageInstances[index];
 		}
 
-		void Blit(StormImage* image, int x, int y, int sourcex, int sourcey, int sourceFrame, int destFrame, bool allowTrans, int customHeight = -1);
 		void Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowTrans, bool allowflip, byte *remapTable = nullptr);
 
 		void ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, int light) const;
 		void ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame) const;
-		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame) const;
+		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx = 0, int starty = 0) const;
+		void ClipRenderUI(const Surface& out, int sx, int sy, int frame, int startx = 0, int starty = 0) const;
 		void ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame) const;
 
 		void ClipRenderWithLightingTrans(const Surface& out, int sx, int sy, int frame) const {

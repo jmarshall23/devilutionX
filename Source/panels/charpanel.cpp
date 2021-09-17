@@ -294,7 +294,7 @@ void DrawChr(const Surface &out)
 	//}
 	Point pos = GetPanelPosition(UiPanels::Character, { 0, 0 });
 	//DrawArt(out, pos, &PanelFull);
-	pChrPanel->ClipRenderNoLighting(out, pos.x, pos.y + pChrPanel->Height(), 1);
+	pChrPanel->ClipRenderUI(out, pos.x, pos.y + pChrPanel->Height(), 1);
 	for (auto &entry : panelEntries) {
 		if (entry.statDisplayFunc != nullptr) {
 			StyledText tmp = entry.statDisplayFunc();

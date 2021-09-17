@@ -9,7 +9,7 @@ unsigned int GL_CreateTexture2D(byte* data, int width, int height, int bpp);
 
 void GL_UploadTexture(unsigned int image, unsigned char* data, int width, int height, int bpp);
 
-void GL_RenderImage(unsigned int image, int x, int y, int width, int height);
+void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int startx = 0, int starty = 0);
 
 void GL_BeginFrame(void);
 void GL_EndFrame(unsigned char* finalScreenBuffer, unsigned char* palette);

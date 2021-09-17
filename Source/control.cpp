@@ -90,7 +90,6 @@ StormImage *pChrPanel;
 namespace {
 StormImage *P8Bulbs;
 StormImage *panel8;
-StormImage *pBottomBuffer;
 
 std::optional<CelSprite> talkButtons;
 std::optional<CelSprite> pDurIcons;
@@ -899,11 +898,9 @@ void DrawPlayerHud(const Surface &out)
 	lifeHeight = (lifeFilled / 80) * P8Bulbs->GetFrame(1).height;
 	manaHeight = (manaFilled / 80) * P8Bulbs->GetFrame(2).height;
 
-	pBottomBuffer->Blit(panel8, 0, 0, 0, 0, 1, 1, true);
-	pBottomBuffer->Blit(P8Bulbs, LifeFlaskUpperOffset, 0, 0, lifeHeight, 1, 1, true);
-	pBottomBuffer->Blit(P8Bulbs, ManaFlaskUpperOffset, 0, 0, manaHeight, 2, 1, true);
-
-	pBottomBuffer->Draw(out, PANEL_X, PANEL_Y - 16, 0, 0, 1, false, false);
+	panel8->ClipRenderUI(out, PANEL_X, PANEL_Y - 16, 1);
+	P8Bulbs->ClipRenderUI(out, PANEL_X + LifeFlaskUpperOffset, PANEL_Y - 16, 1, 0, lifeHeight);
+	P8Bulbs->ClipRenderUI(out, PANEL_X + ManaFlaskUpperOffset, PANEL_Y - 16, 2, 0, manaHeight);
 
 	DrawSpell(out);
 
@@ -939,9 +936,6 @@ void control_update_life_mana()
 
 void InitControlPan()
 {
-	//pBtmBuff.emplace(PANEL_WIDTH, (PANEL_HEIGHT + 16) * (IsChatAvailable() ? 2 : 1));
-	pBottomBuffer = StormImage::AllocateSytemImage("BottomBuffer", PANEL_WIDTH, (PANEL_HEIGHT + 16) * (IsChatAvailable() ? 2 : 1));
-
 	pChrPanel = StormImage::LoadImageSequence("Data\\Char", false, false); //LoadCel("Data\\Char.CEL", SPANEL_WIDTH);
 	if (!gbIsHellfire)
 		pSpellCels = StormImage::LoadImageSequence("CtrlPan\\SpelIcon", false, false);
@@ -1494,12 +1488,12 @@ void DrawSpellBook(const Surface &out)
 
 	Point point = GetPanelPosition(UiPanels::Spell, { 0, 351 });
 	//point.y -= pSpellBkCel->Height();
-	pSpellBkCel->ClipRenderNoLighting(out, point.x, point.y, 1);
+	pSpellBkCel->ClipRenderUI(out, point.x, point.y, 1);
 
 	if (gbIsHellfire && sbooktab < 5) {
 		Point point = GetPanelPosition(UiPanels::Spell, { 61 * sbooktab + 7, 348 });
 
-		pSBkBtnCel->ClipRenderNoLighting(out, point.x, point.y, sbooktab + 1);
+		pSBkBtnCel->ClipRenderUI(out, point.x, point.y, sbooktab + 1);
 		//CelDrawTo(out, , *pSBkBtnCel, sbooktab + 1);
 	} else {
 		// BUGFIX: rendering of page 3 and page 4 buttons are both off-by-one pixel (fixed).
@@ -1509,7 +1503,7 @@ void DrawSpellBook(const Surface &out)
 		}
 		Point point = GetPanelPosition(UiPanels::Spell, { sx, 348 });
 
-		pSBkBtnCel->ClipRenderNoLighting(out, point.x, point.y, sbooktab + 1);
+		pSBkBtnCel->ClipRenderUI(out, point.x, point.y, sbooktab + 1);
 		//CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { sx, 348 }), *pSBkBtnCel, sbooktab + 1);
 	}
 	auto &myPlayer = Players[MyPlayerId];

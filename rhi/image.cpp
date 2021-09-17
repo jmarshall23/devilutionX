@@ -11,6 +11,20 @@
 namespace devilution
 {
 	const char* pal_name = nullptr;
+
+	byte* FastFlipHorizontalBuffer(byte *data, int width, int height)
+	{
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				data[y * width + x] = data[y * width + (width - x - 1)];
+			}
+		}
+
+		return data;
+	}
+
 	/*
 	==============
 	R_CopyImage
@@ -54,18 +68,31 @@ namespace devilution
 	}
 
 	std::vector<StormImage*> globalImageList;
+
 	/*
 	=======================
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame) const
+	void StormImage::ClipRenderUI(const Surface& out, int sx, int sy, int frame, int startx, int starty) const
+	{
+		const ImageFrame_t& image = frames[frame - 1];
+
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height, startx, starty);
+	}
+
+	/*
+	=======================
+	StormImage::ClipRenderNoLighting
+	=======================
+	*/
+	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx, int starty) const
 	{
 		const ImageFrame_t& image = frames[frame - 1];
 
 		sy -= image.height;
 
-		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height, startx, starty);
 	}
 
 	/*
@@ -185,22 +212,6 @@ namespace devilution
 
 	/*
 	=======================
-	StormImage::LoadImageSequence
-	=======================
-	*/
-	void StormImage::Blit(StormImage* image, int x, int y, int sourcex, int sourcey, int sourceFrame, int destFrame, bool allowTrans, int customHeight)
-	{
-		sourceFrame = sourceFrame - 1;
-		destFrame = destFrame - 1;
-		if (customHeight == -1)
-		{
-			customHeight = image->frames[sourceFrame].height - sourcey;
-		}
-		R_CopyImage(image->frames[sourceFrame].buffer, sourcex, sourcey, image->frames[sourceFrame].width, frames[destFrame].buffer, x, y, frames[destFrame].width, frames[destFrame].height, image->frames[sourceFrame].width - sourcex, customHeight, allowTrans, true, nullptr);
-	}
-
-	/*
-	=======================
 	StormImage::Draw
 	=======================
 	*/
@@ -262,7 +273,7 @@ namespace devilution
 			{
 				for (int x = 0; x < subImageWidth; x++)
 				{
-					int sourcePos = (y * atlasImage.width) + (x + frameOffset) - (subImageWidth / 6);
+					int sourcePos = (y * atlasImage.width) + (x + frameOffset);
 					int destPos = (y * subImage.width) + x;
 
 					if (sourcePos < 0)
