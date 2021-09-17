@@ -322,8 +322,12 @@ namespace ConversionTool
 			Console.WriteLine("Exporting GenData Images...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.GenDataImages)
 			{
+				string palette = Path.ChangeExtension(entry.path, ".pal");
+				ExportTileset.SetColorPalette("BlizzData\\" + palette);
 				ConvertSingleImage(entry.path, entry.width, null, null);
 			}
+
+			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
 
 			Console.WriteLine("Exporting Data Inv...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.DataInv)
