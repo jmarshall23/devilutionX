@@ -538,7 +538,7 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 	if (nCel < 1 || frames > 50 || nCel > frames) {
 		const char *szMode = "unknown action";
 		if (player._pmode <= PM_QUIT)
-			szMode = PlayerModeNames[player._pmode];
+			szMode = PlayerModeNames[player._pmode]
 		Log(
 		    "Drawing player {} \"{}\" {}: facing {}, frame {} of {}",
 		    pnum,
@@ -558,7 +558,7 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 
 	if (pnum == MyPlayerId) {
 		//Cl2Draw(out, px, py, *pCelSprite, nCel);
-		pCelSprite->ClipRenderNoLighting(out, px, py, nCel);
+		pCelSprite->ClipRenderNoLighting(out, px, py, nCel );
 		DrawPlayerIcons(out, pnum, px, py, true);
 		return;
 	}
