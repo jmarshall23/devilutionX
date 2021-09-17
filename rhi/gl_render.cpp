@@ -18,7 +18,6 @@ SDL_GLContext glContext;
 SDL_Window* glWindow;
 int screen_width, screen_height;
 
-unsigned int texture_table[30000];
 int numTextures = 0;
 byte* outputbuffer;
 SDL_Surface *uiSurface; // hd texture surface.
@@ -106,8 +105,9 @@ void GL_Init(const char* name, void* sdl_window, HWND hwnd, int width, int heigh
 
 unsigned int GL_CreateTexture2D(byte* data, int width, int height, int bpp)
 {
-	glGenTextures(1, &texture_table[numTextures]);
-	glBindTexture(GL_TEXTURE_2D, texture_table[numTextures]);
+	unsigned int texNum = 0;
+	glGenTextures(1, &texNum);
+	glBindTexture(GL_TEXTURE_2D, texNum);
 
 	// Setup filtering parameters for display
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -120,11 +120,11 @@ unsigned int GL_CreateTexture2D(byte* data, int width, int height, int bpp)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
-	return numTextures++;
+	return texNum;
 }
 
 void GL_UploadTexture(unsigned int image, unsigned char* data, int width, int height, int bpp) {
-	glBindTexture(GL_TEXTURE_2D, texture_table[image]);
+	glBindTexture(GL_TEXTURE_2D, image);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 }
 
@@ -132,7 +132,7 @@ void GL_RenderImage(unsigned int image, int x, int y, int width, int height) {
 	ImVec2 mi(x, y);
 	ImVec2 ma(x + width, y + height);
 
-	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)texture_table[image], mi, ma);
+	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma);
 }
 
 void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int height, int startx, int starty, int uvwidth, int uvheight, int imagewidth, int imageheight) {
@@ -147,7 +147,7 @@ void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int hei
 	endUV.x = startUV.x + ((float)uvwidth / (float)imagewidth);
 	endUV.y = startUV.y + ((float)uvheight / (float)imageheight);
 
-	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)texture_table[image], mi, ma, startUV, endUV);
+	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV);
 }
 
 void GL_BeginFrame(void) {
