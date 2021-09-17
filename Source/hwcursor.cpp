@@ -123,7 +123,8 @@ bool SetHardwareCursorFromSprite(int pcurs)
 	constexpr std::uint8_t TransparentColor = 255;
 	SDL_FillRect(out.surface, nullptr, TransparentColor);
 	SDL_SetColorKey(out.surface, 1, TransparentColor);
-	CelDrawCursor(out, { outlineWidth, size.height - outlineWidth }, pcurs);
+	//CelDrawCursor(out, { outlineWidth, size.height - outlineWidth }, pcurs);
+
 
 	const bool result = SetHardwareCursor(out.surface, isItem ? HotpointPosition::Center : HotpointPosition::TopLeft);
 	return result;
@@ -139,8 +140,37 @@ CursorInfo GetCurrentCursorInfo()
 
 void SetHardwareCursor(CursorInfo cursorInfo)
 {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
+	if (ArtCursor.image == nullptr) {
+		return;
+	}
+
+	if (!CurrentCursorInfo.Enabled())
+		return;
+
+	int x, y;
+	SDL_PumpEvents();
+	SDL_GetMouseState(&x, &y);
+	Surface temp;
+
+	if (cursorInfo.type() == CursorType::UserInterface) {
+		const bool isItem = IsItemSprite(pcurs);
+		if (isItem && !sgOptions.Graphics.bHardwareCursorForItems)
+			return;
+
+		const int outlineWidth = isItem ? 1 : 0;
+
+		RenderItemSprite(temp, pcurs, x, y);
+
+		return;
+	} else if (cursorInfo.type() == CursorType::UserInterface) {
+		ArtCursor.image->ClipRenderNoLighting(temp, x, y, 1);
+	}
+	/*
 	CurrentCursorInfo = cursorInfo;
+
+	
+	
+
 	switch (cursorInfo.type()) {
 	case CursorType::Game:
 		CurrentCursorInfo.SetEnabled(SetHardwareCursorFromSprite(cursorInfo.id()));
@@ -148,10 +178,10 @@ void SetHardwareCursor(CursorInfo cursorInfo)
 	case CursorType::UserInterface:
 		// ArtCursor is null while loading the game on the progress screen,
 		// called via palette fade from ShowProgress.
-		if (ArtCursor.surface != nullptr) {
+		if (ArtCursor.image != nullptr) {
 			CurrentCursorInfo.SetEnabled(
 			    IsCursorSizeAllowed(Size { ArtCursor.surface->w, ArtCursor.surface->h })
-			    && SetHardwareCursor(ArtCursor.surface.get(), HotpointPosition::TopLeft));
+			    && SetHardwareCursor(ArtCursor.surface, HotpointPosition::TopLeft));
 		}
 		break;
 	case CursorType::Unknown:
@@ -160,7 +190,7 @@ void SetHardwareCursor(CursorInfo cursorInfo)
 	}
 	if (!CurrentCursorInfo.Enabled())
 		SetHardwareCursorVisible(false);
-#endif
+	*/
 }
 
 } // namespace devilution

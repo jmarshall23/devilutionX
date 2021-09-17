@@ -42,12 +42,12 @@ void selok_Esc()
 void UiSelOkDialog(const char *title, const char *body, bool background)
 {
 	if (!background) {
-		LoadBackgroundArt("ui_art\\black.pcx");
+		LoadBackgroundArt("ui_art\\black.tga");
 	} else {
 		if (!gbSpawned) {
-			LoadBackgroundArt("ui_art\\mainmenu.pcx");
+			LoadBackgroundArt("ui_art\\mainmenu.tga");
 		} else {
-			LoadBackgroundArt("ui_art\\swmmenu.pcx");
+			LoadBackgroundArt("ui_art\\swmmenu.tga");
 		}
 	}
 

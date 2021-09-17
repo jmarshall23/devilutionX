@@ -78,7 +78,7 @@ namespace devilution
 	{
 		const ImageFrame_t& image = frames[frame - 1];
 
-		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height, startx, starty);
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 	}
 
 	/*
@@ -92,7 +92,7 @@ namespace devilution
 
 		sy -= image.height;
 
-		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height, startx, starty);
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 	}
 
 	/*
@@ -212,6 +212,13 @@ namespace devilution
 		}
 	}
 
+	void StormImage::Draw2D(int frame, int x, int y, int width, int height, int sourcex, int sourcey, int uvwidth, int uvheight)
+	{
+		const ImageFrame_t& image = frames[frame - 1];
+
+		GL_RenderImageScaledUV(image.glHandle, x, y, width, height, sourcex, sourcey, uvwidth, uvheight, image.width, image.height);
+	}
+
 	/*
 	=======================
 	StormImage::Draw
@@ -309,7 +316,22 @@ namespace devilution
 		StormImage* image = new StormImage();
 		image->name = path;
 
-		if (isAtlas)
+		if (!isAtlas && !isTiles && strstr(path, ".tga"))
+		{
+			char framePath[512];
+			ImageFrame_t frame;
+
+			std::unique_ptr<byte[]> data = LoadFileInMem(path);
+
+			frame.width = *(short*)((byte*)&data.get()[12]);
+			frame.height = *(short*)((byte*)&data.get()[14]);
+			frame.buffer = new byte[frame.width * frame.height * 4];
+
+			memcpy(frame.buffer, &data[18], frame.width * frame.height * 4);
+
+			image->frames.push_back(frame);
+		}
+		else if (isAtlas)
 		{
 			char atlasPath[512];
 			char descripPath[512];

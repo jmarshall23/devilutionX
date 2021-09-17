@@ -42,10 +42,10 @@ void MainmenuLoad(const char *name, void (*fnSound)(const char *file))
 
 	if (!gbSpawned || gbIsHellfire) {
 		if (gbIsHellfire)
-			LoadArt("ui_art\\mainmenuw.pcx", &ArtBackgroundWidescreen);
-		LoadBackgroundArt("ui_art\\mainmenu.pcx");
+			LoadArt("ui_art\\mainmenuw.tga", &ArtBackgroundWidescreen);
+		LoadBackgroundArt("ui_art\\mainmenu.tga");
 	} else {
-		LoadBackgroundArt("ui_art\\swmmenu.pcx");
+		LoadBackgroundArt("ui_art\\swmmenu.tga");
 	}
 
 	UiAddBackground(&vecMainMenuDialog);

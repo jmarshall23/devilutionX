@@ -261,7 +261,7 @@ void SelheroClassSelectorSelect(int value)
 	if (gbSpawned && (hClass == HeroClass::Rogue || hClass == HeroClass::Sorcerer || (hClass == HeroClass::Bard && hfbard_mpq == nullptr))) {
 		ArtBackground.Unload();
 		UiSelOkDialog(nullptr, _("The Rogue and Sorcerer are only available in the full retail version of Diablo. Visit https://www.gog.com/game/diablo to purchase."), false);
-		LoadBackgroundArt("ui_art\\selhero.pcx");
+		LoadBackgroundArt("ui_art\\selhero.tga");
 		SelheroListSelect(selhero_SaveCount);
 		return;
 	}
@@ -305,7 +305,7 @@ void SelheroNameSelect(int /*value*/)
 	if (selhero_isMultiPlayer && !UiValidPlayerName(selhero_heroInfo.name)) {
 		ArtBackground.Unload();
 		UiSelOkDialog(title, _("Invalid name. A name cannot contain spaces, reserved characters, or reserved words.\n"), false);
-		LoadBackgroundArt("ui_art\\selhero.pcx");
+		LoadBackgroundArt("ui_art\\selhero.tga");
 	} else {
 		if (gfnHeroCreate(&selhero_heroInfo)) {
 			SelheroLoadSelect(1);
@@ -347,7 +347,7 @@ void SelheroLoadSelect(int value)
 		// which happens to work because the render loops are similar.
 		selhero_endMenu = false;
 		SelheroFree();
-		LoadBackgroundArt("ui_art\\selgame.pcx");
+		LoadBackgroundArt("ui_art\\selgame.tga");
 		selgame_GameSelection_Select(0);
 	}
 
@@ -446,7 +446,7 @@ const char *SelheroGenerateName(HeroClass heroClass)
 
 void selhero_Init()
 {
-	LoadBackgroundArt("ui_art\\selhero.pcx");
+	LoadBackgroundArt("ui_art\\selhero.tga");
 	UiAddBackground(&vecSelHeroDialog);
 	UiAddLogo(&vecSelHeroDialog);
 	LoadScrollBar();

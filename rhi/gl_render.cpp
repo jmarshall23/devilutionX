@@ -128,11 +128,26 @@ void GL_UploadTexture(unsigned int image, unsigned char* data, int width, int he
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 }
 
-void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int startx, int starty) {
-	ImVec2 mi(x + startx, y + starty);
+void GL_RenderImage(unsigned int image, int x, int y, int width, int height) {
+	ImVec2 mi(x, y);
 	ImVec2 ma(x + width, y + height);
 
 	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)texture_table[image], mi, ma);
+}
+
+void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int height, int startx, int starty, int uvwidth, int uvheight, int imagewidth, int imageheight) {
+	ImVec2 mi(x, y);
+	ImVec2 ma(x + width, y + height);
+
+	ImVec2 startUV, endUV;
+
+	startUV.x = (float)startx / (float)imagewidth;
+	startUV.y = (float)starty / (float)imageheight;
+
+	endUV.x = startUV.x + ((float)uvwidth / (float)imagewidth);
+	endUV.y = startUV.y + ((float)uvheight / (float)imageheight);
+
+	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)texture_table[image], mi, ma, startUV, endUV);
 }
 
 void GL_BeginFrame(void) {
@@ -163,9 +178,9 @@ void GL_EndFrame(unsigned char*finalScreenBuffer, unsigned char*palette) {
 	{
 		for (int i = 0; i < screen_width * screen_height; i++)
 		{
-			outputbuffer[(i * 4) + 0] = finalScreenBuffer[(i * 4) + 2] * 10;
-			outputbuffer[(i * 4) + 1] = finalScreenBuffer[(i * 4) + 1] * 10;
-			outputbuffer[(i * 4) + 2] = finalScreenBuffer[(i * 4) + 0] * 10;
+			outputbuffer[(i * 4) + 0] = finalScreenBuffer[(i * 4) + 0];
+			outputbuffer[(i * 4) + 1] = finalScreenBuffer[(i * 4) + 1];
+			outputbuffer[(i * 4) + 2] = finalScreenBuffer[(i * 4) + 2];
 			outputbuffer[(i * 4) + 3] = finalScreenBuffer[(i * 4) + 3];
 		}
 		GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);

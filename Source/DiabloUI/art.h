@@ -4,10 +4,11 @@
 
 #include "utils/sdl_ptrs.h"
 
+
 namespace devilution {
 
 struct Art {
-	SDLSurfaceUniquePtr surface;
+	class StormImage *image;
 	int frames;
 	int logical_width;
 	int frame_height;
@@ -15,7 +16,7 @@ struct Art {
 
 	Art()
 	{
-		surface = NULL;
+		image = NULL;
 		frames = 1;
 		logical_width = 0;
 		frame_height = 0; // logical frame height (before scaling)
@@ -34,12 +35,11 @@ struct Art {
 
 	void Unload()
 	{
-		surface = nullptr;
+		image = nullptr;
 	}
 };
 
 void LoadArt(const char *pszFile, Art *art, int frames = 1, SDL_Color *pPalette = NULL);
 void LoadMaskedArt(const char *pszFile, Art *art, int frames = 1, int mask = 250);
-void LoadArt(Art *art, const std::uint8_t *artData, int w, int h, int frames = 1);
 
 } // namespace devilution

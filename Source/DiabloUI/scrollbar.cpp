@@ -8,9 +8,9 @@ Art ArtScrollBarArrow;
 
 void LoadScrollBar()
 {
-	LoadArt("ui_art\\sb_bg.pcx", &ArtScrollBarBackground);
-	LoadArt("ui_art\\sb_thumb.pcx", &ArtScrollBarThumb);
-	LoadArt("ui_art\\sb_arrow.pcx", &ArtScrollBarArrow, 4);
+	LoadArt("ui_art\\sb_bg.tga", &ArtScrollBarBackground);
+	LoadArt("ui_art\\sb_thumb.tga", &ArtScrollBarThumb);
+	LoadArt("ui_art\\sb_arrow.tga", &ArtScrollBarArrow, 4);
 }
 
 void UnloadScrollBar()

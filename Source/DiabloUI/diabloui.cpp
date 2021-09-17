@@ -480,7 +480,7 @@ inline SDL_Rect MakeRect(int x, int y, int w, int h)
 
 void LoadHeros()
 {
-	LoadArt("ui_art\\heros.pcx", &ArtHero);
+	LoadArt("ui_art\\heros.tga", &ArtHero);
 
 	const int portraitHeight = 76;
 	int portraitOrder[enum_size<HeroClass>::value + 1] = { 0, 1, 2, 2, 1, 0, 3 };
@@ -493,31 +493,6 @@ void LoadHeros()
 		portraitOrder[static_cast<std::size_t>(HeroClass::Barbarian)] = 6;
 	}
 
-	SDLSurfaceUniquePtr heros = SDLWrap::CreateRGBSurfaceWithFormat(0, ArtHero.w(), portraitHeight * (static_cast<int>(enum_size<HeroClass>::value) + 1), 8, SDL_PIXELFORMAT_INDEX8);
-
-	for (int i = 0; i <= static_cast<int>(enum_size<HeroClass>::value); i++) {
-		int offset = portraitOrder[i] * portraitHeight;
-		if (offset + portraitHeight > ArtHero.h()) {
-			offset = 0;
-		}
-		SDL_Rect srcRect = MakeRect(0, offset, ArtHero.w(), portraitHeight);
-		SDL_Rect dstRect = MakeRect(0, i * portraitHeight, ArtHero.w(), portraitHeight);
-		SDL_BlitSurface(ArtHero.surface.get(), &srcRect, heros.get(), &dstRect);
-	}
-
-	for (int i = 0; i <= static_cast<int>(enum_size<HeroClass>::value); i++) {
-		Art portrait;
-		char portraitPath[18];
-		sprintf(portraitPath, "ui_art\\hero%i.pcx", i);
-		LoadArt(portraitPath, &portrait);
-		if (portrait.surface == nullptr)
-			continue;
-
-		SDL_Rect dstRect = MakeRect(0, i * portraitHeight, portrait.w(), portraitHeight);
-		SDL_BlitSurface(portrait.surface.get(), nullptr, heros.get(), &dstRect);
-	}
-
-	ArtHero.surface = std::move(heros);
 	ArtHero.frame_height = portraitHeight;
 	ArtHero.frames = static_cast<int>(enum_size<HeroClass>::value);
 }
@@ -525,14 +500,14 @@ void LoadHeros()
 void LoadUiGFX()
 {
 	if (gbIsHellfire) {
-		LoadMaskedArt("ui_art\\hf_logo2.pcx", &ArtLogos[LOGO_MED], 16);
+		LoadMaskedArt("ui_art\\hf_logo2.tga", &ArtLogos[LOGO_MED], 16);
 	} else {
-		LoadMaskedArt("ui_art\\smlogo.pcx", &ArtLogos[LOGO_MED], 15);
+		LoadMaskedArt("ui_art\\smlogo.tga", &ArtLogos[LOGO_MED], 15);
 	}
-	LoadMaskedArt("ui_art\\focus16.pcx", &ArtFocus[FOCUS_SMALL], 8);
-	LoadMaskedArt("ui_art\\focus.pcx", &ArtFocus[FOCUS_MED], 8);
-	LoadMaskedArt("ui_art\\focus42.pcx", &ArtFocus[FOCUS_BIG], 8);
-	LoadMaskedArt("ui_art\\cursor.pcx", &ArtCursor, 1, 0);
+	LoadMaskedArt("ui_art\\focus16.tga", &ArtFocus[FOCUS_SMALL], 8);
+	LoadMaskedArt("ui_art\\focus.tga", &ArtFocus[FOCUS_MED], 8);
+	LoadMaskedArt("ui_art\\focus42.tga", &ArtFocus[FOCUS_BIG], 8);
+	LoadMaskedArt("ui_art\\cursor.tga", &ArtCursor, 1, 0);
 
 	LoadHeros();
 }
@@ -553,7 +528,7 @@ void UiInitialize()
 {
 	LoadUiGFX();
 	LoadArtFonts();
-	if (ArtCursor.surface != nullptr) {
+	if (ArtCursor.image != nullptr) {
 		if (SDL_ShowCursor(SDL_DISABLE) <= -1) {
 			ErrSdl();
 		}
@@ -616,7 +591,7 @@ void LoadBackgroundArt(const char *pszFile, int frames)
 {
 	SDL_Color pPal[256];
 	LoadArt(pszFile, &ArtBackground, frames, pPal);
-	if (ArtBackground.surface == nullptr)
+	if (ArtBackground.image == nullptr)
 		return;
 
 	LoadPalInMem(pPal);
@@ -625,13 +600,7 @@ void LoadBackgroundArt(const char *pszFile, int frames)
 	fadeTc = 0;
 	fadeValue = 0;
 
-	if (IsHardwareCursorEnabled() && ArtCursor.surface != nullptr && GetCurrentCursorInfo().type() != CursorType::UserInterface) {
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-		SDL_SetSurfacePalette(ArtCursor.surface.get(), Palette);
-		SDL_SetColorKey(ArtCursor.surface.get(), 1, 0);
-#endif
-		SetHardwareCursor(CursorInfo::UserInterfaceCursor());
-	}
+	SetHardwareCursor(CursorInfo::UserInterfaceCursor());
 
 	BlackPalette();
 
@@ -643,7 +612,7 @@ void LoadBackgroundArt(const char *pszFile, int frames)
 
 void UiAddBackground(std::vector<std::unique_ptr<UiItemBase>> *vecDialog)
 {
-	if (ArtBackgroundWidescreen.surface != nullptr) {
+	if (ArtBackgroundWidescreen.image != nullptr) {
 		SDL_Rect rectw = { 0, UI_OFFSET_Y, 0, 0 };
 		vecDialog->push_back(std::make_unique<UiImage>(&ArtBackgroundWidescreen, rectw, UiFlags::AlignCenter));
 	}

@@ -186,19 +186,19 @@ void Init(const char *text, const char *caption, bool error, bool renderBehind)
 	}
 
 	if (!renderBehind) {
-		LoadBackgroundArt("ui_art\\black.pcx");
-		if (ArtBackground.surface == nullptr) {
+		LoadBackgroundArt("ui_art\\black.tga");
+		if (ArtBackground.image == nullptr) {
 			LoadFallbackPalette();
 		}
 	}
 	SetFadeLevel(256);
 	if (caption == nullptr) {
-		LoadMaskedArt(error ? "ui_art\\srpopup.pcx" : "ui_art\\spopup.pcx", &dialogArt);
+		LoadMaskedArt(error ? "ui_art\\srpopup.tga" : "ui_art\\spopup.tga", &dialogArt);
 	} else {
 		if (error) {
-			LoadArt(&dialogArt, PopupData, 385, 280);
+			//LoadArt(&dialogArt, PopupData, 385, 280);
 		} else {
-			LoadMaskedArt("ui_art\\lpopup.pcx", &dialogArt);
+			LoadMaskedArt("ui_art\\lpopup.tga", &dialogArt);
 		}
 	}
 	LoadSmlButtonArt();
