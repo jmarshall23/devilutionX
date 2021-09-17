@@ -139,6 +139,8 @@ namespace devilution
 	*/
 	void StormImage::ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame) const
 	{
+		return;
+
 		const ImageFrame_t& image = frames[frame - 1];
 
 		sy -= image.height;

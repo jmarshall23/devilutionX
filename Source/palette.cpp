@@ -207,14 +207,14 @@ void LoadRndLvlPal(dungeon_type l)
 		return;
 	}
 
-	char szFileName[27];
+	static char szFileName[27];
 	if (l == DTYPE_NEST) {
 		if (!gbNestArt) {
 			rv++;
 		}
 		sprintf(szFileName, "L%iBase%i",  6, rv);
 	} else {
-		sprintf(szFileName, "L%i_%i.PAL", l, rv);
+		sprintf(szFileName, "L%i_%i", l, rv);
 	}
 	LoadPalette(szFileName);
 }
