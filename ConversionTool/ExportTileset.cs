@@ -79,7 +79,7 @@ namespace ConversionTool
 			return false;
 		}
 
-		private static byte[] currentColorPalette;
+		public static byte[] currentColorPalette;
 		private static string palette_name;
 
 		public static void SetColorPalette(string filename)

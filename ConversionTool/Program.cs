@@ -228,6 +228,32 @@ namespace ConversionTool
 
 		static void Main(string[] args)
         {
+			Console.WriteLine("Exporting UI...");
+			{
+				string[] uiPCXFiles = System.IO.Directory.GetFiles("BlizzData\\ui_art\\", "*.pcx", SearchOption.AllDirectories);
+				foreach (string file in uiPCXFiles)
+				{
+					if (file == "BlizzData\\ui_art\\listbox.pcx")
+						continue;
+
+					if (file == "BlizzData\\ui_art\\list_gry.pcx")
+						continue;
+
+					string f = file.Remove(0, new string("BlizzData/").Length);
+					Console.WriteLine("Processing:" + f);
+
+					int width = 0;
+					int height = 0;
+
+					byte[] data = DiabloPCX.LoadPCX32(file, out width, out height);
+
+					Directory.CreateDirectory("Build\\" + Path.GetDirectoryName(f));
+					string filename = "Build\\" + f;
+					filename = Path.ChangeExtension(filename, ".tga");
+					ExportTileset.WriteTGA(filename, data, width, height, false);
+				}
+			}
+
 			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
 
 			Console.WriteLine("Exporting In Game Menu Items...");
