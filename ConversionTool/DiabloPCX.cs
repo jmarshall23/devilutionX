@@ -111,7 +111,7 @@ namespace ConversionTool
 
 			ExportTileset.currentColorPalette = new byte[768];
 
-			for(int i = 0; i < 256; i++)
+			for (int i = 0; i < 256; i++)
 			{
 				ExportTileset.currentColorPalette[(i * 3) + 0] = palette[(i * 3) + 1];
 				ExportTileset.currentColorPalette[(i * 3) + 1] = palette[(i * 3) + 2];
@@ -119,6 +119,42 @@ namespace ConversionTool
 			}
 
 			return pcxBuffer;
+		}
+
+		public static void WriteConvertedPCX2TGA(string filename, byte[] data, int width, int height)
+		{
+			byte[] buffer;
+			int i, d;
+			int bufferSize = (width * height * 4) + 18;
+			int imgStart = 18;
+
+			buffer = new byte[bufferSize];
+			buffer[2] = 2; // uncompressed type
+			buffer[12] = (byte)(width & 255);
+			buffer[13] = (byte)(width >> 8);
+			buffer[14] = (byte)(height & 255);
+			buffer[15] = (byte)(height >> 8);
+			buffer[16] = 32; // pixel size
+			buffer[17] = (byte)(1 << 5); // flip bit, for normal top to bottom raster order
+
+			for (i = 0; i < width * height; i++)
+			{
+				if (ExportTileset.currentColorPalette[(data[i] * 3) + 0] == 0 && ExportTileset.currentColorPalette[(data[i] * 3) + 1] == 255 && ExportTileset.currentColorPalette[(data[i] * 3) + 2] == 0)
+				{
+					buffer[imgStart + (i * 4) + 0] = 0;
+					buffer[imgStart + (i * 4) + 1] = 0;
+					buffer[imgStart + (i * 4) + 2] = 0;
+					buffer[imgStart + (i * 4) + 3] = 0;
+					continue;
+				}
+
+				buffer[imgStart + (i * 4) + 0] = ExportTileset.currentColorPalette[(data[i] * 3) + 2];
+				buffer[imgStart + (i * 4) + 1] = ExportTileset.currentColorPalette[(data[i] * 3) + 1];
+				buffer[imgStart + (i * 4) + 2] = ExportTileset.currentColorPalette[(data[i] * 3) + 0];
+				buffer[imgStart + (i * 4) + 3] = 255;
+			}
+
+			File.WriteAllBytes(filename, buffer);
 		}
 	}
 }

@@ -250,7 +250,7 @@ namespace ConversionTool
 					Directory.CreateDirectory("Build\\" + Path.GetDirectoryName(f));
 					string filename = "Build\\" + f;
 					filename = Path.ChangeExtension(filename, ".tga");
-					ExportTileset.WriteTGA(filename, data, width, height, false);
+					DiabloPCX.WriteConvertedPCX2TGA(filename, data, width, height);
 				}
 			}
 
