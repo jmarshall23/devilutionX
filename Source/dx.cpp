@@ -312,11 +312,11 @@ void RenderPresent()
 
 	LimitFrameRate();
 
-	if (!gbActive) {		
+	if (!gbActive) {
 		return;
 	}
 
-	GL_EndFrame((unsigned char *)surface->pixels, (unsigned char *)&system_palette[0]);
+	GL_EndFrame(nullptr, nullptr);
 	GL_BeginFrame();
 }
 

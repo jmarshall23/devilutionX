@@ -1844,7 +1844,7 @@ void DrawAndBlit()
 	//	return;
 	//}
 
-	GL_EndFrame((unsigned char *)out.surface->pixels, (unsigned char *)&system_palette[0]);
+	GL_EndFrame(nullptr, nullptr);
 	GL_BeginFrame();
 
 	drawhpflag = false;

@@ -155,35 +155,37 @@ void GL_BeginFrame(void) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
-
-	// First command is ALWAYS to render the main screen buffer texture, we will update the d3dtexture at the very end; this just adds this to the imgui command queue.
-	GL_RenderImage(mainScreenBufferTex, 0, 0, screen_width, screen_height);
-
 }
 
 void GL_EndFrame(unsigned char*finalScreenBuffer, unsigned char*palette) {
-	if (palette)
+
+	if (finalScreenBuffer)
 	{
-		for (int i = 0; i < screen_width * screen_height; i++)
+		if (palette)
 		{
-			outputbuffer[(i * 4) + 0] = palette[(finalScreenBuffer[i] * 4) + 0];
-			outputbuffer[(i * 4) + 1] = palette[(finalScreenBuffer[i] * 4) + 1];
-			outputbuffer[(i * 4) + 2] = palette[(finalScreenBuffer[i] * 4) + 2];
-			outputbuffer[(i * 4) + 3] = 255;
+			for (int i = 0; i < screen_width * screen_height; i++)
+			{
+				outputbuffer[(i * 4) + 0] = palette[(finalScreenBuffer[i] * 4) + 0];
+				outputbuffer[(i * 4) + 1] = palette[(finalScreenBuffer[i] * 4) + 1];
+				outputbuffer[(i * 4) + 2] = palette[(finalScreenBuffer[i] * 4) + 2];
+				outputbuffer[(i * 4) + 3] = 255;
+			}
+
+			GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);
+		}
+		else
+		{
+			for (int i = 0; i < screen_width * screen_height; i++)
+			{
+				outputbuffer[(i * 4) + 0] = finalScreenBuffer[(i * 4) + 0];
+				outputbuffer[(i * 4) + 1] = finalScreenBuffer[(i * 4) + 1];
+				outputbuffer[(i * 4) + 2] = finalScreenBuffer[(i * 4) + 2];
+				outputbuffer[(i * 4) + 3] = finalScreenBuffer[(i * 4) + 3];
+			}
+			GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);
 		}
 
-		GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);
-	}
-	else
-	{
-		for (int i = 0; i < screen_width * screen_height; i++)
-		{
-			outputbuffer[(i * 4) + 0] = finalScreenBuffer[(i * 4) + 0];
-			outputbuffer[(i * 4) + 1] = finalScreenBuffer[(i * 4) + 1];
-			outputbuffer[(i * 4) + 2] = finalScreenBuffer[(i * 4) + 2];
-			outputbuffer[(i * 4) + 3] = finalScreenBuffer[(i * 4) + 3];
-		}
-		GL_UploadTexture(mainScreenBufferTex, outputbuffer, screen_width, screen_height, 32);
+		GL_RenderImage(mainScreenBufferTex, 0, 0, screen_width, screen_height);
 	}
 
 	// Rendering

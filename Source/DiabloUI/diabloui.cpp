@@ -69,7 +69,7 @@ std::size_t SelectedItem = 0;
 void DiabloUIPresent(void)
 {
 	SDL_Surface *surface = DiabloUiSurface();
-	GL_EndFrame((unsigned char *)surface->pixels, NULL);
+	GL_EndFrame(nullptr, NULL);
 	GL_BeginFrame();
 }
 

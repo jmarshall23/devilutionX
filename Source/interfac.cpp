@@ -112,23 +112,10 @@ void InitCutscene(interface_mode uMsg)
 
 void DrawCutscene()
 {
-	lock_buf(1);
 	const Surface &out = GlobalBackBuffer();
-	//CelDrawTo(out, { PANEL_X, 480 - 1 + UI_OFFSET_Y }, *sgpBackCel, 1);
 	int height = sgpBackCel->GetFrame(1).height;
-	sgpBackCel->Draw(out, PANEL_X, 480 - 1 + UI_OFFSET_Y - height, 0, 0, 1, false, true);
+	sgpBackCel->ClipRenderNoLighting(out, PANEL_X, 480 - 1 + UI_OFFSET_Y, 1);
 
-	constexpr int ProgressHeight = 22;
-	SDL_Rect rect = MakeSdlRect(
-	    out.region.x + BarPos[progress_id][0] + PANEL_X,
-	    out.region.y + BarPos[progress_id][1] + UI_OFFSET_Y,
-	    sgdwProgress,
-	    ProgressHeight);
-	SDL_FillRect(out.surface, &rect, BarColor[progress_id]);
-
-	unlock_buf(1);
-
-	BltFast(&rect, &rect);
 	RenderPresent();
 }
 
