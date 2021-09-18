@@ -1158,7 +1158,8 @@ void DrawInv(const Surface &out)
 			const Point position = GetPanelPosition(UiPanels::Inventory, { screenX, screenY });
 
 			if (pcursinvitem == slot) {
-				RenderItemSpriteOutline(out, GetOutlineColor(myPlayer.InvBody[slot], true), celFrame, position.x, position.y);
+				SetItemOutlineColor(myPlayer.InvBody[slot], true);
+				RenderItemSpriteOutline(out, celFrame, position.x, position.y);
 			}
 			RenderItemSprite(out, celFrame, position.x, position.y);
 
@@ -1203,7 +1204,8 @@ void DrawInv(const Surface &out)
 			//const int celFrame = GetInvItemFrame(frame);
 			const Point position = GetPanelPosition(UiPanels::Inventory, InvRect[j + SLOTXY_INV_FIRST]) + Displacement { 0, -1 };
 			if (pcursinvitem == ii + INVITEM_INV_FIRST) {
-				RenderItemSpriteOutline(out, GetOutlineColor(myPlayer.InvList[ii], true), frame, position.x, position.y);
+				SetItemOutlineColor(myPlayer.InvList[ii], true);
+				RenderItemSpriteOutline(out, frame, position.x, position.y);
 			}
 
 			RenderItemSprite(out, frame, position.x, position.y);
@@ -1235,7 +1237,8 @@ void DrawInvBelt(const Surface &out)
 
 		if (pcursinvitem == i + INVITEM_BELT_FIRST) {
 			if (!sgbControllerActive || invflag) {
-				RenderItemSpriteOutline(out, GetOutlineColor(myPlayer.SpdList[i], true), frame, position.x, position.y);
+				SetItemOutlineColor(myPlayer.SpdList[i], true);
+				RenderItemSpriteOutline(out, frame, position.x, position.y);
 			}
 		}
 

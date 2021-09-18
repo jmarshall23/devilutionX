@@ -77,9 +77,10 @@ void RenderItemSprite(const Surface &out, int cursId, int x, int y)
 	pCursCels->ClipRenderNoLighting(out, x, y, cursId);
 }
 
-void RenderItemSpriteOutline(const Surface &out, int color, int cursId, int x, int y)
+void RenderItemSpriteOutline(const Surface &out, int cursId, int x, int y)
 {
-	pCursCels->ClipRenderOutline(out, color, x, y, cursId);
+	// Color is set via SetItemOutlineColor
+	pCursCels->ClipRenderOutline(out, -1, -1, -1, x, y, cursId);
 }
 
 void SetICursor(int cursId)
@@ -106,7 +107,8 @@ void CelDrawCursor(const Surface &out, Point position, int cursId)
 {
 	if (IsItemSprite(cursId)) {
 		Item heldItem = Players[MyPlayerId].HoldItem;
-		RenderItemSpriteOutline(out, GetOutlineColor(heldItem, true), cursId, position.x, position.y);
+		SetItemOutlineColor(heldItem, true);
+		RenderItemSpriteOutline(out, cursId, position.x, position.y);
 		RenderItemSprite(out, cursId, position.x, position.y);
 	} else {
 		RenderItemSprite(out, cursId, position.x, position.y);

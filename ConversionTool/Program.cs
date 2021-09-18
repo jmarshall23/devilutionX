@@ -255,6 +255,7 @@ namespace ConversionTool
 			}
 
 			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
+			ExportTileset.DumpPaletteToTextFile("BlizzData\\Levels\\TownData\\Town.pal");
 
 			Console.WriteLine("Exporting store graphics...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.store)

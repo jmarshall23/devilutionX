@@ -553,7 +553,7 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 
 	if (pnum == pcursplr) {
 		//Cl2DrawOutline(out, 165, px, py, *pCelSprite, nCel);
-		pCelSprite->ClipRenderOutline(out, 165, px, py, nCel);
+		pCelSprite->ClipRenderOutline(out, 168, 113, 113, px, py, nCel);
 	}
 
 	if (pnum == MyPlayerId) {
@@ -656,7 +656,7 @@ void DrawObject(const Surface &out, int x, int y, int ox, int oy, bool pre)
 
 	//CelSprite cel { Objects[bv]._oAnimData, Objects[bv]._oAnimWidth };
 	if (bv == pcursobj) {
-		pCelBuff->ClipRenderOutline(out, 194, objectPosition.x, objectPosition.y, nCel);
+		pCelBuff->ClipRenderOutline(out, 221, 196, 126, objectPosition.x, objectPosition.y, nCel);
 	}
 	if (Objects[bv]._oLight) {
 		pCelBuff->ClipRenderWithLighting(out, objectPosition.x, objectPosition.y, nCel);
@@ -673,7 +673,7 @@ void RenderTile(const Surface &out, int x, int y, bool forceBlack)
 		return;
 
 	if (LightTableIndex == LightsMax) {
-		pDungeonCels->ClipRenderOutline(out, 0, x, y, level_piece_id); // Fully Black
+		pDungeonCels->ClipRenderOutline(out, 0, 0, 0, x, y, level_piece_id); // Fully Black
 	} else if (LightTableIndex == 0) {
 		pDungeonCels->ClipRenderNoLighting(out, x, y, level_piece_id);
 	} else {
@@ -762,7 +762,8 @@ void DrawItem(const Surface &out, int x, int y, int sx, int sy, bool pre)
 	const Point position { px, sy };
 	if (bItem - 1 == pcursitem || AutoMapShowItems) {
 		//CelBlitOutlineTo(out, GetOutlineColor(item, false), position, *cel, nCel);
-		cel->ClipRenderOutline(out, GetOutlineColor(item, false), position.x, position.y, nCel);
+		SetItemOutlineColor(item, false);
+		cel->ClipRenderOutline(out, -1, -1, -1, position.x, position.y, nCel);
 	}
 	//CelClippedDrawLightTo(out, position, *cel, nCel);
 	cel->ClipRenderWithLighting(out, position.x, position.y, nCel);
@@ -796,7 +797,7 @@ void DrawMonsterHelper(const Surface &out, int x, int y, int oy, int sx, int sy)
 		//CelClippedDrawTo(out, position, CelSprite(towner._tAnimData, towner._tAnimWidth), towner._tAnimFrame);
 
 		if (mi == pcursmonst) {
-			towner.image->ClipRenderOutline(out, 166, position.x, position.y, towner._tAnimFrame);
+			towner.image->ClipRenderOutline(out, 165, 90, 90, position.x, position.y, towner._tAnimFrame);
 		}
 		towner.image->ClipRenderNoLighting(out, position.x, position.y, towner._tAnimFrame);
 // jmarshall end
@@ -831,7 +832,7 @@ void DrawMonsterHelper(const Surface &out, int x, int y, int oy, int sx, int sy)
 	int px = sx + offset.deltaX - CalculateWidth2(cel->Width());
 	int py = sy + offset.deltaY;
 	if (mi == pcursmonst) {
-		cel->ClipRenderOutline(out, 233, px, py, monster.AnimInfo.GetFrameToUseForRendering());
+		cel->ClipRenderOutline(out, 147, 30, 30, px, py, monster.AnimInfo.GetFrameToUseForRendering());
 		//Cl2DrawOutline(out, 233, px, py, cel, monster.AnimInfo.GetFrameToUseForRendering());
 	}
 	DrawMonster(out, x, y, px, py, monster);

@@ -63,6 +63,6 @@ class ImageFrame_t;
 const ImageFrame_t *GetInvItemSprite(int i);
 
 void RenderItemSprite(const Surface &out, int cursId, int x, int y);
-void RenderItemSpriteOutline(const Surface &out, int color, int cursId, int x, int y);
+void RenderItemSpriteOutline(const Surface &out, int cursId, int x, int y);
 
 } // namespace devilution

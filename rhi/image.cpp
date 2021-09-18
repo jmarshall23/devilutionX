@@ -150,79 +150,18 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderOutline(const Surface& out, int color, int sx, int sy, int frame) const
+	void StormImage::ClipRenderOutline(const Surface& out, int r, int g, int b, int sx, int sy, int frame) const
 	{
-		return;
-
 		const ImageFrame_t& image = frames[frame - 1];
-
 		sy -= image.height;
 
-		sx -= 1;
-		sy -= 1;
+		if(r >= 0 && g >= 0 && b >= 0)
+			GL_SetColor(r, g, b);
 
-		for (int y = 0; y < image.height; y++)
-		{
-			for (int x = 0; x < image.width; x++)
-			{
-				int screenX = x + sx;
-				int screenY = y + sy;
-
-				if (screenX < 0)
-					continue;
-
-				if (screenY < 0)
-					continue;
-
-				if (screenX >= out.w())
-					continue;
-
-				if (screenY >= out.h())
-					continue;
-
-				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
-
-				if (image.buffer[sourcePos] == (byte)255 || image.buffer[sourcePos] == (byte)0)
-					continue;
-
-				std::uint8_t* dst = out.at(screenX, screenY);
-
-				*dst = (uint8_t)color;
-			}
-		}
-
-		sx += 2;
-		sy += 2;
-
-		for (int y = 0; y < image.height; y++)
-		{
-			for (int x = 0; x < image.width; x++)
-			{
-				int screenX = x + sx;
-				int screenY = y + sy;
-
-				if (screenX < 0)
-					continue;
-
-				if (screenY < 0)
-					continue;
-
-				if (screenX >= out.w())
-					continue;
-
-				if (screenY >= out.h())
-					continue;
-
-				int sourcePos = (image.width * (image.height - y - 1)) + (image.width - x - 1);
-
-				if (image.buffer[sourcePos] == (byte)255 || image.buffer[sourcePos] == (byte)0)
-					continue;
-
-				std::uint8_t* dst = out.at(screenX, screenY);
-
-				*dst = (uint8_t)color;
-			}
-		}
+		GL_SetSolidColorMode(true);
+		GL_RenderImage(image.glHandle, sx - 4, sy - 4, image.width + 8, image.height + 8);
+		GL_SetSolidColorMode(false);
+		GL_SetColor(255, 255, 255);
 	}
 
 	void StormImage::Draw2D(int frame, int x, int y, int width, int height, int sourcex, int sourcey, int uvwidth, int uvheight)

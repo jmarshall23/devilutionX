@@ -36,6 +36,9 @@
 #include "datatable.h"
 
 #include "../rhi/image.h"
+#include "../rhi/gl_render.h"
+#undef max
+#undef min
 
 namespace devilution {
 
@@ -2558,18 +2561,29 @@ bool IsItemAvailable(int i)
 	        sgOptions.Gameplay.bTestBard && (i == IDI_BARDSWORD || i == IDI_BARDDAGGER));
 }
 
-BYTE GetOutlineColor(const Item &item, bool checkReq)
+void SetItemOutlineColor(const Item &item, bool checkReq)
 {
-	if (checkReq && !item._iStatFlag)
-		return ICOL_RED;
-	if (item._itype == ITYPE_GOLD)
-		return ICOL_YELLOW;
-	if (item._iMagical == ITEM_QUALITY_MAGIC)
-		return ICOL_BLUE;
-	if (item._iMagical == ITEM_QUALITY_UNIQUE)
-		return ICOL_YELLOW;
+	if (checkReq && !item._iStatFlag) {
+		GL_SetColor(207, 73, 73); // ICOL_RED;
+		return;
+	}
 
-	return ICOL_WHITE;
+	if (item._itype == ITYPE_GOLD) {
+		GL_SetColor(171, 154, 99); // ICOL_YELLOW
+		return;
+	}
+
+	if (item._iMagical == ITEM_QUALITY_MAGIC) {
+		GL_SetColor(121,127,160); // ICOL_BLUE
+		return;
+	}
+
+	if (item._iMagical == ITEM_QUALITY_UNIQUE) {
+		GL_SetColor(171,154,99); // ICOL_YELLOW
+		return;
+	}
+
+	GL_SetColor(255, 255, 255); // ICOL_WHITE
 }
 
 bool IsUniqueAvailable(int i)

@@ -82,6 +82,19 @@ namespace ConversionTool
 		public static byte[] currentColorPalette;
 		private static string palette_name;
 
+		public static void DumpPaletteToTextFile(string filename)
+		{
+			string outputPath = Path.ChangeExtension(filename, ".txt");
+
+			string lines = "// For debug purposes only\n";
+			for(int i = 0; i < 256; i++)
+			{
+				lines += "" + i + " " + currentColorPalette[(i * 3) + 0] + " " + currentColorPalette[(i * 3) + 1] + " " + currentColorPalette[(i * 3) + 2] + "\n";
+			}
+
+			File.WriteAllText(outputPath, lines);
+		}
+
 		public static void SetColorPalette(string filename)
 		{
 			palette_name = Path.GetFileNameWithoutExtension(filename);
@@ -110,16 +123,20 @@ namespace ConversionTool
 				{
 					if(data[i] == 255)
 					{
-						buffer[imgStart + (i * 4) + 0] = 0;
-						buffer[imgStart + (i * 4) + 1] = 0;
-						buffer[imgStart + (i * 4) + 2] = 0;
+						buffer[imgStart + (i * 4) + 0] = 255;
+						buffer[imgStart + (i * 4) + 1] = 255;
+						buffer[imgStart + (i * 4) + 2] = 255;
 						buffer[imgStart + (i * 4) + 3] = 0;
 						continue;
 					}
 					buffer[imgStart + (i * 4) + 0] = currentColorPalette[(data[i] * 3) + 2];
 					buffer[imgStart + (i * 4) + 1] = currentColorPalette[(data[i] * 3) + 1];
 					buffer[imgStart + (i * 4) + 2] = currentColorPalette[(data[i] * 3) + 0];
-					buffer[imgStart + (i * 4) + 3] = 255;
+
+					if(buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0)
+						buffer[imgStart + (i * 4) + 3] = 128;
+					else
+						buffer[imgStart + (i * 4) + 3] = 255;
 				}
 			}
 			else
@@ -128,16 +145,20 @@ namespace ConversionTool
 				{
 					if (data[d] == 255)
 					{
-						buffer[imgStart + (i * 4) + 0] = 0;
-						buffer[imgStart + (i * 4) + 1] = 0;
-						buffer[imgStart + (i * 4) + 2] = 0;
+						buffer[imgStart + (i * 4) + 0] = 255;
+						buffer[imgStart + (i * 4) + 1] = 255;
+						buffer[imgStart + (i * 4) + 2] = 255;
 						buffer[imgStart + (i * 4) + 3] = 0;
 						continue;
 					}
 					buffer[imgStart + (i * 4) + 0] = currentColorPalette[(data[d] * 3) + 2];
 					buffer[imgStart + (i * 4) + 1] = currentColorPalette[(data[d] * 3) + 1];
 					buffer[imgStart + (i * 4) + 2] = currentColorPalette[(data[d] * 3) + 0];
-					buffer[imgStart + (i * 4) + 3] = 255;
+
+					if (buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0)
+						buffer[imgStart + (i * 4) + 3] = 128;
+					else
+						buffer[imgStart + (i * 4) + 3] = 255;
 				}
 			}
 			
