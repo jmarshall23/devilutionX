@@ -271,47 +271,12 @@ void BlackPalette()
 
 void PaletteFadeIn(int fr)
 {
-	ApplyGamma(logical_palette, orig_palette, 256);
-
-	const uint32_t tc = SDL_GetTicks();
-	fr *= 3;
-
-	uint32_t prevFadeValue = 255;
-	for (uint32_t i = 0; i < 256; i = fr * (SDL_GetTicks() - tc) / 50) {
-		if (i != prevFadeValue) {
-			SetFadeLevel(i);
-			prevFadeValue = i;
-		}
-		BltFast(nullptr, nullptr);
-		RenderPresent();
-	}
-	SetFadeLevel(256);
-
-	memcpy(logical_palette, orig_palette, sizeof(orig_palette));
-
-	sgbFadedIn = true;
+	
 }
 
 void PaletteFadeOut(int fr)
 {
-	if (!sgbFadedIn)
-		return;
-
-	const uint32_t tc = SDL_GetTicks();
-	fr *= 3;
-
-	uint32_t prevFadeValue = 0;
-	for (uint32_t i = 0; i < 256; i = fr * (SDL_GetTicks() - tc) / 50) {
-		if (i != prevFadeValue) {
-			SetFadeLevel(256 - i);
-			prevFadeValue = i;
-		}
-		BltFast(nullptr, nullptr);
-		RenderPresent();
-	}
-	SetFadeLevel(0);
-
-	sgbFadedIn = false;
+	
 }
 
 void palette_update_caves()
