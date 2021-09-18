@@ -332,7 +332,7 @@ namespace devilution
 				{
 					if (specialName != nullptr)
 					{
-						sprintf(framePath, "%s\\%s_%d.tga", path, specialName, image->frames.size());
+						sprintf(framePath, "%s_%s\\%s_%d.tga", path, pal_name, specialName, image->frames.size());
 					}
 					else
 					{

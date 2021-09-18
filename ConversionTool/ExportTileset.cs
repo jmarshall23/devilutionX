@@ -80,7 +80,7 @@ namespace ConversionTool
 		}
 
 		public static byte[] currentColorPalette;
-		private static string palette_name;
+		public static string palette_name;
 
 		public static void DumpPaletteToTextFile(string filename)
 		{
