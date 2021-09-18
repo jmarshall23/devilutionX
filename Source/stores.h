@@ -57,7 +57,7 @@ struct STextStruct {
 /** Shop frame graphics */
 extern std::optional<CelSprite> pSTextBoxCels;
 /** Small text selection cursor */
-extern std::optional<CelSprite> pSPentSpn2Cels;
+extern class StormImage *pSPentSpn2Cels;
 /** Scrollbar graphics */
 extern std::optional<CelSprite> pSTextSlidCels;
 

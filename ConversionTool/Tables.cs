@@ -95,6 +95,13 @@ namespace ConversionTool
 		private static readonly int[] CharButsWidth = { 95, 41, 41, 41, 41, 41, 41,41,41,41 };
 		private static readonly int[] CharButsHeight = { 22, 22, 22, 22, 22, 22, 22, 22, 22,22,22 };
 
+		public static readonly ConvEntry[] fonts =
+		{
+			new ConvEntry("Data\\MedTextS.CEL", 22),
+			new ConvEntry("Data\\BigTGold.CEL", 46),
+			new ConvEntry("Data\\PentSpn2.CEL", 12)
+		};
+
 		public static readonly ConvEntry[] InGameMenuAssets =
 		{
 			new ConvEntry("Data\\Diabsmal.CEL", 296),

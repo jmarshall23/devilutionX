@@ -282,11 +282,13 @@ void PrintQLString(const Surface &out, int x, int y, const char *str, bool marke
 	int sx = x + std::max((257 - width) / 2, 0);
 	int sy = y + lineHeight; //seems that DrawString y is the text base line -> so add a lines height
 	if (marked) {
-		CelDrawTo(out, GetPanelPosition(UiPanels::Quest, { sx - 20, sy + 1 }), *pSPentSpn2Cels, PentSpn2Spin());
+		Point pos = GetPanelPosition(UiPanels::Quest, { sx - 20, sy + 1 });
+		pSPentSpn2Cels->ClipRenderNoLighting(out, pos.x, pos.y, PentSpn2Spin());
 	}
 	DrawString(out, str, { GetPanelPosition(UiPanels::Quest, { sx, sy }), { 257, 0 } }, disabled ? UiFlags::ColorGold : UiFlags::ColorSilver);
 	if (marked) {
-		CelDrawTo(out, GetPanelPosition(UiPanels::Quest, { sx + width + 7, sy + 1 }), *pSPentSpn2Cels, PentSpn2Spin());
+		Point pos = GetPanelPosition(UiPanels::Quest, { sx + width + 7, sy + 1 });
+		pSPentSpn2Cels->ClipRenderNoLighting(out, pos.x, pos.y, PentSpn2Spin());
 	}
 }
 

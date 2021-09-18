@@ -12,6 +12,8 @@
 #include "engine/point.hpp"
 #include "palette.h"
 
+#include "../../rhi/image.h"
+
 namespace devilution {
 
 namespace {
@@ -131,7 +133,7 @@ enum text_color : uint8_t {
 int LineHeights[3] = { 12, 38, 50 };
 
 /** Graphics for the fonts */
-std::array<std::optional<CelSprite>, 3> fonts;
+StormImage *fonts[3];
 
 uint8_t fontColorTableGold[256];
 uint8_t fontColorTableBlue[256];
@@ -139,37 +141,42 @@ uint8_t fontColorTableRed[256];
 
 void DrawChar(const Surface &out, Point position, GameFontTables size, int nCel, text_color color)
 {
+	fonts[size]->ClipRenderNoLighting(out, position.x, position.y, nCel);
+	return; // TODO: colored fonts!
+
+
 	switch (color) {
 	case ColorWhite:
-		CelDrawTo(out, position, *fonts[size], nCel);
+		fonts[size]->ClipRenderNoLighting(out, position.x, position.y, nCel);
+		//CelDrawTo(out, position, *fonts[size], nCel);
 		return;
 	case ColorBlue:
-		CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableBlue);
+		//CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableBlue);
 		break;
 	case ColorRed:
-		CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableRed);
+		//CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableRed);
 		break;
 	case ColorGold:
-		CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableGold);
+	//	CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableGold);
 		break;
 	case ColorBlack:
 		LightTableIndex = 15;
-		CelDrawLightTo(out, position, *fonts[size], nCel, nullptr);
+	//	CelDrawLightTo(out, position, *fonts[size], nCel, nullptr);
 		return;
 	}
 }
 
 } // namespace
 
-std::optional<CelSprite> pSPentSpn2Cels;
+StormImage *pSPentSpn2Cels;
 
 void InitText()
 {
-	fonts[GameFontSmall] = LoadCel("CtrlPan\\SmalText.CEL", 13);
-	fonts[GameFontMed] = LoadCel("Data\\MedTextS.CEL", 22);
-	fonts[GameFontBig] = LoadCel("Data\\BigTGold.CEL", 46);
+	fonts[GameFontSmall] = StormImage::LoadImageSequence("CtrlPan\\SmalText", false, false);
+	fonts[GameFontMed] = StormImage::LoadImageSequence("Data\\MedTextS", false, false);
+	fonts[GameFontBig] = StormImage::LoadImageSequence("Data\\BigTGold", false, false);
 
-	pSPentSpn2Cels = LoadCel("Data\\PentSpn2.CEL", 12);
+	pSPentSpn2Cels = StormImage::LoadImageSequence("Data\\PentSpn2", false, false);
 
 	for (int i = 0; i < 256; i++) {
 		uint8_t pix = i;
@@ -337,7 +344,8 @@ uint16_t DrawString(const Surface &out, string_view text, const Rectangle &rect,
 			characterPosition.x += symbolWidth + spacing;
 	}
 	if (drawTextCursor) {
-		CelDrawTo(out, characterPosition, *pSPentSpn2Cels, PentSpn2Spin());
+		//CelDrawTo(out, characterPosition, *pSPentSpn2Cels, PentSpn2Spin());
+		pSPentSpn2Cels->ClipRenderNoLighting(out, characterPosition.x, characterPosition.y, PentSpn2Spin());
 	}
 
 	return i;

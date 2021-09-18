@@ -14,3 +14,4 @@ void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int hei
 
 void GL_BeginFrame(void);
 void GL_EndFrame(unsigned char* finalScreenBuffer, unsigned char* palette);
+

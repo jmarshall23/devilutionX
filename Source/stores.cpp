@@ -20,6 +20,10 @@
 #include "towners.h"
 #include "utils/language.h"
 
+#include "../rhi/gl_render.h"
+#undef min
+#undef max
+
 namespace devilution {
 
 Item golditem;
@@ -2163,13 +2167,15 @@ void DrawSelector(const Surface &out, const Rectangle &rect, const char *text, U
 	if (HasAnyOf(flags, UiFlags::AlignCenter))
 		x1 += (rect.size.width - lineWidth) / 2;
 
-	CelDrawTo(out, { x1, rect.position.y + 1 }, *pSPentSpn2Cels, PentSpn2Spin());
+	//CelDrawTo(out, { x1, rect.position.y + 1 }, *pSPentSpn2Cels, PentSpn2Spin());
+	pSPentSpn2Cels->ClipRenderNoLighting(out, x1, rect.position.y + 1, PentSpn2Spin());
 
 	int x2 = rect.position.x + rect.size.width + 5;
 	if (HasAnyOf(flags, UiFlags::AlignCenter))
 		x2 = rect.position.x + (rect.size.width - lineWidth) / 2 + lineWidth + 5;
 
-	CelDrawTo(out, { x2, rect.position.y + 1 }, *pSPentSpn2Cels, PentSpn2Spin());
+	//CelDrawTo(out, { x2, rect.position.y + 1 }, *pSPentSpn2Cels, PentSpn2Spin());
+	pSPentSpn2Cels->ClipRenderNoLighting(out, x2, rect.position.y + 1, PentSpn2Spin());
 }
 
 } // namespace

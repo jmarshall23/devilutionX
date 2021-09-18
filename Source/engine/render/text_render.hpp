@@ -24,7 +24,7 @@ enum GameFontTables : uint8_t {
 	GameFontBig,
 };
 
-extern std::optional<CelSprite> pSPentSpn2Cels;
+extern class StormImage *pSPentSpn2Cels;
 
 void InitText();
 
