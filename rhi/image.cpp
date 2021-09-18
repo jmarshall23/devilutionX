@@ -111,7 +111,11 @@ namespace devilution
 
 		sy -= image.height;
 
+		float lightScale = 1.0f - (light / 15.0f);
+		lightScale *= 255.0f;
+		GL_SetColor(lightScale, lightScale, lightScale);		
 		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
+		GL_SetColor(255, 255, 255);
 	}
 
 	/*
@@ -132,7 +136,13 @@ namespace devilution
 
 		sy -= image.height;
 
+		float lightScale = 1.0f - (LightTableIndex / 15.0f);
+
+		lightScale *= 255.0f;
+
+		GL_SetColor(lightScale, lightScale, lightScale);
 		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
+		GL_SetColor(255, 255, 255);
 	}
 
 	/*

@@ -156,7 +156,7 @@ void DrawChar(const Surface &out, Point position, GameFontTables size, int nCel,
 		GL_SetColor(218, 198, 153);
 		break;
 	case ColorBlack:
-		LightTableIndex = 15;
+		//LightTableIndex = 15;
 		return;
 	}
 
