@@ -159,7 +159,8 @@ namespace devilution
 			GL_SetColor(r, g, b);
 
 		GL_SetSolidColorMode(true);
-		GL_RenderImage(image.glHandle, sx - 4, sy - 4, image.width + 8, image.height + 8);
+		GL_RenderImage(image.glHandle, sx - 1, sy - 1, image.width, image.height);
+		GL_RenderImage(image.glHandle, sx + 1, sy + 1, image.width, image.height);
 		GL_SetSolidColorMode(false);
 		GL_SetColor(255, 255, 255);
 	}
