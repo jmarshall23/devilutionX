@@ -1488,7 +1488,7 @@ void DrawSpellBook(const Surface &out)
 	//CelDrawTo(out, GetPanelPosition(UiPanels::Spell, { 0, 351 }), *pSpellBkCel, 1);
 
 	Point point = GetPanelPosition(UiPanels::Spell, { 0, 351 });
-	//point.y -= pSpellBkCel->Height();
+	point.y -= pSpellBkCel->Height();
 	pSpellBkCel->ClipRenderUI(out, point.x, point.y, 1);
 
 	if (gbIsHellfire && sbooktab < 5) {

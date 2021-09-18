@@ -1111,8 +1111,7 @@ void InitInv()
 void DrawInv(const Surface &out)
 {
 	Point pt = GetPanelPosition(UiPanels::Inventory, { 0, 351 });
-	pt.y -= pInvCels->GetFrame(1).height;
-	pInvCels->Draw(out, pt.x, pt.y, 0, 0, 1, false, true);
+	pInvCels->ClipRenderNoLighting(out, pt.x, pt.y, 1);
 
 	Size slotSize[] = {
 		{ 2, 2 }, //head
