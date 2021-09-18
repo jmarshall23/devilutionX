@@ -21,6 +21,7 @@
 #include "utils/language.h"
 
 #include "../rhi/gl_render.h"
+#include "../rhi/image.h"
 #undef min
 #undef max
 
@@ -28,8 +29,8 @@ namespace devilution {
 
 Item golditem;
 
-std::optional<CelSprite> pSTextBoxCels;
-std::optional<CelSprite> pSTextSlidCels;
+StormImage *pSTextBoxCels;
+StormImage *pSTextSlidCels;
 
 talk_id stextflag;
 
@@ -104,7 +105,7 @@ const char *const TownerNames[] = {
 
 void DrawSTextBack(const Surface &out)
 {
-	CelDrawTo(out, { PANEL_X + 320 + 24, 327 + UI_OFFSET_Y }, *pSTextBoxCels, 1);
+	pSTextBoxCels->ClipRenderNoLighting(out, PANEL_X + 320 + 24, 327 + UI_OFFSET_Y, 1);
 	DrawHalfTransparentRectTo(out, PANEL_X + 347, UI_OFFSET_Y + 28, 265, 297);
 }
 
@@ -113,17 +114,17 @@ void DrawSSlider(const Surface &out, int y1, int y2)
 	int yd1 = y1 * 12 + 44 + UI_OFFSET_Y;
 	int yd2 = y2 * 12 + 44 + UI_OFFSET_Y;
 	if (stextscrlubtn != -1)
-		CelDrawTo(out, { PANEL_X + 601, yd1 }, *pSTextSlidCels, 12);
+		pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 601, yd1, 12);
 	else
-		CelDrawTo(out, { PANEL_X + 601, yd1 }, *pSTextSlidCels, 10);
+		pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 601, yd1, 10);
 	if (stextscrldbtn != -1)
-		CelDrawTo(out, { PANEL_X + 601, yd2 }, *pSTextSlidCels, 11);
+		pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 601, yd2, 11);
 	else
-		CelDrawTo(out, { PANEL_X + 601, yd2 }, *pSTextSlidCels, 9);
+		pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 601, yd2, 9);
 	yd1 += 12;
 	int yd3 = yd1;
 	for (; yd3 < yd2; yd3 += 12) {
-		CelDrawTo(out, { PANEL_X + 601, yd3 }, *pSTextSlidCels, 14);
+		pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 601, yd3, 14);
 	}
 	if (stextsel == 22)
 		yd3 = stextlhold;
@@ -133,7 +134,8 @@ void DrawSSlider(const Surface &out, int y1, int y2)
 		yd3 = 1000 * (stextsval + ((yd3 - stextup) / 4)) / (storenumh - 1) * (y2 * 12 - y1 * 12 - 24) / 1000;
 	else
 		yd3 = 0;
-	CelDrawTo(out, { PANEL_X + 601, (y1 + 1) * 12 + 44 + UI_OFFSET_Y + yd3 }, *pSTextSlidCels, 13);
+	
+	pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 601, (y1 + 1) * 12 + 44 + UI_OFFSET_Y + yd3, 13);
 }
 
 void AddSLine(int y)
@@ -2205,8 +2207,8 @@ void AddStoreHoldRepair(Item *itm, int8_t i)
 
 void InitStores()
 {
-	pSTextBoxCels = LoadCel("Data\\TextBox2.CEL", 271);
-	pSTextSlidCels = LoadCel("Data\\TextSlid.CEL", 12);
+	pSTextBoxCels  = StormImage::LoadImageSequence("Data\\TextBox2", false, false);
+	pSTextSlidCels = StormImage::LoadImageSequence("Data\\TextSlid", false, false);
 	ClearSText(0, STORE_LINES);
 	stextflag = STORE_NONE;
 	stextsize = false;
@@ -2245,8 +2247,7 @@ void SetupTownStores()
 
 void FreeStoreMem()
 {
-	pSTextBoxCels = std::nullopt;
-	pSTextSlidCels = std::nullopt;
+
 }
 
 void PrintSString(const Surface &out, int margin, int line, const char *text, UiFlags flags, int price)

@@ -16,6 +16,8 @@
 
 #include "datatable.h"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 namespace {
@@ -93,21 +95,32 @@ void DrawDiabloMsg(const Surface &out)
 {
 	int dialogStartY = ((gnScreenHeight - PANEL_HEIGHT) / 2) - (ErrorWindowHeight / 2) + 9;
 
-	CelDrawTo(out, { PANEL_X + 101, dialogStartY }, *pSTextSlidCels, 1);
-	CelDrawTo(out, { PANEL_X + 527, dialogStartY }, *pSTextSlidCels, 4);
-	CelDrawTo(out, { PANEL_X + 101, dialogStartY + ErrorWindowHeight - 6 }, *pSTextSlidCels, 2);
-	CelDrawTo(out, { PANEL_X + 527, dialogStartY + ErrorWindowHeight - 6 }, *pSTextSlidCels, 3);
+	pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 101, dialogStartY, 1);
+	pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 527, dialogStartY, 4);
+	pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 101, dialogStartY + ErrorWindowHeight - 6, 2);
+	pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 527, dialogStartY + ErrorWindowHeight - 6, 3);
+
+	//CelDrawTo(out, { PANEL_X + 101, dialogStartY }, *pSTextSlidCels, 1);
+	//CelDrawTo(out, { PANEL_X + 527, dialogStartY }, *pSTextSlidCels, 4);
+	//CelDrawTo(out, { PANEL_X + 101, dialogStartY + ErrorWindowHeight - 6 }, *pSTextSlidCels, 2);
+	//CelDrawTo(out, { PANEL_X + 527, dialogStartY + ErrorWindowHeight - 6 }, *pSTextSlidCels, 3);
 
 	int sx = PANEL_X + 109;
 	for (int i = 0; i < 35; i++) {
-		CelDrawTo(out, { sx, dialogStartY }, *pSTextSlidCels, 5);
-		CelDrawTo(out, { sx, dialogStartY + ErrorWindowHeight - 6 }, *pSTextSlidCels, 7);
+		pSTextSlidCels->ClipRenderNoLighting(out, sx, dialogStartY, 5);
+		pSTextSlidCels->ClipRenderNoLighting(out, sx, dialogStartY + ErrorWindowHeight - 6, 7);
+
+		//CelDrawTo(out, { sx, dialogStartY }, *pSTextSlidCels, 5);
+		//CelDrawTo(out, { sx, dialogStartY + ErrorWindowHeight - 6 }, *pSTextSlidCels, 7);
 		sx += 12;
 	}
 	int drawnYborder = 12;
 	while ((drawnYborder + 12) < ErrorWindowHeight) {
-		CelDrawTo(out, { PANEL_X + 101, dialogStartY + drawnYborder }, *pSTextSlidCels, 6);
-		CelDrawTo(out, { PANEL_X + 527, dialogStartY + drawnYborder }, *pSTextSlidCels, 8);
+		//CelDrawTo(out, {  }, *pSTextSlidCels, 6);
+		//CelDrawTo(out, { }, *pSTextSlidCels, 8);
+
+		pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 101, dialogStartY + drawnYborder, 6);
+		pSTextSlidCels->ClipRenderNoLighting(out, PANEL_X + 527, dialogStartY + drawnYborder, 8);
 		drawnYborder += 12;
 	}
 

@@ -55,11 +55,11 @@ struct STextStruct {
 };
 
 /** Shop frame graphics */
-extern std::optional<CelSprite> pSTextBoxCels;
+extern class StormImage *pSTextBoxCels;
 /** Small text selection cursor */
 extern class StormImage *pSPentSpn2Cels;
 /** Scrollbar graphics */
-extern std::optional<CelSprite> pSTextSlidCels;
+extern class StormImage *pSTextSlidCels;
 
 /** Currently active store */
 extern talk_id stextflag;
