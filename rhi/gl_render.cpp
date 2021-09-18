@@ -23,6 +23,10 @@ byte* outputbuffer;
 SDL_Surface *uiSurface; // hd texture surface.
 int mainScreenBufferTex = 0;
 
+int global_red = 255;
+int global_green = 255;
+int global_blue = 255;
+
 #define GL_CLAMP_TO_EDGE 0x812F
 #define GL_TEXTURE_WRAP_S 0x2802
 #define GL_TEXTURE_WRAP_T 0x2803
@@ -34,6 +38,12 @@ namespace devilution
 	{
 		return uiSurface;
 	}
+}
+
+void GL_SetColor(float r, float g, float b) {
+	global_red = r;
+	global_blue = b;
+	global_green = g;
 }
 
 /*
@@ -140,7 +150,7 @@ void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int
 	endUV.x = 1;
 	endUV.y = 1.0f - start_uvy;
 
-	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV);
+	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV, IM_COL32(global_red, global_green, global_blue, 255));
 }
 
 void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int height, int startx, int starty, int uvwidth, int uvheight, int imagewidth, int imageheight) {
@@ -155,7 +165,7 @@ void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int hei
 	endUV.x = startUV.x + ((float)uvwidth / (float)imagewidth);
 	endUV.y = startUV.y + ((float)uvheight / (float)imageheight);
 
-	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV);
+	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV, IM_COL32(global_red, global_green, global_blue, 255));
 }
 
 void GL_BeginFrame(void) {

@@ -13,6 +13,7 @@
 #include "palette.h"
 
 #include "../../rhi/image.h"
+#include "../../rhi/gl_render.h"
 
 namespace devilution {
 
@@ -141,29 +142,26 @@ uint8_t fontColorTableRed[256];
 
 void DrawChar(const Surface &out, Point position, GameFontTables size, int nCel, text_color color)
 {
-	fonts[size]->ClipRenderNoLighting(out, position.x, position.y, nCel);
-	return; // TODO: colored fonts!
-
-
 	switch (color) {
 	case ColorWhite:
-		fonts[size]->ClipRenderNoLighting(out, position.x, position.y, nCel);
-		//CelDrawTo(out, position, *fonts[size], nCel);
-		return;
+		GL_SetColor(255, 255, 255);
+		break;
 	case ColorBlue:
-		//CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableBlue);
+		GL_SetColor(91, 89, 174);
 		break;
 	case ColorRed:
-		//CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableRed);
+		GL_SetColor(255, 0, 0);
 		break;
 	case ColorGold:
-	//	CelDrawLightTo(out, position, *fonts[size], nCel, fontColorTableGold);
+		GL_SetColor(218, 198, 153);
 		break;
 	case ColorBlack:
 		LightTableIndex = 15;
-	//	CelDrawLightTo(out, position, *fonts[size], nCel, nullptr);
 		return;
 	}
+
+	fonts[size]->ClipRenderNoLighting(out, position.x, position.y, nCel);
+	GL_SetColor(255, 255, 255);
 }
 
 } // namespace
