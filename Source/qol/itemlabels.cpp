@@ -8,7 +8,6 @@
 #include "control.h"
 #include "cursor.h"
 #include "engine/point.hpp"
-#include "engine/render/cel_render.hpp"
 #include "gmenu.h"
 #include "inv.h"
 #include "itemlabels.h"

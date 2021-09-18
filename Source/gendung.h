@@ -10,7 +10,6 @@
 #include <vector>
 
 #include "engine.h"
-#include "engine/cel_sprite.hpp"
 #include "engine/point.hpp"
 #include "scrollrt.h"
 #include "utils/stdcompat/optional.hpp"

@@ -12,7 +12,6 @@
 #include "engine.h"
 #include "engine/actor_position.hpp"
 #include "engine/animationinfo.h"
-#include "engine/cel_sprite.hpp"
 #include "engine/point.hpp"
 #include "gendung.h"
 #include "interfac.h"

@@ -1,7 +1,6 @@
 #include "towners.h"
 
 #include "cursor.h"
-#include "engine/cel_header.hpp"
 #include "engine/load_file.hpp"
 #include "engine/random.hpp"
 #include "inv.h"

@@ -11,7 +11,6 @@
 
 #include "DiabloUI/ui_item.h"
 #include "engine.h"
-#include "engine/cel_sprite.hpp"
 #include "engine/rectangle.hpp"
 #include "utils/stdcompat/optional.hpp"
 #include "utils/stdcompat/string_view.hpp"

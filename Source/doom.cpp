@@ -7,15 +7,9 @@
 
 #include "control.h"
 #include "engine.h"
-#include "engine/cel_sprite.hpp"
-#include "engine/load_cel.hpp"
-#include "engine/render/cel_render.hpp"
 #include "utils/stdcompat/optional.hpp"
 
 namespace devilution {
-namespace {
-std::optional<CelSprite> DoomCel;
-} // namespace
 
 bool DoomFlag;
 
@@ -28,7 +22,6 @@ void doom_init()
 void doom_close()
 {
 	DoomFlag = false;
-	DoomCel = std::nullopt;
 }
 
 void doom_draw(const Surface &out)

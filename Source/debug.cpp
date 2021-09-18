@@ -13,7 +13,6 @@
 #include "automap.h"
 #include "control.h"
 #include "cursor.h"
-#include "engine/load_cel.hpp"
 #include "engine/point.hpp"
 #include "error.h"
 #include "inv.h"
@@ -26,7 +25,6 @@
 
 namespace devilution {
 
-std::optional<CelSprite> pSquareCel;
 bool DebugGodMode = false;
 bool DebugVision = false;
 bool DebugCoords = false;
@@ -508,12 +506,12 @@ std::vector<DebugCmdItem> DebugCmdList = {
 
 void LoadDebugGFX()
 {
-	pSquareCel = LoadCel("Data\\Square.CEL", 64);
+//	pSquareCel = LoadCel("Data\\Square.CEL", 64);
 }
 
 void FreeDebugGFX()
 {
-	pSquareCel = std::nullopt;
+	//pSquareCel = std::nullopt;
 }
 
 void PrintDebugPlayer(bool bNextPlayer)

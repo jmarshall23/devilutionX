@@ -7,7 +7,6 @@
 
 #include "control.h"
 #include "engine.h"
-#include "engine/cel_sprite.hpp"
 #include "utils/stdcompat/optional.hpp"
 
 namespace devilution {

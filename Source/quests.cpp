@@ -11,7 +11,6 @@
 #include "cursor.h"
 #include "engine/load_file.hpp"
 #include "engine/random.hpp"
-#include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "gendung.h"
 #include "init.h"

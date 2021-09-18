@@ -10,9 +10,7 @@
 #include <fmt/format.h>
 
 #include "cursor.h"
-#include "engine/load_cel.hpp"
 #include "engine/random.hpp"
-#include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "init.h"
 #include "minitext.h"

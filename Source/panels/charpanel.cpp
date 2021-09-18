@@ -7,7 +7,6 @@
 #include "DiabloUI/art_draw.h"
 
 #include "control.h"
-#include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "utils/language.h"
 

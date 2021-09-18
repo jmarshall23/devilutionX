@@ -9,7 +9,6 @@
 #include "dead.h"
 #include "doom.h"
 #include "dx.h"
-#include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "panels/charpanel.hpp"
 #include "error.h"
@@ -897,10 +896,10 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 		negMon = dMonster[sx][sy - 1];
 
 #ifdef _DEBUG
-	if (DebugVision && (bFlag & BFLAG_LIT) != 0) {
-		CelClippedDrawTo(out, { dx, dy }, *pSquareCel, 1);
-	}
-	DebugCoordsMap[sx + sy * MAXDUNX] = { dx, dy };
+	//if (DebugVision && (bFlag & BFLAG_LIT) != 0) {
+	//	CelClippedDrawTo(out, { dx, dy }, *pSquareCel, 1);
+	//}
+	//DebugCoordsMap[sx + sy * MAXDUNX] = { dx, dy };
 #endif
 
 	if (MissilePreFlag) {

@@ -7,7 +7,6 @@
 
 #include "missiles.h"
 #include "engine/load_file.hpp"
-#include "engine/cel_header.hpp"
 
 #include "datatable.h"
 

@@ -9,7 +9,6 @@
 #include "error.h"
 
 #include "control.h"
-#include "engine/render/cel_render.hpp"
 #include "engine/render/text_render.hpp"
 #include "stores.h"
 #include "utils/language.h"
