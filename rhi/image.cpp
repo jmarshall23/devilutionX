@@ -313,6 +313,17 @@ namespace devilution
 		}
 		else
 		{
+			if (isTiles)
+			{
+				if (specialName) {
+					image->name += specialName;
+				}
+
+				if (pal_name) {
+					image->name += pal_name;
+				}
+			}
+
 			while (true) {
 				char framePath[512];
 				ImageFrame_t frame;
