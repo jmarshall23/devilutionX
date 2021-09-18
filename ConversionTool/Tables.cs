@@ -97,6 +97,7 @@ namespace ConversionTool
 
 		public static readonly ConvEntry[] store =
 		{
+			new ConvEntry("Data\\TextBox.CEL", 591),
 			new ConvEntry("Data\\TextBox2.CEL", 271),
 			new ConvEntry("Data\\TextSlid.CEL", 12),
 		};

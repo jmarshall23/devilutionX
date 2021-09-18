@@ -18,6 +18,8 @@
 #include "utils/stdcompat/optional.hpp"
 #include "utils/stdcompat/string_view.hpp"
 
+#include "../rhi/image.h"
+
 namespace devilution {
 
 /** Specify if the quest dialog window is being shown */
@@ -30,7 +32,7 @@ int qtextSpd;
 /** Start time of scrolling */
 Uint32 ScrollStart;
 /** Graphics for the window border */
-std::optional<CelSprite> pTextBoxCels;
+StormImage *pTextBoxCels;
 
 /** Pixels for a line of text and the empty space under it. */
 const int LineHeight = 38;
@@ -128,7 +130,7 @@ void DrawQTextContent(const Surface &out)
  */
 void FreeQuestText()
 {
-	pTextBoxCels = std::nullopt;
+
 }
 
 /**
@@ -136,7 +138,7 @@ void FreeQuestText()
  */
 void InitQuestText()
 {
-	pTextBoxCels = LoadCel("Data\\TextBox.CEL", 591);
+	pTextBoxCels = StormImage::LoadImageSequence("Data\\TextBox", false, false);
 	qtextflag = false;
 }
 
@@ -158,7 +160,7 @@ void InitQTextMsg(_speech_id m)
 
 void DrawQTextBack(const Surface &out)
 {
-	CelDrawTo(out, { PANEL_X + 24, 327 + UI_OFFSET_Y }, *pTextBoxCels, 1);
+	pTextBoxCels->ClipRenderNoLighting(out, PANEL_X + 24, 327 + UI_OFFSET_Y, 1);
 	DrawHalfTransparentRectTo(out, PANEL_X + 27, UI_OFFSET_Y + 28, 585, 297);
 }
 
