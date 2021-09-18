@@ -16,7 +16,7 @@
 
 namespace devilution {
 
-std::optional<CelSprite> pChrButtons;
+StormImage *pChrButtons;
 extern StormImage *pChrPanel;
 
 /** Map of hero class names */
@@ -273,14 +273,24 @@ bool CharPanelLoaded = false;
 void DrawStatButtons(const Surface &out)
 {
 	if (MyPlayer->_pStatPts > 0) {
-		if (MyPlayer->_pBaseStr < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Strength))
-			CelDrawTo(out, GetPanelPosition(UiPanels::Character, { 137, 159 }), *pChrButtons, chrbtn[static_cast<size_t>(CharacterAttribute::Strength)] ? 3 : 2);
-		if (MyPlayer->_pBaseMag < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Magic))
-			CelDrawTo(out, GetPanelPosition(UiPanels::Character, { 137, 187 }), *pChrButtons, chrbtn[static_cast<size_t>(CharacterAttribute::Magic)] ? 5 : 4);
-		if (MyPlayer->_pBaseDex < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Dexterity))
-			CelDrawTo(out, GetPanelPosition(UiPanels::Character, { 137, 216 }), *pChrButtons, chrbtn[static_cast<size_t>(CharacterAttribute::Dexterity)] ? 7 : 6);
-		if (MyPlayer->_pBaseVit < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Vitality))
-			CelDrawTo(out, GetPanelPosition(UiPanels::Character, { 137, 244 }), *pChrButtons, chrbtn[static_cast<size_t>(CharacterAttribute::Vitality)] ? 9 : 8);
+		if (MyPlayer->_pBaseStr < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Strength)) {
+			Point point = GetPanelPosition(UiPanels::Character, { 137, 159 });
+			pChrButtons->ClipRenderNoLighting(out, point.x, point.y, chrbtn[static_cast<size_t>(CharacterAttribute::Strength)] ? 3 : 2);
+		}
+		if (MyPlayer->_pBaseMag < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Magic)) {
+			Point point = GetPanelPosition(UiPanels::Character, { 137, 187 });
+			pChrButtons->ClipRenderNoLighting(out, point.x, point.y, chrbtn[static_cast<size_t>(CharacterAttribute::Magic)] ? 5 : 4);
+		}
+
+		if (MyPlayer->_pBaseDex < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Dexterity)) {
+			Point point = GetPanelPosition(UiPanels::Character, { 137, 216 });
+			pChrButtons->ClipRenderNoLighting(out, point.x, point.y, chrbtn[static_cast<size_t>(CharacterAttribute::Dexterity)] ? 7 : 6);
+		}
+
+		if (MyPlayer->_pBaseVit < MyPlayer->GetMaximumAttributeValue(CharacterAttribute::Vitality)) {
+			Point point = GetPanelPosition(UiPanels::Character, { 137, 244 });
+			pChrButtons->ClipRenderNoLighting(out, point.x, point.y, chrbtn[static_cast<size_t>(CharacterAttribute::Vitality)] ? 9 : 8);
+		}
 	}
 }
 

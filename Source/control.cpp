@@ -91,11 +91,12 @@ namespace {
 StormImage *P8Bulbs;
 StormImage *panel8;
 
-std::optional<CelSprite> talkButtons;
-std::optional<CelSprite> pDurIcons;
-std::optional<CelSprite> multiButtons;
-std::optional<CelSprite> pPanelButtons;
-std::optional<CelSprite> pGBoxBuff;
+StormImage *talkButtons;
+StormImage *pDurIcons;
+StormImage *multiButtons;
+StormImage *pPanelButtons;
+StormImage *pGBoxBuff;
+
 StormImage *pSBkBtnCel;
 StormImage *pSpellBkCel;
 StormImage *pSpellCels;
@@ -472,7 +473,9 @@ int DrawDurIcon4Item(const Surface &out, Item &pItem, int x, int c)
 	}
 	if (pItem._iDurability > 2)
 		c += 8;
-	CelDrawTo(out, { x, -17 + PANEL_Y }, *pDurIcons, c);
+	//CelDrawTo(out, { x, -17 + PANEL_Y }, *pDurIcons, c);
+
+	pDurIcons->ClipRenderNoLighting(out, x, -17 + PANEL_Y, c);
 	return x - 32 - 8;
 }
 
@@ -911,15 +914,24 @@ void DrawPlayerHud(const Surface &out)
 
 	for (int i = 0; i < 6; i++) {
 		if (PanelButtons[i])
-			CelDrawTo(out, { PanBtnPos[i].x + PANEL_X, PanBtnPos[i].y + PANEL_Y + 18 }, *pPanelButtons, i + 1);
+			pPanelButtons->ClipRenderNoLighting(out, PanBtnPos[i].x + PANEL_X, PanBtnPos[i].y + PANEL_Y + 18, i + 1);
+			//CelDrawTo(out, {  }, *pPanelButtons, i + 1);
 	}
 
+	//if (PanelButtonIndex == 8) {
+	//	CelDrawTo(out, { 87 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[6] ? 2 : 1);
+	//	if (gbFriendlyMode)
+	//		CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 4 : 3);
+	//	else
+	//		CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 6 : 5);
+	//}
+
 	if (PanelButtonIndex == 8) {
-		CelDrawTo(out, { 87 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[6] ? 2 : 1);
+		multiButtons->ClipRenderNoLighting(out, 87 + PANEL_X, 122 + PANEL_Y, PanelButtons[6] ? 2 : 1);
 		if (gbFriendlyMode)
-			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 4 : 3);
+			multiButtons->ClipRenderNoLighting(out, 527 + PANEL_X, 122 + PANEL_Y, PanelButtons[7] ? 4 : 3);
 		else
-			CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 6 : 5);
+			multiButtons->ClipRenderNoLighting(out, 527 + PANEL_X, 122 + PANEL_Y, PanelButtons[7] ? 6 : 5);
 	}
 }
 
@@ -955,8 +967,8 @@ void InitControlPan()
 // jmarshall - chat todo
 		//	CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) * 2 - 1 }, LoadCel("CtrlPan\\TalkPanl.CEL", PANEL_WIDTH), 1);
 // jmarshall end
-		multiButtons = LoadCel("CtrlPan\\P8But2.CEL", 33);
-		talkButtons = LoadCel("CtrlPan\\TalkButt.CEL", 61);
+		multiButtons = StormImage::LoadImageSequence("CtrlPan\\P8But2", false, false);
+		talkButtons = StormImage::LoadImageSequence("CtrlPan\\TalkButt", false, false);
 		sgbPlrTalkTbl = 0;
 		TalkMessage[0] = '\0';
 		for (bool &whisper : WhisperList)
@@ -966,7 +978,7 @@ void InitControlPan()
 	}
 	panelflag = false;
 	lvlbtndown = false;
-	pPanelButtons = LoadCel("CtrlPan\\Panel8bu.CEL", 71);
+	pPanelButtons = StormImage::LoadImageSequence("CtrlPan\\Panel8bu", false, false);
 	for (bool &panbtn : PanelButtons)
 		panbtn = false;
 	panbtndown = false;
@@ -974,11 +986,11 @@ void InitControlPan()
 		PanelButtonIndex = 6;
 	else
 		PanelButtonIndex = 8;
-	pChrButtons = LoadCel("Data\\CharBut.CEL", 41);
+	pChrButtons = StormImage::LoadImageSequence("Data\\CharBut", false, false);
 	for (bool &buttonEnabled : chrbtn)
 		buttonEnabled = false;
 	chrbtnactive = false;
-	pDurIcons = LoadCel("Items\\DurIcons.CEL", 32);
+	pDurIcons = StormImage::LoadImageSequence("Items\\DurIcons", false, false);
 	strcpy(infostr, "");
 	ClearPanel();
 	drawhpflag = true;
@@ -1008,7 +1020,7 @@ void InitControlPan()
 		SpellPages[0][0] = SPL_BLODBOIL;
 	}
 	pQLogCel = StormImage::LoadImageSequence("Data\\Quest", false, false); //LoadCel("Data\\Quest.CEL", SPANEL_WIDTH);
-	pGBoxBuff = LoadCel("CtrlPan\\Golddrop.cel", 261);
+	pGBoxBuff = StormImage::LoadImageSequence("CtrlPan\\Golddrop", false, false);
 	dropGoldFlag = false;
 	dropGoldValue = 0;
 	initialDropGoldValue = 0;
@@ -1291,15 +1303,7 @@ void CheckBtnUp()
 
 void FreeControlPan()
 {
-//	pChrPanel = std::nullopt;
-	pPanelButtons = std::nullopt;
-	multiButtons = std::nullopt;
-	talkButtons = std::nullopt;
-	pChrButtons = std::nullopt;
-	pDurIcons = std::nullopt;
-	//pSpellBkCel = std::nullopt;
-	//pSBkBtnCel = std::nullopt;
-	pGBoxBuff = std::nullopt;
+
 }
 
 void DrawInfoBox(const Surface &out)
@@ -1385,7 +1389,8 @@ void DrawLevelUpIcon(const Surface &out)
 	if (stextflag == STORE_NONE) {
 		int nCel = lvlbtndown ? 3 : 2;
 		DrawString(out, _("Level Up"), { { PANEL_LEFT + 0, PANEL_TOP - 49 }, { 120, 0 } }, UiFlags::ColorSilver | UiFlags::AlignCenter);
-		CelDrawTo(out, { 40 + PANEL_X, -17 + PANEL_Y }, *pChrButtons, nCel);
+		//CelDrawTo(out, { 40 + PANEL_X, -17 + PANEL_Y }, *pChrButtons, nCel);
+		pChrButtons->ClipRenderNoLighting(out, 40 + PANEL_X, -17 + PANEL_Y, nCel);
 	}
 }
 
@@ -1589,7 +1594,8 @@ void DrawGoldSplit(const Surface &out, int amount)
 {
 	const int dialogX = 30;
 
-	CelDrawTo(out, GetPanelPosition(UiPanels::Inventory, { dialogX, 178 }), *pGBoxBuff, 1);
+	Point point = GetPanelPosition(UiPanels::Inventory, { dialogX, 178 });
+	pGBoxBuff->ClipRenderNoLighting(out, point.x, point.y, 1);
 
 	constexpr auto BufferSize = sizeof(tempstr) / sizeof(*tempstr);
 
@@ -1698,13 +1704,15 @@ void DrawTalkPan(const Surface &out)
 			color = UiFlags::ColorGold;
 			if (TalkButtonsDown[talkBtn]) {
 				int nCel = talkBtn != 0 ? 4 : 3;
-				CelDrawTo(out, talkPanPosition, *talkButtons, nCel);
+				talkButtons->ClipRenderNoLighting(out, talkPanPosition.x, talkPanPosition.y, nCel);
+				//CelDrawTo(out, talkPanPosition, *talkButtons, nCel);
 			}
 		} else {
 			int nCel = talkBtn != 0 ? 2 : 1;
 			if (TalkButtonsDown[talkBtn])
 				nCel += 4;
-			CelDrawTo(out, talkPanPosition, *talkButtons, nCel);
+			//CelDrawTo(out, talkPanPosition, *talkButtons, nCel);
+			talkButtons->ClipRenderNoLighting(out, talkPanPosition.x, talkPanPosition.y, nCel);
 		}
 		auto &player = Players[i];
 		if (player.plractive) {
