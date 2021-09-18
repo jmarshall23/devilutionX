@@ -260,8 +260,9 @@ void CalculatePanelAreas(void)
  */
 void DrawSpellCel(const Surface &out, Point position, int nCel)
 {
-	position.y -= pSpellCels->GetFrame(nCel).height;
-	pSpellCels->Draw(out, position.x, position.y, 0, 0, nCel, false, true, (byte *)SplTransTbl);
+	//position.y -= pSpellCels->GetFrame(nCel).height;
+	//pSpellCels->Draw(out, position.x, position.y, 0, 0, nCel, false, true, (byte *)SplTransTbl);
+	pSpellCels->ClipRenderNoLighting(out, position.x, position.y, nCel);
 }
 
 void SetSpellTrans(spell_type t)
