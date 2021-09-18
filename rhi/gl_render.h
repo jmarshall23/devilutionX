@@ -18,3 +18,5 @@ void GL_EndFrame(unsigned char* finalScreenBuffer, unsigned char* palette);
 void GL_SetColor(float r, float g, float b);
 void GL_SetAlpha(float a);
 void GL_SetSolidColorMode(bool solidColorsOnly);
+
+void GL_DrawLine(float sx, float sy, float dx, float dy, float thickness);

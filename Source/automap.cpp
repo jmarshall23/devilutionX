@@ -19,6 +19,8 @@
 #include "utils/stdcompat/algorithm.hpp"
 #include "utils/ui_fwd.h"
 
+#include "../rhi/gl_render.h"
+
 namespace devilution {
 
 namespace {
@@ -84,50 +86,67 @@ struct AutomapTile {
  */
 std::array<AutomapTile, 256> AutomapTypeTiles;
 
-void DrawDiamond(const Surface &out, Point center, uint8_t color)
+void DrawDiamond(const Surface &out, Point center, int r, int g, int b)
 {
 	const Point left { center.x - AmLine16, center.y };
 	const Point top { center.x, center.y - AmLine8 };
 	const Point bottom { center.x, center.y + AmLine8 };
 
-	DrawMapLineNE(out, left, AmLine8, color);
-	DrawMapLineSE(out, left, AmLine8, color);
-	DrawMapLineSE(out, top, AmLine8, color);
-	DrawMapLineNE(out, bottom, AmLine8, color);
+	GL_SetColor(r, g, b);
+	DrawMapLineNE(out, left, AmLine8);
+
+	GL_SetColor(r, g, b);
+	DrawMapLineSE(out, left, AmLine8);
+
+	GL_SetColor(r, g, b);
+	DrawMapLineSE(out, top, AmLine8);
+
+	GL_SetColor(r, g, b);
+	DrawMapLineNE(out, bottom, AmLine8);
 }
 
 void DrawMapVerticalDoor(const Surface &out, Point center)
 {
-	DrawMapLineNE(out, { center.x + AmLine8, center.y - AmLine4 }, AmLine4, MapColorsDim);
-	DrawMapLineNE(out, { center.x - AmLine16, center.y + AmLine8 }, AmLine4, MapColorsDim);
-	DrawDiamond(out, center, MapColorsBright);
+	GL_SetColor(120, 111, 73);
+	DrawMapLineNE(out, { center.x + AmLine8, center.y - AmLine4 }, AmLine4);
+
+	GL_SetColor(120, 111, 73);
+	DrawMapLineNE(out, { center.x - AmLine16, center.y + AmLine8 }, AmLine4);
+
+	DrawDiamond(out, center, 255, 253, 159);
 }
 
 void DrawMapHorizontalDoor(const Surface &out, Point center)
 {
-	DrawMapLineSE(out, { center.x - AmLine16, center.y - AmLine8 }, AmLine4, MapColorsDim);
-	DrawMapLineSE(out, { center.x + AmLine8, center.y + AmLine4 }, AmLine4, MapColorsDim);
-	DrawDiamond(out, center, MapColorsBright);
+	GL_SetColor(120, 111, 73);
+	DrawMapLineSE(out, { center.x - AmLine16, center.y - AmLine8 }, AmLine4);
+
+	GL_SetColor(120, 111, 73);
+	DrawMapLineSE(out, { center.x + AmLine8, center.y + AmLine4 }, AmLine4);
+
+	DrawDiamond(out, center, 255, 253, 159);
 }
 
 void DrawDirt(const Surface &out, Point center)
 {
-	out.SetPixel(center, MapColorsDim);
-	out.SetPixel({ center.x - AmLine8, center.y - AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x - AmLine8, center.y + AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x + AmLine8, center.y - AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x + AmLine8, center.y + AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x - AmLine16, center.y }, MapColorsDim);
-	out.SetPixel({ center.x + AmLine16, center.y }, MapColorsDim);
-	out.SetPixel({ center.x, center.y - AmLine8 }, MapColorsDim);
-	out.SetPixel({ center.x, center.y + AmLine8 }, MapColorsDim);
-	out.SetPixel({ center.x + AmLine8 - AmLine32, center.y + AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x - AmLine8 + AmLine32, center.y + AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x - AmLine16, center.y + AmLine8 }, MapColorsDim);
-	out.SetPixel({ center.x + AmLine16, center.y + AmLine8 }, MapColorsDim);
-	out.SetPixel({ center.x - AmLine8, center.y + AmLine16 - AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x + AmLine8, center.y + AmLine16 - AmLine4 }, MapColorsDim);
-	out.SetPixel({ center.x, center.y + AmLine16 }, MapColorsDim);
+// jmarshall
+//	out.SetPixel(center, MapColorsDim);
+//	out.SetPixel({ center.x - AmLine8, center.y - AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x - AmLine8, center.y + AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x + AmLine8, center.y - AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x + AmLine8, center.y + AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x - AmLine16, center.y }, MapColorsDim);
+//	out.SetPixel({ center.x + AmLine16, center.y }, MapColorsDim);
+//	out.SetPixel({ center.x, center.y - AmLine8 }, MapColorsDim);
+//	out.SetPixel({ center.x, center.y + AmLine8 }, MapColorsDim);
+//	out.SetPixel({ center.x + AmLine8 - AmLine32, center.y + AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x - AmLine8 + AmLine32, center.y + AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x - AmLine16, center.y + AmLine8 }, MapColorsDim);
+//	out.SetPixel({ center.x + AmLine16, center.y + AmLine8 }, MapColorsDim);
+//	out.SetPixel({ center.x - AmLine8, center.y + AmLine16 - AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x + AmLine8, center.y + AmLine16 - AmLine4 }, MapColorsDim);
+//	out.SetPixel({ center.x, center.y + AmLine16 }, MapColorsDim);
+// jmarshall end
 }
 
 void DrawStairs(const Surface &out, Point center)
@@ -136,7 +155,8 @@ void DrawStairs(const Surface &out, Point center)
 	const Displacement offset = { -AmLine8, AmLine4 };
 	Point p = { center.x - AmLine8, center.y - AmLine8 - AmLine4 };
 	for (int i = 0; i < NumStairSteps; ++i) {
-		DrawMapLineSE(out, p, AmLine16, MapColorsBright);
+		GL_SetColor(255,253,159);
+		DrawMapLineSE(out, p, AmLine16);
 		p += offset;
 	}
 }
@@ -147,17 +167,19 @@ void DrawStairs(const Surface &out, Point center)
 void DrawHorizontal(const Surface &out, Point center, AutomapTile tile)
 {
 	if (!tile.HasFlag(AutomapTile::Flags::HorizontalPassage)) {
-		DrawMapLineSE(out, { center.x, center.y - AmLine16 }, AmLine16, MapColorsDim);
+		GL_SetColor(120, 111, 73);
+		DrawMapLineSE(out, { center.x, center.y - AmLine16 }, AmLine16);
 		return;
 	}
 	if (tile.HasFlag(AutomapTile::Flags::HorizontalDoor)) {
 		DrawMapHorizontalDoor(out, { center.x + AmLine16, center.y - AmLine8 });
 	}
 	if (tile.HasFlag(AutomapTile::Flags::HorizontalGrate)) {
-		DrawMapLineSE(out, { center.x + AmLine16, center.y - AmLine8 }, AmLine8, MapColorsDim);
-		DrawDiamond(out, { center.x, center.y - AmLine8 }, MapColorsDim);
+		GL_SetColor(120, 111, 73);
+		DrawMapLineSE(out, { center.x + AmLine16, center.y - AmLine8 }, AmLine8);
+		DrawDiamond(out, { center.x, center.y - AmLine8 }, 120, 111, 73);
 	} else if (tile.HasFlag(AutomapTile::Flags::HorizontalArch)) {
-		DrawDiamond(out, { center.x, center.y - AmLine8 }, MapColorsDim);
+		DrawDiamond(out, { center.x, center.y - AmLine8 }, 120, 111, 73);
 	}
 }
 
@@ -167,17 +189,19 @@ void DrawHorizontal(const Surface &out, Point center, AutomapTile tile)
 void DrawVertical(const Surface &out, Point center, AutomapTile tile)
 {
 	if (!tile.HasFlag(AutomapTile::Flags::VerticalPassage)) {
-		DrawMapLineNE(out, { center.x - AmLine32, center.y }, AmLine16, MapColorsDim);
+		GL_SetColor(120, 111, 73);
+		DrawMapLineNE(out, { center.x - AmLine32, center.y }, AmLine16);
 		return;
 	}
 	if (tile.HasFlag(AutomapTile::Flags::VerticalDoor)) { // two wall segments with a door in the middle
 		DrawMapVerticalDoor(out, { center.x - AmLine16, center.y - AmLine8 });
 	}
 	if (tile.HasFlag(AutomapTile::Flags::VerticalGrate)) { // right-facing half-wall
-		DrawMapLineNE(out, { center.x - AmLine32, center.y }, AmLine8, MapColorsDim);
-		DrawDiamond(out, { center.x, center.y - AmLine8 }, MapColorsDim);
+		GL_SetColor(120, 111, 73);
+		DrawMapLineNE(out, { center.x - AmLine32, center.y }, AmLine8);
+		DrawDiamond(out, { center.x, center.y - AmLine8 }, 120, 111, 73);
 	} else if (tile.HasFlag(AutomapTile::Flags::VerticalArch)) { // window or passable column
-		DrawDiamond(out, { center.x, center.y - AmLine8 }, MapColorsDim);
+		DrawDiamond(out, { center.x, center.y - AmLine8 }, 120, 111, 73);
 	}
 }
 
@@ -189,7 +213,8 @@ void DrawCaveHorizontal(const Surface &out, Point center, AutomapTile tile)
 	if (tile.HasFlag(AutomapTile::Flags::VerticalDoor)) {
 		DrawMapHorizontalDoor(out, { center.x - AmLine16, center.y + AmLine8 });
 	} else {
-		DrawMapLineSE(out, { center.x - AmLine32, center.y }, AmLine16, MapColorsDim);
+		GL_SetColor(120, 111, 73);
+		DrawMapLineSE(out, { center.x - AmLine32, center.y }, AmLine16);
 	}
 }
 
@@ -201,7 +226,8 @@ void DrawCaveVertical(const Surface &out, Point center, AutomapTile tile)
 	if (tile.HasFlag(AutomapTile::Flags::HorizontalDoor)) {
 		DrawMapVerticalDoor(out, { center.x + AmLine16, center.y + AmLine8 });
 	} else {
-		DrawMapLineNE(out, { center.x, center.y + AmLine16 }, AmLine16, MapColorsDim);
+		GL_SetColor(120, 111, 73);
+		DrawMapLineNE(out, { center.x, center.y + AmLine16 }, AmLine16);
 	}
 }
 
@@ -220,7 +246,7 @@ void DrawAutomapTile(const Surface &out, Point center, AutomapTile tile)
 
 	switch (tile.type) {
 	case AutomapTile::Types::Diamond: // stand-alone column or other unpassable object
-		DrawDiamond(out, { center.x, center.y - AmLine8 }, MapColorsDim);
+		DrawDiamond(out, { center.x, center.y - AmLine8 }, 120, 111, 73);
 		break;
 	case AutomapTile::Types::Vertical:
 	case AutomapTile::Types::FenceVertical:
@@ -296,7 +322,7 @@ void SearchAutomapItem(const Surface &out, const Displacement &myPlayerOffset)
 					screen.x += 160;
 			}
 			screen.y -= AmLine8;
-			DrawDiamond(out, screen, MapColorsItem);
+			DrawDiamond(out, screen, 87, 87, 255);
 		}
 	}
 }
@@ -306,7 +332,7 @@ void SearchAutomapItem(const Surface &out, const Displacement &myPlayerOffset)
  */
 void DrawAutomapPlr(const Surface &out, const Displacement &myPlayerOffset, int playerId)
 {
-	int playerColor = MapColorsPlayer + (8 * playerId) % 128;
+	//int playerColor = MapColorsPlayer + (8 * playerId) % 128;
 
 	auto &player = Players[playerId];
 	Point tile = player.position.tile;
@@ -341,51 +367,51 @@ void DrawAutomapPlr(const Surface &out, const Displacement &myPlayerOffset, int 
 	switch (player._pdir) {
 	case DIR_N: {
 		const Point point { base.x, base.y - AmLine16 };
-		DrawVerticalLine(out, point, AmLine16, playerColor);
-		DrawMapLineSteepNE(out, { point.x - AmLine4, point.y + 2 * AmLine4 }, AmLine4, playerColor);
-		DrawMapLineSteepNW(out, { point.x + AmLine4, point.y + 2 * AmLine4 }, AmLine4, playerColor);
+		DrawVerticalLine(out, point, AmLine16);
+		DrawMapLineSteepNE(out, { point.x - AmLine4, point.y + 2 * AmLine4 }, AmLine4);
+		DrawMapLineSteepNW(out, { point.x + AmLine4, point.y + 2 * AmLine4 }, AmLine4);
 	} break;
 	case DIR_NE: {
 		const Point point { base.x + AmLine16, base.y - AmLine8 };
-		DrawHorizontalLine(out, { point.x - AmLine8, point.y }, AmLine8, playerColor);
-		DrawMapLineNE(out, { point.x - 2 * AmLine8, point.y + AmLine8 }, AmLine8, playerColor);
-		DrawMapLineSteepSW(out, point, AmLine4, playerColor);
+		DrawHorizontalLine(out, { point.x - AmLine8, point.y }, AmLine8);
+		DrawMapLineNE(out, { point.x - 2 * AmLine8, point.y + AmLine8 }, AmLine8);
+		DrawMapLineSteepSW(out, point, AmLine4);
 	} break;
 	case DIR_E: {
 		const Point point { base.x + AmLine16, base.y };
-		DrawMapLineNW(out, point, AmLine4, playerColor);
-		DrawHorizontalLine(out, { point.x - AmLine16, point.y }, AmLine16, playerColor);
-		DrawMapLineSW(out, point, AmLine4, playerColor);
+		DrawMapLineNW(out, point, AmLine4);
+		DrawHorizontalLine(out, { point.x - AmLine16, point.y }, AmLine16);
+		DrawMapLineSW(out, point, AmLine4);
 	} break;
 	case DIR_SE: {
 		const Point point { base.x + AmLine16, base.y + AmLine8 };
-		DrawMapLineSE(out, { point.x - 2 * AmLine8, point.y - AmLine8 }, AmLine8, playerColor);
-		DrawHorizontalLine(out, { point.x - (AmLine8 + 1), point.y }, AmLine8 + 1, playerColor);
-		DrawMapLineSteepNW(out, point, AmLine4, playerColor);
+		DrawMapLineSE(out, { point.x - 2 * AmLine8, point.y - AmLine8 }, AmLine8);
+		DrawHorizontalLine(out, { point.x - (AmLine8 + 1), point.y }, AmLine8 + 1);
+		DrawMapLineSteepNW(out, point, AmLine4);
 	} break;
 	case DIR_S: {
 		const Point point { base.x, base.y + AmLine16 };
-		DrawVerticalLine(out, { point.x, point.y - AmLine16 }, AmLine16, playerColor);
-		DrawMapLineSteepSW(out, { point.x + AmLine4, point.y - 2 * AmLine4 }, AmLine4, playerColor);
-		DrawMapLineSteepSE(out, { point.x - AmLine4, point.y - 2 * AmLine4 }, AmLine4, playerColor);
+		DrawVerticalLine(out, { point.x, point.y - AmLine16 }, AmLine16);
+		DrawMapLineSteepSW(out, { point.x + AmLine4, point.y - 2 * AmLine4 }, AmLine4);
+		DrawMapLineSteepSE(out, { point.x - AmLine4, point.y - 2 * AmLine4 }, AmLine4);
 	} break;
 	case DIR_SW: {
 		const Point point { base.x - AmLine16, base.y + AmLine8 };
-		DrawMapLineSteepNE(out, point, AmLine4, playerColor);
-		DrawMapLineSW(out, { point.x + 2 * AmLine8, point.y - AmLine8 }, AmLine8, playerColor);
-		DrawHorizontalLine(out, point, AmLine8 + 1, playerColor);
+		DrawMapLineSteepNE(out, point, AmLine4);
+		DrawMapLineSW(out, { point.x + 2 * AmLine8, point.y - AmLine8 }, AmLine8);
+		DrawHorizontalLine(out, point, AmLine8 + 1);
 	} break;
 	case DIR_W: {
 		const Point point { base.x - AmLine16, base.y };
-		DrawMapLineNE(out, point, AmLine4, playerColor);
-		DrawHorizontalLine(out, point, AmLine16 + 1, playerColor);
-		DrawMapLineSE(out, point, AmLine4, playerColor);
+		DrawMapLineNE(out, point, AmLine4);
+		DrawHorizontalLine(out, point, AmLine16 + 1);
+		DrawMapLineSE(out, point, AmLine4);
 	} break;
 	case DIR_NW: {
 		const Point point { base.x - AmLine16, base.y - AmLine8 };
-		DrawMapLineNW(out, { point.x + 2 * AmLine8, point.y + AmLine8 }, AmLine8, playerColor);
-		DrawHorizontalLine(out, point, AmLine8 + 1, playerColor);
-		DrawMapLineSteepSE(out, point, AmLine4, playerColor);
+		DrawMapLineNW(out, { point.x + 2 * AmLine8, point.y + AmLine8 }, AmLine8);
+		DrawHorizontalLine(out, point, AmLine8 + 1);
+		DrawMapLineSteepSE(out, point, AmLine4);
 	} break;
 	}
 }

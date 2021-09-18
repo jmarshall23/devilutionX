@@ -47,8 +47,6 @@
 #include "options.h"
 #include "pfile.h"
 #include "plrmsg.h"
-#include "qol/common.h"
-#include "qol/itemlabels.h"
 #include "restrict.h"
 #include "setmaps.h"
 #include "sound.h"
@@ -151,7 +149,7 @@ void StartGame(interface_mode uMsg)
 #endif
 	assert(ghMainWnd);
 	music_stop();
-	InitQol();
+//	InitQol();
 	ShowProgress(uMsg);
 	gmenu_init_menu();
 	InitLevelCursor();
@@ -162,7 +160,7 @@ void StartGame(interface_mode uMsg)
 
 void FreeGame()
 {
-	FreeQol();
+//	FreeQol();
 	FreeControlPan();
 	FreeInvGFX();
 	FreeGMenu();
@@ -401,10 +399,10 @@ void ReleaseKey(int vkey)
 {
 	if (vkey == DVL_VK_SNAPSHOT)
 		CaptureScreen();
-	if (vkey == DVL_VK_MENU || vkey == DVL_VK_LMENU || vkey == DVL_VK_RMENU)
-		AltPressed(false);
-	if (vkey == DVL_VK_CONTROL || vkey == DVL_VK_LCONTROL || vkey == DVL_VK_RCONTROL)
-		ToggleItemLabelHighlight();
+//	if (vkey == DVL_VK_MENU || vkey == DVL_VK_LMENU || vkey == DVL_VK_RMENU)
+//		AltPressed(false);
+//	if (vkey == DVL_VK_CONTROL || vkey == DVL_VK_LCONTROL || vkey == DVL_VK_RCONTROL)
+//		ToggleItemLabelHighlight();
 }
 
 void ClosePanels()
@@ -428,8 +426,8 @@ void PressKey(int vkey)
 		return;
 	}
 
-	if (vkey == DVL_VK_MENU || vkey == DVL_VK_LMENU || vkey == DVL_VK_RMENU)
-		AltPressed(true);
+//	if (vkey == DVL_VK_MENU || vkey == DVL_VK_LMENU || vkey == DVL_VK_RMENU)
+//		AltPressed(true);
 
 	if (MyPlayerIsDead) {
 		if (sgnTimeoutCurs != CURSOR_NONE) {

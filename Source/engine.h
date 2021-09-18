@@ -75,10 +75,10 @@ bool IsNoneOf(const V &v, X x, Xs... xs)
  * @param width
  * @param colorIndex Color index from current palette
  */
-void DrawHorizontalLine(const Surface &out, Point from, int width, std::uint8_t colorIndex);
+void DrawHorizontalLine(const Surface &out, Point from, int width);
 
 /** Same as DrawHorizontalLine but without bounds clipping. */
-void UnsafeDrawHorizontalLine(const Surface &out, Point from, int width, std::uint8_t colorIndex);
+void UnsafeDrawHorizontalLine(const Surface &out, Point from, int width);
 
 /**
  * @brief Draw a vertical line segment in the target buffer (top to bottom)
@@ -87,10 +87,10 @@ void UnsafeDrawHorizontalLine(const Surface &out, Point from, int width, std::ui
  * @param height
  * @param colorIndex Color index from current palette
  */
-void DrawVerticalLine(const Surface &out, Point from, int height, std::uint8_t colorIndex);
+void DrawVerticalLine(const Surface &out, Point from, int height);
 
 /** Same as DrawVerticalLine but without bounds clipping. */
-void UnsafeDrawVerticalLine(const Surface &out, Point from, int height, std::uint8_t colorIndex);
+void UnsafeDrawVerticalLine(const Surface &out, Point from, int height);
 
 /**
  * Draws a half-transparent rectangle by blacking out odd pixels on odd lines,

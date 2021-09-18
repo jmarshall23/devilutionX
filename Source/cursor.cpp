@@ -14,7 +14,6 @@
 #include "hwcursor.hpp"
 #include "inv.h"
 #include "missiles.h"
-#include "qol/itemlabels.h"
 #include "towners.h"
 #include "track.h"
 #include "trigs.h"
@@ -178,8 +177,6 @@ void CheckRportal()
 
 void CheckCursMove()
 {
-	if (IsItemLabelHighlighted())
-		return;
 
 	int sx = MousePosition.x;
 	int sy = MousePosition.y;

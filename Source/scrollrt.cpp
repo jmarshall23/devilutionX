@@ -22,9 +22,6 @@
 #include "missiles.h"
 #include "nthread.h"
 #include "plrmsg.h"
-#include "qol/itemlabels.h"
-#include "qol/monhealthbar.h"
-#include "qol/xpbar.h"
 #include "stores.h"
 #include "towners.h"
 #include "utils/endian.hpp"
@@ -773,8 +770,8 @@ void DrawItem(const Surface &out, int x, int y, int sx, int sy, bool pre)
 	}
 	//CelClippedDrawLightTo(out, position, *cel, nCel);
 	cel->ClipRenderWithLighting(out, position.x, position.y, nCel);
-	if (item.AnimInfo.CurrentFrame == item.AnimInfo.NumberOfFrames || item._iCurs == ICURS_MAGIC_ROCK)
-		AddItemToLabelQueue(bItem - 1, px, sy);
+//	if (item.AnimInfo.CurrentFrame == item.AnimInfo.NumberOfFrames || item._iCurs == ICURS_MAGIC_ROCK)
+//		AddItemToLabelQueue(bItem - 1, px, sy);
 }
 
 /**
@@ -1317,8 +1314,8 @@ void DrawView(const Surface &out, int startX, int startY)
 		}
 	}
 #endif
-	DrawMonsterHealthBar(out);
-	DrawItemNameLabels(out);
+//	DrawMonsterHealthBar(out);
+//	DrawItemNameLabels(out);
 
 	if (stextflag != STORE_NONE && !qtextflag)
 		DrawSText(out);
@@ -1782,7 +1779,7 @@ void DrawAndBlit()
 	bool ddsdesc = false;
 	bool ctrlPan = false;
 
-	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255 || IsHighlightingLabelsEnabled()) {
+	if (gnScreenWidth > PANEL_WIDTH || force_redraw == 255) {
 		drawhpflag = true;
 		drawmanaflag = true;
 		drawbtnflag = true;
@@ -1830,7 +1827,7 @@ void DrawAndBlit()
 		DrawTalkPan(out);
 		hgt = gnScreenHeight;
 	}
-	DrawXPBar(out);
+	//DrawXPBar(out);
 
 	if (IsHardwareCursor()) {
 		SetHardwareCursorVisible(ShouldShowCursor());

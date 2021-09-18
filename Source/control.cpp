@@ -23,7 +23,6 @@
 #include "minitext.h"
 #include "missiles.h"
 #include "panels/charpanel.hpp"
-#include "qol/xpbar.h"
 #include "stores.h"
 #include "towners.h"
 #include "trigs.h"
@@ -1221,9 +1220,9 @@ void CheckPanelInfo()
 	if (MousePosition.x > 190 + PANEL_LEFT && MousePosition.x < 437 + PANEL_LEFT && MousePosition.y > 4 + PANEL_TOP && MousePosition.y < 33 + PANEL_TOP)
 		pcursinvitem = CheckInvHLight();
 
-	if (CheckXPBarInfo()) {
-		panelflag = true;
-	}
+	//if (CheckXPBarInfo()) {
+	//	panelflag = true;
+	//}
 }
 
 void CheckBtnUp()

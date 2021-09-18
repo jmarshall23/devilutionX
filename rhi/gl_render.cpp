@@ -161,6 +161,14 @@ void GL_UploadTexture(unsigned int image, unsigned char* data, int width, int he
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 }
 
+void GL_DrawLine(float sx, float sy, float dx, float dy, float thickness) {
+	ImVec2 mi(sx, sy);
+	ImVec2 ma(dx, dy);
+
+	ImGui::GetBackgroundDrawList()->AddLine(mi, ma, IM_COL32(global_red, global_green, global_blue, 255), thickness);
+	GL_SetColor(255, 255, 255);
+}
+
 void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int startx, int starty, float start_uvx, float start_uvy) {
 	ImVec2 mi(x + startx, y);
 	ImVec2 ma(x + width, y + height - starty); 

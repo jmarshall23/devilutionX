@@ -18,6 +18,8 @@
 #include "movie.h"
 #include "options.h"
 
+#include "../rhi/gl_render.h"
+
 namespace devilution {
 namespace {
 
@@ -49,7 +51,7 @@ void DrawHalfTransparentStippledRectTo(const Surface &out, int sx, int sy, int w
 }
 } // namespace
 
-void DrawHorizontalLine(const Surface &out, Point from, int width, std::uint8_t colorIndex)
+void DrawHorizontalLine(const Surface &out, Point from, int width)
 {
 	if (from.y < 0 || from.y >= out.h() || from.x >= out.w() || width <= 0 || from.x + width <= 0)
 		return;
@@ -59,15 +61,20 @@ void DrawHorizontalLine(const Surface &out, Point from, int width, std::uint8_t 
 	}
 	if (from.x + width > out.w())
 		width = out.w() - from.x;
-	return UnsafeDrawHorizontalLine(out, from, width, colorIndex);
+	return UnsafeDrawHorizontalLine(out, from, width);
 }
 
-void UnsafeDrawHorizontalLine(const Surface &out, Point from, int width, std::uint8_t colorIndex)
+void UnsafeDrawHorizontalLine(const Surface &out, Point from, int width)
 {
-	std::memset(&out[from], colorIndex, width);
+	Point dest;
+	dest.x = from.x + width;
+	dest.y = from.y;
+
+	GL_DrawLine(from.x, from.y, dest.x, dest.y, 1.0f);
+	//std::memset(&out[from], colorIndex, width);
 }
 
-void DrawVerticalLine(const Surface &out, Point from, int height, std::uint8_t colorIndex)
+void DrawVerticalLine(const Surface &out, Point from, int height)
 {
 	if (from.x < 0 || from.x >= out.w() || from.y >= out.h() || height <= 0 || from.y + height <= 0)
 		return;
@@ -77,17 +84,17 @@ void DrawVerticalLine(const Surface &out, Point from, int height, std::uint8_t c
 	}
 	if (from.y + height > out.h())
 		height = (from.y + height) - out.h();
-	return UnsafeDrawVerticalLine(out, from, height, colorIndex);
+	return UnsafeDrawVerticalLine(out, from, height);
 }
 
-void UnsafeDrawVerticalLine(const Surface &out, Point from, int height, std::uint8_t colorIndex)
+void UnsafeDrawVerticalLine(const Surface &out, Point from, int height)
 {
-	auto *dst = &out[from];
-	const auto pitch = out.pitch();
-	while (height-- > 0) {
-		*dst = colorIndex;
-		dst += pitch;
-	}
+	Point dest;
+	dest.x = from.x;
+	dest.y = from.y + height;
+
+	GL_DrawLine(from.x, from.y, dest.x, dest.y, 1.0f);
+	//std::memset(&out[from], colorIndex, width);
 }
 
 void DrawHalfTransparentRectTo(const Surface &out, int sx, int sy, int width, int height)
