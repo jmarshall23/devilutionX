@@ -21,7 +21,7 @@ bool DoomFlag;
 
 void doom_init()
 {
-	DoomCel = LoadCel("Items\\Map\\MapZtown.CEL", 640);
+	//DoomCel = LoadCel("Items\\Map\\MapZtown.CEL", 640);
 	DoomFlag = true;
 }
 
@@ -37,7 +37,7 @@ void doom_draw(const Surface &out)
 		return;
 	}
 
-	CelDrawTo(out, { PANEL_X, PANEL_Y - 1 }, *DoomCel, 1);
+	//CelDrawTo(out, { PANEL_X, PANEL_Y - 1 }, *DoomCel, 1);
 }
 
 } // namespace devilution
