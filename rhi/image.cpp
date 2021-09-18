@@ -379,6 +379,9 @@ namespace devilution
 			}
 
 			image->frames[i].glHandle = GL_CreateTexture2D((::byte *)temp, image->frames[i].width, image->frames[i].height, 32);
+
+			delete image->frames[i].buffer;
+			image->frames[i].buffer = nullptr;
 		}
 
 		// Create image instances.
