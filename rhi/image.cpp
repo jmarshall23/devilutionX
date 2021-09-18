@@ -78,7 +78,10 @@ namespace devilution
 	{
 		const ImageFrame_t& image = frames[frame - 1];
 
-		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
+		float start_u = (float)startx / image.width;
+		float start_v = (float)starty / image.height;
+
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height, startx, starty, start_u, start_v );
 	}
 
 	/*

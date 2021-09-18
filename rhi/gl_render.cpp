@@ -128,11 +128,19 @@ void GL_UploadTexture(unsigned int image, unsigned char* data, int width, int he
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 }
 
-void GL_RenderImage(unsigned int image, int x, int y, int width, int height) {
-	ImVec2 mi(x, y);
-	ImVec2 ma(x + width, y + height);
+void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int startx, int starty, float start_uvx, float start_uvy) {
+	ImVec2 mi(x + startx, y);
+	ImVec2 ma(x + width, y + height - starty); 
 
-	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma);
+	ImVec2 startUV;
+	startUV.x = start_uvx;
+	startUV.y = 0;
+
+	ImVec2 endUV;
+	endUV.x = 1;
+	endUV.y = 1.0f - start_uvy;
+
+	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV);
 }
 
 void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int height, int startx, int starty, int uvwidth, int uvheight, int imagewidth, int imageheight) {
