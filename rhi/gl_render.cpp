@@ -42,15 +42,29 @@ namespace devilution
 }
 
 void GL_SetColor(float r, float g, float b) {
+	if (r < 0)
+		r = 0;
+
+	if (g < 0)
+		g = 0;
+
+	if (b < 0)
+		b = 0;
+
 	global_red = r;
 	global_blue = b;
 	global_green = g;
 }
 
+void GL_SetAlpha(float a)
+{
+	global_alpha = a;
+}
+
 void GL_SetSolidColorMode(bool solidColorsOnly)
 {
 	if (solidColorsOnly)
-		global_alpha = 128;
+		global_alpha = 75;
 	else
 		global_alpha = 255;
 }

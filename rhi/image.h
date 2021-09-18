@@ -65,9 +65,7 @@ namespace devilution {
 
 		void Draw2D(int frame, int x, int y, int width, int height, int sourcex, int sourcey, int uvwidth, int uvheight);
 
-		void ClipRenderWithLightingTrans(const Surface& out, int sx, int sy, int frame) const {
-			ClipRenderWithLighting(out, sx, sy, frame);
-		}
+		void ClipRenderWithLightingTrans(const Surface& out, int sx, int sy, int frame, int alpha) const;
 
 		int Width() const {
 			return frames[0].width;

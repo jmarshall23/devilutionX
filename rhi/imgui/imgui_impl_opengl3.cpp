@@ -617,7 +617,7 @@ bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
         "out vec4 Out_Color;\n"
         "void main()\n"
         "{\n"
-		"	 if(Frag_Color.a != 1.0f)\n"
+		"	 if(Frag_Color.a < 0.5)\n"
 		"	 {\n"
 		"		Out_Color = vec4(Frag_Color.r, Frag_Color.g, Frag_Color.b, texture(Texture, Frag_UV.st).a);\n"
 		"		if(Out_Color.a != 1.0f) discard;\n"

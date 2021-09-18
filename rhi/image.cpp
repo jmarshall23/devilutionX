@@ -111,11 +111,21 @@ namespace devilution
 
 		sy -= image.height;
 
-		float lightScale = 1.0f - (light / 15.0f);
+		float lightScale = 1.0f - (light / 17.0f);
 		lightScale *= 255.0f;
 		GL_SetColor(lightScale, lightScale, lightScale);		
 		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 		GL_SetColor(255, 255, 255);
+	}
+	/*
+	=======================
+	StormImage::ClipRenderWithLightingTrans
+	=======================
+	*/
+	void StormImage::ClipRenderWithLightingTrans(const Surface& out, int sx, int sy, int frame, int alpha) const {
+		GL_SetAlpha(alpha);
+		ClipRenderWithLighting(out, sx, sy, frame);
+		GL_SetAlpha(255);
 	}
 
 	/*
@@ -136,7 +146,7 @@ namespace devilution
 
 		sy -= image.height;
 
-		float lightScale = 1.0f - (LightTableIndex / 15.0f);
+		float lightScale = 1.0f - (LightTableIndex / 17.0f);
 
 		lightScale *= 255.0f;
 

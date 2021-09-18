@@ -671,13 +671,20 @@ void RenderTile(const Surface &out, int x, int y, bool forceBlack)
 	if (forceBlack)
 		return;
 
-	if (LightTableIndex == LightsMax) {
-		pDungeonCels->ClipRenderOutline(out, 0, 0, 0, x, y, level_piece_id); // Fully Black
-	} else if (LightTableIndex == 0) {
-		pDungeonCels->ClipRenderNoLighting(out, x, y, level_piece_id);
+	const auto c = block_lvid[level_piece_id];
+
+	if (cel_transparency_active && arch_draw_type == 0) {
+		pDungeonCels->ClipRenderWithLightingTrans(out, x, y, level_piece_id, 170);
 	} else {
-		pDungeonCels->ClipRenderWithLighting(out, x, y, level_piece_id);
+		if (LightTableIndex == LightsMax) {
+			pDungeonCels->ClipRenderOutline(out, 0, 0, 0, x, y, level_piece_id); // Fully Black
+		} else if (LightTableIndex == 0) {
+			pDungeonCels->ClipRenderNoLighting(out, x, y, level_piece_id);
+		} else {
+			pDungeonCels->ClipRenderWithLighting(out, x, y, level_piece_id);
+		}
 	}
+	
 }
 
 /**
@@ -954,7 +961,7 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 			}
 #endif
 		//	CelClippedBlitLightTransTo(out, { dx, dy }, *pSpecialCels, bArch);
-			pSpecialCels->ClipRenderWithLightingTrans(out, dx, dy, bArch);
+			pSpecialCels->ClipRenderWithLightingTrans(out, dx, dy, bArch, 200);
 #ifdef _DEBUG
 			if (GetAsyncKeyState(DVL_VK_MENU)) {
 				cel_transparency_active = TransList[bMap]; // Turn transparency back to its normal state
