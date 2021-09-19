@@ -1,6 +1,5 @@
 #pragma once
 
-#include <SDL_ttf.h>
 #include <SDL.h>
 #ifdef USE_SDL1
 #include "utils/sdl2_to_1_2_backports.h"
@@ -15,14 +14,7 @@ namespace devilution {
 
 namespace TTFWrap {
 
-inline SDLSurfaceUniquePtr RenderText_Solid(TTF_Font *font, const char *text, SDL_Color fg)
-{
-	SDLSurfaceUniquePtr ret { TTF_RenderText_Solid(font, text, fg) };
-	if (ret == nullptr)
-		ErrTtf();
 
-	return ret;
-}
 
 } //namespace TTFWrap
 

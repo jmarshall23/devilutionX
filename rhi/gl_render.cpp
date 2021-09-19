@@ -11,8 +11,8 @@
 #include <vector>
 #include <memory>
 
-#include <sdl2/SDL_opengl.h>
-#include <sdl2/SDL_video.h>
+#include <SDL_opengl.h>
+#include <SDL_video.h>
 
 SDL_GLContext glContext;
 SDL_Window* glWindow;

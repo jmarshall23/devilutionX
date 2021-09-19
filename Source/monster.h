@@ -19,6 +19,8 @@
 #include "spelldat.h"
 #include "textdat.h"
 
+#include <functional>
+
 namespace devilution {
 
 struct Missile;

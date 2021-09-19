@@ -203,7 +203,8 @@ void Init(const char *text, const char *caption, bool error, bool renderBehind)
 	}
 	LoadSmlButtonArt();
 
-	fontWasLoaded = font != nullptr;
+	fontWasLoaded = false;
+	 //font != nullptr;
 	if (!fontWasLoaded)
 		LoadTtfFont();
 }
@@ -278,9 +279,9 @@ void UiOkDialog(const char *text, const char *caption, bool error, const std::ve
 
 	inDialog = true;
 	Init(text, caption, error, !renderBehind.empty());
-	if (font != nullptr)
-		DialogLoop(vecOkDialog, renderBehind);
-	else
+	//if (font != nullptr)
+	//	DialogLoop(vecOkDialog, renderBehind);
+	//else
 		UiOkDialog(text, caption, error, renderBehind);
 	Deinit();
 	inDialog = false;

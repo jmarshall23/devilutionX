@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
 
-include(C:/projects/vcpkg/scripts/buildsystems/vcpkg.cmake)
-
 if(POLICY CMP0092)
   cmake_policy(SET CMP0092 NEW)
 endif()
@@ -29,7 +27,7 @@ option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
 option(USE_SDL1 "Use SDL1.2 instead of SDL2" OFF)
 option(NONET "Disable network support" OFF)
-option(NOSOUND "Disable sound support" OFF)
+option(NOSOUND "Disable sound support" On)
 option(RUN_TESTS "Build and run tests" OFF)
 option(ENABLE_CODECOVERAGE "Instrument code for code coverage (only enabled with RUN_TESTS)" OFF)
 
@@ -201,35 +199,9 @@ if(NOT NINTENDO_3DS)
   find_package(Threads REQUIRED)
 endif()
 
-if(ANDROID)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/android-project/3rdParty/SDL2)
-elseif(USE_SDL1)
-  find_package(SDL REQUIRED)
-  find_package(SDL_ttf REQUIRED)
-  include_directories(${SDL_INCLUDE_DIR})
-else()
-  find_package(SDL2 REQUIRED)
-  if(TARGET SDL2::SDL2)
-    set(SDL2_MAIN SDL2::SDL2main)
-  elseif(TARGET SDL2::SDL2-static)
-    # On some distros, such as vitasdk, only the SDL2::SDL2-static target is available.
-    # Alias to SDL2::SDL2 because some finder scripts may refer to SDL2::SDL2.
-    if(CMAKE_VERSION VERSION_LESS "3.18")
-      # Aliasing local targets is not supported on CMake < 3.18, so make it global.
-      set_target_properties(SDL2::SDL2-static PROPERTIES IMPORTED_GLOBAL TRUE)
-    endif()
-    add_library(SDL2::SDL2 ALIAS SDL2::SDL2-static)
-    set(SDL2_MAIN SDL2::SDL2main)
-  else()
-    # Assume an older Debian derivate that comes with an sdl2-config.cmake
-    # that only defines `SDL2_LIBRARIES` (as -lSDL2) and `SDL2_INCLUDE_DIRS`.
-    add_library(SDL2_lib INTERFACE)
-    target_link_libraries(SDL2_lib INTERFACE ${SDL2_LIBRARIES})
-    target_include_directories(SDL2_lib INTERFACE ${SDL2_INCLUDE_DIRS})
-    # Can't define an INTERFACE target with ::, so alias instead
-    add_library(SDL2::SDL2 ALIAS SDL2_lib)
-  endif()
-endif()
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/SDL2)
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2/include)
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/libfmt)
 
 if(NOT NONET AND NOT DISABLE_TCP)
   add_subdirectory(3rdParty/asio)
@@ -744,8 +716,8 @@ else()
 endif()
 
 target_link_libraries(libdevilutionx PUBLIC
-    SDL2::SDL2
-    ${SDL2_MAIN})
+    SDL2-static
+    SDL2main)
 
 if(NOT NOSOUND)
   target_link_libraries(libdevilutionx PUBLIC SDL_audiolib)

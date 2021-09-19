@@ -274,6 +274,7 @@ bool SVidPlayContinue()
 		return SVidLoadNextFrame(); // Skip video and audio if the system is to slow
 	}
 
+#ifndef NOSOUND
 	if (HasAudio()) {
 		const auto len = smk_get_audio_size(SVidSMK, 0);
 		const unsigned char *buf = smk_get_audio(SVidSMK, 0);
@@ -283,7 +284,7 @@ bool SVidPlayContinue()
 			SVidAudioDecoder->PushSamples(reinterpret_cast<const std::uint8_t *>(buf), len);
 		}
 	}
-
+#endif
 	if (SDL_GetTicks() * 1000.0 >= SVidFrameEnd) {
 		return SVidLoadNextFrame(); // Skip video if the system is to slow
 	}

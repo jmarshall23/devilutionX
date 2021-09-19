@@ -8,7 +8,6 @@
 
 namespace devilution {
 
-TTF_Font *font = nullptr;
 std::unique_ptr<uint8_t[]> FontTables[4];
 Art ArtFonts[4][2];
 /** This is so we know ttf has been init when we get to the diablo_deinit() function */

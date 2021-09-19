@@ -143,8 +143,8 @@ void CreditsRenderer::Render()
 	SDL_FillRect(DiabloUiSurface(), nullptr, 0x000000);
 	DrawArt({ PANEL_LEFT - 320, UI_OFFSET_Y }, &ArtBackgroundWidescreen);
 	DrawArt({ PANEL_LEFT, UI_OFFSET_Y }, &ArtBackground);
-	if (font == nullptr)
-		return;
+	//if (font == nullptr)
+	//	return;
 
 	const std::size_t linesBegin = std::max(offsetY / LINE_H, 0);
 	const std::size_t linesEnd = std::min(linesBegin + MAX_VISIBLE_LINES, textLines);

@@ -7,6 +7,17 @@ namespace devilution {
 int sfxdelay;
 _sfx_id sfxdnum;
 
+
+void InitSfxDataTable(void)
+{
+
+}
+
+_sfx_id SfxIdFromString(std::string str)
+{
+	return (_sfx_id)0;
+}
+
 // Disable clang-format here because our config says:
 // AllowShortFunctionsOnASingleLine: None
 // clang-format off

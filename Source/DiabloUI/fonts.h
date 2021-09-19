@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-#include <SDL_ttf.h>
+//#include <SDL_ttf.h>
 
 #include "DiabloUI/art.h"
 
@@ -21,7 +21,6 @@ enum _artFontColors : uint8_t {
 	AFC_GOLD,
 };
 
-extern TTF_Font *font;
 extern std::unique_ptr<uint8_t[]> FontTables[4];
 extern Art ArtFonts[4][2];
 

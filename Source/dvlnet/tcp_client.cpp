@@ -6,7 +6,6 @@
 #include <exception>
 #include <functional>
 #include <memory>
-#include <sodium.h>
 #include <sstream>
 #include <stdexcept>
 #include <system_error>

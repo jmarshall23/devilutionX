@@ -7,7 +7,7 @@
 
 #include <cstdint>
 #include <SDL.h>
-
+#include <memory.h>
 #include "appfat.h"
 
 namespace devilution {

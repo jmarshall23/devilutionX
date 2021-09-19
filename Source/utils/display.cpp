@@ -20,7 +20,7 @@
 #include "utils/sdl_wrap.h"
 
 #include "../../rhi/gl_render.h"
-#include <SDL2/SDL_syswm.h>
+#include <SDL_syswm.h>
 
 namespace devilution {
 
