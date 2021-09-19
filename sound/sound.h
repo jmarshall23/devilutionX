@@ -50,12 +50,13 @@ enum _music_id : uint8_t {
 struct TSnd {
 	uint32_t start_tc;
 	unsigned int alHandle;
-	unsigned int alSource; // This works because diablo only lets one sound play at a time.
 	wavinfo_t waveinfo;
 
-	bool isPlaying();
+	bool isPlaying(int index = -1);
 	void Play(int volume, int currentSystemVolume, int pan);
+	void PlayMusic(void);
 	void Stop(void);
+	void StopMusic(void);
 	int GetLength() { return 0; }
 
 	~TSnd();

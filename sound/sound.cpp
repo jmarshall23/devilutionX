@@ -41,6 +41,11 @@ bool gbSoundOn = true;
 ALCdevice *openALDevice;
 ALCcontext *openALContext;
 
+#define MAX_PLAY_SOURCES 64
+ALuint sourcePool[MAX_PLAY_SOURCES];
+
+ALuint musicSource;
+
 namespace {
 	std::unique_ptr<TSnd> currentMusic;
 
@@ -67,10 +72,6 @@ void snd_play_snd(TSnd *pSnd, int lVolume, int lPan)
 		return;
 	}
 
-	if (pSnd->isPlaying()) {
-		return;
-	}
-
 	pSnd->Play(lVolume, sgOptions.Audio.nSoundVolume, lPan);
 	pSnd->start_tc = tc;
 }
@@ -93,29 +94,71 @@ std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
 	ALsizei size = size = snd.get()->waveinfo.samples * snd.get()->waveinfo.width;;
 	ALenum format = snd.get()->waveinfo.width == 2 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO8;
 
-	alGenBuffers(1, &snd.get()->alHandle);
-	alBufferData(snd.get()->alHandle, format, waveFile.get() + snd.get()->waveinfo.dataofs, size, snd.get()->waveinfo.rate);
-	alGenSources(1, &snd.get()->alSource);
+	TSnd* sndPtr = snd.get();;
 
-	alSourcei(snd.get()->alSource, AL_BUFFER, snd.get()->alHandle);
-
+	alGenBuffers(1, &sndPtr->alHandle);
+	alBufferData(sndPtr->alHandle, format, waveFile.get() + sndPtr->waveinfo.dataofs, size, sndPtr->waveinfo.rate);
 	SFileCloseFileThreadSafe(file);
 
 	return snd;
 }
 
-bool TSnd::isPlaying() {
-	ALint state;
-	alGetSourcei(alSource, AL_SOURCE_STATE, &state);
-	return state == AL_PLAYING;
+bool TSnd::isPlaying(int index) {
+
+	for (int i = 0; i < MAX_PLAY_SOURCES; i++)
+	{
+		ALint state;
+		alGetSourcei(sourcePool[i], AL_SOURCE_STATE, &state);
+		if (state == AL_PLAYING)
+		{
+			ALint sourceHandle;
+			alGetSourcei(sourcePool[i], AL_BUFFER, &sourceHandle);
+
+			if (alHandle == sourceHandle)
+				return true;
+		}
+	}
+
+	return false;
 }
 
 void TSnd::Play(int volume, int currentSystemVolume, int pan) {
-	alSourcePlay(alSource);
+	for (int i = 0; i < MAX_PLAY_SOURCES; i++)
+	{
+		ALint state;
+		alGetSourcei(sourcePool[i], AL_SOURCE_STATE, &state);
+		if (state != AL_PLAYING)
+		{
+			alSourcei(sourcePool[i], AL_BUFFER, alHandle);
+			alSourcePlay(sourcePool[i]);
+			return;
+		}
+	}
+}
+
+void TSnd::PlayMusic(void) {
+	alSourcei(musicSource, AL_BUFFER, alHandle);
+	alSourcePlay(musicSource);
+}
+
+void TSnd::StopMusic(void) {
+	alSourceStop(musicSource);
 }
 
 void TSnd::Stop(void) {
-	alSourceStop(alSource);
+	for (int i = 0; i < MAX_PLAY_SOURCES; i++)
+	{
+		ALint state;
+		alGetSourcei(sourcePool[i], AL_SOURCE_STATE, &state);
+		if (state == AL_PLAYING)
+		{
+			ALint sourceHandle;
+			alGetSourcei(sourcePool[i], AL_BUFFER, &sourceHandle);
+
+			if (alHandle == sourceHandle)
+				alSourceStop(sourcePool[i]);
+		}
+	}
 }
 
 TSnd::~TSnd()
@@ -143,6 +186,9 @@ void snd_init()
 	if (!alcMakeContextCurrent(openALContext))
 		devilution::app_fatal("Failed to switch to OpenAL context!");
 
+	alGenSources(MAX_PLAY_SOURCES, &sourcePool[0]);
+	alGenSources(1, &musicSource);
+
 	gbSndInited = true;
 }
 
@@ -159,7 +205,7 @@ void snd_deinit()
 void music_stop()
 {
 	if (currentMusic)
-		currentMusic->Stop();
+		currentMusic->StopMusic();
 
 	currentMusic = nullptr;
 }
@@ -170,7 +216,7 @@ void music_start(uint8_t nTrack)
 	if (gbMusicOn) {
 		const char* trackPath = musicTable->GetValue("filename", nTrack);
 		currentMusic = sound_file_load(trackPath, false);
-		currentMusic->Play(sgOptions.Audio.nMusicVolume, sgOptions.Audio.nMusicVolume, 0);
+		currentMusic->PlayMusic();
 	}
 
 #if 0
