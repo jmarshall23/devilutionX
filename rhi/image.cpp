@@ -239,7 +239,7 @@ namespace devilution
 
 			subImage.buffer = new byte[subImage.width * subImage.height * 4];
 
-			int frameOffset = subImageWidth * (numFrames - i - 1);
+			int frameOffset = subImageWidth * i;
 
 			for (int y = 0; y < subImage.height; y++)
 			{

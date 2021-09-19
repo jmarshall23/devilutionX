@@ -212,9 +212,9 @@ namespace ConversionTool
 				int destWidth = (cel.NumFrames * baseFrame.Width);
 				byte[] tempBuffer = new byte[destWidth * baseFrame.Height];
 
-				for (int i = 0; i < cel.NumFrames; i++)
+				for (int i = 0,d = cel.NumFrames - 1; i < cel.NumFrames; i++, d--)
 				{
-					DiabloCelBase frame = cel.GetFrame((short)i);
+					DiabloCelBase frame = cel.GetFrame((short)d);
 
 					byte[] fixedBuffer = ExportTileset.FastFlipHorizontalBuffer(frame.Pixels, frame.Width, frame.Height);
 					ExportTileset.BlitImage2(fixedBuffer, 0, 0, frame.Width, tempBuffer, (i * baseFrame.Width), 0, destWidth, baseFrame.Height, frame.Width, frame.Height, true);
