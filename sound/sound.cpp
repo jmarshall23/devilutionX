@@ -91,7 +91,7 @@ std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
 	snd.get()->waveinfo = GetWavinfo((char *)path, waveFile.get(), dwBytes);
 
 	ALsizei size = size = snd.get()->waveinfo.samples * snd.get()->waveinfo.width;;
-	ALenum format = snd.get()->waveinfo.width == 2 ? AL_FORMAT_MONO16 : AL_FORMAT_MONO8;
+	ALenum format = snd.get()->waveinfo.width == 2 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO8;
 
 	alGenBuffers(1, &snd.get()->alHandle);
 	alBufferData(snd.get()->alHandle, format, waveFile.get() + snd.get()->waveinfo.dataofs, size, snd.get()->waveinfo.rate);
@@ -158,11 +158,21 @@ void snd_deinit()
 
 void music_stop()
 {
+	if (currentMusic)
+		currentMusic->Stop();
+
 	currentMusic = nullptr;
 }
 
 void music_start(uint8_t nTrack)
 {
+	music_stop();
+	if (gbMusicOn) {
+		const char* trackPath = musicTable->GetValue("filename", nTrack);
+		currentMusic = sound_file_load(trackPath, false);
+		currentMusic->Play(sgOptions.Audio.nMusicVolume, sgOptions.Audio.nMusicVolume, 0);
+	}
+
 #if 0
 	bool success;
 	const char *trackPath;
