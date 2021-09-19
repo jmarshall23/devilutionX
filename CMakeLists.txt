@@ -68,12 +68,6 @@ if(NOT NOSOUND)
                         "DEVILUTIONX_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
 endif()
 
-if(NOT NONET)
-  option(DEVILUTIONX_SYSTEM_LIBSODIUM "Use system-provided libsodium" ON)
-  cmake_dependent_option(DEVILUTIONX_STATIC_LIBSODIUM "Link static libsodium" OFF
-                        "DEVILUTIONX_SYSTEM_LIBSODIUM AND NOT DIST" ON)
-endif()
-
 option(DEVILUTIONX_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
 cmake_dependent_option(DEVILUTIONX_STATIC_LIBFMT "Link static libfmt" OFF
                        "DEVILUTIONX_SYSTEM_LIBFMT AND NOT DIST" ON)
@@ -210,15 +204,6 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 if(NOT NINTENDO_3DS)
   find_package(Threads REQUIRED)
-endif()
-
-if(NOT NONET)
-  if(DEVILUTIONX_SYSTEM_LIBSODIUM)
-    set(sodium_USE_STATIC_LIBS ${DEVILUTIONX_STATIC_LIBSODIUM})
-    find_package(sodium REQUIRED)
-  else()
-    add_subdirectory(3rdParty/libsodium)
-  endif()
 endif()
 
 if(DEVILUTIONX_SYSTEM_LIBFMT)
@@ -659,7 +644,6 @@ if(NOT NONET)
   if(NOT DISABLE_TCP)
     target_link_libraries(libdevilutionx PUBLIC asio)
   endif()
-  target_link_libraries(libdevilutionx PUBLIC sodium)
 endif()
 
 target_link_libraries(libdevilutionx PUBLIC fmt::fmt)
