@@ -235,7 +235,6 @@ endif()
 
 if(ANDROID)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/android-project/3rdParty/SDL2)
-  add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/android-project/3rdParty/SDL2_ttf)
 elseif(USE_SDL1)
   find_package(SDL REQUIRED)
   find_package(SDL_ttf REQUIRED)
@@ -262,7 +261,6 @@ else()
     # Can't define an INTERFACE target with ::, so alias instead
     add_library(SDL2::SDL2 ALIAS SDL2_lib)
   endif()
-  find_package(SDL2_ttf REQUIRED)
 endif()
 
 if(NOT NONET AND NOT DISABLE_TCP)
@@ -448,7 +446,6 @@ set(libdevilutionx_SRCS
   Source/DiabloUI/text.cpp
   Source/DiabloUI/text_draw.cpp
   Source/DiabloUI/title.cpp
-  Source/DiabloUI/ttf_render_wrapped.cpp
   Source/panels/charpanel.cpp
   Source/dvlnet/abstract_net.cpp
   Source/dvlnet/base.cpp
@@ -776,17 +773,9 @@ else()
   target_link_libraries(libdevilutionx PUBLIC "$<${ASAN_GENEX}:-fsanitize=address;-fsanitize-recover=address>")
 endif()
 
-if(USE_SDL1)
-  target_link_libraries(libdevilutionx PUBLIC
-    ${SDL_TTF_LIBRARY}
-    ${SDL_LIBRARY})
-  target_compile_definitions(libdevilutionx PUBLIC USE_SDL1)
-else()
-  target_link_libraries(libdevilutionx PUBLIC
+target_link_libraries(libdevilutionx PUBLIC
     SDL2::SDL2
-    ${SDL2_MAIN}
-    SDL2::SDL2_ttf)
-endif()
+    ${SDL2_MAIN})
 
 if(NOT NOSOUND)
   target_link_libraries(libdevilutionx PUBLIC SDL_audiolib)
