@@ -68,11 +68,6 @@ if(NOT NOSOUND)
                         "DEVILUTIONX_SYSTEM_SDL_AUDIOLIB AND NOT DIST" ON)
 endif()
 
-option(DEVILUTIONX_SYSTEM_LIBFMT "Use system-provided libfmt" ON)
-cmake_dependent_option(DEVILUTIONX_STATIC_LIBFMT "Link static libfmt" OFF
-                       "DEVILUTIONX_SYSTEM_LIBFMT AND NOT DIST" ON)
-
-
 if(NOT VERSION_NUM)
   include(CMake/git.cmake)
   get_git_tag(VERSION_NUM)
@@ -204,18 +199,6 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 if(NOT NINTENDO_3DS)
   find_package(Threads REQUIRED)
-endif()
-
-if(DEVILUTIONX_SYSTEM_LIBFMT)
-  find_package(fmt 7.0.0 QUIET)
-  if(fmt_FOUND)
-    message("-- Found fmt ${fmt_VERSION}")
-  else()
-    message("-- Suitable system fmt package not found, will use fmt from source")
-  endif()
-endif()
-if(NOT fmt_FOUND)
-  add_subdirectory(3rdParty/libfmt)
 endif()
 
 if(ANDROID)
@@ -445,6 +428,11 @@ set(libdevilutionx_SRCS
   Source/storm/storm_svid.cpp
   Source/miniwin/misc_msg.cpp)
 
+  list(APPEND libdevilutionx_SRCS
+    3rdparty/libfmt/format.cc
+    3rdparty/libfmt/os.cc
+    )
+
 if(USE_SDL1)
   list(APPEND libdevilutionx_SRCS Source/utils/sdl2_to_1_2_backports.cpp)
 endif()
@@ -645,8 +633,6 @@ if(NOT NONET)
     target_link_libraries(libdevilutionx PUBLIC asio)
   endif()
 endif()
-
-target_link_libraries(libdevilutionx PUBLIC fmt::fmt)
 
 genex_for_option(DEBUG)
 target_compile_definitions(libdevilutionx PUBLIC "$<${DEBUG_GENEX}:_DEBUG>")
