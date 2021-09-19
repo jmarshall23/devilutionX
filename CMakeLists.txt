@@ -27,7 +27,7 @@ option(BINARY_RELEASE "Enable options for binary release" OFF)
 option(NIGHTLY_BUILD "Enable options for nightly build" OFF)
 option(USE_SDL1 "Use SDL1.2 instead of SDL2" OFF)
 option(NONET "Disable network support" OFF)
-option(NOSOUND "Disable sound support" On)
+option(NOSOUND "Disable sound support" OFF)
 option(RUN_TESTS "Build and run tests" OFF)
 option(ENABLE_CODECOVERAGE "Instrument code for code coverage (only enabled with RUN_TESTS)" OFF)
 
@@ -200,6 +200,8 @@ if(NOT NINTENDO_3DS)
 endif()
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/SDL2)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/OpenAL)
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/openal/include)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/sdl2/include)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/libfmt)
 
@@ -213,14 +215,6 @@ if(NOT NONET AND NOT DISABLE_TCP)
       target_include_directories(asio BEFORE INTERFACE CMake/ctr/asio/include)
   elseif(NINTENDO_SWITCH)
     include(asio_defs)
-  endif()
-endif()
-
-if(NOT NOSOUND)
-  if(DEVILUTIONX_SYSTEM_SDL_AUDIOLIB)
-    find_package(SDL_audiolib REQUIRED)
-  else()
-    add_subdirectory(3rdParty/SDL_audiolib)
   endif()
 endif()
 
@@ -409,17 +403,12 @@ if(USE_SDL1)
   list(APPEND libdevilutionx_SRCS Source/utils/sdl2_to_1_2_backports.cpp)
 endif()
 
-if(NOSOUND)
-  list(APPEND libdevilutionx_SRCS
-    Source/effects_stubs.cpp
-    Source/sound_stubs.cpp)
-else()
-  list(APPEND libdevilutionx_SRCS
+
+list(APPEND libdevilutionx_SRCS
     Source/effects.cpp
-    Source/sound.cpp
-    Source/utils/push_aulib_decoder.cpp
-    Source/utils/soundsample.cpp)
-endif()
+    sound/wave.cpp
+    sound/sound.cpp)
+
 
 if(NOT NONET)
   if(NOT DISABLE_TCP)
@@ -717,11 +706,8 @@ endif()
 
 target_link_libraries(libdevilutionx PUBLIC
     SDL2-static
+    OpenAL
     SDL2main)
-
-if(NOT NOSOUND)
-  target_link_libraries(libdevilutionx PUBLIC SDL_audiolib)
-endif()
 
 if(AMIGA)
   target_link_libraries(libdevilutionx PUBLIC

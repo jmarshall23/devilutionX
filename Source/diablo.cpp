@@ -49,7 +49,7 @@
 #include "plrmsg.h"
 #include "restrict.h"
 #include "setmaps.h"
-#include "sound.h"
+#include "../sound/sound.h"
 #include "stores.h"
 #include "storm/storm.h"
 #include "themes.h"

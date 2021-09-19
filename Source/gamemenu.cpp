@@ -12,7 +12,7 @@
 #include "loadsave.h"
 #include "options.h"
 #include "pfile.h"
-#include "sound.h"
+#include "../sound/sound.h"
 #include "utils/language.h"
 
 namespace devilution {

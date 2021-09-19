@@ -15,7 +15,7 @@
 #include "miniwin/miniwin.h"
 #include "utils/stdcompat/optional.hpp"
 #include "monstdat.h"
-#include "sound.h"
+#include "../sound/sound.h"
 #include "spelldat.h"
 #include "textdat.h"
 

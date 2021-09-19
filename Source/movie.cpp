@@ -8,7 +8,7 @@
 #include "effects.h"
 #include "engine/demomode.h"
 #include "hwcursor.hpp"
-#include "sound.h"
+#include "../sound/sound.h"
 #include "storm/storm_svid.h"
 #include "utils/display.h"
 

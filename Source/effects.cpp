@@ -8,7 +8,7 @@
 #include "engine/random.hpp"
 #include "init.h"
 #include "player.h"
-#include "sound.h"
+#include "../sound/sound.h"
 #include "utils/stdcompat/algorithm.hpp"
 
 #include "datatable.h"
@@ -1130,7 +1130,7 @@ void StreamPlay(TSFX *pSFX, int lVolume, int lPan)
 			lVolume = VOLUME_MAX;
 		if (pSFX->pSnd == nullptr)
 			pSFX->pSnd = sound_file_load(pSFX->pszName, AllowStreaming);
-		pSFX->pSnd->DSB.Play(lVolume, sound_get_or_set_sound_volume(1), lPan);
+		pSFX->pSnd->Play(lVolume, sound_get_or_set_sound_volume(1), lPan);
 		sgpStreamSFX = pSFX;
 	}
 }
@@ -1331,7 +1331,7 @@ void sound_stop()
 	for (int i = 0; i < numSfx; i++) {
 		auto &sfx = sgSFX[i];
 		if (sfx.pSnd != nullptr) {
-			sfx.pSnd->DSB.Stop();
+			sfx.pSnd->Stop();
 		}
 	}
 }
@@ -1415,7 +1415,7 @@ int GetSFXLength(int nSFX)
 	if (sgSFX[nSFX].pSnd == nullptr)
 		sgSFX[nSFX].pSnd = sound_file_load(sgSFX[nSFX].pszName,
 		    /*stream=*/AllowStreaming && (sgSFX[nSFX].bFlags & sfx_STREAM) != 0);
-	return sgSFX[nSFX].pSnd->DSB.GetLength();
+	return sgSFX[nSFX].pSnd->GetLength();
 }
 
 } // namespace devilution
