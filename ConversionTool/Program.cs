@@ -5,6 +5,8 @@ namespace ConversionTool
 {
     class Program
     {
+
+		public static bool exportingTileset = false;
         static void SaveDun(string filename)
         {
             string dunFile = filename;
@@ -360,6 +362,7 @@ namespace ConversionTool
             }
 
 			Console.WriteLine("Converting Level Data...");
+			Program.exportingTileset = true;
 			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
 			ExportLevels("levels/towndata");
 			ExportLevels("levels/l1data");

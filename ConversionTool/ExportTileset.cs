@@ -133,7 +133,7 @@ namespace ConversionTool
 					buffer[imgStart + (i * 4) + 1] = currentColorPalette[(data[i] * 3) + 1];
 					buffer[imgStart + (i * 4) + 2] = currentColorPalette[(data[i] * 3) + 0];
 
-					if(buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0)
+					if(buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0 && !Program.exportingTileset)
 						buffer[imgStart + (i * 4) + 3] = 128;
 					else
 						buffer[imgStart + (i * 4) + 3] = 255;
@@ -155,7 +155,7 @@ namespace ConversionTool
 					buffer[imgStart + (i * 4) + 1] = currentColorPalette[(data[d] * 3) + 1];
 					buffer[imgStart + (i * 4) + 2] = currentColorPalette[(data[d] * 3) + 0];
 
-					if (buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0)
+					if (buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0 && !Program.exportingTileset)
 						buffer[imgStart + (i * 4) + 3] = 128;
 					else
 						buffer[imgStart + (i * 4) + 3] = 255;
