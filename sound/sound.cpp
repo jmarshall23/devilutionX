@@ -76,7 +76,7 @@ void snd_play_snd(TSnd *pSnd, int lVolume, int lPan)
 	pSnd->start_tc = tc;
 }
 
-std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
+std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream, bool isMusic)
 {
 	auto snd = std::make_unique<TSnd>();
 	snd->start_tc = SDL_GetTicks() - 80 - 1;
@@ -92,7 +92,11 @@ std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
 	snd.get()->waveinfo = GetWavinfo((char *)path, waveFile.get(), dwBytes);
 
 	ALsizei size = size = snd.get()->waveinfo.samples * snd.get()->waveinfo.width;;
-	ALenum format = snd.get()->waveinfo.width == 2 ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO8;
+	ALenum format = snd.get()->waveinfo.width == 2 ? AL_FORMAT_MONO16 : AL_FORMAT_MONO8;
+	if (isMusic)
+	{
+		format = AL_FORMAT_STEREO16;
+	}
 
 	TSnd* sndPtr = snd.get();;
 
@@ -215,7 +219,7 @@ void music_start(uint8_t nTrack)
 	music_stop();
 	if (gbMusicOn) {
 		const char* trackPath = musicTable->GetValue("filename", nTrack);
-		currentMusic = sound_file_load(trackPath, false);
+		currentMusic = sound_file_load(trackPath, false, true);
 		currentMusic->PlayMusic();
 	}
 

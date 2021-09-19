@@ -68,7 +68,7 @@ extern bool gbSndInited;
 void ClearDuplicateSounds();
 void snd_stop_snd(TSnd *pSnd);
 void snd_play_snd(TSnd *pSnd, int lVolume, int lPan);
-std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream = false);
+std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream = false, bool isMusic = false);
 void snd_init();
 void snd_deinit();
 void music_stop();
