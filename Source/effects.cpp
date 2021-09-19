@@ -1250,6 +1250,7 @@ bool effect_is_playing(int nSFX)
 void stream_stop()
 {
 	if (sgpStreamSFX != nullptr) {
+		sgpStreamSFX->pSnd->Stop();
 		sgpStreamSFX->pSnd = nullptr;
 		sgpStreamSFX = nullptr;
 	}
