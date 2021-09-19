@@ -97,6 +97,8 @@ std::unique_ptr<TSnd> sound_file_load(const char *path, bool stream)
 	alBufferData(snd.get()->alHandle, format, waveFile.get() + snd.get()->waveinfo.dataofs, size, snd.get()->waveinfo.rate);
 	alGenSources(1, &snd.get()->alSource);
 
+	alSourcei(snd.get()->alSource, AL_BUFFER, snd.get()->alHandle);
+
 	SFileCloseFileThreadSafe(file);
 
 	return snd;
@@ -142,6 +144,11 @@ void snd_init()
 		devilution::app_fatal("Failed to switch to OpenAL context!");
 
 	gbSndInited = true;
+}
+
+void snd_think()
+{
+
 }
 
 void snd_deinit()
