@@ -3242,7 +3242,7 @@ void LazarusAi(int i)
 		if (!gbIsMultiplayer) {
 			auto &myPlayer = Players[MyPlayerId];
 			if (monster.mtalkmsg == TEXT_VILE13 && monster._mgoal == MGOAL_INQUIRING && myPlayer.position.tile.x == 35 && myPlayer.position.tile.y == 46) {
-				PlayInGameMovie("gendata\\fprst3.smk");
+				PlayInGameMovie("movies\\fprst3.smk");
 				monster._mmode = MonsterMode::Talk;
 				Quests[Q_BETRAYER]._qvar1 = 5;
 			}
@@ -4070,17 +4070,17 @@ void DoEnding()
 	switch (Players[MyPlayerId]._pClass) {
 	case HeroClass::Sorcerer:
 	case HeroClass::Monk:
-		play_movie("gendata\\DiabVic1.smk", false);
+		play_movie("movies\\DiabVic1.smk", false);
 		break;
 	case HeroClass::Warrior:
 	case HeroClass::Barbarian:
-		play_movie("gendata\\DiabVic2.smk", false);
+		play_movie("movies\\DiabVic2.smk", false);
 		break;
 	default:
-		play_movie("gendata\\DiabVic3.smk", false);
+		play_movie("movies\\DiabVic3.smk", false);
 		break;
 	}
-	play_movie("gendata\\Diabend.smk", false);
+	play_movie("movies\\Diabend.smk", false);
 
 	bool bMusicOn = gbMusicOn;
 	gbMusicOn = true;
@@ -4090,7 +4090,7 @@ void DoEnding()
 
 	music_start(TMUSIC_L2);
 	loop_movie = true;
-	play_movie("gendata\\loopdend.smk", true);
+	play_movie("movies\\loopdend.smk", true);
 	loop_movie = false;
 	music_stop();
 

@@ -287,8 +287,22 @@ namespace ConversionTool
 			}
 		}
 
+		static void CopyMovies()
+		{
+			string[] movieFiles = System.IO.Directory.GetFiles("mpq_data\\gendata\\", "*.smk", SearchOption.AllDirectories);
+			foreach (string file in movieFiles)
+			{
+				Directory.CreateDirectory("base\\movies");
+
+				File.Copy(file, "base\\movies\\" + Path.GetFileName(file), true);
+			}
+		}
+
 		static void Main(string[] args)
         {
+			Console.WriteLine("Copying movie files");
+			CopyMovies();
+
 			Console.WriteLine("Copying UI bin files");
 			CopyUIBin();
 
