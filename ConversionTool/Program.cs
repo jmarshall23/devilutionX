@@ -110,7 +110,7 @@ namespace ConversionTool
 
 		static void ExportLevels(string path)
 		{
-			string BlizzDatapath = "BlizzData/" + path;
+			string BlizzDatapath = "mpq_data/" + path;
 
 			// Dun files
 			{
@@ -160,9 +160,9 @@ namespace ConversionTool
 					if (files.Length > 1)
 					{
 						if (files[1].Contains("town"))
-							ConvertSingleImage(files[1].Remove(0, new string("BlizzData/").Length), 64, null, null, false, false, "special_" + ExportTileset.palette_name);
+							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, false, "special_" + ExportTileset.palette_name);
 						else
-							ConvertSingleImage(files[1].Remove(0, new string("BlizzData/").Length), 64, null, null, false, true, "special_" + ExportTileset.palette_name);
+							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, true, "special_" + ExportTileset.palette_name);
 					}
 				}
 			}
@@ -176,7 +176,7 @@ namespace ConversionTool
 
 			if (isCl2)
 			{
-				cel = new DiabloCL2("BlizzData/" + filename);
+				cel = new DiabloCL2("mpq_data/" + filename);
 
 				if (cel.NumFrames == 0)
 				{
@@ -186,10 +186,10 @@ namespace ConversionTool
 			}
 			else
 			{
-				cel = new DiabloCel("BlizzData/" + filename, width, 0, widthTable, heightTable, forceFrameHeaderSkip);
+				cel = new DiabloCel("mpq_data/" + filename, width, 0, widthTable, heightTable, forceFrameHeaderSkip);
 			}
 
-			string outputPath = "Build\\base\\" + ExportTileset.FixExportPath(filename);
+			string outputPath = "base\\" + ExportTileset.FixExportPath(filename);
 
 			if(newOutputFolder != "")
 			{
@@ -238,7 +238,7 @@ namespace ConversionTool
 		static void CopySoundFiles()
 		{
 			{
-				string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\sfx\\", "*.wav", SearchOption.AllDirectories);
+				string[] soundFiles = System.IO.Directory.GetFiles("mpq_data\\sfx\\", "*.wav", SearchOption.AllDirectories);
 				foreach (string file in soundFiles)
 				{
 					string newPath = ExportTileset.FixExportPath(file);
@@ -250,7 +250,7 @@ namespace ConversionTool
 			}
 
 			{
-				string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\monsters\\", "*.wav", SearchOption.AllDirectories);
+				string[] soundFiles = System.IO.Directory.GetFiles("mpq_data\\monsters\\", "*.wav", SearchOption.AllDirectories);
 				foreach (string file in soundFiles)
 				{
 					string newPath = ExportTileset.FixExportPath(file);
@@ -262,7 +262,7 @@ namespace ConversionTool
 			}
 
 			{
-				string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\music\\", "*.wav", SearchOption.AllDirectories);
+				string[] soundFiles = System.IO.Directory.GetFiles("mpq_data\\music\\", "*.wav", SearchOption.AllDirectories);
 				foreach (string file in soundFiles)
 				{
 					string newPath = ExportTileset.FixExportPath(file);
@@ -276,7 +276,7 @@ namespace ConversionTool
 
 		static void CopyUIBin()
 		{
-			string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\ui_art\\", "*.bin", SearchOption.AllDirectories);
+			string[] soundFiles = System.IO.Directory.GetFiles("mpq_data\\ui_art\\", "*.bin", SearchOption.AllDirectories);
 			foreach (string file in soundFiles)
 			{
 				string newPath = ExportTileset.FixExportPath(file);
@@ -297,16 +297,16 @@ namespace ConversionTool
 
 			Console.WriteLine("Exporting UI...");
 			{
-				string[] uiPCXFiles = System.IO.Directory.GetFiles("BlizzData\\ui_art\\", "*.pcx", SearchOption.AllDirectories);
+				string[] uiPCXFiles = System.IO.Directory.GetFiles("mpq_data\\ui_art\\", "*.pcx", SearchOption.AllDirectories);
 				foreach (string file in uiPCXFiles)
 				{
-					if (file == "BlizzData\\ui_art\\listbox.pcx")
+					if (file == "mpq_data\\ui_art\\listbox.pcx")
 						continue;
 
-					if (file == "BlizzData\\ui_art\\list_gry.pcx")
+					if (file == "mpq_data\\ui_art\\list_gry.pcx")
 						continue;
 
-					string f = file.Remove(0, new string("BlizzData/").Length);
+					string f = file.Remove(0, new string("mpq_data/").Length);
 					Console.WriteLine("Processing:" + f);
 
 					int width = 0;
@@ -314,15 +314,15 @@ namespace ConversionTool
 
 					byte[] data = DiabloPCX.LoadPCX32(file, out width, out height);
 
-					Directory.CreateDirectory("Build\\base\\" + Path.GetDirectoryName(f));
-					string filename = "Build\\base\\" + f;
+					Directory.CreateDirectory("base\\" + Path.GetDirectoryName(f));
+					string filename = "base\\" + f;
 					filename = Path.ChangeExtension(filename, ".tga");
 					DiabloPCX.WriteConvertedPCX2TGA(filename, data, width, height);
 				}
 			}
 
-			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
-			ExportTileset.DumpPaletteToTextFile("BlizzData\\Levels\\TownData\\Town.pal");
+			ExportTileset.SetColorPalette("mpq_data\\Levels\\TownData\\Town.pal");
+			ExportTileset.DumpPaletteToTextFile("mpq_data\\Levels\\TownData\\Town.pal");
 
 			Console.WriteLine("Exporting store graphics...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.store)
@@ -351,10 +351,10 @@ namespace ConversionTool
 			DiabloCel.indexedCelArrayHack = false;
 			Console.WriteLine("Exporting Objects...");
 			{
-				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\objects\\", "*.cel", SearchOption.AllDirectories);
+				string[] playerCl2Files = System.IO.Directory.GetFiles("mpq_data\\objects\\", "*.cel", SearchOption.AllDirectories);
 				foreach (string file in playerCl2Files)
 				{
-					string f = file.Remove(0, new string("BlizzData/").Length);
+					string f = file.Remove(0, new string("mpq_data/").Length);
 					Console.WriteLine("Processing:" + f);
 					ConvertSingleImage(f, 0, null, null, true);
 				}
@@ -362,10 +362,10 @@ namespace ConversionTool
 
 			Console.WriteLine("Exporting Missiles...");
 			{
-				string[] missileFiles = System.IO.Directory.GetFiles("BlizzData\\missiles\\", "*.cl2", SearchOption.AllDirectories);
+				string[] missileFiles = System.IO.Directory.GetFiles("mpq_data\\missiles\\", "*.cl2", SearchOption.AllDirectories);
 				foreach (string file in missileFiles)
 				{
-					string f = file.Remove(0, new string("BlizzData/").Length);
+					string f = file.Remove(0, new string("mpq_data/").Length);
 					Console.WriteLine("Processing:" + f);
 					ConvertSingleImage(f, 0, null, null);
 				}
@@ -379,10 +379,10 @@ namespace ConversionTool
 
 			Console.WriteLine("Exporting Monsters...");
 			{
-				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\monsters\\", "*.cl2", SearchOption.AllDirectories);
+				string[] playerCl2Files = System.IO.Directory.GetFiles("mpq_data\\monsters\\", "*.cl2", SearchOption.AllDirectories);
 				foreach (string file in playerCl2Files)
 				{
-					string f = file.Remove(0, new string("BlizzData/").Length);
+					string f = file.Remove(0, new string("mpq_data/").Length);
 					Console.WriteLine("Processing:" + f);
 					ConvertSingleImage(f, 0, null, null);
 				}
@@ -390,10 +390,10 @@ namespace ConversionTool
 
 			Console.WriteLine("Exporting Player Gfx...");
 			{
-				string[] playerCl2Files = System.IO.Directory.GetFiles("BlizzData\\plrgfx\\", "*.cl2", SearchOption.AllDirectories);
+				string[] playerCl2Files = System.IO.Directory.GetFiles("mpq_data\\plrgfx\\", "*.cl2", SearchOption.AllDirectories);
 				foreach(string file in playerCl2Files)
 				{
-					string f = file.Remove(0, new string("BlizzData/").Length);
+					string f = file.Remove(0, new string("mpq_data/").Length);
 					Console.WriteLine("Processing:" + f);
 					ConvertSingleImage(f, 0, null, null);
 				}
@@ -403,11 +403,11 @@ namespace ConversionTool
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.GenDataImages)
 			{
 				string palette = Path.ChangeExtension(entry.path, ".pal");
-				ExportTileset.SetColorPalette("BlizzData\\" + palette);
+				ExportTileset.SetColorPalette("mpq_data\\" + palette);
 				ConvertSingleImage(entry.path, entry.width, null, null);
 			}
 
-			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
+			ExportTileset.SetColorPalette("mpq_data\\Levels\\TownData\\Town.pal");
 
 			Console.WriteLine("Exporting Data Inv...");
 			foreach (ConversionTables.ConvEntry entry in ConversionTables.DataInv)
@@ -429,7 +429,7 @@ namespace ConversionTool
 
 			Console.WriteLine("Converting Level Data...");
 			Program.exportingTileset = true;
-			ExportTileset.SetColorPalette("BlizzData\\Levels\\TownData\\Town.pal");
+			ExportTileset.SetColorPalette("mpq_data\\Levels\\TownData\\Town.pal");
 			ExportLevels("levels/towndata");
 			ExportLevels("levels/l1data");
 			ExportLevels("levels/l2data");
