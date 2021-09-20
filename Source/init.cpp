@@ -30,30 +30,14 @@ namespace devilution {
 
 /** True if the game is the current active window */
 bool gbActive;
-/** A handle to an hellfire.mpq archive. */
-HANDLE hellfire_mpq;
 /** The current input handler function */
 WNDPROC CurrentProc;
-/** A handle to the spawn.mpq archive. */
-HANDLE spawn_mpq;
-/** A handle to the diabdat.mpq archive. */
-HANDLE diabdat_mpq;
-/** A handle to the patch_rt.mpq archive. */
-HANDLE patch_rt_mpq;
 /** Indicate if we only have access to demo data */
 bool gbIsSpawn;
 /** Indicate if we have loaded the Hellfire expansion data */
 bool gbIsHellfire;
 /** Indicate if we want vanilla savefiles */
 bool gbVanilla;
-HANDLE hfmonk_mpq;
-HANDLE hfbard_mpq;
-HANDLE hfbarb_mpq;
-HANDLE hfmusic_mpq;
-HANDLE hfvoice_mpq;
-HANDLE hfopt1_mpq;
-HANDLE hfopt2_mpq;
-HANDLE devilutionx_mpq;
 
 namespace {
 
@@ -86,56 +70,6 @@ void init_cleanup()
 	if (gbIsMultiplayer && gbRunGame) {
 		pfile_write_hero(/*writeGameData=*/false, /*clearTables=*/true);
 	}
-
-	if (spawn_mpq != nullptr) {
-		SFileCloseArchive(spawn_mpq);
-		spawn_mpq = nullptr;
-	}
-	if (diabdat_mpq != nullptr) {
-		SFileCloseArchive(diabdat_mpq);
-		diabdat_mpq = nullptr;
-	}
-	if (patch_rt_mpq != nullptr) {
-		SFileCloseArchive(patch_rt_mpq);
-		patch_rt_mpq = nullptr;
-	}
-	if (hellfire_mpq != nullptr) {
-		SFileCloseArchive(hellfire_mpq);
-		hellfire_mpq = nullptr;
-	}
-	if (hfmonk_mpq != nullptr) {
-		SFileCloseArchive(hfmonk_mpq);
-		hfmonk_mpq = nullptr;
-	}
-	if (hfbard_mpq != nullptr) {
-		SFileCloseArchive(hfbard_mpq);
-		hfbard_mpq = nullptr;
-	}
-	if (hfbarb_mpq != nullptr) {
-		SFileCloseArchive(hfbarb_mpq);
-		hfbarb_mpq = nullptr;
-	}
-	if (hfmusic_mpq != nullptr) {
-		SFileCloseArchive(hfmusic_mpq);
-		hfmusic_mpq = nullptr;
-	}
-	if (hfvoice_mpq != nullptr) {
-		SFileCloseArchive(hfvoice_mpq);
-		hfvoice_mpq = nullptr;
-	}
-	if (hfopt1_mpq != nullptr) {
-		SFileCloseArchive(hfopt1_mpq);
-		hfopt1_mpq = nullptr;
-	}
-	if (hfopt2_mpq != nullptr) {
-		SFileCloseArchive(hfopt2_mpq);
-		hfopt2_mpq = nullptr;
-	}
-	if (devilutionx_mpq != nullptr) {
-		SFileCloseArchive(devilutionx_mpq);
-		devilutionx_mpq = nullptr;
-	}
-
 	NetClose();
 }
 
@@ -175,47 +109,10 @@ void init_archives()
 		LogVerbose("MPQ search paths:{}", message);
 	}
 
-	diabdat_mpq = LoadMPQ(paths, "DIABDAT.MPQ");
-	if (diabdat_mpq == nullptr) {
-		// DIABDAT.MPQ is uppercase on the original CD and the GOG version.
-		diabdat_mpq = LoadMPQ(paths, "diabdat.mpq");
-	}
-
-	if (diabdat_mpq == nullptr) {
-		spawn_mpq = LoadMPQ(paths, "spawn.mpq");
-		if (spawn_mpq != nullptr)
-			gbIsSpawn = true;
-	}
 	HANDLE fh = nullptr;
 	if (!SFileOpenFile("ui_art\\title.tga", &fh))
 		InsertCDDlg();
 	SFileCloseFileThreadSafe(fh);
-
-	patch_rt_mpq = LoadMPQ(paths, "patch_rt.mpq");
-	if (patch_rt_mpq == nullptr)
-		patch_rt_mpq = LoadMPQ(paths, "patch_sh.mpq");
-
-	hellfire_mpq = LoadMPQ(paths, "hellfire.mpq");
-	if (hellfire_mpq != nullptr)
-		gbIsHellfire = true;
-	hfmonk_mpq = LoadMPQ(paths, "hfmonk.mpq");
-	hfbard_mpq = LoadMPQ(paths, "hfbard.mpq");
-	if (hfbard_mpq != nullptr)
-		gbBard = true;
-	hfbarb_mpq = LoadMPQ(paths, "hfbarb.mpq");
-	if (hfbarb_mpq != nullptr)
-		gbBarbarian = true;
-	hfmusic_mpq = LoadMPQ(paths, "hfmusic.mpq");
-	hfvoice_mpq = LoadMPQ(paths, "hfvoice.mpq");
-	hfopt1_mpq = LoadMPQ(paths, "hfopt1.mpq");
-	hfopt2_mpq = LoadMPQ(paths, "hfopt2.mpq");
-
-	if (gbIsHellfire && (hfmonk_mpq == nullptr || hfmusic_mpq == nullptr || hfvoice_mpq == nullptr)) {
-		UiErrorOkDialog(_("Some Hellfire MPQs are missing"), _("Not all Hellfire MPQs were found.\nPlease copy all the hf*.mpq files."));
-		app_fatal(nullptr);
-	}
-
-	//devilutionx_mpq = LoadMPQ(paths, "devilutionx.mpq");
 }
 
 void init_create_window()

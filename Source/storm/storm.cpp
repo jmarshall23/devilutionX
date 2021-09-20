@@ -99,7 +99,7 @@ bool SFileOpenFile(const char *filename, HANDLE *phFile)
 			result = SFileOpenFileEx((HANDLE) nullptr, path.c_str(), SFILE_OPEN_LOCAL_FILE, phFile);
 		}
 	}
-
+#if 0
 	if (!result && devilutionx_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)devilutionx_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}
@@ -138,6 +138,7 @@ bool SFileOpenFile(const char *filename, HANDLE *phFile)
 	if (!result && diabdat_mpq != nullptr) {
 		result = SFileOpenFileEx((HANDLE)diabdat_mpq, filename, SFILE_OPEN_FROM_MPQ, phFile);
 	}
+#endif
 
 	if (!result || (*phFile == nullptr)) {
 		const auto error = SErrGetLastError();

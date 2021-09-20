@@ -10,22 +10,10 @@
 namespace devilution {
 
 extern bool gbActive;
-extern HANDLE hellfire_mpq;
 extern WNDPROC CurrentProc;
-extern HANDLE spawn_mpq;
-extern HANDLE diabdat_mpq;
 extern bool gbIsSpawn;
 extern bool gbIsHellfire;
 extern bool gbVanilla;
-extern HANDLE patch_rt_mpq;
-extern HANDLE hfmonk_mpq;
-extern HANDLE hfbard_mpq;
-extern HANDLE hfbarb_mpq;
-extern HANDLE hfmusic_mpq;
-extern HANDLE hfvoice_mpq;
-extern HANDLE hfopt1_mpq;
-extern HANDLE hfopt2_mpq;
-extern HANDLE devilutionx_mpq;
 
 void init_cleanup();
 void init_archives();
