@@ -1,8 +1,8 @@
 # Devilution-X Iced Branch
 
 # What is Devilution-X Iced Branch
-	This is a special fork of the Devilution-X project(https://github.com/diasurgical/devilutionX), to add new features like hardware
-accelerated rendering and new modding support.
+	* This is a special fork of the Devilution-X project(https://github.com/diasurgical/devilutionX).
+	* This fork adds new features like hardware accelerated rendering and new modding support.
 
 # Compiling from Source:
 	1) Install visual studio 2022, and open the cmake project and hit compile.
