@@ -83,10 +83,21 @@ bool SFileOpenFile(const char *filename, HANDLE *phFile)
 	bool result = false;
 
 	if (directFileAccess) {
-		std::string path = SBasePath + filename;
-		//for (std::size_t i = SBasePath->size(); i < path.size(); ++i)
-		//	path[i] = AsciiToLowerTable_Path[static_cast<unsigned char>(path[i])];
+		std::string path;
+
+		path += "..\\mod\\";
+		path += filename;
+
 		result = SFileOpenFileEx((HANDLE) nullptr, path.c_str(), SFILE_OPEN_LOCAL_FILE, phFile);
+
+		if (!result) {
+			std::string path;
+
+			path += "..\\base\\";
+			path += filename;
+
+			result = SFileOpenFileEx((HANDLE) nullptr, path.c_str(), SFILE_OPEN_LOCAL_FILE, phFile);
+		}
 	}
 
 	if (!result && devilutionx_mpq != nullptr) {

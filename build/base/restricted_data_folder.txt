@@ -1,0 +1,7 @@
+The data in this folder is property of Blizzard Entertainment. You may not, in any way, redistribute any data that is located in this folder.
+If this folder is blank, it is becuase you need to run the conversion tool. Please refer to the readme file for setup.
+
+The ConversionTool requires the original Diablo game diabdat.mpq and extracted data from that archive(again see readme for more details).
+The data here is considered to be restricted data, and may NOT be redistributed in anyway!
+
+All new content for your mod should go into the mod folder.

@@ -20,6 +20,7 @@
 #include "utils/ui_fwd.h"
 
 #include "../rhi/gl_render.h"
+#include "datatable.h"
 
 namespace devilution {
 
@@ -521,21 +522,62 @@ void DrawAutomapText(const Surface &out)
 	}
 }
 
+#define AUTOMAP_STRING_TO_ID(x) \
+	if (str == #x) {            \
+		buf_ptr[i].type = AutomapTile::Types::##x;  \
+		buf_ptr[i].flags = (AutomapTile::Flags)flags;		\
+		continue;               \
+	}
+
+std::unique_ptr<AutomapTile[]> ParseAutomapData(const char *fileName, size_t &tileCount)
+{
+	DataTable *automapData = new DataTable(fileName);
+	tileCount = automapData->NumRows();
+
+	std::unique_ptr<AutomapTile[]> buf { new AutomapTile[tileCount] };
+
+	AutomapTile *buf_ptr = buf.get();
+
+	for (int i = 0; i < tileCount; i++) {
+		std::string str = automapData->GetValue("type", i);
+		int flags = automapData->GetInt("flags", i);
+
+		AUTOMAP_STRING_TO_ID(None);
+		AUTOMAP_STRING_TO_ID(Diamond);
+		AUTOMAP_STRING_TO_ID(Vertical);
+		AUTOMAP_STRING_TO_ID(Horizontal);
+		AUTOMAP_STRING_TO_ID(Cross);
+		AUTOMAP_STRING_TO_ID(FenceVertical);
+		AUTOMAP_STRING_TO_ID(FenceHorizontal);
+		AUTOMAP_STRING_TO_ID(Corner);
+		AUTOMAP_STRING_TO_ID(CaveHorizontalCross);
+		AUTOMAP_STRING_TO_ID(CaveVerticalCross);
+		AUTOMAP_STRING_TO_ID(CaveHorizontal);
+		AUTOMAP_STRING_TO_ID(CaveVertical);
+		AUTOMAP_STRING_TO_ID(CaveCross);
+
+		devilution::app_fatal("Unknown automap cell type!");
+	}
+
+	delete automapData;
+	return buf;
+}
+
 std::unique_ptr<AutomapTile[]> LoadAutomapData(size_t &tileCount)
 {
 	switch (leveltype) {
 	case DTYPE_CATHEDRAL:
 		if (currlevel < 21)
-			return LoadFileInMem<AutomapTile>("Levels\\L1Data\\L1.AMP", &tileCount);
-		return LoadFileInMem<AutomapTile>("NLevels\\L5Data\\L5.AMP", &tileCount);
+			return ParseAutomapData("Levels\\L1Data\\automap.amptxt", tileCount);
+		return ParseAutomapData("NLevels\\L5Data\\automap.amptxt", tileCount);
 	case DTYPE_CATACOMBS:
-		return LoadFileInMem<AutomapTile>("Levels\\L2Data\\L2.AMP", &tileCount);
+		return ParseAutomapData("Levels\\L2Data\\automap.amptxt", tileCount);
 	case DTYPE_CAVES:
 		if (currlevel < 17)
-			return LoadFileInMem<AutomapTile>("Levels\\L3Data\\L3.AMP", &tileCount);
-		return LoadFileInMem<AutomapTile>("NLevels\\L6Data\\L6.AMP", &tileCount);
+			return ParseAutomapData("Levels\\L3Data\\automap.amptxt", tileCount);
+		return ParseAutomapData("NLevels\\L6Data\\automap.amptxt", tileCount);
 	case DTYPE_HELL:
-		return LoadFileInMem<AutomapTile>("Levels\\L4Data\\L4.AMP", &tileCount);
+		return ParseAutomapData("Levels\\L4Data\\automap.amptxt", tileCount);
 	default:
 		return nullptr;
 	}

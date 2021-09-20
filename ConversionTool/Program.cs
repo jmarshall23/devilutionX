@@ -136,6 +136,14 @@ namespace ConversionTool
 					SaveTil(f);
 			}
 
+			// amp files
+			{
+				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.amp");
+
+				foreach (string f in files)
+					DiabloAMP.ConvertAutomapFile(f);
+			}
+
 			// cel files
 			{
 				string[] minfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.min");
@@ -181,7 +189,7 @@ namespace ConversionTool
 				cel = new DiabloCel("BlizzData/" + filename, width, 0, widthTable, heightTable, forceFrameHeaderSkip);
 			}
 
-			string outputPath = "Build\\" + ExportTileset.FixExportPath(filename);
+			string outputPath = "Build\\base\\" + ExportTileset.FixExportPath(filename);
 
 			if(newOutputFolder != "")
 			{
@@ -227,8 +235,66 @@ namespace ConversionTool
 			}
 		}
 
+		static void CopySoundFiles()
+		{
+			{
+				string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\sfx\\", "*.wav", SearchOption.AllDirectories);
+				foreach (string file in soundFiles)
+				{
+					string newPath = ExportTileset.FixExportPath(file);
+
+					Directory.CreateDirectory(newPath);
+
+					File.Copy(file, newPath + "\\" + Path.GetFileName(file), true);
+				}
+			}
+
+			{
+				string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\monsters\\", "*.wav", SearchOption.AllDirectories);
+				foreach (string file in soundFiles)
+				{
+					string newPath = ExportTileset.FixExportPath(file);
+
+					Directory.CreateDirectory(newPath);
+
+					File.Copy(file, newPath + "\\" + Path.GetFileName(file), true);
+				}
+			}
+
+			{
+				string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\music\\", "*.wav", SearchOption.AllDirectories);
+				foreach (string file in soundFiles)
+				{
+					string newPath = ExportTileset.FixExportPath(file);
+
+					Directory.CreateDirectory(newPath);
+
+					File.Copy(file, newPath + "\\" + Path.GetFileName(file), true);
+				}
+			}
+		}
+
+		static void CopyUIBin()
+		{
+			string[] soundFiles = System.IO.Directory.GetFiles("BlizzData\\ui_art\\", "*.bin", SearchOption.AllDirectories);
+			foreach (string file in soundFiles)
+			{
+				string newPath = ExportTileset.FixExportPath(file);
+
+				Directory.CreateDirectory(newPath);
+
+				File.Copy(file, newPath + "\\" + Path.GetFileName(file), true);
+			}
+		}
+
 		static void Main(string[] args)
         {
+			Console.WriteLine("Copying UI bin files");
+			CopyUIBin();
+
+			Console.WriteLine("Copy sound files...");
+			CopySoundFiles();
+
 			Console.WriteLine("Exporting UI...");
 			{
 				string[] uiPCXFiles = System.IO.Directory.GetFiles("BlizzData\\ui_art\\", "*.pcx", SearchOption.AllDirectories);
@@ -248,8 +314,8 @@ namespace ConversionTool
 
 					byte[] data = DiabloPCX.LoadPCX32(file, out width, out height);
 
-					Directory.CreateDirectory("Build\\" + Path.GetDirectoryName(f));
-					string filename = "Build\\" + f;
+					Directory.CreateDirectory("Build\\base\\" + Path.GetDirectoryName(f));
+					string filename = "Build\\base\\" + f;
 					filename = Path.ChangeExtension(filename, ".tga");
 					DiabloPCX.WriteConvertedPCX2TGA(filename, data, width, height);
 				}

@@ -11,7 +11,7 @@ namespace ConversionTool
 		public static string FixExportPath(string path)
 		{
 			string dpath = Path.GetDirectoryName(path);
-			dpath = dpath.Replace("BlizzData", "Build");
+			dpath = dpath.Replace("BlizzData", "Build\\base");
 		//	Directory.CreateDirectory(dpath);
 			return dpath;
 		}

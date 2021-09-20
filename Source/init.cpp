@@ -187,7 +187,7 @@ void init_archives()
 			gbIsSpawn = true;
 	}
 	HANDLE fh = nullptr;
-	if (!SFileOpenFile("ui_art\\title.pcx", &fh))
+	if (!SFileOpenFile("ui_art\\title.tga", &fh))
 		InsertCDDlg();
 	SFileCloseFileThreadSafe(fh);
 

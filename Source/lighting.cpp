@@ -848,10 +848,14 @@ void MakeLightTable()
 		tbl += 240;
 	}
 
-	LoadFileInMem("PlrGFX\\Infra.TRN", tbl, 256);
+// jmarshall - todo infra
+//	LoadFileInMem("PlrGFX\\Infra.TRN", tbl, 256);
+// jmarshall end
 	tbl += 256;
 
-	LoadFileInMem("PlrGFX\\Stone.TRN", tbl, 256);
+// jmarshall - todo stone
+//	LoadFileInMem("PlrGFX\\Stone.TRN", tbl, 256);
+// jmarshall end
 	tbl += 256;
 
 	for (int i = 0; i < 8; i++) {
