@@ -7,13 +7,6 @@
 #include <SDL.h>
 #include <smacker.h>
 
-#ifndef NOSOUND
-#include <Aulib/ResamplerSpeex.h>
-#include <Aulib/Stream.h>
-
-#include "utils/push_aulib_decoder.h"
-#endif
-
 #include "dx.h"
 #include "options.h"
 #include "palette.h"
@@ -28,12 +21,6 @@
 
 namespace devilution {
 namespace {
-
-#ifndef NOSOUND
-std::optional<Aulib::Stream> SVidAudioStream;
-PushAulibDecoder *SVidAudioDecoder;
-std::uint8_t SVidAudioDepth;
-#endif
 
 unsigned long SVidWidth, SVidHeight;
 double SVidFrameEnd;
@@ -113,13 +100,6 @@ void TrySetVideoModeToSVidForSDL1()
 }
 #endif
 
-#ifndef NOSOUND
-bool HasAudio()
-{
-	return SVidAudioStream && SVidAudioStream->isPlaying();
-}
-#endif
-
 bool SVidLoadNextFrame()
 {
 	SVidFrameEnd += SVidFrameLength;
@@ -170,37 +150,37 @@ bool SVidPlayBegin(const char *filename, int flags)
 	}
 
 #ifndef NOSOUND
-	const bool enableAudio = (flags & 0x1000000) == 0;
-
-	constexpr std::size_t MaxSmkChannels = 7;
-	unsigned char channels[MaxSmkChannels];
-	unsigned char depth[MaxSmkChannels];
-	unsigned long rate[MaxSmkChannels]; // NOLINT(google-runtime-int): Match `smk_info_audio` signature.
-	smk_info_audio(SVidSMK, nullptr, channels, depth, rate);
-	LogVerbose(LogCategory::Audio, "SVid audio depth={} channels={} rate={}", depth[0], channels[0], rate[0]);
-
-	if (enableAudio && depth[0] != 0) {
-		sound_stop(); // Stop in-progress music and sound effects
-
-		smk_enable_audio(SVidSMK, 0, 1);
-		SVidAudioDepth = depth[0];
-		auto decoder = std::make_unique<PushAulibDecoder>(channels[0], rate[0]);
-		SVidAudioDecoder = decoder.get();
-		SVidAudioStream.emplace(/*rwops=*/nullptr, std::move(decoder),
-		    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/false);
-		const float volume = static_cast<float>(sgOptions.Audio.nSoundVolume - VOLUME_MIN) / -VOLUME_MIN;
-		SVidAudioStream->setVolume(volume);
-		if (!SVidAudioStream->open()) {
-			LogError(LogCategory::Audio, "Aulib::Stream::open (from SVidPlayBegin): {}", SDL_GetError());
-			SVidAudioStream = std::nullopt;
-			SVidAudioDecoder = nullptr;
-		}
-		if (!SVidAudioStream->play()) {
-			LogError(LogCategory::Audio, "Aulib::Stream::play (from SVidPlayBegin): {}", SDL_GetError());
-			SVidAudioStream = std::nullopt;
-			SVidAudioDecoder = nullptr;
-		}
-	}
+	//const bool enableAudio = (flags & 0x1000000) == 0;
+	//
+	//constexpr std::size_t MaxSmkChannels = 7;
+	//unsigned char channels[MaxSmkChannels];
+	//unsigned char depth[MaxSmkChannels];
+	//unsigned long rate[MaxSmkChannels]; // NOLINT(google-runtime-int): Match `smk_info_audio` signature.
+	//smk_info_audio(SVidSMK, nullptr, channels, depth, rate);
+	//LogVerbose(LogCategory::Audio, "SVid audio depth={} channels={} rate={}", depth[0], channels[0], rate[0]);
+	//
+	//if (enableAudio && depth[0] != 0) {
+	//	sound_stop(); // Stop in-progress music and sound effects
+	//
+	//	smk_enable_audio(SVidSMK, 0, 1);
+	//	SVidAudioDepth = depth[0];
+	//	auto decoder = std::make_unique<PushAulibDecoder>(channels[0], rate[0]);
+	//	SVidAudioDecoder = decoder.get();
+	//	SVidAudioStream.emplace(/*rwops=*/nullptr, std::move(decoder),
+	//	    std::make_unique<Aulib::ResamplerSpeex>(sgOptions.Audio.nResamplingQuality), /*closeRw=*/false);
+	//	const float volume = static_cast<float>(sgOptions.Audio.nSoundVolume - VOLUME_MIN) / -VOLUME_MIN;
+	//	SVidAudioStream->setVolume(volume);
+	//	if (!SVidAudioStream->open()) {
+	//		LogError(LogCategory::Audio, "Aulib::Stream::open (from SVidPlayBegin): {}", SDL_GetError());
+	//		SVidAudioStream = std::nullopt;
+	//		SVidAudioDecoder = nullptr;
+	//	}
+	//	if (!SVidAudioStream->play()) {
+	//		LogError(LogCategory::Audio, "Aulib::Stream::play (from SVidPlayBegin): {}", SDL_GetError());
+	//		SVidAudioStream = std::nullopt;
+	//		SVidAudioDecoder = nullptr;
+	//	}
+	//}
 #endif
 
 	unsigned long nFrames;
@@ -275,15 +255,15 @@ bool SVidPlayContinue()
 	}
 
 #ifndef NOSOUND
-	if (HasAudio()) {
-		const auto len = smk_get_audio_size(SVidSMK, 0);
-		const unsigned char *buf = smk_get_audio(SVidSMK, 0);
-		if (SVidAudioDepth == 16) {
-			SVidAudioDecoder->PushSamples(reinterpret_cast<const std::int16_t *>(buf), len / 2);
-		} else {
-			SVidAudioDecoder->PushSamples(reinterpret_cast<const std::uint8_t *>(buf), len);
-		}
-	}
+	//if (HasAudio()) {
+	//	const auto len = smk_get_audio_size(SVidSMK, 0);
+	//	const unsigned char *buf = smk_get_audio(SVidSMK, 0);
+	//	if (SVidAudioDepth == 16) {
+	//		SVidAudioDecoder->PushSamples(reinterpret_cast<const std::int16_t *>(buf), len / 2);
+	//	} else {
+	//		SVidAudioDecoder->PushSamples(reinterpret_cast<const std::uint8_t *>(buf), len);
+	//	}
+	//}
 #endif
 	if (SDL_GetTicks() * 1000.0 >= SVidFrameEnd) {
 		return SVidLoadNextFrame(); // Skip video if the system is to slow
@@ -308,10 +288,10 @@ bool SVidPlayContinue()
 void SVidPlayEnd()
 {
 #ifndef NOSOUND
-	if (HasAudio()) {
-		SVidAudioStream = std::nullopt;
-		SVidAudioDecoder = nullptr;
-	}
+	//if (HasAudio()) {
+	//	SVidAudioStream = std::nullopt;
+	//	SVidAudioDecoder = nullptr;
+	//}
 #endif
 
 	if (SVidSMK != nullptr)
