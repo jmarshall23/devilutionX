@@ -185,7 +185,7 @@ void unlock_buf(int idx) // NOLINT(misc-unused-parameters)
 Surface GlobalBackBuffer()
 {
 	if (sgdwLockCount == 0) {
-		Log("WARNING: Trying to obtain GlobalBackBuffer() without holding a lock");
+	//	Log("WARNING: Trying to obtain GlobalBackBuffer() without holding a lock");
 		return Surface();
 	}
 
