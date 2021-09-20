@@ -129,9 +129,9 @@ char gszVersionNumber[64] = "internal version unknown";
 
 bool gbGameLoopStartup;
 bool forceSpawn;
-bool forceDiablo;
+bool forceDiablo = true;
 int sgnTimeoutCurs;
-bool gbShowIntro = true;
+bool gbShowIntro = false; // jmarshall: For now disable startup videos
 /** To know if these things have been done when we get to the diablo_deinit() function */
 bool was_archives_init = false;
 /** To know if surfaces have been initialized or not */
