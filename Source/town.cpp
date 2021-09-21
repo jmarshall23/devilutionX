@@ -14,6 +14,7 @@
 #include "trigs.h"
 
 #include "datatable.h"
+#include "../rhi/image.h"
 
 namespace devilution {
 
@@ -44,7 +45,7 @@ void FillSector(const char *path, int xi, int yy1)
 		int yy = yy1 + (j * 2);
 
 		if (tileId >= 0) {
-			MegaTile mega = pMegaTiles[tileId];
+			MegaTile mega = pDungeonCels->megaTiles[tileId];
 			v1 = SDL_SwapLE16(mega.micro1) + 1;
 			v2 = SDL_SwapLE16(mega.micro2) + 1;
 			v3 = SDL_SwapLE16(mega.micro3) + 1;
@@ -70,7 +71,7 @@ void FillSector(const char *path, int xi, int yy1)
  */
 void FillTile(int xx, int yy, int t)
 {
-	MegaTile mega = pMegaTiles[t - 1];
+	MegaTile mega = pDungeonCels->megaTiles[t - 1];
 
 	dPiece[xx + 0][yy + 0] = SDL_SwapLE16(mega.micro1) + 1;
 	dPiece[xx + 1][yy + 0] = SDL_SwapLE16(mega.micro2) + 1;

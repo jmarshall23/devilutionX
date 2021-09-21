@@ -112,6 +112,49 @@ namespace ConversionTool
 			return tile;
 		}
 
+		public void GetSubTileInfo(int tileIndex, int subTileIndex, int startY, out int x, out int y, out int width, out int height)
+		{
+			if (this.min == null || tileIndex >= this.subtileIndices.Count)
+			{
+				throw new Exception("Broken");
+			}
+
+			ImageTemp tempImage = LoadSubImageTemp(subtileIndices[tileIndex][subTileIndex]);
+
+			x = 0;
+			y = 0;
+			width = 0;
+			height = 0;
+
+			switch (subTileIndex)
+			{
+				case 0:
+					x = 32;
+					y = 0;
+					break;
+
+				case 1:
+					x = 64;
+					y = 16;
+					break;
+
+				case 2:
+					x = 0;
+					y = 16;
+					break;
+
+				case 3:
+					x = 32;
+					y = 32;
+					break;
+
+				default:
+					throw new Exception("Invalid sub index");
+			}
+			width = tempImage.width;
+			height = tempImage.height - startY;
+		}
+		
 		public ImageTemp[] getTileImagesTemp(ushort tileIndex)
 		{
 			if (this.min == null || tileIndex >= this.subtileIndices.Count)
@@ -197,7 +240,7 @@ namespace ConversionTool
 		private ushort tileHeight = (0);
 		private ushort tilePixelWidth = (0);
 		private ushort tilePixelHeight = (0);
-		private List<List<ushort>> subtileIndices = new List<List<ushort>>();
+		public List<List<ushort>> subtileIndices = new List<List<ushort>>();
 	}
 
 

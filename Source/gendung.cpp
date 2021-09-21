@@ -12,6 +12,7 @@
 #include "options.h"
 
 #include "datatable.h"
+#include "../rhi/image.h"
 
 namespace devilution {
 
@@ -25,9 +26,6 @@ int setpc_h;
 std::unique_ptr<uint16_t[]> pSetPiece;
 bool setloadflag;
 StormImage *pSpecialCels;
-std::unique_ptr<MegaTile[]> pMegaTiles;
-//std::unique_ptr<MTType[]> pLevelPieces;
-//std::unique_ptr<byte[]> pDungeonCels;
 StormImage *pDungeonCels;
 std::array<uint8_t, MAXTILES + 1> block_lvid;
 std::array<bool, MAXTILES + 1> nBlockTable;
@@ -66,46 +64,6 @@ int themeCount;
 THEME_LOC themeLoc[MAXTHEMES];
 
 namespace {
-
-std::unique_ptr<uint8_t[]> LoadSolTileText(const char *filename, size_t *tileCount)
-{
-	DataTable *table = new DataTable(filename);
-
-	std::unique_ptr<uint8_t[]> buf { new uint8_t[table->NumRows()] };
-
-	for (int i = 0; i < table->NumRows(); i++) {
-		buf[i] = table->GetInt("val", i);
-	}
-
-	*tileCount = table->NumRows();
-
-	delete table;
-	return buf;
-}
-
-std::unique_ptr<uint8_t[]> LoadLevelSOLData(size_t &tileCount)
-{
-	switch (leveltype) {
-	case DTYPE_TOWN:
-		if (gbIsHellfire)
-			return LoadSolTileText("NLevels\\TownData\\Town.soltext", &tileCount);
-		return LoadSolTileText("Levels\\TownData\\Town.soltext", &tileCount);
-	case DTYPE_CATHEDRAL:
-		if (currlevel < 17)
-			return LoadSolTileText("Levels\\L1Data\\L1.soltext", &tileCount);
-		return LoadSolTileText("NLevels\\L5Data\\L5.soltext", &tileCount);
-	case DTYPE_CATACOMBS:
-		return LoadSolTileText("Levels\\L2Data\\L2.soltext", &tileCount);
-	case DTYPE_CAVES:
-		if (currlevel < 17)
-			return LoadSolTileText("Levels\\L3Data\\L3.soltext", &tileCount);
-		return LoadSolTileText("NLevels\\L6Data\\L6.soltext", &tileCount);
-	case DTYPE_HELL:
-		return LoadSolTileText("Levels\\L4Data\\L4.soltext", &tileCount);
-	default:
-		app_fatal("FillSolidBlockTbls");
-	}
-}
 
 bool WillThemeRoomFit(int floor, int x, int y, int minSize, int maxSize, int *width, int *height)
 {
@@ -339,11 +297,8 @@ void FindTransparencyValues(int i, int j, int x, int y, int d, uint8_t floorID)
 
 void FillSolidBlockTbls()
 {
-	size_t tileCount;
-	auto pSBFile = LoadLevelSOLData(tileCount);
-
-	for (unsigned i = 0; i < tileCount; i++) {
-		uint8_t bv = pSBFile[i];
+	for (unsigned i = 0; i < pDungeonCels->solData.size(); i++) {
+		unsigned char bv = (unsigned char)pDungeonCels->solData[i];
 		nSolidTable[i + 1] = (bv & 0x01) != 0;
 		nBlockTable[i + 1] = (bv & 0x02) != 0;
 		nMissileTable[i + 1] = (bv & 0x04) != 0;
@@ -530,7 +485,7 @@ void DRLG_HoldThemeRooms()
 void DRLG_LPass3(int lv)
 {
 	{
-		MegaTile mega = pMegaTiles[lv];
+		MegaTile mega = pDungeonCels->megaTiles[lv];
 		int v1 = SDL_SwapLE16(mega.micro1) + 1;
 		int v2 = SDL_SwapLE16(mega.micro2) + 1;
 		int v3 = SDL_SwapLE16(mega.micro3) + 1;
@@ -557,7 +512,7 @@ void DRLG_LPass3(int lv)
 
 			int tileId = dungeon[i][j] - 1;
 			if (tileId >= 0) {
-				MegaTile mega = pMegaTiles[tileId];
+				MegaTile mega = pDungeonCels->megaTiles[tileId];
 				v1 = SDL_SwapLE16(mega.micro1) + 1;
 				v2 = SDL_SwapLE16(mega.micro2) + 1;
 				v3 = SDL_SwapLE16(mega.micro3) + 1;

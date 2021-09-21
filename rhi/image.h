@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include "../source/megatile.h"
+
 namespace devilution {
 	struct ImageFrame_t {
 		ImageFrame_t()
@@ -74,8 +76,13 @@ namespace devilution {
 		int Height() const {
 			return frames[0].height;
 		}
+
+		std::vector<int> solData;
+		std::vector<MegaTile> megaTiles;
 	private:
 		void CreateImagesFromAtlas(ImageFrame_t& atlasImage, int numFrames);
+
+		
 
 		std::string name;
 		std::vector<ImageFrame_t> frames;

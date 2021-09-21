@@ -49,65 +49,6 @@ namespace ConversionTool
             }
         }
 
-        static void SaveSol(string filename)
-        {
-            string tilFile = filename;
-            string outFile = ExportTileset.FixExportPath(filename) + "/" + Path.GetFileNameWithoutExtension(tilFile) + ".soltext";
-
-            Console.WriteLine("Opening sol file {0}", tilFile);
-
-            using (StreamWriter writer = File.CreateText(outFile))
-            {
-                using (BinaryReader reader = new BinaryReader(File.Open(tilFile, FileMode.Open)))
-                {
-                    writer.WriteLine("index,val");
-
-                    long numEntries = reader.BaseStream.Length;
-
-                    for (int i = 0; i < numEntries; i++)
-                    {
-                        byte val = reader.ReadByte();
-
-                        writer.WriteLine(i + "," + val);
-                    }
-
-                    if (reader.BaseStream.Position != reader.BaseStream.Length)
-                        throw new Exception("invalid sol parse");
-                }
-            }
-        }
-
-		static void SaveTil(string filename)
-		{
-			string tilFile = filename;
-			string outFile = ExportTileset.FixExportPath(filename)  + "/megatiles.tiltext";
-
-			Console.WriteLine("Opening til file {0}", tilFile);
-
-			using (StreamWriter writer = File.CreateText(outFile))
-			{
-				using (BinaryReader reader = new BinaryReader(File.Open(tilFile, FileMode.Open)))
-				{
-					writer.WriteLine("index,top,right,left,bottom");
-
-					long numEntries = reader.BaseStream.Length / (2 * 4);
-
-					for (int i = 0; i < numEntries; i++)
-					{
-						ushort top = reader.ReadUInt16();
-						ushort right = reader.ReadUInt16();
-						ushort left = reader.ReadUInt16();
-						ushort bottom = reader.ReadUInt16();
-
-						writer.WriteLine(i + "," + top + "," + right + "," + left + "," + bottom);
-					}
-
-					if (reader.BaseStream.Position != reader.BaseStream.Length)
-						throw new Exception("invalid til parse");
-				}
-			}
-		}
-
 		static void ExportLevels(string path)
 		{
 			string BlizzDatapath = "mpq_data/" + path;
@@ -119,22 +60,6 @@ namespace ConversionTool
                 foreach (string f in files)
                     SaveDun(f);
             }
-
-            // sol files
-            {
-                string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.sol");
-
-                foreach (string f in files)
-                    SaveSol(f);
-            }
-
-			// til files
-			{
-				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.til");
-
-				foreach (string f in files)
-					SaveTil(f);
-			}
 
 			// amp files
 			{
@@ -149,26 +74,26 @@ namespace ConversionTool
 				string[] minfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.min");
 				string[] tilfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.til");
 				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.cel");
-
 				string[] pal = System.IO.Directory.GetFiles(BlizzDatapath, "*.pal");
+				string[] solFiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.sol");
 
-				foreach(string p in pal)
+				foreach (string p in pal)
 				{
 					ExportTileset.SetColorPalette(p);					
-					ExportTileset.Export(files[0], minfiles[0], tilfiles[0]);
+					ExportTileset.Export(files[0], minfiles[0], tilfiles[0], solFiles[0]);
 
 					if (files.Length > 1)
 					{
 						if (files[1].Contains("town"))
-							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, false, "special_" + ExportTileset.palette_name);
+							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, false, "special", ExportTileset.palette_name);
 						else
-							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, true, "special_" + ExportTileset.palette_name);
+							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, true, "special", ExportTileset.palette_name);
 					}
 				}
 			}
 		}
 
-		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable, bool forceAtlas = false, bool forceFrameHeaderSkip = false, string newOutputFolder = "")
+		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable, bool forceAtlas = false, bool forceFrameHeaderSkip = false, string newOutputFolder = "", string fileNameSuffix = "")
 		{
 			DiabloCel cel = null;
 
@@ -209,7 +134,14 @@ namespace ConversionTool
 
 					byte[] fixedBuffer = ExportTileset.FastFlipHorizontalBuffer(frame.Pixels, frame.Width, frame.Height);
 
-					ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + "_" + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
+					if(fileNameSuffix != "")
+					{
+						ExportTileset.WriteTGA(outputPath + "/tiles" + i + "_" + fileNameSuffix + ".tga", fixedBuffer, frame.Width, frame.Height, true);
+					}
+					else
+					{
+						ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + "_" + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
+					}
 				}
 			}
 			else

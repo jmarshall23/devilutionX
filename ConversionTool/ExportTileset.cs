@@ -12,7 +12,7 @@ namespace ConversionTool
 		{
 			string dpath = Path.GetDirectoryName(path);
 			dpath = dpath.Replace("mpq_data", "base");
-		//	Directory.CreateDirectory(dpath);
+			//	Directory.CreateDirectory(dpath);
 			return dpath;
 		}
 		public static void BlitImage(byte[] source, int sourceX, int sourceY, int sourceWidth, byte[] dest, int destX, int destY, int destWidth, int destHeight, int width, int height)
@@ -87,7 +87,7 @@ namespace ConversionTool
 			string outputPath = Path.ChangeExtension(filename, ".txt");
 
 			string lines = "// For debug purposes only\n";
-			for(int i = 0; i < 256; i++)
+			for (int i = 0; i < 256; i++)
 			{
 				lines += "" + i + " " + currentColorPalette[(i * 3) + 0] + " " + currentColorPalette[(i * 3) + 1] + " " + currentColorPalette[(i * 3) + 2] + "\n";
 			}
@@ -108,7 +108,7 @@ namespace ConversionTool
 			int bufferSize = (width * height * 4) + 18;
 			int imgStart = 18;
 
-			buffer = new byte[bufferSize];			
+			buffer = new byte[bufferSize];
 			buffer[2] = 2; // uncompressed type
 			buffer[12] = (byte)(width & 255);
 			buffer[13] = (byte)(width >> 8);
@@ -121,7 +121,7 @@ namespace ConversionTool
 			{
 				for (i = 0; i < width * height; i++)
 				{
-					if(data[i] == 255)
+					if (data[i] == 255)
 					{
 						buffer[imgStart + (i * 4) + 0] = 255;
 						buffer[imgStart + (i * 4) + 1] = 255;
@@ -133,7 +133,7 @@ namespace ConversionTool
 					buffer[imgStart + (i * 4) + 1] = currentColorPalette[(data[i] * 3) + 1];
 					buffer[imgStart + (i * 4) + 2] = currentColorPalette[(data[i] * 3) + 0];
 
-					if(buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0 && !Program.exportingTileset)
+					if (buffer[imgStart + (i * 4) + 0] == 0 && buffer[imgStart + (i * 4) + 1] == 0 && buffer[imgStart + (i * 4) + 2] == 0 && !Program.exportingTileset)
 						buffer[imgStart + (i * 4) + 3] = 128;
 					else
 						buffer[imgStart + (i * 4) + 3] = 255;
@@ -161,16 +161,16 @@ namespace ConversionTool
 						buffer[imgStart + (i * 4) + 3] = 255;
 				}
 			}
-			
 
-			File.WriteAllBytes(filename, buffer);			
+
+			File.WriteAllBytes(filename, buffer);
 		}
 
-		private static int FindStartY(byte[] buffer, int width, int height)
+		public static int FindStartY(byte[] buffer, int width, int height)
 		{
 			int startY = 0;
 
-			while(startY < height)
+			while (startY < height)
 			{
 				if (ImageSegmentHasData(buffer, 0, startY, width, width, 32))
 					return startY;
@@ -188,7 +188,7 @@ namespace ConversionTool
 			byte[] buffer = new byte[data.Length];
 			for (int i = 0; i < data.Length; i++)
 			{
-				buffer[i] = data[data.Length - 1 - i]; 
+				buffer[i] = data[data.Length - 1 - i];
 			}
 
 			return buffer;
@@ -197,9 +197,9 @@ namespace ConversionTool
 		public static byte[] FastFlipHorizontalBuffer(byte[] data, int width, int height)
 		{
 			byte[] buffer = new byte[data.Length];
-			for(int y = 0; y < height; y++)
+			for (int y = 0; y < height; y++)
 			{
-				for(int x = 0; x < width; x++)
+				for (int x = 0; x < width; x++)
 				{
 					buffer[y * width + x] = data[y * width + (width - x - 1)];
 				}
@@ -233,56 +233,40 @@ namespace ConversionTool
 			}
 		}
 
-		public static void Export(string filename, string minfile, string tilPath)
+		public static void Export(string filename, string minfile, string tilPath, string solPath)
 		{
 			DiabloCel cel = new DiabloCel(filename);
 
+			byte[] solData = File.ReadAllBytes(solPath);
+
 			string fname = Path.GetFileNameWithoutExtension(filename);
 
-			string tilePath = ExportTileset.FixExportPath(filename) + "/tiles_" + palette_name  + "/";
+			string tilePath = ExportTileset.FixExportPath(filename) + "/tiles/";
 			Directory.CreateDirectory(tilePath);
-
-			//for(int i = 0; i < cel.NumFrames; i++)
-			//{
-			//	DiabloCelBase frame = cel.GetFrame(i);
-			//
-			//	WriteTGA(tilePath + "tile" + i + ".tga", frame.Pixels, frame.Width, frame.Height, true);
-			//}
 
 			D1Min min = new D1Min(minfile, cel);
 			D1Til til = new D1Til(tilPath, min);
 
-			byte[] tempQuadBuffer = new byte[64 * 32];
-
-			int tileIndex = 0;
-
-			List<string> hashes = new List<string>();
-			for(int i = 0; i < til.getTileCount(); i++)
+			for (int i = 0; i < til.getTileCount(); i++)
 			{
 				// Export mod ready tiles
-				//byte[] buffer = FastFlipBuffer(til.getTileImage((ushort)i));
-				//
-				//ExportFixedTarga(tilePath + "tile" + i + ".tga", buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
+				byte[] buffer = ExportTileset.FastFlipHorizontalBuffer(FastFlipBuffer(til.getTileImage((ushort)i)), til.getTilePixelWidth(), til.getTilePixelHeight());
 
-				// Stop gap export for til ready rendering without min.
-				D1Til.ImageTemp[] tempImages = til.getTileImagesTemp((ushort)i);
+				int startY = FindStartY(buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
 
-				foreach(D1Til.ImageTemp temp in tempImages)
+				using (StreamWriter writer = File.CreateText(tilePath + "tile" + i + ".tileinfo"))
 				{
-					byte[] buffer = FastFlipHorizontalBuffer(FastFlipBuffer(temp.data), temp.width, temp.height);
-
-					string hash = GetHashSHA1(buffer);
-
-					if(hashes.Contains(hash))
-						continue;
-
-					if (ExportFixedTarga(tilePath + "tile_" + tileIndex + ".tga", buffer, temp.width, temp.height))
+					writer.WriteLine("index,x,y,width,height,solflag");
+					for (int d = 0; d < 4; d++)
 					{
-						tileIndex++;
-					}
+						int x, y, width, height;
+						til.GetSubTileInfo(i, d, startY, out x, out y, out width, out height);
 
-					hashes.Add(hash);
+						writer.WriteLine("" + d + "," + x + "," + y + "," + width + "," + height + "," + solData[til.subtileIndices[i][d]]);
+					}
 				}
+
+				ExportFixedTarga(tilePath + "tile" + i + "_" + palette_name + ".tga", buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
 			}
 		}
 	}

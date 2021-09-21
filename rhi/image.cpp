@@ -7,6 +7,7 @@
 #include "image.h"
 #include "../source/engine/render/common_impl.h"
 #include "gl_render.h"
+#include "../source/datatable.h"
 
 namespace devilution
 {
@@ -261,7 +262,7 @@ namespace devilution
 			frames.push_back(subImage);
 		}
 	}
-
+	
 	/*
 	=======================
 	StormImage::LoadImageSequence
@@ -321,39 +322,126 @@ namespace devilution
 
 			delete atlasImage.buffer;
 		}
-		else
+		else if (isTiles)
 		{
-			if (isTiles)
-			{
-				if (specialName) {
-					image->name += specialName;
-				}
-
-				if (pal_name) {
-					image->name += pal_name;
-				}
+			if (specialName) {
+				image->name += specialName;
 			}
+
+			if (pal_name) {
+				image->name += pal_name;
+			}
+
+			int numTileFiles = 0;
 
 			while (true) {
 				char framePath[512];
 				ImageFrame_t frame;
 
-				if (isTiles)
+				if (specialName != nullptr)
 				{
-					if (specialName != nullptr)
-					{
-						sprintf(framePath, "%s_%s\\%s_%d.tga", path, pal_name, specialName, image->frames.size());
-					}
-					else
-					{
-						sprintf(framePath, "%s\\tiles_%s\\tile_%d.tga", path, pal_name, image->frames.size());
-					}
+					sprintf(framePath, "%s\\tiles%d_%s.tga", path, numTileFiles, pal_name);
 				}
 				else
 				{
-					sprintf(framePath, "%s_%d.tga", path, image->frames.size());
+					sprintf(framePath, "%s\\tiles\\tile%d_%s.tga", path, numTileFiles, pal_name);
 				}
 
+				HANDLE file;
+				if (!SFileOpenFile(framePath, &file)) {
+					break;
+				}
+
+				SFileCloseFile(file);
+
+				std::unique_ptr<byte[]> data = LoadFileInMem(framePath);
+
+				frame.width = *(short*)((byte*)&data.get()[12]);
+				frame.height = *(short*)((byte*)&data.get()[14]);
+				frame.buffer = new byte[frame.width * frame.height * 4];
+
+				memcpy(frame.buffer, &data[18], frame.width * frame.height * 4);
+
+				if (specialName != nullptr)
+				{
+					image->frames.push_back(frame);
+					numTileFiles++;
+				}
+				else
+				{
+					char tileInfoPath[512];
+					sprintf(framePath, "%s\\tiles\\tile%d.tileinfo", path, numTileFiles);
+
+					DataTable* table = new DataTable(framePath);
+
+
+					MegaTile megaTile;
+					for (int d = 0; d < 4; d++)
+					{
+						ImageFrame_t subImage;
+
+						subImage.width = table->GetInt("width", d);
+						subImage.height = table->GetInt("height", d);
+						subImage.buffer = new byte[subImage.width * subImage.height * 4];
+
+						int subImageX = table->GetInt("x", d);
+						int subImageY = table->GetInt("y", d);
+
+						for (int y = 0; y < subImage.height; y++)
+						{
+							for (int x = 0; x < subImage.width; x++)
+							{
+								int sourcePos = ((y + subImageY) * frame.width) + (x + subImageX);
+								int destPos = (y * subImage.width) + x;
+
+								if (sourcePos < 0)
+									sourcePos = 0;
+
+								for (int d = 0; d < 4; d++)
+									subImage.buffer[(destPos * 4) + d] = frame.buffer[(sourcePos * 4) + d];
+							}
+						}
+
+						switch (d)
+						{
+							case 0:
+								megaTile.micro1 = (image->megaTiles.size() * 4) + 0;
+								break;
+							case 1:
+								megaTile.micro2 = (image->megaTiles.size() * 4) + 1;
+								break;
+							case 2:
+								megaTile.micro3 = (image->megaTiles.size() * 4) + 2;
+								break;
+							case 3:
+								megaTile.micro4 = (image->megaTiles.size() * 4) + 3;
+								break;
+							default:
+								devilution::app_fatal("Invalid micro");
+								break;
+
+						}
+
+						image->solData.push_back(table->GetInt("solflag", d));
+						image->frames.push_back(subImage);
+					}
+
+					image->megaTiles.push_back(megaTile);
+					numTileFiles++;
+
+
+					delete frame.buffer;
+					delete table;
+				}
+			}
+		}
+		else
+		{
+			while (true) {
+				char framePath[512];
+				ImageFrame_t frame;
+
+				sprintf(framePath, "%s_%d.tga", path, image->frames.size());
 
 				HANDLE file;
 				if (!SFileOpenFile(framePath, &file)) {

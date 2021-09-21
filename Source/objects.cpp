@@ -1641,7 +1641,7 @@ void UpdateBurningCrossDamage(int i)
 
 void ObjSetMini(Point position, int v)
 {
-	MegaTile mega = pMegaTiles[v - 1];
+	MegaTile mega = pDungeonCels->megaTiles[v - 1];
 
 	Point megaOrigin = position * 2 + Displacement { 16, 16 };
 
