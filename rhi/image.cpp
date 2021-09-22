@@ -374,10 +374,59 @@ namespace devilution
 
 					DataTable* table = new DataTable(framePath);
 
-
 					MegaTile megaTile;
 					for (int d = 0; d < 4; d++)
 					{
+						int overridePos = table->GetInt("tilid", d);
+						int testMicro = -1;
+						if (overridePos != -1)
+						{
+							switch (d)
+							{
+							case 0:
+								testMicro = megaTile.micro1 = overridePos;
+								break;
+							case 1:
+								testMicro = megaTile.micro2 = overridePos;
+								break;
+							case 2:
+								testMicro = megaTile.micro3 = overridePos;
+								break;
+							case 3:
+								testMicro = megaTile.micro4 = overridePos;
+								break;
+							default:
+								devilution::app_fatal("Invalid micro");
+								break;
+
+							}
+						}
+						else
+						{
+							switch (d)
+							{
+							case 0:
+								testMicro = megaTile.micro1 = (image->megaTiles.size() * 4) + 0;
+								break;
+							case 1:
+								testMicro = megaTile.micro2 = (image->megaTiles.size() * 4) + 1;
+								break;
+							case 2:
+								testMicro = megaTile.micro3 = (image->megaTiles.size() * 4) + 2;
+								break;
+							case 3:
+								testMicro = megaTile.micro4 = (image->megaTiles.size() * 4) + 3;
+								break;
+							default:
+								devilution::app_fatal("Invalid micro");
+								break;
+
+							}
+						}
+
+						if (testMicro < image->frames.size() && overridePos != -1)
+							continue;
+
 						ImageFrame_t subImage;
 
 						subImage.width = table->GetInt("width", d);
@@ -400,26 +449,6 @@ namespace devilution
 								for (int d = 0; d < 4; d++)
 									subImage.buffer[(destPos * 4) + d] = frame.buffer[(sourcePos * 4) + d];
 							}
-						}
-
-						switch (d)
-						{
-							case 0:
-								megaTile.micro1 = (image->megaTiles.size() * 4) + 0;
-								break;
-							case 1:
-								megaTile.micro2 = (image->megaTiles.size() * 4) + 1;
-								break;
-							case 2:
-								megaTile.micro3 = (image->megaTiles.size() * 4) + 2;
-								break;
-							case 3:
-								megaTile.micro4 = (image->megaTiles.size() * 4) + 3;
-								break;
-							default:
-								devilution::app_fatal("Invalid micro");
-								break;
-
 						}
 
 						image->solData.push_back(table->GetInt("solflag", d));

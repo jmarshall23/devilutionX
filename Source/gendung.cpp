@@ -298,7 +298,7 @@ void FindTransparencyValues(int i, int j, int x, int y, int d, uint8_t floorID)
 void FillSolidBlockTbls()
 {
 	for (unsigned i = 0; i < pDungeonCels->solData.size(); i++) {
-		unsigned char bv = (unsigned char)pDungeonCels->solData[i];
+		int bv = pDungeonCels->solData[i];
 		nSolidTable[i + 1] = (bv & 0x01) != 0;
 		nBlockTable[i + 1] = (bv & 0x02) != 0;
 		nMissileTable[i + 1] = (bv & 0x04) != 0;
