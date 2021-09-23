@@ -424,8 +424,21 @@ namespace devilution
 							}
 						}
 
+						bool floorHack = false;
 						if (testMicro < image->frames.size() && overridePos != -1)
-							continue;
+						{
+							int solflag = table->GetInt("solflag", d);
+
+							// stupid hack for the floors.
+							if (solflag == 0 && frame.width == 128 && frame.height == 64)
+							{
+								floorHack = true;
+							}
+							else
+							{
+								continue;
+							}
+						}
 
 						ImageFrame_t subImage;
 
@@ -451,8 +464,17 @@ namespace devilution
 							}
 						}
 
-						image->solData.push_back(table->GetInt("solflag", d));
-						image->frames.push_back(subImage);
+						if (!floorHack)
+						{
+							image->solData.push_back(table->GetInt("solflag", d));
+							image->frames.push_back(subImage);
+						}
+						else
+						{
+							delete image->frames[testMicro].buffer;
+							image->frames[testMicro] = subImage;
+						}
+						
 					}
 
 					image->megaTiles.push_back(megaTile);
