@@ -430,7 +430,7 @@ namespace devilution
 							int solflag = table->GetInt("solflag", d);
 
 							// stupid hack for the floors.
-							if (solflag == 0 && frame.width == 128 && frame.height == 64)
+							if (solflag == 0 && frame.width == 128 && frame.height == 64 && image->frames[testMicro].height > 64)
 							{
 								floorHack = true;
 							}
