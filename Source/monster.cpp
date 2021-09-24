@@ -552,10 +552,11 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 	monster.mMinDamage2 = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMinDamage2 + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
 	monster.mMaxDamage2 = difficultyTable->GetInt("monster_damgemult", sgGameInitInfo.nDifficulty) * (monster.mMaxDamage2 + difficultyTable->GetInt("monster_damagebase", sgGameInitInfo.nDifficulty));
 	
-	
-	char filestr[64];
-	sprintf(filestr, "Monsters\\Monsters\\%s.TRN", uniqueData.mTrnName);
-	LoadFileInMem(filestr, &LightTables[256 * (uniquetrans + 19)], 256);
+// jmarshall: replace with HSV!	
+	//char filestr[64];
+	//sprintf(filestr, "Monsters\\Monsters\\%s.TRN", uniqueData.mTrnName);
+	//LoadFileInMem(filestr, &LightTables[256 * (uniquetrans + 19)], 256);
+// jmarshall end
 
 	monster._uniqtrans = uniquetrans++;
 
