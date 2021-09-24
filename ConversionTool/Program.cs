@@ -77,23 +77,29 @@ namespace ConversionTool
 				string[] pal = System.IO.Directory.GetFiles(BlizzDatapath, "*.pal");
 				string[] solFiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.sol");
 
+				
 				foreach (string p in pal)
 				{
+					if (p.Contains("palg"))
+						continue;
+
 					ExportTileset.SetColorPalette(p);					
 					ExportTileset.Export(files[0], minfiles[0], tilfiles[0], solFiles[0]);
 
 					if (files.Length > 1)
 					{
 						if (files[1].Contains("town"))
-							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, false, "special", ExportTileset.palette_name);
+							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, false, "special", "special");
 						else
-							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, true, "special", ExportTileset.palette_name);
+							ConvertSingleImage(files[1].Remove(0, new string("mpq_data/").Length), 64, null, null, false, true, "special", "special");
 					}
+
+					break;
 				}
 			}
 		}
 
-		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable, bool forceAtlas = false, bool forceFrameHeaderSkip = false, string newOutputFolder = "", string fileNameSuffix = "")
+		static void ConvertSingleImage(string filename, int width, int[] widthTable, int[] heightTable, bool forceAtlas = false, bool forceFrameHeaderSkip = false, string newOutputFolder = "", string fileNameOverride = "")
 		{
 			DiabloCel cel = null;
 
@@ -134,9 +140,9 @@ namespace ConversionTool
 
 					byte[] fixedBuffer = ExportTileset.FastFlipHorizontalBuffer(frame.Pixels, frame.Width, frame.Height);
 
-					if(fileNameSuffix != "")
+					if(fileNameOverride != "")
 					{
-						ExportTileset.WriteTGA(outputPath + "/tiles" + i + "_" + fileNameSuffix + ".tga", fixedBuffer, frame.Width, frame.Height, true);
+						ExportTileset.WriteTGA(outputPath + "/" + fileNameOverride + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
 					}
 					else
 					{

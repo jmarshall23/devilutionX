@@ -288,7 +288,7 @@ namespace ConversionTool
 					}
 				}
 
-				ExportFixedTarga(tilePath + "tile" + i + "_" + palette_name + ".tga", buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
+				ExportFixedTarga(tilePath + "tile" + i + ".tga", buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
 			}
 		}
 	}

@@ -328,9 +328,9 @@ namespace devilution
 				image->name += specialName;
 			}
 
-			if (pal_name) {
-				image->name += pal_name;
-			}
+			//if (pal_name) {
+			//	image->name += pal_name;
+			//}
 
 			int numTileFiles = 0;
 
@@ -340,11 +340,11 @@ namespace devilution
 
 				if (specialName != nullptr)
 				{
-					sprintf(framePath, "%s\\tiles%d_%s.tga", path, numTileFiles, pal_name);
+					sprintf(framePath, "%s\\special%d.tga", path, numTileFiles);
 				}
 				else
 				{
-					sprintf(framePath, "%s\\tiles\\tile%d_%s.tga", path, numTileFiles, pal_name);
+					sprintf(framePath, "%s\\tiles\\tile%d.tga", path, numTileFiles);
 				}
 
 				HANDLE file;
