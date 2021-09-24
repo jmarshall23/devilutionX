@@ -237,6 +237,8 @@ namespace ConversionTool
 		{
 			DiabloCel cel = new DiabloCel(filename);
 
+			bool isTown = filename.Contains("town");
+
 			byte[] solData = File.ReadAllBytes(solPath);
 
 			string fname = Path.GetFileNameWithoutExtension(filename);
@@ -272,7 +274,8 @@ namespace ConversionTool
 			for (int i = 0; i < til.getTileCount(); i++)
 			{
 				// Export mod ready tiles
-				byte[] buffer = ExportTileset.FastFlipHorizontalBuffer(FastFlipBuffer(til.getTileImage((ushort)i)), til.getTilePixelWidth(), til.getTilePixelHeight());
+				byte[] tilBuffer = til.getTileImage((ushort)i, solData[til.subtileIndices[i][0]], solData[til.subtileIndices[i][1]], solData[til.subtileIndices[i][2]], solData[til.subtileIndices[i][3]], isTown);
+				byte[] buffer = ExportTileset.FastFlipHorizontalBuffer(FastFlipBuffer(tilBuffer), til.getTilePixelWidth(), til.getTilePixelHeight());
 
 				int startY = FindStartY(buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
 

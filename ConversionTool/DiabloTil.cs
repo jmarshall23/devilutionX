@@ -84,7 +84,12 @@ namespace ConversionTool
 			return temp;
 		}
 
-		public byte[] getTileImage(ushort tileIndex)
+		private bool IsFloor(int sol)
+		{
+			return (sol & 1) == 0;
+		}
+
+		public byte[] getTileImage(ushort tileIndex, int sol1, int sol2, int sol3, int sol4, bool isTown)
 		{
 			if (this.min == null || tileIndex >= this.subtileIndices.Count)
 			{
@@ -104,10 +109,31 @@ namespace ConversionTool
 			for (int i = 0; i < width * height; i++)
 				tile[i] = 255;
 
-			ExportTileset.BlitImage(tempImages[0].data, 0, 0, tempImages[0].width, tile, 32, 0, width, height,tempImages[0].width, tempImages[0].height); ;
-			ExportTileset.BlitImage(tempImages[1].data, 0, 0, tempImages[1].width, tile, 64, 16, width, height, tempImages[1].width, tempImages[1].height); ;
-			ExportTileset.BlitImage(tempImages[2].data, 0, 0, tempImages[2].width, tile, 0, 16, width, height, tempImages[2].width, tempImages[2].height); ;
-			ExportTileset.BlitImage(tempImages[3].data, 0, 0, tempImages[3].width, tile, 32, 32, width, height, tempImages[3].width, tempImages[3].height); ;
+			bool isFloor = IsFloor(sol1) && IsFloor(sol2) && IsFloor(sol3) && IsFloor(sol4);
+			bool forceDisableFloorRemovalIdea = true;
+
+			if (isFloor || isTown || forceDisableFloorRemovalIdea)
+			{
+				ExportTileset.BlitImage(tempImages[0].data, 0, 0, tempImages[0].width, tile, 32, 0, width, height, tempImages[0].width, tempImages[0].height); 
+				ExportTileset.BlitImage(tempImages[1].data, 0, 0, tempImages[1].width, tile, 64, 16, width, height, tempImages[1].width, tempImages[1].height); 
+				ExportTileset.BlitImage(tempImages[2].data, 0, 0, tempImages[2].width, tile, 0, 16, width, height, tempImages[2].width, tempImages[2].height); 
+				ExportTileset.BlitImage(tempImages[3].data, 0, 0, tempImages[3].width, tile, 32, 32, width, height, tempImages[3].width, tempImages[3].height); 
+			}
+			else
+			{
+				if (!IsFloor(sol1))
+					ExportTileset.BlitImage(tempImages[0].data, 0, 0, tempImages[0].width, tile, 32, 0, width, height, tempImages[0].width, tempImages[0].height);
+
+				if (!IsFloor(sol2))
+					ExportTileset.BlitImage(tempImages[1].data, 0, 0, tempImages[1].width, tile, 64, 16, width, height, tempImages[1].width, tempImages[1].height);
+
+				if (!IsFloor(sol3))
+					ExportTileset.BlitImage(tempImages[2].data, 0, 0, tempImages[2].width, tile, 0, 16, width, height, tempImages[2].width, tempImages[2].height);
+
+				if(!IsFloor(sol4))
+					ExportTileset.BlitImage(tempImages[3].data, 0, 0, tempImages[3].width, tile, 32, 32, width, height, tempImages[3].width, tempImages[3].height);
+			}
+			
 
 			return tile;
 		}
