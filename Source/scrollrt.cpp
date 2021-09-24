@@ -889,7 +889,13 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 
 	LightTableIndex = dLight[sx][sy];
 
-	DrawCell(out, sx, sy, dx, dy);
+	level_piece_id = dPiece[sx][sy];
+// jmarshall - don't draw the floor, we did that during drawfloor.
+	bool isFloor = level_piece_id != 0 && !nSolidTable[level_piece_id];
+	if (!isFloor) {
+		DrawCell(out, sx, sy, dx, dy);
+	}
+// jmarshall end
 
 	int8_t bFlag = dFlags[sx][sy];
 	int8_t bDead = dDead[sx][sy];
@@ -993,16 +999,9 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy, int rows, int c
 {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
-			if (x >= 0 && x < MAXDUNX && y >= 0 && y < MAXDUNY) {
-				level_piece_id = dPiece[x][y];
-				if (level_piece_id != 0) {
-					if (!nSolidTable[level_piece_id])
-						DrawFloor(out, x, y, sx, sy);
-				} else {
-					RenderTile(out, sx, sy, true); // black
-				}
-			} else {
-				RenderTile(out, sx, sy, true); // black
+			level_piece_id = dPiece[x][y];
+			if (level_piece_id != 0 && !nSolidTable[level_piece_id]) {
+				DrawFloor(out, x, y, sx, sy);					
 			}
 			ShiftGrid(&x, &y, 1, 0);
 			sx += TILE_WIDTH;
