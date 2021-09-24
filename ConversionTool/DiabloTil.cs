@@ -110,9 +110,9 @@ namespace ConversionTool
 				tile[i] = 255;
 
 			bool isFloor = IsFloor(sol1) && IsFloor(sol2) && IsFloor(sol3) && IsFloor(sol4);
-			bool forceDisableFloorRemovalIdea = true;
+			bool tempDisableFloorRemovalFromTiles = true;
 
-			if (isFloor || isTown || forceDisableFloorRemovalIdea)
+			if (isFloor || isTown || tempDisableFloorRemovalFromTiles)
 			{
 				ExportTileset.BlitImage(tempImages[0].data, 0, 0, tempImages[0].width, tile, 32, 0, width, height, tempImages[0].width, tempImages[0].height); 
 				ExportTileset.BlitImage(tempImages[1].data, 0, 0, tempImages[1].width, tile, 64, 16, width, height, tempImages[1].width, tempImages[1].height); 
