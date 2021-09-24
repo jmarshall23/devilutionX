@@ -892,7 +892,7 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 	level_piece_id = dPiece[sx][sy];
 // jmarshall - don't draw the floor, we did that during drawfloor.
 	bool isFloor = level_piece_id != 0 && !nSolidTable[level_piece_id];
-	if (!isFloor) {
+	if (!isFloor || leveltype == DTYPE_TOWN) {
 		DrawCell(out, sx, sy, dx, dy);
 	}
 // jmarshall end
@@ -985,6 +985,9 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 	}
 }
 
+#define IsWall(x, y) (dPiece[x][y] == 0 || nSolidTable[dPiece[x][y]] || dSpecial[x][y] != 0)
+#define IsWalkable(x, y) (dPiece[x][y] != 0 && IsTileNotSolid({ x, y }))
+
 /**
  * @brief Render a row of tiles
  * @param out Buffer to render to
@@ -1000,7 +1003,7 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy, int rows, int c
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
 			level_piece_id = dPiece[x][y];
-			if (level_piece_id != 0 && !nSolidTable[level_piece_id]) {
+			if (level_piece_id != 0 && (!nSolidTable[level_piece_id] || IsWall(x, y))) {
 				DrawFloor(out, x, y, sx, sy);					
 			}
 			ShiftGrid(&x, &y, 1, 0);
@@ -1023,9 +1026,6 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy, int rows, int c
 		}
 	}
 }
-
-#define IsWall(x, y) (dPiece[x][y] == 0 || nSolidTable[dPiece[x][y]] || dSpecial[x][y] != 0)
-#define IsWalkable(x, y) (dPiece[x][y] != 0 && IsTileNotSolid({ x, y }))
 
 /**
  * @brief Render a row of tile
