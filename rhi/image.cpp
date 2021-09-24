@@ -434,6 +434,10 @@ namespace devilution
 							{
 								floorHack = true;
 							}
+							else if (solflag == 15 && frame.width == 128 && frame.height == 128)
+							{
+								floorHack = true;
+							}
 							else
 							{
 								continue;
