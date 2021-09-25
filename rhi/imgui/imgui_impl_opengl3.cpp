@@ -97,6 +97,16 @@
 #include <stdint.h>     // intptr_t
 #endif
 
+#include <memory>
+
+namespace devilution
+{
+	template <typename T = unsigned char>
+	std::unique_ptr<T[]> LoadFileInMem(const char* path, size_t* elements = nullptr);
+
+	void app_fatal(const char* pszFmt, ...);
+}
+
 // GL includes
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -557,7 +567,9 @@ static bool CheckShader(GLuint handle, const char* desc)
         ImVector<char> buf;
         buf.resize((int)(log_length + 1));
         glGetShaderInfoLog(handle, log_length, NULL, (GLchar*)buf.begin());
-        fprintf(stderr, "%s\n", buf.begin());
+        //fprintf(stderr, "%s\n", buf.begin());
+
+		devilution::app_fatal(buf.begin());
     }
     return (GLboolean)status == GL_TRUE;
 }
@@ -598,52 +610,29 @@ bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
     int glsl_version = 130;
     sscanf(bd->GlslVersionString, "#version %d", &glsl_version);
 
-    const GLchar* vertex_shader_glsl_130 =
-        "uniform mat4 ProjMtx;\n"
-        "in vec2 Position;\n"
-        "in vec2 UV;\n"
-        "in vec4 Color;\n"
-        "out vec2 Frag_UV;\n"
-        "out vec4 Frag_Color;\n"
-        "void main()\n"
-        "{\n"
-        "    Frag_UV = UV;\n"
-        "    Frag_Color = Color;\n"
-        "    gl_Position = ProjMtx * vec4(Position.xy,0,1);\n"
-        "}\n";
-
-    const GLchar* fragment_shader_glsl_130 =
-        "uniform sampler2D Texture;\n"
-        "in vec2 Frag_UV;\n"
-        "in vec4 Frag_Color;\n"
-        "out vec4 Out_Color;\n"
-        "void main()\n"
-        "{\n"
-		"	 if(Frag_Color.a < 0.5)\n"
-		"	 {\n"
-		"		Out_Color = vec4(Frag_Color.r, Frag_Color.g, Frag_Color.b, texture(Texture, Frag_UV.st).a);\n"
-		"		if(Out_Color.a != 1.0f) discard;\n"
-		"	 }\n"
-		"	 else\n"
-        "		Out_Color = Frag_Color * texture(Texture, Frag_UV.st);\n"
-        "}\n";
+	size_t vshaderlen, pshaderlen;
+	std::unique_ptr<unsigned char[]> vertex_shader_glsl_130 = devilution::LoadFileInMem<unsigned char>("shaders/render.vertexshader", &vshaderlen);
+	std::unique_ptr<unsigned char[]> fragment_shader_glsl_130 = devilution::LoadFileInMem<unsigned char>("shaders/render.pixelshader", &pshaderlen);
 
     // Select shaders matching our GLSL versions
-    const GLchar* vertex_shader = NULL;
-    const GLchar* fragment_shader = NULL;
-	vertex_shader = vertex_shader_glsl_130;
-	fragment_shader = fragment_shader_glsl_130;
+    GLchar* vertex_shader = (GLchar * )alloca(vshaderlen + 1);
+    GLchar* fragment_shader = (GLchar *)alloca(pshaderlen + 1);
+
+	// DevilutionX load code isn't that great and the string here isn't null terminated.
+	memcpy((char*)vertex_shader, (char*)vertex_shader_glsl_130.get(), vshaderlen);
+	memcpy((char*)fragment_shader, (char*)fragment_shader_glsl_130.get(), pshaderlen);
+
+	vertex_shader[vshaderlen] = 0;
+	fragment_shader[pshaderlen] = 0;
 
     // Create shaders
-    const GLchar* vertex_shader_with_version[2] = { bd->GlslVersionString, vertex_shader };
     GLuint vert_handle = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vert_handle, 2, vertex_shader_with_version, NULL);
+    glShaderSource(vert_handle, 1, &vertex_shader, NULL);
     glCompileShader(vert_handle);
     CheckShader(vert_handle, "vertex shader");
 
-    const GLchar* fragment_shader_with_version[2] = { bd->GlslVersionString, fragment_shader };
     GLuint frag_handle = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(frag_handle, 2, fragment_shader_with_version, NULL);
+    glShaderSource(frag_handle, 1, &fragment_shader, NULL);
     glCompileShader(frag_handle);
     CheckShader(frag_handle, "fragment shader");
 

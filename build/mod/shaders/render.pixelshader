@@ -1,0 +1,16 @@
+#version 130
+
+uniform sampler2D Texture;
+in vec2 Frag_UV;
+in vec4 Frag_Color;
+out vec4 Out_Color;
+void main()
+{
+	 if(Frag_Color.a < 0.5)
+	 {
+		Out_Color = vec4(Frag_Color.r, Frag_Color.g, Frag_Color.b, texture(Texture, Frag_UV.st).a);
+		if(Out_Color.a != 1.0f) discard;
+	 }
+	 else
+		Out_Color = Frag_Color * texture(Texture, Frag_UV.st);
+};
