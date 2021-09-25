@@ -11,6 +11,8 @@
 
 namespace devilution
 {
+	void ParseAutomapData(const char* fileName);
+
 	const char* pal_name = nullptr;
 
 	byte* FastFlipHorizontalBuffer(byte *data, int width, int height)
@@ -333,8 +335,10 @@ namespace devilution
 			//}
 
 			int numTileFiles = 0;
+			bool hasAutomapData = false;
 
 			while (true) {
+				// Check to see if this tile exists. 
 				char framePath[512];
 				ImageFrame_t frame;
 
@@ -354,6 +358,28 @@ namespace devilution
 
 				SFileCloseFile(file);
 
+				// Load in the automap data
+				if (specialName == nullptr)
+				{
+					HANDLE file;
+					char automapPath[512];
+					sprintf(automapPath, "%s\\tiles\\tile%d.automap", path, numTileFiles);
+
+					if (numTileFiles == 0)
+					{
+						if (SFileOpenFile(automapPath, &file)) {
+							SFileCloseFile(file);
+							hasAutomapData = true;
+						}
+					}
+
+					if (hasAutomapData)
+					{
+						ParseAutomapData(automapPath);
+					}
+				}
+
+				// Load in the map data.
 				std::unique_ptr<byte[]> data = LoadFileInMem(framePath);
 
 				frame.width = *(short*)((byte*)&data.get()[12]);

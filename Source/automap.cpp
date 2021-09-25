@@ -24,7 +24,6 @@
 
 namespace devilution {
 
-namespace {
 Point Automap;
 
 enum MapColors : uint8_t {
@@ -524,66 +523,39 @@ void DrawAutomapText(const Surface &out)
 
 #define AUTOMAP_STRING_TO_ID(x) \
 	if (str == #x) {            \
-		buf_ptr[i].type = AutomapTile::Types::##x;  \
-		buf_ptr[i].flags = (AutomapTile::Flags)flags;		\
-		continue;               \
+		automapTile.type = AutomapTile::Types::##x;  \
+		automapTile.flags = (AutomapTile::Flags)flags;		\
+		automapTilesFileData.push_back(automapTile);             \
+		delete automapData; \
+		return; \
 	}
 
-std::unique_ptr<AutomapTile[]> ParseAutomapData(const char *fileName, size_t &tileCount)
+std::vector<AutomapTile> automapTilesFileData;
+
+void ParseAutomapData(const char *fileName)
 {
 	DataTable *automapData = new DataTable(fileName);
-	tileCount = automapData->NumRows();
+	AutomapTile automapTile;
 
-	std::unique_ptr<AutomapTile[]> buf { new AutomapTile[tileCount] };
+	std::string str = automapData->GetValue("type", 0);
+	int flags = automapData->GetInt("flags", 0);
 
-	AutomapTile *buf_ptr = buf.get();
+	AUTOMAP_STRING_TO_ID(None);
+	AUTOMAP_STRING_TO_ID(Diamond);
+	AUTOMAP_STRING_TO_ID(Vertical);
+	AUTOMAP_STRING_TO_ID(Horizontal);
+	AUTOMAP_STRING_TO_ID(Cross);
+	AUTOMAP_STRING_TO_ID(FenceVertical);
+	AUTOMAP_STRING_TO_ID(FenceHorizontal);
+	AUTOMAP_STRING_TO_ID(Corner);
+	AUTOMAP_STRING_TO_ID(CaveHorizontalCross);
+	AUTOMAP_STRING_TO_ID(CaveVerticalCross);
+	AUTOMAP_STRING_TO_ID(CaveHorizontal);
+	AUTOMAP_STRING_TO_ID(CaveVertical);
+	AUTOMAP_STRING_TO_ID(CaveCross);
 
-	for (int i = 0; i < tileCount; i++) {
-		std::string str = automapData->GetValue("type", i);
-		int flags = automapData->GetInt("flags", i);
-
-		AUTOMAP_STRING_TO_ID(None);
-		AUTOMAP_STRING_TO_ID(Diamond);
-		AUTOMAP_STRING_TO_ID(Vertical);
-		AUTOMAP_STRING_TO_ID(Horizontal);
-		AUTOMAP_STRING_TO_ID(Cross);
-		AUTOMAP_STRING_TO_ID(FenceVertical);
-		AUTOMAP_STRING_TO_ID(FenceHorizontal);
-		AUTOMAP_STRING_TO_ID(Corner);
-		AUTOMAP_STRING_TO_ID(CaveHorizontalCross);
-		AUTOMAP_STRING_TO_ID(CaveVerticalCross);
-		AUTOMAP_STRING_TO_ID(CaveHorizontal);
-		AUTOMAP_STRING_TO_ID(CaveVertical);
-		AUTOMAP_STRING_TO_ID(CaveCross);
-
-		devilution::app_fatal("Unknown automap cell type!");
-	}
-
-	delete automapData;
-	return buf;
+	devilution::app_fatal("Unknown automap cell type!");
 }
-
-std::unique_ptr<AutomapTile[]> LoadAutomapData(size_t &tileCount)
-{
-	switch (leveltype) {
-	case DTYPE_CATHEDRAL:
-		if (currlevel < 21)
-			return ParseAutomapData("Levels\\L1Data\\automap.amptxt", tileCount);
-		return ParseAutomapData("NLevels\\L5Data\\automap.amptxt", tileCount);
-	case DTYPE_CATACOMBS:
-		return ParseAutomapData("Levels\\L2Data\\automap.amptxt", tileCount);
-	case DTYPE_CAVES:
-		if (currlevel < 17)
-			return ParseAutomapData("Levels\\L3Data\\automap.amptxt", tileCount);
-		return ParseAutomapData("NLevels\\L6Data\\automap.amptxt", tileCount);
-	case DTYPE_HELL:
-		return ParseAutomapData("Levels\\L4Data\\automap.amptxt", tileCount);
-	default:
-		return nullptr;
-	}
-}
-
-} // namespace
 
 bool AutomapActive;
 bool AutomapView[DMAXX][DMAXY];
@@ -608,11 +580,12 @@ void InitAutomapOnce()
 
 void InitAutomap()
 {
-	size_t tileCount = 0;
-	std::unique_ptr<AutomapTile[]> tileTypes = LoadAutomapData(tileCount);
-	for (unsigned i = 0; i < tileCount; i++) {
-		AutomapTypeTiles[i + 1] = tileTypes[i];
+	size_t tileCount = automapTilesFileData.size();
+	for (int i = 0; i < tileCount; i++) {
+		AutomapTypeTiles[i + 1] = automapTilesFileData[i];
 	}
+
+	automapTilesFileData.clear();
 
 	memset(AutomapView, 0, sizeof(AutomapView));
 

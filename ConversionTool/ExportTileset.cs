@@ -233,7 +233,7 @@ namespace ConversionTool
 			}
 		}
 
-		public static void Export(string filename, string minfile, string tilPath, string solPath)
+		public static void Export(string filename, string minfile, string tilPath, string solPath, DiabloAMP ampFile)
 		{
 			DiabloCel cel = new DiabloCel(filename);
 
@@ -270,6 +270,11 @@ namespace ConversionTool
 				writer.WriteLine("};");
 			}
 #endif
+			if(ampFile != null)
+			{
+				if (til.getTileCount() != ampFile.entries.Count)
+					throw new Exception("Automap entries invalid!");
+			}
 
 			for (int i = 0; i < til.getTileCount(); i++)
 			{
@@ -278,6 +283,16 @@ namespace ConversionTool
 				byte[] buffer = ExportTileset.FastFlipHorizontalBuffer(FastFlipBuffer(tilBuffer), til.getTilePixelWidth(), til.getTilePixelHeight());
 
 				int startY = FindStartY(buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
+
+				if(ampFile != null)
+				{
+					using (StreamWriter writer = File.CreateText(tilePath + "tile" + i + ".automap"))
+					{
+						writer.WriteLine("type,flags");
+
+						writer.WriteLine(ampFile.entries[i].type.ToString() + "," + ampFile.entries[i].flags);
+					}
+				}
 
 				using (StreamWriter writer = File.CreateText(tilePath + "tile" + i + ".tileinfo"))
 				{

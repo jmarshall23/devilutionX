@@ -61,14 +61,6 @@ namespace ConversionTool
                     SaveDun(f);
             }
 
-			// amp files
-			{
-				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.amp");
-
-				foreach (string f in files)
-					DiabloAMP.ConvertAutomapFile(f);
-			}
-
 			// cel files
 			{
 				string[] minfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.min");
@@ -76,15 +68,20 @@ namespace ConversionTool
 				string[] files = System.IO.Directory.GetFiles(BlizzDatapath, "*.cel");
 				string[] pal = System.IO.Directory.GetFiles(BlizzDatapath, "*.pal");
 				string[] solFiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.sol");
+				string[] ampfiles = System.IO.Directory.GetFiles(BlizzDatapath, "*.amp");
 
-				
+				DiabloAMP ampFile = null;
+
+				if(ampfiles.Length > 0)
+					ampFile = new DiabloAMP(ampfiles[0]);
+
 				foreach (string p in pal)
 				{
 					if (p.Contains("palg"))
 						continue;
 
 					ExportTileset.SetColorPalette(p);					
-					ExportTileset.Export(files[0], minfiles[0], tilfiles[0], solFiles[0]);
+					ExportTileset.Export(files[0], minfiles[0], tilfiles[0], solFiles[0], ampFile);
 
 					if (files.Length > 1)
 					{

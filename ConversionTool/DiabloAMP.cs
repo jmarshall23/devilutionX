@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConversionTool
 {
-	class DiabloAMP
+	public class DiabloAMP
 	{
 		public enum Types
 		{
@@ -25,22 +25,28 @@ namespace ConversionTool
 			CaveCross,
 		};
 
-		public static void ConvertAutomapFile(string filename)
+		public struct Entry
+		{
+			public Types type;
+			public byte flags;
+		}
+
+		public List<Entry> entries = new List<Entry>();
+
+		public DiabloAMP(string filename)
 		{
 			byte[] tileTypes = File.ReadAllBytes(filename);
-			string exportFilename = ExportTileset.FixExportPath(filename) + "/automap.amptxt";
 
-			using (StreamWriter writer = File.CreateText(exportFilename))
+			for (int i = 0; i < tileTypes.Length / 2; i++)
 			{
-				writer.WriteLine("index,type,flags");
+				Types t = (Types)tileTypes[(i * 2) + 0];
+				byte flags = tileTypes[(i * 2) + 1];
 
-				for(int i = 0; i < tileTypes.Length / 2; i++)
-				{
-					Types t = (Types)tileTypes[(i * 2) + 0];
-					byte flags = tileTypes[(i * 2) + 1];
+				Entry entry = new Entry();
+				entry.type = t;
+				entry.flags = flags;
 
-					writer.WriteLine("" + i + "," + t.ToString() + "," + flags);
-				}
+				entries.Add(entry);
 			}
 		}
 	}
