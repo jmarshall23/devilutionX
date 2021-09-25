@@ -77,6 +77,10 @@ namespace devilution {
 			return frames[0].height;
 		}
 
+		unsigned int GetDeviceHandle(int frame) {
+			return frames[frame].glHandle;
+		}
+
 		std::vector<int> solData;
 		std::vector<MegaTile> megaTiles;
 	private:

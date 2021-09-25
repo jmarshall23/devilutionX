@@ -6,7 +6,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_impl_opengl3_loader.h"
+#include "glew/glew.h"
 
 #include <vector>
 #include <memory>
@@ -111,6 +111,8 @@ void GL_Init(const char* name, void* sdl_window, HWND hwnd, int width, int heigh
 
 	SDL_GL_MakeCurrent(glWindow, glContext);
 	SDL_GL_SetSwapInterval(1); // Enable vsync
+
+	glewInit();
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
