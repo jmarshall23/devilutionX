@@ -18,6 +18,8 @@ void main()
 	 {
 		float lit = 0;
 		vec2 currentPixelPosition = vec2(gl_FragCoord.x, gl_FragCoord.y);
+		currentPixelPosition.x -= 4;
+		currentPixelPosition.y -= 3;
 
 		for(int i = 0; i < MAX_LIGHTS; i++)
 		{

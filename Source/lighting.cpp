@@ -526,7 +526,7 @@ void DoUnLight(int nXPos, int nYPos, int nRadius)
 
 void DoLighting(Point position, int nRadius, int lnum)
 {
-	SetLight(position, 20);
+	SetLight(position, 20 + nRadius);
 }
 
 void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns)
@@ -539,23 +539,23 @@ void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns)
 	rows += MicroTileLen;
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
-			if (dPreLight[x][y] == 20) {
+			if (dPreLight[x][y] > 20) {
 				if (numLights >= 128)
 					devilution::app_fatal("Too many lights!");
 
 				lightInfoData[numLights][0] = sx + (TILE_WIDTH / 2);
 				lightInfoData[numLights][1] = gnScreenHeight - sy + TILE_HEIGHT / 2;
-				lightInfoData[numLights][2] = 3000;
+				lightInfoData[numLights][2] = (dPreLight[x][y] - 20) * 1000;
 				numLights++;
 			}
 
-			if (dLight[x][y] == 20) {
+			if (dLight[x][y] > 20) {
 				if (numLights >= 128)
 					devilution::app_fatal("Too many lights!");
 
 				lightInfoData[numLights][0] = sx + (TILE_WIDTH / 2);
 				lightInfoData[numLights][1] = gnScreenHeight - sy + TILE_HEIGHT / 2;
-				lightInfoData[numLights][2] = 3000;
+				lightInfoData[numLights][2] = (dLight[x][y] - 20) * 1000;
 				numLights++;
 			}
 

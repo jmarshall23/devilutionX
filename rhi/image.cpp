@@ -149,7 +149,7 @@ namespace devilution
 
 		const ImageFrame_t& image = frames[frame - 1];
 
-		uint8_t* lightTable = &LightTables[LightTableIndex * 256];
+		//uint8_t* lightTable = &LightTables[LightTableIndex * 256];
 
 		sy -= image.height;
 
