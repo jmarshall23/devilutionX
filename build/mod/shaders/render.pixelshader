@@ -10,6 +10,17 @@ in vec2 Frag_UV;
 in vec4 Frag_Color;
 out vec4 Out_Color;
 
+#define tileWidthHalf 32
+#define tileHeightHalf 16
+
+vec2 ScreenToIsometricCoordinates(float screenX, float screenY)
+{
+	float x = 0.5 * ( screenX / tileWidthHalf + screenY / tileHeightHalf);
+	float y = 0.5 * (-screenX / tileWidthHalf + screenY / tileHeightHalf);
+	
+	return vec2(x, y);
+}
+
 void main()
 {
 	 float LitTile = TileInfo.x;
@@ -18,19 +29,17 @@ void main()
 	 {
 		float lit = 0;
 		vec2 currentPixelPosition = vec2(gl_FragCoord.x, gl_FragCoord.y);
-		currentPixelPosition.x -= 4;
-		currentPixelPosition.y -= 3;
 
 		for(int i = 0; i < MAX_LIGHTS; i++)
 		{
-			float dist = distance(currentPixelPosition, vec2(LightInfo[i].x, LightInfo[i].y));
-			float atten = clamp( 1.0 - dist/LightInfo[i].z, 0.0, 1.0);
+			float dist = distance(ScreenToIsometricCoordinates(currentPixelPosition.x, currentPixelPosition.y), ScreenToIsometricCoordinates(LightInfo[i].x, LightInfo[i].y));
+			float atten = clamp( 1.0 - dist/(LightInfo[i].z * 0.035), 0.0, 1.0);
 			
 			if(dist < LightInfo[i].z)
 				lit += pow(atten, 2);
 		}
 		vec4 diffuse = texture(Texture, Frag_UV.st);
-		diffuse.xyz *= clamp(lit, 0.0, 1.0);
+		diffuse.xyz *= clamp(lit + 0.1, 0.1, 1.0);
 		Out_Color = diffuse;				
 	 }
 	 else if(Frag_Color.a < 0.5)
