@@ -545,7 +545,7 @@ void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns)
 
 				lightInfoData[numLights][0] = sx + (TILE_WIDTH / 2);
 				lightInfoData[numLights][1] = gnScreenHeight - sy + TILE_HEIGHT / 2;
-				lightInfoData[numLights][2] = (dPreLight[x][y] - 20) * 1000;
+				lightInfoData[numLights][2] = (dPreLight[x][y] - 20) * 50;
 				numLights++;
 			}
 
@@ -555,7 +555,7 @@ void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns)
 
 				lightInfoData[numLights][0] = sx + (TILE_WIDTH / 2);
 				lightInfoData[numLights][1] = gnScreenHeight - sy + TILE_HEIGHT / 2;
-				lightInfoData[numLights][2] = (dLight[x][y] - 20) * 1000;
+				lightInfoData[numLights][2] = (dLight[x][y] - 20) * 50;
 				numLights++;
 			}
 
