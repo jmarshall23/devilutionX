@@ -29,8 +29,9 @@ void main()
 			if(dist < LightInfo[i].z)
 				lit += pow(atten, 2);
 		}
-
-		Out_Color = clamp(lit, 0.0, 1.0) * texture(Texture, Frag_UV.st);				
+		vec4 diffuse = texture(Texture, Frag_UV.st);
+		diffuse.xyz *= clamp(lit, 0.0, 1.0);
+		Out_Color = diffuse;				
 	 }
 	 else if(Frag_Color.a < 0.5)
 	 {

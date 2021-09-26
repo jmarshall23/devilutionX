@@ -889,7 +889,10 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 		return;
 	dRendered[sx][sy] = true;
 
-	LightTableIndex = 5; //dLight[sx][sy];
+	if (leveltype == DTYPE_TOWN)
+		LightTableIndex = 0;
+	else
+		LightTableIndex = 5; //dLight[sx][sy];
 
 	level_piece_id = dPiece[sx][sy];
 // jmarshall - don't draw the floor, we did that during drawfloor.
