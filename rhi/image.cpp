@@ -79,6 +79,8 @@ namespace devilution
 	*/
 	void StormImage::ClipRenderUI(const Surface& out, int sx, int sy, int frame, int startx, int starty) const
 	{
+		GL_ToggleLighting(false);
+
 		const ImageFrame_t& image = frames[frame - 1];
 
 		float start_u = (float)startx / image.width;
@@ -94,6 +96,7 @@ namespace devilution
 	*/
 	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx, int starty) const
 	{
+		GL_ToggleLighting(false);
 		const ImageFrame_t& image = frames[frame - 1];
 
 		sy -= image.height;
@@ -108,15 +111,14 @@ namespace devilution
 	*/
 	void StormImage::ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, int light) const
 	{
+		GL_ToggleLighting(true);
 		const ImageFrame_t& image = frames[frame - 1];
 
 		uint8_t *lightTable = GetLightTable(light);
 
 		sy -= image.height;
 
-		float lightScale = 1.0f - (light / 17.0f);
-		lightScale *= 255.0f;
-		GL_SetColor(lightScale, lightScale, lightScale);		
+		//GL_SetColor(lightScale, lightScale, lightScale);		
 		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 		GL_SetColor(255, 255, 255);
 	}
@@ -126,9 +128,9 @@ namespace devilution
 	=======================
 	*/
 	void StormImage::ClipRenderWithLightingTrans(const Surface& out, int sx, int sy, int frame, int alpha) const {
-		GL_SetAlpha(alpha);
+		//GL_SetAlpha(alpha);
 		ClipRenderWithLighting(out, sx, sy, frame);
-		GL_SetAlpha(255);
+	//	GL_SetAlpha(255);
 	}
 
 	/*
@@ -143,19 +145,17 @@ namespace devilution
 			return;
 		}
 
+		GL_ToggleLighting(true);
+
 		const ImageFrame_t& image = frames[frame - 1];
 
 		uint8_t* lightTable = &LightTables[LightTableIndex * 256];
 
 		sy -= image.height;
 
-		float lightScale = 1.0f - (LightTableIndex / 17.0f);
-
-		lightScale *= 255.0f;
-
-		GL_SetColor(lightScale, lightScale, lightScale);
+		//GL_SetColor(lightScale, lightScale, lightScale);
 		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
-		GL_SetColor(255, 255, 255);
+		//GL_SetColor(255, 255, 255);
 	}
 
 	/*
@@ -165,6 +165,8 @@ namespace devilution
 	*/
 	void StormImage::ClipRenderOutline(const Surface& out, int r, int g, int b, int sx, int sy, int frame) const
 	{
+		GL_ToggleLighting(false);
+
 		const ImageFrame_t& image = frames[frame - 1];
 		sy -= image.height;
 
@@ -181,6 +183,7 @@ namespace devilution
 	void StormImage::Draw2D(int frame, int x, int y, int width, int height, int sourcex, int sourcey, int uvwidth, int uvheight)
 	{
 		const ImageFrame_t& image = frames[frame - 1];
+		GL_ToggleLighting(false);
 
 		GL_RenderImageScaledUV(image.glHandle, x, y, width, height, sourcex, sourcey, uvwidth, uvheight, image.width, image.height);
 	}

@@ -31,6 +31,10 @@ int global_alpha = 255;
 #define GL_CLAMP_TO_EDGE 0x812F
 #define GL_TEXTURE_WRAP_S 0x2802
 #define GL_TEXTURE_WRAP_T 0x2803
+
+void GL_Backend_SetLightingParams(float* attributes, int numValues);
+void GL_Backend_ToggleLightRender(bool toggle);
+
 namespace devilution
 {
 	void app_fatal(const char* pszFmt, ...);
@@ -156,6 +160,41 @@ unsigned int GL_CreateTexture2D(byte* data, int width, int height, int bpp)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 	return texNum;
+}
+
+void GL_UpdateLights(float* lightParams, int numLights)
+{
+	GL_Backend_SetLightingParams(lightParams, numLights);
+}
+
+void GL_Private_EnableLighting(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	GL_Backend_ToggleLightRender(true);
+}
+
+void GL_Private_DisableLighting(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	GL_Backend_ToggleLightRender(false);
+}
+
+static bool isLightRenderEnabled = false;
+
+void GL_ResetForLevelChange(void)
+{
+	isLightRenderEnabled = true;
+}
+
+void GL_ToggleLighting(bool toggle)
+{
+	if (isLightRenderEnabled == toggle)
+		return;
+
+	isLightRenderEnabled = toggle;
+
+	if (toggle)
+		ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_EnableLighting, nullptr);
+	else
+		ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_DisableLighting, nullptr);
 }
 
 void GL_UploadTexture(unsigned int image, unsigned char* data, int width, int height, int bpp) {

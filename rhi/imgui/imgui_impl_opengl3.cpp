@@ -180,6 +180,11 @@ struct ImGui_ImplOpenGL3_Data
     char            GlslVersionString[32];   // Specified by user or detected based on compile time GL settings.
     GLuint          FontTexture;
     GLuint          ShaderHandle;
+// jmarshall
+	GLint			TileInfoUniform;
+	GLint			LightInfoUniform;
+// jmarshall end
+
     GLint           AttribLocationTex;       // Uniforms location
     GLint           AttribLocationProjMtx;
     GLuint          AttribLocationVtxPos;    // Vertex attributes location
@@ -593,6 +598,31 @@ static bool CheckProgram(GLuint handle, const char* desc)
     return (GLboolean)status == GL_TRUE;
 }
 
+void GL_Backend_SetLightingParams(float *attributes, int numValues)
+{
+	ImGui_ImplOpenGL3_Data* bd = ImGui_ImplOpenGL3_GetBackendData();
+	glUseProgram(bd->ShaderHandle);
+	glUniform4fv(bd->LightInfoUniform, numValues, attributes);
+	glUseProgram(0);
+}
+
+void GL_Backend_ToggleLightRender(bool toggle)
+{
+	static float lightInfo[4] = { 0 };
+
+	if (toggle)
+	{
+		lightInfo[0] = 1;
+	}
+	else
+	{
+		lightInfo[0] = 0;
+	}
+
+	ImGui_ImplOpenGL3_Data* bd = ImGui_ImplOpenGL3_GetBackendData();
+	glUniform4fv(bd->TileInfoUniform, 1, &lightInfo[0]);
+}
+
 bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
 {
     ImGui_ImplOpenGL3_Data* bd = ImGui_ImplOpenGL3_GetBackendData();
@@ -649,6 +679,11 @@ bool    ImGui_ImplOpenGL3_CreateDeviceObjects()
     glDeleteShader(frag_handle);
 
     bd->AttribLocationTex = glGetUniformLocation(bd->ShaderHandle, "Texture");
+// jmarshall
+	bd->TileInfoUniform = glGetUniformLocation(bd->ShaderHandle, "TileInfo");
+	bd->LightInfoUniform = glGetUniformLocation(bd->ShaderHandle, "LightInfo");
+// jmarshall end
+
     bd->AttribLocationProjMtx = glGetUniformLocation(bd->ShaderHandle, "ProjMtx");
     bd->AttribLocationVtxPos = (GLuint)glGetAttribLocation(bd->ShaderHandle, "Position");
     bd->AttribLocationVtxUV = (GLuint)glGetAttribLocation(bd->ShaderHandle, "UV");

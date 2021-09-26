@@ -20,3 +20,8 @@ void GL_SetAlpha(float a);
 void GL_SetSolidColorMode(bool solidColorsOnly);
 
 void GL_DrawLine(float sx, float sy, float dx, float dy, float thickness);
+
+void GL_UpdateLights(float* lightParams, int numLights);
+
+void GL_ToggleLighting(bool toggle);
+void GL_ResetForLevelChange(void);

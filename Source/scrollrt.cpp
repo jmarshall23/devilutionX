@@ -35,6 +35,8 @@
 
 namespace devilution {
 
+void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns);
+
 /**
  * Specifies the current light entry.
  */
@@ -674,7 +676,7 @@ void RenderTile(const Surface &out, int x, int y, bool forceBlack)
 		pDungeonCels->ClipRenderWithLightingTrans(out, x, y, level_piece_id, 170);
 	} else {
 		if (LightTableIndex == LightsMax) {
-			pDungeonCels->ClipRenderOutline(out, 0, 0, 0, x, y, level_piece_id); // Fully Black
+			pDungeonCels->ClipRenderWithLighting(out, x, y, level_piece_id);
 		} else if (LightTableIndex == 0) {
 			pDungeonCels->ClipRenderNoLighting(out, x, y, level_piece_id);
 		} else {
@@ -887,7 +889,7 @@ void DrawDungeon(const Surface &out, int sx, int sy, int dx, int dy)
 		return;
 	dRendered[sx][sy] = true;
 
-	LightTableIndex = dLight[sx][sy];
+	LightTableIndex = 5; //dLight[sx][sy];
 
 	level_piece_id = dPiece[sx][sy];
 // jmarshall - don't draw the floor, we did that during drawfloor.
@@ -1244,6 +1246,8 @@ void DrawGame(const Surface &fullOut, int x, int y)
 	case SDIR_NONE:
 		break;
 	}
+
+	UpdateHardwareLighting(x, y, sx, sy, rows, columns);
 
 	DrawFloor(out, x, y, sx, sy, rows, columns);
 	DrawTileContent(out, x, y, sx, sy, rows, columns);

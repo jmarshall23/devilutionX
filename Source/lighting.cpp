@@ -12,6 +12,10 @@
 #include "engine/load_file.hpp"
 #include "player.h"
 
+#include "../rhi/gl_render.h"
+#undef max
+#undef min
+
 namespace devilution {
 
 LightStruct VisionList[MAXVISION];
@@ -522,109 +526,61 @@ void DoUnLight(int nXPos, int nYPos, int nRadius)
 
 void DoLighting(Point position, int nRadius, int lnum)
 {
-	int xoff = 0;
-	int yoff = 0;
-	int lightX = 0;
-	int lightY = 0;
-	int blockX = 0;
-	int blockY = 0;
+	SetLight(position, 20);
+}
 
-	if (lnum >= 0) {
-		xoff = Lights[lnum].position.offset.x;
-		yoff = Lights[lnum].position.offset.y;
-		if (xoff < 0) {
-			xoff += 8;
-			position -= { 1, 0 };
-		}
-		if (yoff < 0) {
-			yoff += 8;
-			position -= { 0, 1 };
-		}
-	}
+void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns)
+{
+	static float lightInfoData[128][4];
 
-	int distX = xoff;
-	int distY = yoff;
+	memset(&lightInfoData[0][0], 0, sizeof(lightInfoData));
+	int numLights = 0;
 
-	int minX = 15;
-	if (position.x - 15 < 0) {
-		minX = position.x + 1;
-	}
-	int maxX = 15;
-	if (position.x + 15 > MAXDUNX) {
-		maxX = MAXDUNX - position.x;
-	}
-	int minY = 15;
-	if (position.y - 15 < 0) {
-		minY = position.y + 1;
-	}
-	int maxY = 15;
-	if (position.y + 15 > MAXDUNY) {
-		maxY = MAXDUNY - position.y;
-	}
+	rows += MicroTileLen;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < columns; j++) {
+			if (dPreLight[x][y] == 20) {
+				if (numLights >= 128)
+					devilution::app_fatal("Too many lights!");
 
-	if (position.x >= 0 && position.x < MAXDUNX && position.y >= 0 && position.y < MAXDUNY) {
-		if (currlevel < 17) {
-			SetLight(position, 0);
-		} else if (GetLight(position) > lightradius[nRadius][0]) {
-			SetLight(position, lightradius[nRadius][0]);
-		}
-	}
-
-	int mult = xoff + 8 * yoff;
-	for (int y = 0; y < minY; y++) {
-		for (int x = 1; x < maxX; x++) {
-			int radiusBlock = lightblock[mult][y][x];
-			if (radiusBlock < 128) {
-				Point temp = position + Displacement { x, y };
-				int8_t v = lightradius[nRadius][radiusBlock];
-				if (temp.x >= 0 && temp.x < MAXDUNX && temp.y >= 0 && temp.y < MAXDUNY)
-					if (v < GetLight(temp))
-						SetLight(temp, v);
+				lightInfoData[numLights][0] = sx + (TILE_WIDTH / 2);
+				lightInfoData[numLights][1] = gnScreenHeight - sy + TILE_HEIGHT / 2;
+				lightInfoData[numLights][2] = 3000;
+				numLights++;
 			}
-		}
-	}
-	RotateRadius(&xoff, &yoff, &distX, &distY, &lightX, &lightY, &blockX, &blockY);
-	mult = xoff + 8 * yoff;
-	for (int y = 0; y < maxY; y++) {
-		for (int x = 1; x < maxX; x++) {
-			int radiusBlock = lightblock[mult][y + blockY][x + blockX];
-			if (radiusBlock < 128) {
-				Point temp = position + Displacement { y, -x };
-				int8_t v = lightradius[nRadius][radiusBlock];
-				if (temp.x >= 0 && temp.x < MAXDUNX && temp.y >= 0 && temp.y < MAXDUNY)
-					if (v < GetLight(temp))
-						SetLight(temp, v);
+
+			if (dLight[x][y] == 20) {
+				if (numLights >= 128)
+					devilution::app_fatal("Too many lights!");
+
+				lightInfoData[numLights][0] = sx + (TILE_WIDTH / 2);
+				lightInfoData[numLights][1] = gnScreenHeight - sy + TILE_HEIGHT / 2;
+				lightInfoData[numLights][2] = 3000;
+				numLights++;
 			}
+
+			ShiftGrid(&x, &y, 1, 0);
+			sx += TILE_WIDTH;
+		}
+
+		// Return to start of row
+		ShiftGrid(&x, &y, -columns, 0);
+		sx -= columns * TILE_WIDTH;
+
+		// Jump to next row
+		sy += TILE_HEIGHT / 2;
+		if ((i & 1) != 0) {
+			x++;
+			columns--;
+			sx += TILE_WIDTH / 2;
+		} else {
+			y++;
+			columns++;
+			sx -= TILE_WIDTH / 2;
 		}
 	}
-	RotateRadius(&xoff, &yoff, &distX, &distY, &lightX, &lightY, &blockX, &blockY);
-	mult = xoff + 8 * yoff;
-	for (int y = 0; y < maxY; y++) {
-		for (int x = 1; x < minX; x++) {
-			int radiusBlock = lightblock[mult][y + blockY][x + blockX];
-			if (radiusBlock < 128) {
-				Point temp = position - Displacement { x, y };
-				int8_t v = lightradius[nRadius][radiusBlock];
-				if (temp.x >= 0 && temp.x < MAXDUNX && temp.y >= 0 && temp.y < MAXDUNY)
-					if (v < GetLight(temp))
-						SetLight(temp, v);
-			}
-		}
-	}
-	RotateRadius(&xoff, &yoff, &distX, &distY, &lightX, &lightY, &blockX, &blockY);
-	mult = xoff + 8 * yoff;
-	for (int y = 0; y < minY; y++) {
-		for (int x = 1; x < minX; x++) {
-			int radiusBlock = lightblock[mult][y + blockY][x + blockX];
-			if (radiusBlock < 128) {
-				Point temp = position + Displacement { -y, x };
-				int8_t v = lightradius[nRadius][radiusBlock];
-				if (temp.x >= 0 && temp.x < MAXDUNX && temp.y >= 0 && temp.y < MAXDUNY)
-					if (v < GetLight(temp))
-						SetLight(temp, v);
-			}
-		}
-	}
+
+	GL_UpdateLights(&lightInfoData[0][0], 128);
 }
 
 void DoUnVision(Point position, int nRadius)
@@ -955,6 +911,8 @@ void InitLighting()
 	for (int i = 0; i < MAXLIGHTS; i++) {
 		ActiveLights[i] = i;
 	}
+
+	GL_ResetForLevelChange();
 }
 
 int AddLight(Point position, int r)
