@@ -60,8 +60,8 @@ namespace devilution {
 
 		void Draw(const Surface& out, int x, int y, int sourcex, int sourcey, int sourceFrame, bool allowTrans, bool allowflip, byte *remapTable = nullptr);
 
-		void ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, int light) const;
-		void ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame) const;
+		void ClipRenderWithLighting2(const Surface& out, int sx, int sy, int frame, int light) const;
+		void ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, bool upbright = false) const;
 		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx = 0, int starty = 0) const;
 		void ClipRenderUI(const Surface& out, int sx, int sy, int frame, int startx = 0, int starty = 0) const;
 		void ClipRenderOutline(const Surface& out, int r, int g, int b,int sx, int sy, int frame) const;

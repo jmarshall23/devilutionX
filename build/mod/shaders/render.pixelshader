@@ -21,6 +21,25 @@ vec2 ScreenToIsometricCoordinates(float screenX, float screenY)
 	return vec2(x, y);
 }
 
+vec3 ColorShiftLightingBytes( float r, float g, float b ) {
+	// normalize by color instead of saturating to white
+	if ( r > 1.0 || g > 1.0 || b > 1.0 ) {
+		float		max;
+
+		max = r > g ? r : g;
+		max = max > b ? max : b;
+		r = r / max;
+		g = g / max;
+		b = b / max;
+	}
+
+	vec3 color;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+	return color;
+}
+
 void main()
 {
 	 float LitTile = TileInfo.x;
@@ -33,21 +52,24 @@ void main()
 		for(int i = 0; i < MAX_LIGHTS; i++)
 		{
 			float dist = distance(ScreenToIsometricCoordinates(currentPixelPosition.x, currentPixelPosition.y), ScreenToIsometricCoordinates(LightInfo[i].x, LightInfo[i].y));
-			float atten = clamp( 1.0 - dist/(LightInfo[i].z * 0.035), 0.0, 1.0);
+			float atten = clamp( 1.0 - (dist * dist)/LightInfo[i].z, 0.0, 1.0);
 			
 			if(Frag_Color.r != 0) {
 				atten = atten * Frag_Color.r;
 			}
 			
-			if(dist < LightInfo[i].z)
-				lit += pow(atten, 3) * vec3( 243.0 / 175.0, 88.0 / 149.0, 79.0 / 255.0);
+			lit += pow(atten, 3) * (vec3( 250.0 / 255.0, 200.0 / 255.0, 170.0 / 255.0));
 		}
 		
-		lit = lit / (lit + 1.0);
-		
-		vec3 ambient = (vec3(79.0/ 255.0, 105.0/ 255.0, 136.0/ 255.0) * 0.5);
+		vec3 ambient = (vec3(79.0/ 255.0, 105.0/ 255.0, 136.0/ 255.0) );
 		vec4 diffuse = texture(Texture, Frag_UV.st);
-		diffuse.xyz *= clamp(lit + 0.1, 0.0, 1.0) + ambient;
+
+		lit = ColorShiftLightingBytes(lit.x, lit.y, lit.z);
+		
+		if(Frag_Color.g != 0)
+			lit = lit + 0.15;
+		
+		diffuse.xyz *= mix(ambient, lit, dot(lit, lit)); //clamp(lit, 0.0, 1.0) + ambient;
 		Out_Color = diffuse;				
 	 }
 	 else if(Frag_Color.a < 0.5)

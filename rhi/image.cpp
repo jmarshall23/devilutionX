@@ -110,7 +110,7 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, int light) const
+	void StormImage::ClipRenderWithLighting2(const Surface& out, int sx, int sy, int frame, int light) const
 	{
 		GL_ToggleLighting(true);
 		const ImageFrame_t& image = frames[frame - 1];
@@ -139,7 +139,7 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame) const
+	void StormImage::ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, bool upbright) const
 	{
 		if (LightTableIndex == 0) {
 			ClipRenderNoLighting(out, sx, sy, frame);
@@ -154,9 +154,13 @@ namespace devilution
 
 		sy -= image.height;
 
-		if (image.megaTileId == DRLG_GetCeilingTile())
+		if (upbright)
 		{
-			GL_SetColor(200, 0, 0); // 50%
+			GL_SetColor(0, 255, 0);
+		}
+		else if (image.megaTileId == DRLG_GetCeilingTile())
+		{
+			GL_SetColor(220, 0, 0); // 50%
 		}
 		else if (IsFloorTile(frame))
 		{
@@ -164,7 +168,7 @@ namespace devilution
 		}
 		else
 		{
-			GL_SetColor(229, 0, 0); // 90%
+			GL_SetColor(239, 0, 0); // 90%
 		}
 
 		//

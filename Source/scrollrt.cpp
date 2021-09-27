@@ -317,7 +317,7 @@ void DrawMissilePrivate(const Surface &out, const Missile &missile, int sx, int 
 	//CelSprite cel { missile._miAnimData, missile._miAnimWidth };
 	if (missile._miUniqTrans != 0) {
 		//Cl2DrawLightTbl(out, mx, my, cel, missile._miAnimFrame, missile._miUniqTrans + 3);
-		missile._miAnimData->ClipRenderWithLighting(out, mx, my, missile._miAnimFrame, missile._miUniqTrans + 3);
+		missile._miAnimData->ClipRenderWithLighting2(out, mx, my, missile._miAnimFrame, missile._miUniqTrans + 3);
 	} else if (missile._miLightFlag) {
 		//Cl2DrawLight(out, mx, my, cel, missile._miAnimFrame);
 		missile._miAnimData->ClipRenderWithLighting(out, mx, my, missile._miAnimFrame);
@@ -556,7 +556,7 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 
 	if (pnum == MyPlayerId) {
 		//Cl2Draw(out, px, py, *pCelSprite, nCel);
-		pCelSprite->ClipRenderWithLighting(out, px, py, nCel);
+		pCelSprite->ClipRenderWithLighting(out, px, py, nCel, true);
 		DrawPlayerIcons(out, pnum, px, py, true);
 		return;
 	}
