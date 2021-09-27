@@ -483,8 +483,17 @@ void DRLG_HoldThemeRooms()
 	}
 }
 
+int globalCeilingTile = 0;
+
+int DRLG_GetCeilingTile(void)
+{
+	return globalCeilingTile;
+}
+
 void DRLG_LPass3(int lv, int floor)
 {
+	globalCeilingTile = lv;
+
 	MegaTile floorMega = pDungeonCels->megaTiles[floor];
 	int floorv1 = SDL_SwapLE16(floorMega.micro1) + 1;
 	int floorv2 = SDL_SwapLE16(floorMega.micro2) + 1;

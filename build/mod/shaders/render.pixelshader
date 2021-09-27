@@ -35,6 +35,10 @@ void main()
 			float dist = distance(ScreenToIsometricCoordinates(currentPixelPosition.x, currentPixelPosition.y), ScreenToIsometricCoordinates(LightInfo[i].x, LightInfo[i].y));
 			float atten = clamp( 1.0 - dist/(LightInfo[i].z * 0.035), 0.0, 1.0);
 			
+			if(Frag_Color.r != 0) {
+				atten = atten * Frag_Color.r;
+			}
+			
 			if(dist < LightInfo[i].z)
 				lit += pow(atten, 2);
 		}

@@ -27,6 +27,7 @@ namespace devilution {
 		int height;
 		byte* buffer;
 		unsigned int glHandle;
+		int megaTileId;
 	};
 
 	class StormImage {
@@ -77,7 +78,7 @@ namespace devilution {
 			return frames[0].height;
 		}
 
-		bool IsFloorTile(int frame) {
+		bool IsFloorTile(int frame) const {
 			if (solData.size() <= 0)
 				return false;
 

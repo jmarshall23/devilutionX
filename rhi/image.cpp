@@ -12,6 +12,7 @@
 namespace devilution
 {
 	void ParseAutomapData(const char* fileName);
+	int DRLG_GetCeilingTile(void);
 
 	const char* pal_name = nullptr;
 
@@ -153,9 +154,22 @@ namespace devilution
 
 		sy -= image.height;
 
-		//GL_SetColor(lightScale, lightScale, lightScale);
+		if (image.megaTileId == DRLG_GetCeilingTile())
+		{
+			GL_SetColor(200, 0, 0); // 50%
+		}
+		else if (IsFloorTile(frame))
+		{
+			GL_SetColor(0, 0, 0); // 100%
+		}
+		else
+		{
+			GL_SetColor(229, 0, 0); // 90%
+		}
+
+		//
 		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
-		//GL_SetColor(255, 255, 255);
+		GL_SetColor(255, 255, 255);
 	}
 
 	/*
@@ -478,6 +492,7 @@ namespace devilution
 						subImage.width = table->GetInt("width", d);
 						subImage.height = table->GetInt("height", d);
 						subImage.buffer = new byte[subImage.width * subImage.height * 4];
+						subImage.megaTileId = numTileFiles;
 
 						int subImageX = table->GetInt("x", d);
 						int subImageY = table->GetInt("y", d);
