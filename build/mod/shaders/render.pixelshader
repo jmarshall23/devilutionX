@@ -58,7 +58,7 @@ void main()
 				atten = atten * Frag_Color.r;
 			}
 			
-			lit += pow(atten, 3) * (vec3( 250.0 / 255.0, 200.0 / 255.0, 170.0 / 255.0));
+			lit = max(pow(atten, 1) * (vec3( 250.0 / 255.0, 200.0 / 255.0, 170.0 / 255.0)), lit);
 		}
 		
 		vec3 ambient = (vec3(79.0/ 255.0, 105.0/ 255.0, 136.0/ 255.0) );
