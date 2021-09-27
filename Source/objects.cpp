@@ -4715,16 +4715,16 @@ void AddObject(_object_id objType, Point objPos)
 	case OBJ_CANDLE1:
 	case OBJ_CANDLE2:
 	case OBJ_BOOKCANDLE:
-		AddObjectLight(oi, 5);
+		AddObjectLight(oi, 3);
 		break;
 	case OBJ_STORYCANDLE:
-		AddObjectLight(oi, 3);
+		AddObjectLight(oi, 1);
 		break;
 	case OBJ_TORCHL:
 	case OBJ_TORCHR:
 	case OBJ_TORCHL2:
 	case OBJ_TORCHR2:
-		AddObjectLight(oi, 8);
+		AddObjectLight(oi, 5);
 		break;
 	case OBJ_L1LDOOR:
 	case OBJ_L1RDOOR:

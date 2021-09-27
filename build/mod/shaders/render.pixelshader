@@ -27,7 +27,7 @@ void main()
 
 	 if(LitTile == 1.0)
 	 {
-		float lit = 0;
+		vec3 lit;
 		vec2 currentPixelPosition = vec2(gl_FragCoord.x, gl_FragCoord.y);
 
 		for(int i = 0; i < MAX_LIGHTS; i++)
@@ -40,10 +40,14 @@ void main()
 			}
 			
 			if(dist < LightInfo[i].z)
-				lit += pow(atten, 2);
+				lit += pow(atten, 3) * vec3( 243.0 / 175.0, 88.0 / 149.0, 79.0 / 255.0);
 		}
+		
+		lit = lit / (lit + 1.0);
+		
+		vec3 ambient = (vec3(79.0/ 255.0, 105.0/ 255.0, 136.0/ 255.0) * 0.5);
 		vec4 diffuse = texture(Texture, Frag_UV.st);
-		diffuse.xyz *= clamp(lit + 0.1, 0.1, 1.0);
+		diffuse.xyz *= clamp(lit + 0.1, 0.0, 1.0) + ambient;
 		Out_Color = diffuse;				
 	 }
 	 else if(Frag_Color.a < 0.5)

@@ -494,6 +494,8 @@ void DRLG_LPass3(int lv, int floor)
 {
 	globalCeilingTile = lv;
 
+	memset(&dFloor[0], 0, sizeof(dFloor));
+
 	MegaTile floorMega = pDungeonCels->megaTiles[floor];
 	int floorv1 = SDL_SwapLE16(floorMega.micro1) + 1;
 	int floorv2 = SDL_SwapLE16(floorMega.micro2) + 1;

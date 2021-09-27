@@ -556,7 +556,7 @@ void DrawPlayer(const Surface &out, int pnum, int x, int y, int px, int py)
 
 	if (pnum == MyPlayerId) {
 		//Cl2Draw(out, px, py, *pCelSprite, nCel);
-		pCelSprite->ClipRenderNoLighting(out, px, py, nCel );
+		pCelSprite->ClipRenderWithLighting(out, px, py, nCel);
 		DrawPlayerIcons(out, pnum, px, py, true);
 		return;
 	}
