@@ -206,6 +206,7 @@ extern char TransVal;
 extern bool TransList[256];
 /** Contains the piece IDs of each tile on the map. */
 extern int dPiece[MAXDUNX][MAXDUNY];
+extern int dFloor[MAXDUNX][MAXDUNY];
 /** Specifies the dungeon piece information for a given coordinate and block number. */
 extern MICROS dpiece_defs_map_2[MAXDUNX][MAXDUNY];
 /** Specifies the transparency at each coordinate of the map. */
@@ -254,7 +255,7 @@ void DRLG_SetPC();
 void Make_SetPC(int x, int y, int w, int h);
 void DRLG_PlaceThemeRooms(int minSize, int maxSize, int floor, int freq, bool rndSize);
 void DRLG_HoldThemeRooms();
-void DRLG_LPass3(int lv);
+void DRLG_LPass3(int lv, int floor);
 void DRLG_Init_Globals();
 bool SkipThemeRoom(int x, int y);
 void InitLevels();

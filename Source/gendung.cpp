@@ -49,6 +49,7 @@ int MicroTileLen;
 char TransVal;
 bool TransList[256];
 int dPiece[MAXDUNX][MAXDUNY];
+int dFloor[MAXDUNX][MAXDUNY];
 MICROS dpiece_defs_map_2[MAXDUNX][MAXDUNY];
 int8_t dTransVal[MAXDUNX][MAXDUNY];
 char dLight[MAXDUNX][MAXDUNY];
@@ -482,8 +483,14 @@ void DRLG_HoldThemeRooms()
 	}
 }
 
-void DRLG_LPass3(int lv)
+void DRLG_LPass3(int lv, int floor)
 {
+	MegaTile floorMega = pDungeonCels->megaTiles[floor];
+	int floorv1 = SDL_SwapLE16(floorMega.micro1) + 1;
+	int floorv2 = SDL_SwapLE16(floorMega.micro2) + 1;
+	int floorv3 = SDL_SwapLE16(floorMega.micro3) + 1;
+	int floorv4 = SDL_SwapLE16(floorMega.micro4) + 1;
+
 	{
 		MegaTile mega = pDungeonCels->megaTiles[lv];
 		int v1 = SDL_SwapLE16(mega.micro1) + 1;
@@ -518,10 +525,41 @@ void DRLG_LPass3(int lv)
 				v3 = SDL_SwapLE16(mega.micro3) + 1;
 				v4 = SDL_SwapLE16(mega.micro4) + 1;
 			}
+
+			bool entireTileIsFloor = pDungeonCels->IsFloorTile(v1) && pDungeonCels->IsFloorTile(v2) && pDungeonCels->IsFloorTile(v3) && pDungeonCels->IsFloorTile(v4);
+
 			dPiece[xx + 0][yy + 0] = v1;
 			dPiece[xx + 1][yy + 0] = v2;
 			dPiece[xx + 0][yy + 1] = v3;
 			dPiece[xx + 1][yy + 1] = v4;
+
+			if (leveltype == DTYPE_TOWN || entireTileIsFloor) {
+				dFloor[xx + 0][yy + 0] = v1;
+				dFloor[xx + 1][yy + 0] = v2;
+				dFloor[xx + 0][yy + 1] = v3;
+				dFloor[xx + 1][yy + 1] = v4;
+			} else {
+				if (!pDungeonCels->IsFloorTile(v1))
+					dFloor[xx + 0][yy + 0] = 0;
+				else
+					dFloor[xx + 0][yy + 0] = floorv1;
+
+				if (!pDungeonCels->IsFloorTile(v2))
+					dFloor[xx + 1][yy + 0] = 0;
+				else
+					dFloor[xx + 1][yy + 0] = floorv2;
+
+				if (!pDungeonCels->IsFloorTile(v3))
+					dFloor[xx + 0][yy + 1] = 0;
+				else
+					dFloor[xx + 0][yy + 1] = floorv3;
+
+				if (!pDungeonCels->IsFloorTile(v4))
+					dFloor[xx + 1][yy + 1] = 0;
+				else
+					dFloor[xx + 1][yy + 1] = floorv4;
+			}
+			
 			xx += 2;
 		}
 		yy += 2;

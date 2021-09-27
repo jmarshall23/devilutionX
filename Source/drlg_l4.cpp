@@ -1461,7 +1461,7 @@ void GenerateLevel(lvl_entry entry)
 
 void Pass3()
 {
-	DRLG_LPass3(30 - 1);
+	DRLG_LPass3(30 - 1, 5);
 }
 
 } // namespace

@@ -3116,7 +3116,7 @@ void LoadDungeonData(const uint16_t *dunData)
 
 void Pass3()
 {
-	DRLG_LPass3(12 - 1);
+	DRLG_LPass3(12 - 1, 43);
 }
 
 } // namespace

@@ -1007,7 +1007,7 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy, int rows, int c
 {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < columns; j++) {
-			level_piece_id = dPiece[x][y];
+			level_piece_id = dFloor[x][y];
 			if (level_piece_id != 0 && (!nSolidTable[level_piece_id] || IsWall(x, y))) {
 				DrawFloor(out, x, y, sx, sy);					
 			}

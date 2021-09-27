@@ -110,7 +110,7 @@ namespace ConversionTool
 				tile[i] = 255;
 
 			bool isFloor = IsFloor(sol1) && IsFloor(sol2) && IsFloor(sol3) && IsFloor(sol4);
-			bool tempDisableFloorRemovalFromTiles = true;
+			bool tempDisableFloorRemovalFromTiles = false;
 
 			if (isFloor || isTown || tempDisableFloorRemovalFromTiles)
 			{

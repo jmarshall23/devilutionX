@@ -77,6 +77,13 @@ namespace devilution {
 			return frames[0].height;
 		}
 
+		bool IsFloorTile(int frame) {
+			if (solData.size() <= 0)
+				return false;
+
+			return (solData[frame - 1] & 1) == 0;
+		}
+
 		unsigned int GetDeviceHandle(int frame) {
 			return frames[frame].glHandle;
 		}
