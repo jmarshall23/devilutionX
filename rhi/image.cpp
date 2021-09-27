@@ -129,9 +129,9 @@ namespace devilution
 	=======================
 	*/
 	void StormImage::ClipRenderWithLightingTrans(const Surface& out, int sx, int sy, int frame, int alpha) const {
-		//GL_SetAlpha(alpha);
+		GL_SetAlpha(alpha);
 		ClipRenderWithLighting(out, sx, sy, frame);
-	//	GL_SetAlpha(255);
+		GL_SetAlpha(255);
 	}
 
 	/*

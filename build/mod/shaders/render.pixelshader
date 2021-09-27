@@ -61,7 +61,7 @@ void main()
 			lit = max(pow(atten, 1) * (vec3( 250.0 / 255.0, 200.0 / 255.0, 170.0 / 255.0)), lit);
 		}
 		
-		vec3 ambient = (vec3(79.0/ 255.0, 105.0/ 255.0, 136.0/ 255.0) );
+		vec3 ambient = (vec3(79.0/ 255.0, 105.0/ 255.0, 136.0/ 255.0) ) * 0.3;
 		vec4 diffuse = texture(Texture, Frag_UV.st);
 
 		lit = ColorShiftLightingBytes(lit.x, lit.y, lit.z);
@@ -70,6 +70,7 @@ void main()
 			lit = lit + 0.15;
 		
 		diffuse.xyz *= mix(ambient, lit, dot(lit, lit)); //clamp(lit, 0.0, 1.0) + ambient;
+		diffuse.a *= Frag_Color.a;
 		Out_Color = diffuse;				
 	 }
 	 else if(Frag_Color.a < 0.5)
