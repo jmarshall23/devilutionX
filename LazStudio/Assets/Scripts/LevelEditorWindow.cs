@@ -8,6 +8,7 @@ public class LevelEditorWindow : EditorWindow
 	Tileset[] tilesets = null;
 	int tileSetSelected = 0;
 	float tileSliderPosition = 0;
+	DataTable level = null;
 
     [MenuItem("LazStudio/Level Editor")]
     static void ShowLevelEditor()
@@ -19,7 +20,7 @@ public class LevelEditorWindow : EditorWindow
 	// Start is called before the first frame update
 	void OnGUI()
 	{
-		GUILayout.BeginArea(new Rect(10, 10, 300, 100));
+		GUILayout.BeginArea(new Rect(10, 10, 300, 130));
 			GUILayout.Label("Diablo Base Folder");
 			string path = GUILayout.TextField("C:\\Projects\\Diablo\\build\\base");
 			if(tilesets == null)
@@ -46,6 +47,16 @@ public class LevelEditorWindow : EditorWindow
 				}
 
 				tileSetSelected = GUILayout.SelectionGrid(tileSetSelected, levelList.ToArray(), levelList.Count);
+				GUILayout.Button("New Map");
+				if(GUILayout.Button("Load Map"))
+				{
+					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", path, "duntext");
+					if(fileName != null)
+					{
+						level = new DataTable(fileName);
+					}
+				}
+				GUILayout.Button("Save Map");
 				tilesets[tileSetSelected].LoadTiles();
 			}
 			
@@ -54,9 +65,9 @@ public class LevelEditorWindow : EditorWindow
 
 		if(tilesets.Length > 0)
 		{
-			tileSliderPosition = GUI.VerticalSlider(new Rect(10, 110, 40, 700), tileSliderPosition, 0, tilesets[tileSetSelected].tiles.Count - 1);
+			tileSliderPosition = GUI.VerticalSlider(new Rect(10, 140, 40, 700), tileSliderPosition, 0, tilesets[tileSetSelected].tiles.Count - 1);
 
-			GUILayout.BeginArea(new Rect(20, 110, 300, 700));
+			GUILayout.BeginArea(new Rect(20, 140, 300, 700));
 			
 				GUILayout.BeginVertical("Tiles");
 					for(int i = 0; i < 4; i++)
