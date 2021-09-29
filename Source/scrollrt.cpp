@@ -1023,11 +1023,11 @@ void DrawFloor(const Surface &out, int x, int y, int sx, int sy, int rows, int c
 		if ((i & 1) != 0) {
 			x++;
 			columns--;
-			sx += TILE_WIDTH / 2;
+			sx += TILE_WIDTH;
 		} else {
 			y++;
 			columns++;
-			sx -= TILE_WIDTH / 2;
+			sx -= TILE_WIDTH;
 		}
 	}
 }

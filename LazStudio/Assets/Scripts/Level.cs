@@ -60,7 +60,7 @@ public class Level : MonoBehaviour
 				height = tileset.tiles[tilid].height;
 			}
 
-			GameObject plane = new GameObject("Plane", typeof(MeshFilter), typeof(MeshRenderer));
+			GameObject plane = new GameObject("Plane " + y, typeof(MeshFilter), typeof(MeshRenderer));
 			MeshFilter mf = plane.GetComponent<MeshFilter>();
 
 			mf.mesh = CreatePlane((int)height, (int)width);
@@ -80,7 +80,7 @@ public class Level : MonoBehaviour
 
 			Vector2 ScreenXY = IsometricToScreen(mapwidth - y, x, 64, 128);
 
-			plane.transform.position = new Vector3(ScreenXY.x, ScreenXY.y, 0);
+			plane.transform.position = new Vector3(ScreenXY.x + height, ScreenXY.y, 0);
 			//plane.transform.rotation = Quaternion.Euler(90, 0, -180);
 			plane.transform.localScale = new Vector3(1, 1, 1);
 
