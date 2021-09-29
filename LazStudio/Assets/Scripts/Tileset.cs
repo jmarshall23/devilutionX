@@ -28,6 +28,11 @@ public class Tileset
 			EditorUtility.DisplayProgressBar("Loading tileset " + tileSetFilename, file, currentFile / files.Length);
 
 			Texture2D tex = TGALoader.LoadTGA(new MemoryStream(File.ReadAllBytes(file)));
+
+			Material material = new Material(Shader.Find("Unlit/UnlitAlpha"));
+			material.mainTexture = (Texture)tex;
+
+			materials.Add(material);
 			tiles.Add(tex);
 
 			currentFile++;
@@ -53,4 +58,5 @@ public class Tileset
 	public readonly string tileSetFilename;
 
 	public List<Texture2D> tiles = new List<Texture2D>();
+	public List<Material> materials = new List<Material>();
 }
