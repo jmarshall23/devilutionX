@@ -37,9 +37,11 @@ public class Level : MonoBehaviour
 	public void Init(string filename, Tileset tileset)
 	{
 		table = new DataTable(filename); 
-		this.tileset = tileset; 
+		this.tileset = tileset;
 
-		for(int i = 0; i < table.NumRows; i++)
+		int mapwidth = table.GetTokenInt("x", table.NumRows - 1);
+
+		for (int i = 0; i < table.NumRows; i++)
 		{
 			int x = table.GetTokenInt("x", i);
 			int y = table.GetTokenInt("y", i);
@@ -76,7 +78,7 @@ public class Level : MonoBehaviour
 
 			
 
-			Vector2 ScreenXY = IsometricToScreen(y, x, 64, 128);
+			Vector2 ScreenXY = IsometricToScreen(mapwidth - y, x, 64, 128);
 
 			plane.transform.position = new Vector3(ScreenXY.x, ScreenXY.y, 0);
 			//plane.transform.rotation = Quaternion.Euler(90, 0, -180);
