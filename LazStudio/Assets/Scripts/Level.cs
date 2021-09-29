@@ -30,20 +30,35 @@ public class Level : MonoBehaviour
 			int y = table.GetTokenInt("y", i);
 			int tilid = table.GetTokenInt("tilid", i);
 
-			if (tilid == -1)
-				continue;
+			
 
 			Vector2 ScreenXY = IsometricToScreen(y, x);
 
 			GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
 			plane.transform.SetParent(this.gameObject.transform);
-			plane.GetComponent<Renderer>().material = tileset.materials[tilid];
+			if (tilid == -1)
+			{
+				plane.GetComponent<Renderer>().material = tileset.transMaterial;
+			}
+			else
+			{
+				plane.GetComponent<Renderer>().material = tileset.materials[tilid];
+			}
+			
 
 			plane.transform.position = new Vector3(ScreenXY.x, ScreenXY.y, 0);
 			plane.transform.rotation = Quaternion.Euler(90, 0, -180);
 
-			if (tileset.tiles[tilid].width == 128 && tileset.tiles[tilid].height == 64)
+			if (tilid == -1)
+			{
 				plane.transform.localScale = new Vector3(1, 1, 0.5f);
+			}
+			else
+			{
+				if (tileset.tiles[tilid].width == 128 && tileset.tiles[tilid].height == 64)
+					plane.transform.localScale = new Vector3(1, 1, 0.5f);
+			}
+			
 
 			cells.Add(plane);
 		}

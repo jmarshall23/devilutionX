@@ -11,6 +11,10 @@ public class Tileset
 	{
 		tileSetPath = path + "\\tiles\\";
 		tileSetFilename = Path.GetFileName(path);
+
+		transTile = TGALoader.LoadTGA(path + "../../../../mod/levels/trans.tga");
+		transMaterial = new Material(Shader.Find("Unlit/UnlitAlpha"));
+		transMaterial.mainTexture = (Texture)transTile;
 	}
 
 
@@ -57,6 +61,8 @@ public class Tileset
 	public readonly string tileSetPath;
 	public readonly string tileSetFilename;
 
+	public Texture2D transTile;
+	public Material transMaterial;
 	public List<Texture2D> tiles = new List<Texture2D>();
 	public List<Material> materials = new List<Material>();
 }
