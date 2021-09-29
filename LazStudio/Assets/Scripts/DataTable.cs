@@ -31,7 +31,7 @@ public class DataTable
 	{
 		get
 		{
-			return rows.Count; 
+			return rows.Count - 1; 
 		}
 	}
 

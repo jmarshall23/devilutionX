@@ -8,15 +8,30 @@ public class Level : MonoBehaviour
 	public Tileset tileset;
 	private List<GameObject> cells = new List<GameObject>();
 
-	const int tileWidthHalf = 8;
-	const int tileHeightHalf = 4;
+	const int tileWidthHalf = 64;
+	const int tileHeightHalf = 32;
 
-	Vector2 IsometricToScreen(float isoX, float isoY)
+	Vector2 IsometricToScreen(float isoX, float isoY, float tileWidthHalf, float tileHeightHalf)
 	{
+		tileWidthHalf = tileWidthHalf;
+		tileHeightHalf = tileHeightHalf ;
+
 		float screenX = (isoX - isoY) * tileWidthHalf;
 		float screenY = (isoX + isoY) * tileHeightHalf;
 
 		return new Vector2(screenX, screenY);
+	}
+
+	private Mesh CreatePlane(int width, int height)
+	{
+		Mesh m = new Mesh();
+		m.name = "Scripted_Plane_New_Mesh";
+		m.vertices = new Vector3[] { new Vector3(-width, -height, 0), new Vector3(width, -height, 0), new Vector3(width, height, 0), new Vector3(-width, height, 0) };
+		m.uv = new Vector2[] { new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0) };
+		m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
+		m.RecalculateNormals();
+		m.RecalculateBounds();
+		return m;
 	}
 
 	public void Init(string filename, Tileset tileset)
@@ -30,12 +45,26 @@ public class Level : MonoBehaviour
 			int y = table.GetTokenInt("y", i);
 			int tilid = table.GetTokenInt("tilid", i);
 
-			
+			float width = 0;
+			float height = 0;
 
-			Vector2 ScreenXY = IsometricToScreen(y, x);
+			if (tilid == -1)
+			{
+				width = tileset.transTile.width;
+				height = tileset.transTile.height;
+			}
+			else { 
+				width = tileset.tiles[tilid].width;
+				height = tileset.tiles[tilid].height;
+			}
 
-			GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+			GameObject plane = new GameObject("Plane", typeof(MeshFilter), typeof(MeshRenderer));
+			MeshFilter mf = plane.GetComponent<MeshFilter>();
+
+			mf.mesh = CreatePlane((int)height, (int)width);
+			mf.sharedMesh = mf.mesh;
 			plane.transform.SetParent(this.gameObject.transform);
+
 			if (tilid == -1)
 			{
 				plane.GetComponent<Renderer>().material = tileset.transMaterial;
@@ -44,24 +73,20 @@ public class Level : MonoBehaviour
 			{
 				plane.GetComponent<Renderer>().material = tileset.materials[tilid];
 			}
+
 			
+
+			Vector2 ScreenXY = IsometricToScreen(y, x, 64, 128);
 
 			plane.transform.position = new Vector3(ScreenXY.x, ScreenXY.y, 0);
-			plane.transform.rotation = Quaternion.Euler(90, 0, -180);
+			//plane.transform.rotation = Quaternion.Euler(90, 0, -180);
+			plane.transform.localScale = new Vector3(1, 1, 1);
 
-			if (tilid == -1)
-			{
-				plane.transform.localScale = new Vector3(1, 1, 0.5f);
-			}
-			else
-			{
-				if (tileset.tiles[tilid].width == 128 && tileset.tiles[tilid].height == 64)
-					plane.transform.localScale = new Vector3(1, 1, 0.5f);
-			}
-			
 
 			cells.Add(plane);
 		}
+
+		transform.rotation = Quaternion.Euler(0, -180, 90);
 	}
 
     // Start is called before the first frame update
