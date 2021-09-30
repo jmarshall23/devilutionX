@@ -10,6 +10,9 @@ public class LevelEditorWindow : EditorWindow
 	float tileSliderPosition = 0;
 	GameObject level = null;
 
+	public static int currentSelectedTile = -1;
+	public static Tileset currentTileset = null;
+
     [MenuItem("LazStudio/Level Editor")]
     static void ShowLevelEditor()
     {
@@ -52,16 +55,19 @@ public class LevelEditorWindow : EditorWindow
 
 				tileSetSelected = GUILayout.SelectionGrid(tileSetSelected, levelList.ToArray(), levelList.Count);
 				tilesets[tileSetSelected].LoadTiles();
+				currentTileset = tilesets[tileSetSelected];
 				GUILayout.Button("New Map");
 				if(GUILayout.Button("Load Map"))
 				{
 					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", path, "duntext");
 					if(fileName != null)
 					{
-						level = new GameObject("__dungeon__");
+						level = new GameObject("__dungeon__", typeof(LevelTile));
 						Level lvl = level.AddComponent<Level>();
 						lvl.Init(fileName, tilesets[tileSetSelected]);
-					}
+
+						Selection.activeObject = level;
+				}
 				}
 				GUILayout.Button("Save Map");
 			}
@@ -81,7 +87,10 @@ public class LevelEditorWindow : EditorWindow
 						if (i + tileSliderPosition >= tilesets[tileSetSelected].tiles.Count)
 							break;
 
-						GUILayout.Button(tilesets[tileSetSelected].tiles[i + (int)tileSliderPosition]);
+						if(GUILayout.Button(tilesets[tileSetSelected].tiles[i + (int)tileSliderPosition]))
+						{
+							currentSelectedTile = i + (int)tileSliderPosition;
+						}
 					}
 				GUILayout.EndVertical();
 			GUILayout.EndArea();

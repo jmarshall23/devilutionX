@@ -5,8 +5,8 @@ using UnityEditor;
 
 public class Level : MonoBehaviour
 {
-	public DataTable table;
-	public Tileset tileset;
+	public static DataTable table;
+	public static Tileset tileset;
 	private List<GameObject> cells = new List<GameObject>();
 
 	const int tileWidthHalf = 64;
@@ -38,7 +38,7 @@ public class Level : MonoBehaviour
 	public void Init(string filename, Tileset tileset)
 	{
 		table = new DataTable(filename); 
-		this.tileset = tileset;
+		Level.tileset = tileset;
 
 		int mapwidth = table.GetTokenInt("x", table.NumRows - 1);
 
@@ -61,7 +61,7 @@ public class Level : MonoBehaviour
 				height = tileset.tiles[tilid].height;
 			}
 
-			GameObject plane = new GameObject("Plane " + y, typeof(MeshFilter), typeof(MeshRenderer), typeof(LevelTile));
+			GameObject plane = new GameObject("" + i, typeof(MeshFilter), typeof(MeshRenderer));
 			MeshFilter mf = plane.GetComponent<MeshFilter>();
 
 			mf.mesh = CreatePlane((int)height, (int)width);
