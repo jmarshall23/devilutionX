@@ -66,8 +66,15 @@ public class LevelEditorWindow : EditorWindow
 						Level lvl = level.AddComponent<Level>();
 						lvl.Init(fileName, tilesets[tileSetSelected]);
 
-						Selection.activeObject = level;
-				}
+						var scene = SceneView.lastActiveSceneView;
+
+						SceneView sv = SceneView.sceneViews[0] as SceneView;
+						sv.in2DMode = true;
+
+						scene.pivot = new Vector3(3087.2f, 115.0f, -745.1f);
+
+						Selection.activeObject = level; 
+					}
 				}
 				GUILayout.Button("Save Map");
 			}
