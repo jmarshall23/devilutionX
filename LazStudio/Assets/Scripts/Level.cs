@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Level : MonoBehaviour
 {
@@ -60,7 +61,7 @@ public class Level : MonoBehaviour
 				height = tileset.tiles[tilid].height;
 			}
 
-			GameObject plane = new GameObject("Plane " + y, typeof(MeshFilter), typeof(MeshRenderer));
+			GameObject plane = new GameObject("Plane " + y, typeof(MeshFilter), typeof(MeshRenderer), typeof(LevelTile));
 			MeshFilter mf = plane.GetComponent<MeshFilter>();
 
 			mf.mesh = CreatePlane((int)height, (int)width);
