@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 public class Level : MonoBehaviour
 {
@@ -16,6 +17,22 @@ public class Level : MonoBehaviour
 	const int tileHeightHalf = 32;
 
 	public static int currentSelectedTileForPainting = -1;
+
+	public void SaveLevel()
+	{
+		using (StreamWriter writer = File.CreateText(table.fileName))
+		{
+			writer.WriteLine("x,y,tilid");
+
+			for (int i = 0; i < table.NumRows; i++)
+			{
+				int x = table.GetTokenInt("x", i);
+				int y = table.GetTokenInt("y", i);
+				int tilid = cellTileIds[i];
+				writer.WriteLine(x + "," + y + "," + tilid);
+			}
+		}
+	}
 
 	public void UpdatePaintCell(int cell)
 	{

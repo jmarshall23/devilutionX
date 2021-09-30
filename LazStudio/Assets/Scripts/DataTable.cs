@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class DataTable
 {
+	public readonly string fileName;
+
 	class DataRow
 	{
 		public DataRow(string line)
@@ -19,8 +21,9 @@ public class DataTable
 	public DataTable(string filename)
 	{
 		string[] lines = File.ReadAllLines(filename);
+		this.fileName = filename;
 
-		foreach(string line in lines)
+		foreach (string line in lines)
 		{
 			DataRow row = new DataRow(line);
 			rows.Add(row);

@@ -9,6 +9,7 @@ public class LevelEditorWindow : EditorWindow
 	int tileSetSelected = 0;
 	float tileSliderPosition = 0;
 	GameObject level = null;
+	Level lvl = null;
 
 	public static Tileset currentTileset = null;
 
@@ -62,7 +63,7 @@ public class LevelEditorWindow : EditorWindow
 					if(fileName != null)
 					{
 						level = new GameObject("__dungeon__", typeof(LevelTile));
-						Level lvl = level.AddComponent<Level>();
+						lvl = level.AddComponent<Level>();
 						lvl.Init(fileName, tilesets[tileSetSelected]);
 
 						Level.currentLevel = lvl;
@@ -77,7 +78,13 @@ public class LevelEditorWindow : EditorWindow
 						Selection.activeObject = level; 
 					}
 				}
-				GUILayout.Button("Save Map");
+				if (lvl != null)
+				{
+					if(GUILayout.Button("Save Map"))
+					{
+						lvl.SaveLevel();
+					}
+				}
 			}
 			
 		GUILayout.EndArea();
