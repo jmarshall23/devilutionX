@@ -39,7 +39,7 @@ public class LevelTile : Editor
 		Handles.EndGUI();
 
 
-		if(Event.current.type == EventType.MouseDown)
+		if(Event.current.type == EventType.MouseDown && Event.current.button == 0)
 		{
 			Level.currentLevel.UpdatePaintCell(index); 
 		}
