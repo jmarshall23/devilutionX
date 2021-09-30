@@ -10,7 +10,6 @@ public class LevelEditorWindow : EditorWindow
 	float tileSliderPosition = 0;
 	GameObject level = null;
 
-	public static int currentSelectedTile = -1;
 	public static Tileset currentTileset = null;
 
     [MenuItem("LazStudio/Level Editor")]
@@ -66,6 +65,8 @@ public class LevelEditorWindow : EditorWindow
 						Level lvl = level.AddComponent<Level>();
 						lvl.Init(fileName, tilesets[tileSetSelected]);
 
+						Level.currentLevel = lvl;
+
 						var scene = SceneView.lastActiveSceneView;
 
 						SceneView sv = SceneView.sceneViews[0] as SceneView;
@@ -82,7 +83,7 @@ public class LevelEditorWindow : EditorWindow
 		GUILayout.EndArea();
 
 
-		if(tilesets.Length > 0)
+		if(tilesets != null && tilesets.Length > 0)
 		{
 			tileSliderPosition = GUI.VerticalSlider(new Rect(10, 140, 40, 700), tileSliderPosition, 0, tilesets[tileSetSelected].tiles.Count - 1);
 
@@ -96,7 +97,7 @@ public class LevelEditorWindow : EditorWindow
 
 						if(GUILayout.Button(tilesets[tileSetSelected].tiles[i + (int)tileSliderPosition]))
 						{
-							currentSelectedTile = i + (int)tileSliderPosition;
+							Level.currentSelectedTileForPainting = i + (int)tileSliderPosition; 
 						}
 					}
 				GUILayout.EndVertical();

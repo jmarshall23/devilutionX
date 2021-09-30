@@ -17,6 +17,8 @@ public class LevelTile : Editor
 		HandleUtility.AddDefaultControl(0);
 
 		GameObject pickedObject = HandleUtility.PickGameObject(Event.current.mousePosition, true);
+		if (pickedObject == null)
+			return;
 
 		int index = int.Parse(pickedObject.name);
 
@@ -39,7 +41,7 @@ public class LevelTile : Editor
 
 		if(Event.current.type == EventType.MouseDown)
 		{
-			
+			Level.currentLevel.UpdatePaintCell(index); 
 		}
 	}
 }

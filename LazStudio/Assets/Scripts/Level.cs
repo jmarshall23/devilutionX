@@ -5,12 +5,62 @@ using UnityEditor;
 
 public class Level : MonoBehaviour
 {
+	public static Level currentLevel = null;
 	public static DataTable table;
 	public static Tileset tileset;
 	private List<GameObject> cells = new List<GameObject>();
+	private List<int> cellTileIds = new List<int>();
+	private List<Vector2> cellScreenXY = new List<Vector2>();
 
 	const int tileWidthHalf = 64;
 	const int tileHeightHalf = 32;
+
+	public static int currentSelectedTileForPainting = -1;
+
+	public void UpdatePaintCell(int cell)
+	{
+		if (currentSelectedTileForPainting == -1)
+			return;
+
+		cells[cell].GetComponent<MeshRenderer>().material = tileset.materials[currentSelectedTileForPainting];
+
+		MeshFilter mf = cells[cell].GetComponent<MeshFilter>();
+
+		float width = 0;
+		float height = 0;
+		float prevWidth = 0;
+		float prevHeight = 0;
+
+		if (cellTileIds[cell] == -1)
+		{
+			prevWidth = tileset.transTile.width;
+			prevHeight = tileset.transTile.height;
+		}
+		else
+		{
+			prevWidth = tileset.tiles[cellTileIds[cell]].width;
+			prevHeight = tileset.tiles[cellTileIds[cell]].height;
+		}
+
+		if (currentSelectedTileForPainting == -1)
+		{
+			width = tileset.transTile.width;
+			height = tileset.transTile.height;
+		}
+		else
+		{
+			width = tileset.tiles[currentSelectedTileForPainting].width;
+			height = tileset.tiles[currentSelectedTileForPainting].height;
+		}
+
+		mf.mesh = CreatePlane((int)height, (int)width);
+		mf.sharedMesh = mf.mesh;
+
+		transform.rotation = Quaternion.Euler(0, 0, 0);
+		cells[cell].transform.position = new Vector3(cellScreenXY[cell].x + height, cellScreenXY[cell].y, 0);
+		transform.rotation = Quaternion.Euler(0, -180, 90);
+		cellTileIds[cell] = currentSelectedTileForPainting;
+	}
 
 	Vector2 IsometricToScreen(float isoX, float isoY, float tileWidthHalf, float tileHeightHalf)
 	{
@@ -37,6 +87,7 @@ public class Level : MonoBehaviour
 
 	public void Init(string filename, Tileset tileset)
 	{
+		currentLevel = this;
 		table = new DataTable(filename); 
 		Level.tileset = tileset;
 
@@ -71,21 +122,23 @@ public class Level : MonoBehaviour
 			if (tilid == -1)
 			{
 				plane.GetComponent<Renderer>().material = tileset.transMaterial;
+				cellTileIds.Add(-1);
 			}
 			else
 			{
 				plane.GetComponent<Renderer>().material = tileset.materials[tilid];
+				cellTileIds.Add(tilid);
 			}
 
-			
+
 
 			Vector2 ScreenXY = IsometricToScreen(mapwidth - y, x, 64, 128);
 
 			plane.transform.position = new Vector3(ScreenXY.x + height, ScreenXY.y, 0);
 			//plane.transform.rotation = Quaternion.Euler(90, 0, -180);
-			plane.transform.localScale = new Vector3(1, 1, 1);
+			//plane.transform.localScale = new Vector3(1, 1, 1);
 
-
+			cellScreenXY.Add(ScreenXY);
 			cells.Add(plane);
 		}
 
