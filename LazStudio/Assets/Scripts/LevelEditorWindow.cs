@@ -25,10 +25,6 @@ public class LevelEditorWindow : EditorWindow
 	// Start is called before the first frame update
 	void OnGUI()
 	{
-		GameObject lastGameObject = GameObject.Find("__dungeon__");
-		if (lastGameObject != null)
-			GameObject.Destroy(lastGameObject);
-
 		GUILayout.BeginArea(new Rect(10, 10, 300, 130));
 			GUILayout.Label("Diablo Base Folder");
 			path = GUILayout.TextField("C:\\Projects\\Diablo\\build\\base");
@@ -64,6 +60,10 @@ public class LevelEditorWindow : EditorWindow
 				}
 				if(GUILayout.Button("Load Map"))
 				{
+					GameObject lastGameObject = GameObject.Find("__dungeon__");
+					if (lastGameObject != null)
+						GameObject.DestroyImmediate(lastGameObject);
+
 					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", path, "duntext");
 					if(fileName != null)
 					{
