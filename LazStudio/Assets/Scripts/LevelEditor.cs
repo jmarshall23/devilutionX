@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(GameObject))]
-public class LevelTile : Editor
+public class LevelEditor : Editor
 {
 	// Start is called before the first frame update
 	void OnEnable()

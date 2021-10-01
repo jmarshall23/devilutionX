@@ -67,7 +67,7 @@ public class LevelEditorWindow : EditorWindow
 					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", path, "duntext");
 					if(fileName != null)
 					{
-						level = new GameObject("__dungeon__", typeof(LevelTile));
+						level = new GameObject("__dungeon__", typeof(LevelEditor));
 						lvl = level.AddComponent<Level>();
 						lvl.Init(fileName, tilesets[tileSetSelected]);
 
