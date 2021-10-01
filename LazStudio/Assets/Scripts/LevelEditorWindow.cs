@@ -11,6 +11,8 @@ public class LevelEditorWindow : EditorWindow
 	GameObject level = null;
 	Level lvl = null;
 
+	public static string path;
+
 	public static Tileset currentTileset = null;
 
     [MenuItem("LazStudio/Level Editor")]
@@ -29,7 +31,7 @@ public class LevelEditorWindow : EditorWindow
 
 		GUILayout.BeginArea(new Rect(10, 10, 300, 130));
 			GUILayout.Label("Diablo Base Folder");
-			string path = GUILayout.TextField("C:\\Projects\\Diablo\\build\\base");
+			path = GUILayout.TextField("C:\\Projects\\Diablo\\build\\base");
 			if(tilesets == null)
 			{
 				if(GUILayout.Button("Load Tilesets"))
@@ -56,7 +58,10 @@ public class LevelEditorWindow : EditorWindow
 				tileSetSelected = GUILayout.SelectionGrid(tileSetSelected, levelList.ToArray(), levelList.Count);
 				tilesets[tileSetSelected].LoadTiles();
 				currentTileset = tilesets[tileSetSelected];
-				GUILayout.Button("New Map");
+				if(GUILayout.Button("New Map"))
+				{
+					NewMapWindow.ShowModal();
+				}
 				if(GUILayout.Button("Load Map"))
 				{
 					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", path, "duntext");
