@@ -39,7 +39,7 @@ public class Level : MonoBehaviour
 		if (currentSelectedTileForPainting == -1)
 			return;
 
-		cells[cell].GetComponent<MeshRenderer>().material = tileset.materials[currentSelectedTileForPainting];
+		cells[cell].GetComponent<MeshRenderer>().material.mainTexture = tileset.tiles[currentSelectedTileForPainting];
 
 		MeshFilter mf = cells[cell].GetComponent<MeshFilter>();
 
@@ -138,12 +138,17 @@ public class Level : MonoBehaviour
 
 			if (tilid == -1)
 			{
-				plane.GetComponent<Renderer>().material = tileset.transMaterial;
+				Material material = new Material(Shader.Find("Unlit/UnlitAlpha"));
+				material.mainTexture = (Texture)tileset.transTile;
 				cellTileIds.Add(-1);
 			}
 			else
 			{
-				plane.GetComponent<Renderer>().material = tileset.materials[tilid];
+
+				Material material = new Material(Shader.Find("Unlit/UnlitAlpha"));
+				material.mainTexture = (Texture)tileset.tiles[tilid];
+
+				plane.GetComponent<Renderer>().material = material;
 				cellTileIds.Add(tilid);
 			}
 
