@@ -6,6 +6,8 @@ using UnityEngine;
 [CustomEditor(typeof(GameObject))]
 public class LevelEditor : Editor
 {
+	GameObject pickedObject = null;
+
 	// Start is called before the first frame update
 	void OnEnable()
 	{
@@ -16,7 +18,9 @@ public class LevelEditor : Editor
 	{
 		HandleUtility.AddDefaultControl(0);
 
-		GameObject pickedObject = HandleUtility.PickGameObject(Event.current.mousePosition, true);
+		if (Event.current.type == EventType.MouseMove)
+			pickedObject = HandleUtility.PickGameObject(Event.current.mousePosition, true);
+
 		if (pickedObject == null)
 			return;
 
