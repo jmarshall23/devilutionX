@@ -43,5 +43,7 @@ public class LevelEditor : Editor
 		{
 			Level.currentLevel.UpdatePaintCell(index); 
 		}
+
+		Level.currentLevel.UpdateHighlightTile(index);
 	}
 }

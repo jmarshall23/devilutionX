@@ -2,6 +2,7 @@ Shader "Unlit/UnlitAlpha"
 {
     Properties
     {
+		_Color("Color", Color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
@@ -37,6 +38,7 @@ Shader "Unlit/UnlitAlpha"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+			float4 _Color;
 
             v2f vert (appdata v)
             {
@@ -54,7 +56,7 @@ Shader "Unlit/UnlitAlpha"
 			if (col.a == 0)
 				discard;
                
-                return col;
+                return col * float4(_Color.x, _Color.y, _Color.z, 1.0);
             }
             ENDCG
         }

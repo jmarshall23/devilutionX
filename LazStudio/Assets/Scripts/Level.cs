@@ -16,6 +16,8 @@ public class Level : MonoBehaviour
 	const int tileWidthHalf = 64;
 	const int tileHeightHalf = 32;
 
+	private int previousCell = -1;
+
 	public static int currentSelectedTileForPainting = -1;
 
 	public void SaveLevel()
@@ -32,6 +34,18 @@ public class Level : MonoBehaviour
 				writer.WriteLine(x + "," + y + "," + tilid);
 			}
 		}
+	}
+
+	public void UpdateHighlightTile(int cell)
+	{
+		if(previousCell != -1)
+		{
+			cells[previousCell].GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+		}
+
+		cells[cell].GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
+
+		previousCell = cell;
 	}
 
 	public void UpdatePaintCell(int cell)
