@@ -90,8 +90,20 @@ public class Level : MonoBehaviour
 		mf.mesh = CreatePlane((int)height, (int)width);
 		mf.sharedMesh = mf.mesh;
 
+		int mapwidth = table.GetTokenInt("x", table.NumRows - 1);
+		int mapheight = table.GetTokenInt("y", table.NumRows - 1);
+		int x = table.GetTokenInt("x", cell);
+		int y = table.GetTokenInt("y", cell);
+		int tilid = table.GetTokenInt("tilid", cell);
+
+		float depthOffset = ((((float)y / (float)mapwidth)) * 1.1f) + ((float)x / (float)mapheight);
+		if (tilid == -1)
+		{
+			depthOffset = 0;
+		}
+
 		transform.rotation = Quaternion.Euler(0, 0, 0);
-		cells[cell].transform.position = new Vector3(cellScreenXY[cell].x + height, cellScreenXY[cell].y, 0);
+		cells[cell].transform.position = new Vector3(cellScreenXY[cell].x + height, cellScreenXY[cell].y, depthOffset);
 		transform.rotation = Quaternion.Euler(0, -180, 90);
 		cellTileIds[cell] = currentSelectedTileForPainting;
 	}
