@@ -38,6 +38,9 @@ public class Level : MonoBehaviour
 
 	public void UpdateHighlightTile(int cell)
 	{
+		if (previousCell == cell)
+			return;
+
 		if(previousCell != -1)
 		{
 			cells[previousCell].GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
@@ -154,6 +157,7 @@ public class Level : MonoBehaviour
 			{
 				Material material = new Material(Shader.Find("Unlit/UnlitAlpha"));
 				material.mainTexture = (Texture)tileset.transTile;
+				plane.GetComponent<Renderer>().material = material;
 				cellTileIds.Add(-1);
 			}
 			else
