@@ -43,10 +43,10 @@ public class Level : MonoBehaviour
 
 		if(previousCell != -1)
 		{
-			cells[previousCell].GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
+			cells[previousCell].GetComponent<MeshRenderer>().sharedMaterial.SetColor("_Color", Color.white);
 		}
 
-		cells[cell].GetComponent<MeshRenderer>().material.SetColor("_Color", Color.blue);
+		cells[cell].GetComponent<MeshRenderer>().sharedMaterial.SetColor("_Color", Color.blue);
 
 		previousCell = cell;
 	}
