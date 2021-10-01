@@ -4,6 +4,7 @@ Shader "Unlit/UnlitAlpha"
     {
 		_Color("Color", Color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
+		_TileInfo("_TileInfo", Vector) = (0, 0, 0, 0)
     }
     SubShader
     {
@@ -36,27 +37,37 @@ Shader "Unlit/UnlitAlpha"
                 float4 vertex : SV_POSITION;
             };
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
-			float4 _Color;
+            uniform sampler2D _MainTex;
+            uniform float4 _MainTex_ST;
+			uniform float4 _Color;
+			uniform float4 _TileInfo;
 
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+				float4 inputVertex = v.vertex;
+                o.vertex = UnityObjectToClipPos(inputVertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
+
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+			struct fragmentOut {
+				half4 color : COLOR;
+			};
+
+			fragmentOut frag (v2f i) : SV_Target
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-			if (col.a == 0)
-				discard;
-               
-                return col * float4(_Color.x, _Color.y, _Color.z, 1.0);
+				if (col.a == 0)
+					discard;
+
+				fragmentOut fOut;
+
+				fOut.color = col * float4(_Color.x, _Color.y, _Color.z, 1.0);
+				return fOut;
             }
             ENDCG
         }

@@ -126,6 +126,7 @@ public class Level : MonoBehaviour
 		Level.tileset = tileset;
 
 		int mapwidth = table.GetTokenInt("x", table.NumRows - 1);
+		int mapheight = table.GetTokenInt("y", table.NumRows - 1);
 
 		for (int i = 0; i < table.NumRows; i++)
 		{
@@ -153,9 +154,10 @@ public class Level : MonoBehaviour
 			mf.sharedMesh = mf.mesh;
 			plane.transform.SetParent(this.gameObject.transform);
 
+			Material material = null;
 			if (tilid == -1)
 			{
-				Material material = new Material(Shader.Find("Unlit/UnlitAlpha"));
+				material = new Material(Shader.Find("Unlit/UnlitAlpha"));
 				material.mainTexture = (Texture)tileset.transTile;
 				plane.GetComponent<Renderer>().material = material;
 				cellTileIds.Add(-1);
@@ -163,18 +165,22 @@ public class Level : MonoBehaviour
 			else
 			{
 
-				Material material = new Material(Shader.Find("Unlit/UnlitAlpha"));
+				material = new Material(Shader.Find("Unlit/UnlitAlpha"));
 				material.mainTexture = (Texture)tileset.tiles[tilid];
-
 				plane.GetComponent<Renderer>().material = material;
 				cellTileIds.Add(tilid);
 			}
 
-
+			float depthOffset = ((((float)y / (float)mapwidth)) * 1.1f) + ((float)x / (float)mapheight);
+			if (tilid == -1)
+			{
+				depthOffset = 0;
+			}
+		//	material.SetVector("_TileInfo", new Vector4(depthOffset, 0, 0, 0));
 
 			Vector2 ScreenXY = IsometricToScreen(mapwidth - y, x, 64, 128);
 
-			plane.transform.position = new Vector3(ScreenXY.x + height, ScreenXY.y, 0);
+			plane.transform.position = new Vector3(ScreenXY.x + height, ScreenXY.y, depthOffset);
 			//plane.transform.rotation = Quaternion.Euler(90, 0, -180);
 			//plane.transform.localScale = new Vector3(1, 1, 1);
 
