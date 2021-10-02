@@ -45,6 +45,8 @@ bool VR3;
 /** Contains the contents of the single player quest DUN file. */
 std::unique_ptr<uint16_t[]> L5pSetPiece;
 
+std::unique_ptr<uint16_t[]> L1RndSetPieces[DRLG1_NUM_RANDOM_PIECES];
+
 /** Contains shadows for 2x2 blocks of base tile IDs in the Cathedral. */
 const ShadowStruct SPATS[37] = {
 	// clang-format off
@@ -957,11 +959,18 @@ void LoadQuestSetPieces()
 		L5pSetPiece = LoadLevelSetPiece(DUNGEON_BANNER);
 		L5setloadflag = true;
 	}
+
+	L1RndSetPieces[0] = LoadLevelSetPiece(DUNGEON_NEWRND1);
+	L1RndSetPieces[1] = LoadLevelSetPiece(DUNGEON_NEWRND2);
 }
 
 void FreeQuestSetPieces()
 {
 	L5pSetPiece = nullptr;
+
+	for (int i = 0; i < DRLG1_NUM_RANDOM_PIECES; i++) {
+		L1RndSetPieces[i] = nullptr;
+	}
 }
 
 void InitDungeonPieces()
@@ -1705,6 +1714,30 @@ void SetRoom(int rx1, int ry1)
 	}
 }
 
+void SetRandomSetRoom(int setpiece, int rx1, int ry1)
+{
+	int width = SDL_SwapLE16(L1RndSetPieces[setpiece][0]);
+	int height = SDL_SwapLE16(L1RndSetPieces[setpiece][1]);
+
+	setpc_x = rx1;
+	setpc_y = ry1;
+	setpc_w = width;
+	setpc_h = height;
+
+	uint16_t *tileLayer = &L1RndSetPieces[setpiece][2];
+
+	for (int j = 0; j < height; j++) {
+		for (int i = 0; i < width; i++) {
+			uint8_t tileId = SDL_SwapLE16(tileLayer[j * width + i]);
+			if (tileId != 0) {
+				dungeon[rx1 + i][ry1 + j] = tileId;
+				L5dflags[rx1 + i][ry1 + j] |= DLRG_PROTECTED;
+			}
+		}
+	}
+}
+
+
 void SetCryptRoom(int rx1, int ry1)
 {
 	int rw = UberRoomPattern[0];
@@ -1950,6 +1983,17 @@ void FillChambers()
 				SetRoom(30, 16);
 				break;
 			}
+		}
+	} else {
+		if (VR1 || VR2 || VR3) {
+			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 2);
+			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 16);
+			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 30);
+		}
+		else {
+			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 2, 16);
+			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 16);
+			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 30, 16);
 		}
 	}
 }
