@@ -30,8 +30,8 @@ public class ObjectEditorWindow : EditorWindow
 
 				GameObject cameraObject = new GameObject("Camera", typeof(Camera));
 				camera = cameraObject.GetComponent<Camera>();
-				camera.transform.position = new Vector3(-0.519999981f, 11.79f, 11.5100002f);
-				camera.transform.rotation = new Quaternion(-0.0192171894f, 0.940588295f, -0.338903844f, -0.00828242023f);
+				camera.transform.position = new Vector3(-0.589999974f, 13.0100002f, 10.29f);
+				camera.transform.rotation = new Quaternion(0f, -0.923879564f, 0.382683426f, 0f);
 				camera.orthographic = true;
 				camera.orthographicSize = 3;
 				//camera.backgroundColor = Color.white;
