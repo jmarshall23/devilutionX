@@ -89,6 +89,7 @@ enum object_graphic_id : int8_t {
 	OFILE_BKSLBRNT,
 	OFILE_MUSHPTCH,
 	OFILE_LZSTAND,
+	OFILE_NUM,
 	OFILE_NULL = -1,
 };
 
@@ -246,8 +247,7 @@ struct ObjDataStruct {
 
 extern const _object_id ObjTypeConv[];
 extern const ObjDataStruct AllObjects[];
-extern const char *const ObjMasterLoadList[];
-extern const char *ObjCryptLoadList[];
-extern const char *ObjHiveLoadList[];
+extern const char *ObjMasterLoadList[OFILE_NUM];
+
 
 } // namespace devilution
