@@ -5,6 +5,9 @@ using UnityEditor;
 
 public class ObjectEditorWindow : EditorWindow
 {
+	// Vector3(-0.0470066965,0,0.407809913)
+	// Rotation: 0 -21.989 0 
+
 	Camera camera = null;
 
 	[MenuItem("LazStudio/Object Editor")]
