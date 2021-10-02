@@ -34,8 +34,8 @@ public class ObjectEditorWindow : EditorWindow
 				camera.transform.rotation = new Quaternion(-0.0192171894f, 0.940588295f, -0.338903844f, -0.00828242023f);
 				camera.orthographic = true;
 				camera.orthographicSize = 3;
-				camera.backgroundColor = Color.white;
-				camera.clearFlags = CameraClearFlags.SolidColor;
+				//camera.backgroundColor = Color.white;
+				camera.clearFlags = CameraClearFlags.Nothing;
 				camera.targetTexture = RenderTexture.GetTemporary(128, 128, 32);
 			}
 
