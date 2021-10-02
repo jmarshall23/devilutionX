@@ -1,7 +1,7 @@
 # Devilution-X Iced Branch
 
 # What is Devilution-X Iced Branch
-	* This is a special fork of the Devilution-X project(https://github.com/diasurgical/devilutionX).
+	* This is a fork of the Devilution-X project(https://github.com/diasurgical/devilutionX).
 	* This fork adds new features like hardware accelerated rendering and new modding support.
 
 # Compiling from Source:
@@ -12,8 +12,9 @@
 	1) Purchase Diablo 1 from GoG.
 	2) Install .net 6.0 core(https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-desktop-6.0.0-rc.1-windows-x64-installer)
 	3) Extract the contents of diabdat.mpq to the mpq_data folder. There are many tools online to help you do this.
-	4) run convertdata.bat - at this point you should see a ton of text go through as it is converting the data.
-	5) finally run x64-release/devilutionx.exe
+	4) Extract the nlevels folder out of hellfire.mpq to the mpq_data folder. There are many tools online to help you do this.
+	5) run convertdata.bat - at this point you should see a ton of text go through as it is converting the data.
+	6) finally run x64-release/devilutionx.exe
 
 # Note from the author:
 	Don't ruin this for the entire community, never ever redistribute the contents of the base folder. 

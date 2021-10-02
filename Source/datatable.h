@@ -98,6 +98,7 @@ extern DataTable *shrineTable;
 extern DataTable *cutsceneTable;
 extern DataTable *invBeltTable;
 extern DataTable *invTable;
+extern DataTable *objMapTable;
 
 void DiabloLoadTables(void);
 

@@ -13,7 +13,7 @@ namespace ConversionTool
 			string dpath = Path.GetDirectoryName(path);
 			dpath = dpath.Replace("mpq_data", "base");
 			//	Directory.CreateDirectory(dpath);
-			return dpath;
+			return dpath.Replace("nlevels", "levels");
 		}
 		public static void BlitImage(byte[] source, int sourceX, int sourceY, int sourceWidth, byte[] dest, int destX, int destY, int destWidth, int destHeight, int width, int height)
 		{

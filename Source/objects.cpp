@@ -4435,10 +4435,10 @@ void InitObjectGFX()
 			ObjFileList[numobjfiles] = static_cast<object_graphic_id>(i);
 			char filestr[32];
 			sprintf(filestr, "Objects\\%s", ObjMasterLoadList[i]);
-			if (currlevel >= 17 && currlevel < 21)
-				sprintf(filestr, "Objects\\%s", ObjHiveLoadList[i]);
-			else if (currlevel >= 21)
-				sprintf(filestr, "Objects\\%s", ObjCryptLoadList[i]);
+			//if (currlevel >= 17 && currlevel < 21)
+			//	sprintf(filestr, "Objects\\%s", ObjHiveLoadList[i]);
+			//else if (currlevel >= 21)
+			//	sprintf(filestr, "Objects\\%s", ObjCryptLoadList[i]);
 			pObjCels[numobjfiles] = StormImage::LoadImageSequence(filestr, false, true);
 //			LoadFileInMem(filestr);
 			numobjfiles++;

@@ -384,6 +384,8 @@ namespace ConversionTool
 			ExportLevels("levels/l2data");
 			ExportLevels("levels/l3data");
 			ExportLevels("levels/l4data");
+			ExportLevels("nlevels/l5data");
+			ExportLevels("nlevels/l6data");
 		}
     }
 }
