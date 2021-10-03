@@ -90,7 +90,7 @@ bool gbBarbarian;
 bool gbQuietMode = false;
 clicktype sgbMouseDown;
 uint16_t gnTickDelay = 50;
-char gszProductName[64] = "DevilutionX(IcedBranch) " __DATE__ " " __TIME__;
+char gszProductName[64] = "Hellfire " __DATE__ " " __TIME__;
 Keymapper keymapper;
 std::array<Keymapper::ActionIndex, 4> quickSpellActionIndexes;
 

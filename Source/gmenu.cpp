@@ -182,10 +182,7 @@ void gmenu_init_menu()
 	gmenu_current_option = nullptr;
 	sgCurrentMenuIdx = 0;
 	mouseNavigation = false;
-	if (gbIsHellfire)
-		sgpLogo = StormImage::LoadImageSequence("Data\\hf_logo3", false, false);
-	else
-		sgpLogo = StormImage::LoadImageSequence("Data\\Diabsmal", false, false);
+	sgpLogo = StormImage::LoadImageSequence("Data\\hf_logo.png", false, false);
 	PentSpin_cel = StormImage::LoadImageSequence("Data\\PentSpin", false, false);
 	option_cel = StormImage::LoadImageSequence("Data\\option", false, false);
 	optbar_cel = StormImage::LoadImageSequence("Data\\optbar", false, false);

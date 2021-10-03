@@ -499,11 +499,7 @@ void LoadHeros()
 
 void LoadUiGFX()
 {
-	if (gbIsHellfire) {
-		LoadMaskedArt("ui_art\\hf_logo2.png", &ArtLogos[LOGO_MED], 16);
-	} else {
-		LoadMaskedArt("ui_art\\smlogo.png", &ArtLogos[LOGO_MED], 15);
-	}
+	LoadMaskedArt("ui_art\\hf_logo2.png", &ArtLogos[LOGO_MED], 16);
 	LoadMaskedArt("ui_art\\focus16.png", &ArtFocus[FOCUS_SMALL], 8);
 	LoadMaskedArt("ui_art\\focus.png", &ArtFocus[FOCUS_MED], 8);
 	LoadMaskedArt("ui_art\\focus42.png", &ArtFocus[FOCUS_BIG], 8);

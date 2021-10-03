@@ -117,7 +117,7 @@ void init_archives()
 
 void init_create_window()
 {
-	if (!SpawnWindow(PROJECT_NAME))
+	if (!SpawnWindow("Hellfire"))
 		app_fatal("%s", _("Unable to create main window"));
 	dx_init();
 	gbActive = true;
