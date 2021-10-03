@@ -28,13 +28,13 @@ void LoadArtFonts()
 	FontTables[AFT_MED] = LoadFileInMem<uint8_t>("ui_art\\font24.bin");
 	FontTables[AFT_BIG] = LoadFileInMem<uint8_t>("ui_art\\font30.bin");
 	FontTables[AFT_HUGE] = LoadFileInMem<uint8_t>("ui_art\\font42.bin");
-	LoadArtFont("ui_art\\font16s.tga", AFT_SMALL, AFC_SILVER);
-	LoadArtFont("ui_art\\font16g.tga", AFT_SMALL, AFC_GOLD);
-	LoadArtFont("ui_art\\font24s.tga", AFT_MED, AFC_SILVER);
-	LoadArtFont("ui_art\\font24g.tga", AFT_MED, AFC_GOLD);
-	LoadArtFont("ui_art\\font30s.tga", AFT_BIG, AFC_SILVER);
-	LoadArtFont("ui_art\\font30g.tga", AFT_BIG, AFC_GOLD);
-	LoadArtFont("ui_art\\font42g.tga", AFT_HUGE, AFC_GOLD);
+	LoadArtFont("ui_art\\font16s.png", AFT_SMALL, AFC_SILVER);
+	LoadArtFont("ui_art\\font16g.png", AFT_SMALL, AFC_GOLD);
+	LoadArtFont("ui_art\\font24s.png", AFT_MED, AFC_SILVER);
+	LoadArtFont("ui_art\\font24g.png", AFT_MED, AFC_GOLD);
+	LoadArtFont("ui_art\\font30s.png", AFT_BIG, AFC_SILVER);
+	LoadArtFont("ui_art\\font30g.png", AFT_BIG, AFC_GOLD);
+	LoadArtFont("ui_art\\font42g.png", AFT_HUGE, AFC_GOLD);
 }
 
 void UnloadArtFonts()

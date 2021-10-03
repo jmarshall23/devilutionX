@@ -29,7 +29,7 @@ void SelconnSelect(int value);
 
 void SelconnLoad()
 {
-	LoadBackgroundArt("ui_art\\selconn.tga");
+	LoadBackgroundArt("ui_art\\selconn.png");
 
 #ifndef NONET
 #ifndef DISABLE_ZERO_TIER

@@ -139,11 +139,11 @@ namespace ConversionTool
 
 					if(fileNameOverride != "")
 					{
-						ExportTileset.WriteTGA(outputPath + "/" + fileNameOverride + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
+						ExportTileset.WriteImage(outputPath + "/" + fileNameOverride + i + ".png", fixedBuffer, frame.Width, frame.Height, true);
 					}
 					else
 					{
-						ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + "_" + i + ".tga", fixedBuffer, frame.Width, frame.Height, true);
+						ExportTileset.WriteImage(outputPath + "/" + fileNameWithoutExtension + "_" + i + ".png", fixedBuffer, frame.Width, frame.Height, true);
 					}
 				}
 			}
@@ -163,7 +163,7 @@ namespace ConversionTool
 					ExportTileset.BlitImage2(fixedBuffer, 0, 0, frame.Width, tempBuffer, (i * baseFrame.Width), 0, destWidth, baseFrame.Height, frame.Width, frame.Height, true);
 				}
 
-				ExportTileset.WriteTGA(outputPath + "/" + fileNameWithoutExtension + ".tga", tempBuffer, destWidth, baseFrame.Height, true);
+				ExportTileset.WriteImage(outputPath + "/" + fileNameWithoutExtension + ".png", tempBuffer, destWidth, baseFrame.Height, true);
 
 				string description = "" + cel.NumFrames;
 				File.WriteAllText(outputPath + "/" + fileNameWithoutExtension + ".txt", description);
@@ -265,8 +265,8 @@ namespace ConversionTool
 
 					Directory.CreateDirectory("base\\" + Path.GetDirectoryName(f));
 					string filename = "base\\" + f;
-					filename = Path.ChangeExtension(filename, ".tga");
-					DiabloPCX.WriteConvertedPCX2TGA(filename, data, width, height);
+					filename = Path.ChangeExtension(filename, ".png");
+					DiabloPNG.SavePNG(filename, data, ExportTileset.currentColorPalette, width, height, 0, 255, 0, false);
 				}
 			}
 

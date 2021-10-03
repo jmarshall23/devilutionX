@@ -101,21 +101,14 @@ namespace ConversionTool
 			currentColorPalette = File.ReadAllBytes(filename);
 		}
 
-		public static void WriteTGA(string filename, byte[] data, int width, int height, bool flipVertical)
+		public static void WriteImage(string filename, byte[] data, int width, int height, bool flipVertical)
 		{
 			byte[] buffer;
 			int i, d;
-			int bufferSize = (width * height * 4) + 18;
-			int imgStart = 18;
+			int bufferSize = (width * height * 4);
+			int imgStart = 0;
 
 			buffer = new byte[bufferSize];
-			buffer[2] = 2; // uncompressed type
-			buffer[12] = (byte)(width & 255);
-			buffer[13] = (byte)(width >> 8);
-			buffer[14] = (byte)(height & 255);
-			buffer[15] = (byte)(height >> 8);
-			buffer[16] = 32; // pixel size
-			buffer[17] = (byte)(1 << 5); // flip bit, for normal top to bottom raster order
 
 			if (!flipVertical)
 			{
@@ -162,8 +155,7 @@ namespace ConversionTool
 				}
 			}
 
-
-			File.WriteAllBytes(filename, buffer);
+			DiabloPNG.SavePNG(filename, buffer, width, height);
 		}
 
 		public static int FindStartY(byte[] buffer, int width, int height)
@@ -208,7 +200,7 @@ namespace ConversionTool
 			return buffer;
 		}
 
-		public static bool ExportFixedTarga(string filename, byte[] buffer, int width, int height)
+		public static bool ExportFixedImage(string filename, byte[] buffer, int width, int height)
 		{
 			int startY = FindStartY(buffer, width, height);
 
@@ -220,7 +212,7 @@ namespace ConversionTool
 
 			BlitImage2(buffer, 0, startY, width, copyBuffer, 0, 0, width, newHeight, width, newHeight);
 
-			WriteTGA(filename, copyBuffer, width, newHeight, false);
+			WriteImage(filename, copyBuffer, width, newHeight, false);
 
 			return true;
 		}
@@ -306,7 +298,7 @@ namespace ConversionTool
 					}
 				}
 
-				ExportFixedTarga(tilePath + "tile" + i + ".tga", buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
+				ExportFixedImage(tilePath + "tile" + i + ".png", buffer, til.getTilePixelWidth(), til.getTilePixelHeight());
 			}
 		}
 	}

@@ -12,7 +12,7 @@ public class Tileset
 		tileSetPath = path + "\\tiles\\";
 		tileSetFilename = Path.GetFileName(path);
 
-		transTile = TGALoader.LoadTGA(path + "../../../../mod/levels/trans.tga");
+		transTile = TGALoader.LoadPNG(path + "../../../../mod/levels/trans.png");
 	}
 
 
@@ -21,7 +21,7 @@ public class Tileset
 		if (tiles.Count != 0)
 			return;
 
-		string[] files = Directory.GetFiles(tileSetPath, "*.tga");
+		string[] files = Directory.GetFiles(tileSetPath, "*.png");
 		Array.Sort(files, new AlphanumComparatorFast());
 
 		int currentFile = 0;
@@ -29,7 +29,7 @@ public class Tileset
 		{
 			EditorUtility.DisplayProgressBar("Loading tileset " + tileSetFilename, file, currentFile / files.Length);
 
-			Texture2D tex = TGALoader.LoadTGA(new MemoryStream(File.ReadAllBytes(file)));
+			Texture2D tex = TGALoader.LoadPNG(file);
 
 			tiles.Add(tex);
 

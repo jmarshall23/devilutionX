@@ -231,7 +231,7 @@ bool IsDifficultyAllowed(int value)
 	if (value == 2)
 		UiSelOkDialog(title, _("Your character must reach level 30 before you can enter a multiplayer game of Hell difficulty."), false);
 
-	LoadBackgroundArt("ui_art\\selgame.tga");
+	LoadBackgroundArt("ui_art\\selgame.png");
 
 	return false;
 }
@@ -415,7 +415,7 @@ static bool IsGameCompatible(GameData *data)
 		UiSelOkDialog(title, msg, false);
 	}
 
-	LoadBackgroundArt("ui_art\\selgame.tga");
+	LoadBackgroundArt("ui_art\\selgame.png");
 
 	return false;
 }
@@ -435,7 +435,7 @@ void selgame_Password_Select(int /*value*/)
 		} else {
 			selgame_Free();
 			UiSelOkDialog(_("Multi Player Game"), SDL_GetError(), false);
-			LoadBackgroundArt("ui_art\\selgame.tga");
+			LoadBackgroundArt("ui_art\\selgame.png");
 			selgame_Password_Init(selgame_selectedGame);
 		}
 		return;
@@ -453,7 +453,7 @@ void selgame_Password_Select(int /*value*/)
 	} else {
 		selgame_Free();
 		UiSelOkDialog(_("Multi Player Game"), SDL_GetError(), false);
-		LoadBackgroundArt("ui_art\\selgame.tga");
+		LoadBackgroundArt("ui_art\\selgame.png");
 		selgame_Password_Init(0);
 	}
 }
@@ -470,7 +470,7 @@ bool UiSelectGame(GameData *gameData, int *playerId)
 {
 	gdwPlayerId = playerId;
 	m_game_data = gameData;
-	LoadBackgroundArt("ui_art\\selgame.tga");
+	LoadBackgroundArt("ui_art\\selgame.png");
 	selgame_GameSelection_Init();
 
 	selgame_endMenu = false;

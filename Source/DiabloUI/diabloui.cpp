@@ -480,7 +480,7 @@ inline SDL_Rect MakeRect(int x, int y, int w, int h)
 
 void LoadHeros()
 {
-	LoadArt("ui_art\\heros.tga", &ArtHero);
+	LoadArt("ui_art\\heros.png", &ArtHero);
 
 	const int portraitHeight = 76;
 	int portraitOrder[enum_size<HeroClass>::value + 1] = { 0, 1, 2, 2, 1, 0, 3 };
@@ -500,14 +500,14 @@ void LoadHeros()
 void LoadUiGFX()
 {
 	if (gbIsHellfire) {
-		LoadMaskedArt("ui_art\\hf_logo2.tga", &ArtLogos[LOGO_MED], 16);
+		LoadMaskedArt("ui_art\\hf_logo2.png", &ArtLogos[LOGO_MED], 16);
 	} else {
-		LoadMaskedArt("ui_art\\smlogo.tga", &ArtLogos[LOGO_MED], 15);
+		LoadMaskedArt("ui_art\\smlogo.png", &ArtLogos[LOGO_MED], 15);
 	}
-	LoadMaskedArt("ui_art\\focus16.tga", &ArtFocus[FOCUS_SMALL], 8);
-	LoadMaskedArt("ui_art\\focus.tga", &ArtFocus[FOCUS_MED], 8);
-	LoadMaskedArt("ui_art\\focus42.tga", &ArtFocus[FOCUS_BIG], 8);
-	LoadMaskedArt("ui_art\\cursor.tga", &ArtCursor, 1, 0);
+	LoadMaskedArt("ui_art\\focus16.png", &ArtFocus[FOCUS_SMALL], 8);
+	LoadMaskedArt("ui_art\\focus.png", &ArtFocus[FOCUS_MED], 8);
+	LoadMaskedArt("ui_art\\focus42.png", &ArtFocus[FOCUS_BIG], 8);
+	LoadMaskedArt("ui_art\\cursor.png", &ArtCursor, 1, 0);
 
 	LoadHeros();
 }

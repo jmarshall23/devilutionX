@@ -4,15 +4,6 @@ using UnityEngine;
 
 public static class TGALoader
 {
-
-	public static Texture2D LoadTGA(string fileName)
-	{
-		using (var imageFile = File.OpenRead(fileName))
-		{
-			return LoadTGA(imageFile);
-		}
-	}
-
 	private static Color32[] FastFlipHorizontalBuffer(Color32[] data, int width, int height)
 	{
 		Color32[] buffer = new Color32[data.Length];
@@ -27,58 +18,11 @@ public static class TGALoader
 		return buffer;
 	}
 
-	public static Texture2D LoadTGA(Stream TGAStream)
+	public static Texture2D LoadPNG(string filename)
 	{
-
-		using (BinaryReader r = new BinaryReader(TGAStream))
-		{
-			// Skip some header info we don't care about.
-			// Even if we did care, we have to move the stream seek point to the beginning,
-			// as the previous method in the workflow left it at the end.
-			r.BaseStream.Seek(12, SeekOrigin.Begin);
-
-			short width = r.ReadInt16();
-			short height = r.ReadInt16();
-			int bitDepth = r.ReadByte();
-
-			// Skip a byte of header information we don't care about.
-			r.BaseStream.Seek(1, SeekOrigin.Current);
-
-			Texture2D tex = new Texture2D(width, height);
-			Color32[] pulledColors = new Color32[width * height];
-
-			if (bitDepth == 32)
-			{
-				for (int i = 0; i < width * height; i++)
-				{
-					byte red = r.ReadByte();
-					byte green = r.ReadByte();
-					byte blue = r.ReadByte();
-					byte alpha = r.ReadByte();
-
-					pulledColors[width * height - 1 - i] = new Color32(blue, green, red, alpha);
-				}
-			}
-			else if (bitDepth == 24)
-			{
-				for (int i = 0; i < width * height; i++)
-				{
-					byte red = r.ReadByte();
-					byte green = r.ReadByte();
-					byte blue = r.ReadByte();
-
-					pulledColors[width * height - 1 - i] = new Color32(blue, green, red, 1);
-				}
-			}
-			else
-			{
-				throw new Exception("TGA texture had non 32/24 bit depth.");
-			}
-
-			tex.SetPixels32(FastFlipHorizontalBuffer(pulledColors, width, height));
-			tex.Apply();
-			return tex;
-
-		}
+		Texture2D tex = new Texture2D(2, 2);
+		tex.LoadImage(File.ReadAllBytes(filename));
+		tex.filterMode = FilterMode.Point;
+		return tex;
 	}
 }

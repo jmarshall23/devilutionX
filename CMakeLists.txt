@@ -253,6 +253,9 @@ add_library(PKWare STATIC
   3rdParty/PKWare/implode.cpp)
 target_include_directories(PKWare PUBLIC 3rdParty/PKWare)
 
+target_include_directories(PKWare PUBLIC 3rdParty/png)
+target_include_directories(PKWare PUBLIC 3rdParty/zlib)
+
 set(libdevilutionx_SRCS
   rhi/glew/glew.c
   rhi/imgui/imgui.cpp
@@ -264,6 +267,59 @@ set(libdevilutionx_SRCS
   rhi/gl_framebuffer.cpp
   rhi/gl_render.cpp
   rhi/image.cpp
+  rhi/image_png.cpp
+
+  
+	./3rdparty/zlib/adler32.c
+	./3rdparty/zlib/compress.c
+	./3rdparty/zlib/crc32.c
+	./3rdparty/zlib/deflate.c
+	./3rdparty/zlib/gzclose.c
+	./3rdparty/zlib/gzlib.c
+	./3rdparty/zlib/gzread.c
+	./3rdparty/zlib/gzwrite.c
+	./3rdparty/zlib/infback.c
+	./3rdparty/zlib/inffast.c
+	./3rdparty/zlib/inflate.c
+	./3rdparty/zlib/inftrees.c
+	./3rdparty/zlib/trees.c
+	./3rdparty/zlib/uncompr.c
+	./3rdparty/zlib/zutil.c
+	./3rdparty/zlib/crc32.h
+	./3rdparty/zlib/deflate.h	
+	./3rdparty/zlib/gzguts.h
+	./3rdparty/zlib/inffast.h
+	./3rdparty/zlib/inffixed.h
+	./3rdparty/zlib/inflate.h
+	./3rdparty/zlib/inftrees.h
+	./3rdparty/zlib/trees.h
+	./3rdparty/zlib/zconf.h
+	./3rdparty/zlib/zconf.h.in
+	./3rdparty/zlib/zlib.h
+	./3rdparty/zlib/zutil.h
+	./3rdparty/zlib/minizip/ioapi.h
+	./3rdparty/zlib/minizip/unzip.h
+	./3rdparty/zlib/minizip/zip.h
+
+	./3rdparty/png/png.c
+	./3rdparty/png/pngerror.c
+	./3rdparty/png/pnggccrd.c
+	./3rdparty/png/pngget.c
+	./3rdparty/png/pngmem.c
+	./3rdparty/png/pngpread.c
+	./3rdparty/png/pngread.c
+	./3rdparty/png/pngrio.c
+	./3rdparty/png/pngrtran.c
+	./3rdparty/png/pngrutil.c
+	./3rdparty/png/pngset.c
+	./3rdparty/png/pngtrans.c
+	./3rdparty/png/pngvcrd.c
+	./3rdparty/png/pngwio.c
+	./3rdparty/png/pngwrite.c
+	./3rdparty/png/pngwtran.c
+	./3rdparty/png/pngwutil.c
+	./3rdparty/png/png.h
+	./3rdparty/png/pngconf.h
 
   Source/appfat.cpp
   Source/automap.cpp
