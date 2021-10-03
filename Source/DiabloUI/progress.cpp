@@ -30,10 +30,10 @@ void DialogActionCancel()
 
 void ProgressLoad(const char *msg)
 {
-	LoadBackgroundArt("ui_art\\black.tga");
-	LoadArt("ui_art\\spopup.tga", &ArtPopupSm);
-	LoadArt("ui_art\\prog_bg.tga", &ArtProgBG);
-	LoadArt("ui_art\\prog_fil.tga", &ProgFil);
+	LoadBackgroundArt("ui_art\\black.png");
+	LoadArt("ui_art\\spopup.png", &ArtPopupSm);
+	LoadArt("ui_art\\prog_bg.png", &ArtProgBG);
+	LoadArt("ui_art\\prog_fil.png", &ProgFil);
 	LoadSmlButtonArt();
 	LoadTtfFont();
 

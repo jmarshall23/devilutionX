@@ -110,7 +110,7 @@ void init_archives()
 	}
 
 	HANDLE fh = nullptr;
-	if (!SFileOpenFile("ui_art\\title.tga", &fh))
+	if (!SFileOpenFile("ui_art\\title.png", &fh))
 		InsertCDDlg();
 	SFileCloseFileThreadSafe(fh);
 }

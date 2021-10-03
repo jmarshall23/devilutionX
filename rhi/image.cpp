@@ -9,6 +9,8 @@
 #include "gl_render.h"
 #include "../source/datatable.h"
 
+void R_LoadPNG(unsigned char* fbuffer, int fileSize, unsigned char** pic, int* width, int* height);
+
 namespace devilution
 {
 	void ParseAutomapData(const char* fileName);
@@ -303,18 +305,16 @@ namespace devilution
 		StormImage* image = new StormImage();
 		image->name = path;
 
-		if (!isAtlas && !isTiles && strstr(path, ".tga"))
+		if (!isAtlas && !isTiles && strstr(path, ".png"))
 		{
 			char framePath[512];
 			ImageFrame_t frame;
 
-			std::unique_ptr<byte[]> data = LoadFileInMem(path);
+			size_t fsize;
+			std::unique_ptr<byte[]> data = LoadFileInMem(path, &fsize);
 
-			frame.width = *(short*)((byte*)&data.get()[12]);
-			frame.height = *(short*)((byte*)&data.get()[14]);
-			frame.buffer = new byte[frame.width * frame.height * 4];
 
-			memcpy(frame.buffer, &data[18], frame.width * frame.height * 4);
+			R_LoadPNG((unsigned char *)data.get(), fsize, (unsigned char**)&frame.buffer, &frame.width, &frame.height);
 
 			image->frames.push_back(frame);
 		}
@@ -323,23 +323,18 @@ namespace devilution
 			char atlasPath[512];
 			char descripPath[512];
 
-			sprintf(atlasPath, "%s.tga", path);
+			sprintf(atlasPath, "%s.png", path);
 			sprintf(descripPath, "%s.txt", path);
 
-			std::unique_ptr<byte[]> descripData = LoadFileInMem(descripPath);
+			size_t fsize;
+			std::unique_ptr<byte[]> descripData = LoadFileInMem(descripPath, &fsize);
 
 			int numFrames = atoi((const char *)descripData.get());
 
 			std::unique_ptr<byte[]> data = LoadFileInMem(atlasPath);
 
 			ImageFrame_t atlasImage;
-			atlasImage.width = *(short*)((byte*)&data.get()[12]);
-			atlasImage.height = *(short*)((byte*)&data.get()[14]);
-			atlasImage.buffer = new byte[atlasImage.width * atlasImage.height * 4];
-
-
-			byte* sourceData = data.get();
-			memcpy(atlasImage.buffer, &data[18], atlasImage.width * atlasImage.height * 4);
+			R_LoadPNG((unsigned char*)data.get(), fsize, (unsigned char**)&atlasImage.buffer, &atlasImage.width, &atlasImage.height);
 
 			image->CreateImagesFromAtlas(atlasImage, numFrames);
 
@@ -365,11 +360,11 @@ namespace devilution
 
 				if (specialName != nullptr)
 				{
-					sprintf(framePath, "%s\\special%d.tga", path, numTileFiles);
+					sprintf(framePath, "%s\\special%d.png", path, numTileFiles);
 				}
 				else
 				{
-					sprintf(framePath, "%s\\tiles\\tile%d.tga", path, numTileFiles);
+					sprintf(framePath, "%s\\tiles\\tile%d.png", path, numTileFiles);
 				}
 
 				HANDLE file;
@@ -401,13 +396,9 @@ namespace devilution
 				}
 
 				// Load in the map data.
-				std::unique_ptr<byte[]> data = LoadFileInMem(framePath);
-
-				frame.width = *(short*)((byte*)&data.get()[12]);
-				frame.height = *(short*)((byte*)&data.get()[14]);
-				frame.buffer = new byte[frame.width * frame.height * 4];
-
-				memcpy(frame.buffer, &data[18], frame.width * frame.height * 4);
+				size_t fsize;
+				std::unique_ptr<byte[]> data = LoadFileInMem(framePath, &fsize);
+				R_LoadPNG((unsigned char*)data.get(), fsize, (unsigned char**)&frame.buffer, &frame.width, &frame.height);
 
 				if (specialName != nullptr)
 				{
@@ -544,7 +535,7 @@ namespace devilution
 				char framePath[512];
 				ImageFrame_t frame;
 
-				sprintf(framePath, "%s_%d.tga", path, image->frames.size());
+				sprintf(framePath, "%s_%d.png", path, image->frames.size());
 
 				HANDLE file;
 				if (!SFileOpenFile(framePath, &file)) {
@@ -553,33 +544,20 @@ namespace devilution
 
 				SFileCloseFile(file);
 
-				std::unique_ptr<byte[]> data = LoadFileInMem(framePath);
+				size_t fsize;
+				std::unique_ptr<byte[]> data = LoadFileInMem(framePath, &fsize);
 
-				frame.width = *(short*)((byte*)&data.get()[12]);
-				frame.height = *(short*)((byte*)&data.get()[14]);
-				frame.buffer = new byte[frame.width * frame.height * 4];
-
-				memcpy(frame.buffer, &data[18], frame.width * frame.height * 4);
+				R_LoadPNG((unsigned char*)data.get(), fsize, (unsigned char**)&frame.buffer, &frame.width, &frame.height);
 
 				image->frames.push_back(frame);
 			}
 		}
 
-		static byte* temp = new byte[4096 * 8192 * 4];
 
 		// Create the hardware image.
 		for (int i = 0; i < image->frames.size(); i++)
 		{
-
-			for (int d = 0; d < image->frames[i].width * image->frames[i].height; d++)
-			{
-				temp[(d * 4) + 0] = image->frames[i].buffer[(d * 4) + 2];
-				temp[(d * 4) + 1] = image->frames[i].buffer[(d * 4) + 1];
-				temp[(d * 4) + 2] = image->frames[i].buffer[(d * 4) + 0];
-				temp[(d * 4) + 3] = image->frames[i].buffer[(d * 4) + 3];
-			}
-
-			image->frames[i].glHandle = GL_CreateTexture2D((::byte *)temp, image->frames[i].width, image->frames[i].height, 32);
+			image->frames[i].glHandle = GL_CreateTexture2D((::byte *)image->frames[i].buffer, image->frames[i].width, image->frames[i].height, 32);
 
 			delete image->frames[i].buffer;
 			image->frames[i].buffer = nullptr;

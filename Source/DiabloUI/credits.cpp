@@ -233,8 +233,8 @@ bool UiCreditsDialog()
 	Text = CreditLines;
 	textLines = CreditLinesSize;
 
-	LoadArt("ui_art\\creditsw.tga", &ArtBackgroundWidescreen);
-	LoadBackgroundArt("ui_art\\credits.tga");
+	LoadArt("ui_art\\creditsw.png", &ArtBackgroundWidescreen);
+	LoadBackgroundArt("ui_art\\credits.png");
 
 	return TextDialog();
 }
@@ -245,11 +245,11 @@ bool UiSupportDialog()
 	textLines = SupportLinesSize;
 
 	if (gbIsHellfire) {
-		LoadArt("ui_art\\supportw.tga", &ArtBackgroundWidescreen);
-		LoadBackgroundArt("ui_art\\support.tga");
+		LoadArt("ui_art\\supportw.png", &ArtBackgroundWidescreen);
+		LoadBackgroundArt("ui_art\\support.png");
 	} else {
-		LoadArt("ui_art\\creditsw.tga", &ArtBackgroundWidescreen);
-		LoadBackgroundArt("ui_art\\credits.tga");
+		LoadArt("ui_art\\creditsw.png", &ArtBackgroundWidescreen);
+		LoadBackgroundArt("ui_art\\credits.png");
 	}
 
 	return TextDialog();

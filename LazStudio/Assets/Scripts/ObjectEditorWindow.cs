@@ -45,9 +45,9 @@ public class ObjectEditorWindow : EditorWindow
 				{
 					Texture2D texture = DiabloEditorUtility.RTImage(camera);
 
-					byte[] bytes = texture.EncodeToTGA();
+					byte[] bytes = texture.EncodeToPNG();
 
-					string fileName = EditorUtility.SaveFilePanel("Render Object to TGA", LevelEditorWindow.path, "newobject", "tga");
+					string fileName = EditorUtility.SaveFilePanel("Render Object to PNG", LevelEditorWindow.path, "newobject", "png");
 					if(fileName != null && fileName.Length > 0)
 					{
 						File.WriteAllBytes(fileName, bytes);
