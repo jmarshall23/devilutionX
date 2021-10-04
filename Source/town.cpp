@@ -279,32 +279,32 @@ void CreateTown(lvl_entry entry)
 	DRLG_Init_Globals();
 
 	if (entry == ENTRY_MAIN) { // New game
-		ViewX = 75;
-		ViewY = 68;
+		ViewX = GetWarpLocation(WARP_NEW_GAME).x;
+		ViewY = GetWarpLocation(WARP_NEW_GAME).y;
 	} else if (entry == ENTRY_PREV) { // Cathedral
-		ViewX = 25;
-		ViewY = 31;
+		ViewX = GetWarpLocation(WARP_CATHEDRAL_RETURN).x;
+		ViewY = GetWarpLocation(WARP_CATHEDRAL_RETURN).y;
 	} else if (entry == ENTRY_TWARPUP) {
 		if (TWarpFrom == 5) {
-			ViewX = 49;
-			ViewY = 22;
+			ViewX = GetWarpLocation(WARP_CATACOMBS_RETURN).x;
+			ViewY = GetWarpLocation(WARP_CATACOMBS_RETURN).y;
 		}
 		if (TWarpFrom == 9) {
-			ViewX = 18;
-			ViewY = 69;
+			ViewX = GetWarpLocation(WARP_CAVE_RETURN).x;
+			ViewY = GetWarpLocation(WARP_CAVE_RETURN).y;
 		}
 		if (TWarpFrom == 13) {
-			ViewX = 41;
-			ViewY = 81;
+			ViewX = GetWarpLocation(WARP_HELL_RETURN).x;
+			ViewY = GetWarpLocation(WARP_HELL_RETURN).y;
 		}
-		if (TWarpFrom == 21) {
-			ViewX = 36;
-			ViewY = 25;
-		}
-		if (TWarpFrom == 17) {
-			ViewX = 79;
-			ViewY = 62;
-		}
+		//if (TWarpFrom == 21) {
+		//	ViewX = 36;
+		//	ViewY = 25;
+		//}
+		//if (TWarpFrom == 17) {
+		//	ViewX = 79;
+		//	ViewY = 62;
+		//}
 	}
 
 	DrlgTPass3();

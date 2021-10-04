@@ -11,6 +11,21 @@
 
 namespace devilution {
 
+enum WarpTable_t {
+	WARP_NEW_GAME = 0,
+	WARP_CATHEDRAL_DOWN,
+	WARP_CATHEDRAL_RETURN,
+	WARP_CATACOMBS_DOWN,
+	WARP_CATACOMBS_RETURN,
+	WARP_CAVE_DOWN,
+	WARP_CAVE_RETURN,
+	WARP_HELL_DOWN,
+	WARP_HELL_RETURN
+};
+
+Point GetWarpLocation(WarpTable_t warpId);
+
+
 #define MAXTRIGGERS 7
 
 struct TriggerStruct {

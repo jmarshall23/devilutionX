@@ -30,6 +30,7 @@ DataTable *cutsceneTable = nullptr;
 DataTable *invBeltTable = nullptr;
 DataTable *invTable = nullptr;
 DataTable *objMapTable = nullptr;
+DataTable *warpTownTable = nullptr;
 
 namespace devilution {
 	void InitMonsterTable(void);
@@ -74,6 +75,7 @@ void DiabloLoadTables(void)
 	invBeltTable = new DataTable("excel\\invbelt.txt");
 	invTable = new DataTable("excel\\inv.txt");
 	objMapTable = new DataTable("excel\\objmap.txt");
+	warpTownTable = new DataTable("excel\\warptown.txt");
 
 	devilution::InitMonsterTable();
 	devilution::InitSpellDataTable();

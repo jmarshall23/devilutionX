@@ -13,6 +13,8 @@
 #include "init.h"
 #include "utils/language.h"
 
+#include "datatable.h"
+
 namespace devilution {
 
 bool trigflag;
@@ -56,6 +58,14 @@ int L5DownList[] = { 125, 126, 129, 131, 132, 135, 136, 140, 142, -1 };
 int L6TWarpUpList[] = { 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, -1 };
 int L6UpList[] = { 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, -1 };
 int L6DownList[] = { 57, 58, 59, 60, 61, 62, 63, 64, -1 };
+
+Point GetWarpLocation(WarpTable_t warpId)
+{
+	Point p;
+	p.x = warpTownTable->GetInt("x", warpId);
+	p.y = warpTownTable->GetInt("y", warpId);
+	return p;
+}
 
 void InitNoTriggers()
 {
@@ -101,40 +111,40 @@ void InitTownTriggers()
 	numtrigs = 0;
 
 	// Cathedral
-	trigs[numtrigs].position = { 25, 29 };
+	trigs[numtrigs].position = GetWarpLocation(WARP_CATHEDRAL_DOWN);
 	trigs[numtrigs]._tmsg = WM_DIABNEXTLVL;
 	numtrigs++;
 
 	if (IsWarpOpen(DTYPE_CATACOMBS)) {
-		trigs[numtrigs].position = { 49, 21 };
+		trigs[numtrigs].position = GetWarpLocation(WARP_CATACOMBS_DOWN);
 		trigs[numtrigs]._tmsg = WM_DIABTOWNWARP;
 		trigs[numtrigs]._tlvl = 5;
 		numtrigs++;
 	}
 	if (IsWarpOpen(DTYPE_CAVES)) {
-		trigs[numtrigs].position = { 17, 69 };
+		trigs[numtrigs].position = GetWarpLocation(WARP_CAVE_DOWN);
 		trigs[numtrigs]._tmsg = WM_DIABTOWNWARP;
 		trigs[numtrigs]._tlvl = 9;
 		numtrigs++;
 	}
 	if (IsWarpOpen(DTYPE_HELL)) {
-		trigs[numtrigs].position = { 41, 80 };
+		trigs[numtrigs].position = GetWarpLocation(WARP_HELL_DOWN);
 		trigs[numtrigs]._tmsg = WM_DIABTOWNWARP;
 		trigs[numtrigs]._tlvl = 13;
 		numtrigs++;
 	}
-	if (IsWarpOpen(DTYPE_NEST)) {
-		trigs[numtrigs].position = { 80, 62 };
-		trigs[numtrigs]._tmsg = WM_DIABTOWNWARP;
-		trigs[numtrigs]._tlvl = 17;
-		numtrigs++;
-	}
-	if (IsWarpOpen(DTYPE_CRYPT)) {
-		trigs[numtrigs].position = { 36, 24 };
-		trigs[numtrigs]._tmsg = WM_DIABTOWNWARP;
-		trigs[numtrigs]._tlvl = 21;
-		numtrigs++;
-	}
+	//if (IsWarpOpen(DTYPE_NEST)) {
+	//	trigs[numtrigs].position = { 80, 62 };
+	//	trigs[numtrigs]._tmsg = WM_DIABTOWNWARP;
+	//	trigs[numtrigs]._tlvl = 17;
+	//	numtrigs++;
+	//}
+	//if (IsWarpOpen(DTYPE_CRYPT)) {
+	//	trigs[numtrigs].position = { 36, 24 };
+	//	trigs[numtrigs]._tmsg = WM_DIABTOWNWARP;
+	//	trigs[numtrigs]._tlvl = 21;
+	//	numtrigs++;
+	//}
 
 	trigflag = false;
 }
@@ -339,7 +349,7 @@ bool ForceTownTrig()
 			break;
 		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
 			strcpy(infostr, _("Down to dungeon"));
-			cursPosition = { 25, 29 };
+			cursPosition = GetWarpLocation(WARP_CATHEDRAL_DOWN);
 			return true;
 		}
 	}
@@ -350,7 +360,7 @@ bool ForceTownTrig()
 				break;
 			if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
 				strcpy(infostr, _("Down to catacombs"));
-				cursPosition = { 49, 21 };
+				cursPosition = GetWarpLocation(WARP_CATACOMBS_DOWN);
 				return true;
 			}
 		}
@@ -360,7 +370,7 @@ bool ForceTownTrig()
 		for (int i = 1199; i <= 1220; i++) {
 			if (dPiece[cursPosition.x][cursPosition.y] == i) {
 				strcpy(infostr, _("Down to caves"));
-				cursPosition = { 17, 69 };
+				cursPosition = GetWarpLocation(WARP_CAVE_DOWN);
 				return true;
 			}
 		}
@@ -370,35 +380,35 @@ bool ForceTownTrig()
 		for (int i = 1240; i <= 1255; i++) {
 			if (dPiece[cursPosition.x][cursPosition.y] == i) {
 				strcpy(infostr, _("Down to hell"));
-				cursPosition = { 41, 80 };
+				cursPosition = GetWarpLocation(WARP_HELL_DOWN);
 				return true;
 			}
 		}
 	}
 
-	if (IsWarpOpen(DTYPE_NEST)) {
-		for (auto tileId : TownHiveList) {
-			if (tileId == -1)
-				break;
-			if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-				strcpy(infostr, _("Down to Hive"));
-				cursPosition = { 80, 62 };
-				return true;
-			}
-		}
-	}
-
-	if (IsWarpOpen(DTYPE_CRYPT)) {
-		for (auto tileId : TownCryptList) {
-			if (tileId == -1)
-				break;
-			if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
-				strcpy(infostr, _("Down to Crypt"));
-				cursPosition = { 36, 24 };
-				return true;
-			}
-		}
-	}
+	//if (IsWarpOpen(DTYPE_NEST)) {
+	//	for (auto tileId : TownHiveList) {
+	//		if (tileId == -1)
+	//			break;
+	//		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
+	//			strcpy(infostr, _("Down to Hive"));
+	//			cursPosition = { 80, 62 };
+	//			return true;
+	//		}
+	//	}
+	//}
+	//
+	//if (IsWarpOpen(DTYPE_CRYPT)) {
+	//	for (auto tileId : TownCryptList) {
+	//		if (tileId == -1)
+	//			break;
+	//		if (dPiece[cursPosition.x][cursPosition.y] == tileId) {
+	//			strcpy(infostr, _("Down to Crypt"));
+	//			cursPosition = { 36, 24 };
+	//			return true;
+	//		}
+	//	}
+	//}
 
 	return false;
 }

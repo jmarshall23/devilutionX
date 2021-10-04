@@ -99,6 +99,7 @@ extern DataTable *cutsceneTable;
 extern DataTable *invBeltTable;
 extern DataTable *invTable;
 extern DataTable *objMapTable;
+extern DataTable *warpTownTable;
 
 void DiabloLoadTables(void);
 
