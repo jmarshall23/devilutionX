@@ -54,10 +54,18 @@ public class LevelEditorWindow : EditorWindow
 				tileSetSelected = GUILayout.SelectionGrid(tileSetSelected, levelList.ToArray(), levelList.Count);
 				tilesets[tileSetSelected].LoadTiles();
 				currentTileset = tilesets[tileSetSelected];
-				if(GUILayout.Button("New Map"))
-				{
-					NewMapWindow.ShowModal();
-				}
+
+				GUILayout.BeginHorizontal();
+					if(GUILayout.Button("New Map"))
+					{
+						NewMapWindow.ShowModal();
+					}
+
+					if(GUILayout.Button("Shift Map"))
+					{
+						ShiftMapWindow.ShowModal();
+					}
+				GUILayout.EndHorizontal();
 				if(GUILayout.Button("Load Map"))
 				{
 					GameObject lastGameObject = GameObject.Find("__dungeon__");

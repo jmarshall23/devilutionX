@@ -6,17 +6,49 @@ public class DataTable
 {
 	public readonly string fileName;
 
-	class DataRow
+	public class DataRow
 	{
 		public DataRow(string line)
 		{
 			tokens = line.Split(',');
 		}
 
+		public DataRow(string[] lines)
+		{
+			tokens = lines;
+		}
+
 		public string[] tokens;
 	}
 
-	private List<DataRow> rows = new List<DataRow>();
+	public List<DataRow> rows = new List<DataRow>();
+
+	public void WriteTable(string filename)
+	{
+		string text = "";
+
+		foreach(DataRow row in rows)
+		{
+			for(int i = 0; i < row.tokens.Length; i++)
+			{
+				if (i != 0)
+					text += ",";
+
+				text += row.tokens[i];
+			}
+
+			text += "\n";
+		}
+
+		File.WriteAllText(filename, text);
+	}
+
+	public void AddRow(int location, string[] tokens)
+	{
+		DataRow row = new DataRow(tokens);
+
+		rows.Insert(location + 1, row);
+	}
 
 	public DataTable(string filename)
 	{
