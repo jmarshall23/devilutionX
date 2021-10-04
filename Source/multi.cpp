@@ -26,6 +26,8 @@
 #include "utils/language.h"
 #include "utils/stdcompat/cstddef.hpp"
 
+#include "trigs.h"
+
 namespace devilution {
 
 bool gbSomebodyWonGameKludge;
@@ -348,8 +350,8 @@ void SetupLocalPositions()
 	leveltype = DTYPE_TOWN;
 	setlevel = false;
 
-	int x = 75;
-	int y = 68;
+	int x = GetWarpLocation(WARP_NEW_GAME).x;
+	int y = GetWarpLocation(WARP_NEW_GAME).y;
 
 	x += plrxoff[MyPlayerId];
 	y += plryoff[MyPlayerId];
