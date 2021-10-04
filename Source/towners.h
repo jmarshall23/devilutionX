@@ -29,6 +29,7 @@ enum _talker_id : uint8_t {
 	TOWN_WITCH,
 	TOWN_BMAID,
 	TOWN_PEGBOY,
+	TOWN_PRIEST,
 	TOWN_COW,
 	TOWN_FARMER,
 	TOWN_GIRL,

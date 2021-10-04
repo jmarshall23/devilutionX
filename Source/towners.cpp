@@ -191,6 +191,18 @@ void InitBoy(TownerStruct &towner, const TownerInit &initData)
 	towner.name = townerDataTable->GetValue("name", TOWN_PEGBOY);
 }
 
+void InitPriest(TownerStruct &towner, const TownerInit &initData)
+{
+	int numframes = townerDataTable->GetInt("numframes", TOWN_PRIEST);
+	int delay = townerDataTable->GetInt("delay", TOWN_PRIEST);
+
+	towner._tAnimWidth = townerDataTable->GetInt("width", TOWN_PRIEST);
+	towner.animOrder = nullptr;
+	towner.animOrderSize = 0;
+	LoadTownerAnimations(towner, townerDataTable->GetValue("path", TOWN_PRIEST), numframes, initData.dir, delay);
+	towner.name = townerDataTable->GetValue("name", TOWN_PRIEST);
+}
+
 void InitHealer(TownerStruct &towner, const TownerInit &initData)
 {
 	int numframes = townerDataTable->GetInt("numframes", TOWN_HEALER);
@@ -566,6 +578,12 @@ void TalkToBoy(Player & /*player*/, TownerStruct & boy)
 	StartStore(STORE_BOY);
 }
 
+void TalkToPriest(Player & /*player*/, TownerStruct &priest)
+{
+	TownerTalk(priest.greetingSpeech);
+}
+
+
 void TalkToStoryteller(Player &player, TownerStruct & storyteller)
 {
 	auto &betrayerQuest = Quests[Q_BETRAYER];
@@ -843,6 +861,7 @@ const TownerInit TownerInitList[] = {
 	{ TOWN_WITCH,   DIR_S,  InitWitch,     TalkToWitch       },
 	{ TOWN_BMAID,   DIR_S,  InitBarmaid,   TalkToBarmaid     },
 	{ TOWN_PEGBOY,  DIR_S,  InitBoy,       TalkToBoy         },
+	{ TOWN_PRIEST,  DIR_S,  InitPriest,	   TalkToPriest		 },
 	//{ TOWN_COW,     DIR_SW, InitCows,      TalkToCow         },
 	//{ TOWN_COW,     DIR_NW, InitCows,      TalkToCow         },
 	//{ TOWN_COW,     DIR_N,  InitCows,      TalkToCow         },

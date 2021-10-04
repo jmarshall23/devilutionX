@@ -337,3 +337,4 @@ TEXT_RBOOKC,Efficio Obitus Ut Inimicus.,TRUE,PS_ROGUE56
 TEXT_BBOOKA,In Spiritu Sanctum.,TRUE,PS_ROGUE54
 TEXT_BBOOKB,Praedictum Otium.,TRUE,PS_ROGUE55
 TEXT_BBOOKC,Efficio Obitus Ut Inimicus.,TRUE,PS_ROGUE56
+TEXT_PRIEST1,All I can do now is pray for us all...,TRUE,TSFX_PRIEST0

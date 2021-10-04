@@ -8,4 +8,5 @@ TOWN_DRUNK,Farnham the Drunk,Towners\Drunk\TwnDrunk,18,96,3,53,76,TEXT_FARNHAM1
 TOWN_WITCH,Adria the Witch,Towners\TownWmn1\Witch,19,96,6,80,32,TEXT_ADRIA1
 TOWN_BMAID,Gillian the Barmaid,Towners\TownWmn1\WmnN,18,96,6,31,61,TEXT_GILLIAN1
 TOWN_PEGBOY,Wirt the Peg-legged boy,Towners\TownBoy\PegKid1,20,96,6,39,88,TEXT_WIRT1
+TOWN_PRIEST,Tremain the Priest,Towners\Priest\priest8,32,96,6,21,8,TEXT_PRIEST1
 TOWN_COW,Cow,Towners\Animals\Cow,12,128,3,-1,-1,TEXT_NONE

@@ -365,6 +365,7 @@ namespace devilution {
 	    SPEECH_STRING_TYPE(TEXT_BBOOKA)
 	    SPEECH_STRING_TYPE(TEXT_BBOOKB)
 	    SPEECH_STRING_TYPE(TEXT_BBOOKC)
+	    SPEECH_STRING_TYPE(TEXT_PRIEST1)
 	    SPEECH_STRING_TYPE(TEXT_NONE)
 
 		devilution::app_fatal("Invalid text id! %s", str.c_str());
