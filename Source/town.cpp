@@ -165,9 +165,9 @@ void DrlgTPass3()
 		}
 	}
 
-	FillSector("Levels\\TownData\\Sector1s.duntext", 46, 46);
+	FillSector("Levels\\TownData\\Sector1s.duntext", 46, 57);
 	FillSector("Levels\\TownData\\Sector2s.duntext", 46, 0);
-	FillSector("Levels\\TownData\\Sector3s.duntext", 0, 46);
+	FillSector("Levels\\TownData\\Sector3s.duntext", 0, 57);
 	FillSector("Levels\\TownData\\Sector4s.duntext", 0, 0);
 
 	if (!IsWarpOpen(DTYPE_CATACOMBS)) {
