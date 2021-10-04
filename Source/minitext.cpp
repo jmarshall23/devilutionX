@@ -64,13 +64,14 @@ void LoadText(const char *text)
 uint32_t CalculateTextSpeed(int nSFX)
 {
 	const int numLines = TextLines.size();
-
-#ifndef NOSOUND
-	Uint32 sfxFrames = GetSFXLength(nSFX);
-#else
+// jmarshall: broken with OpenAL upgrades, fixme!
+//#ifndef NOSOUND
+//	Uint32 sfxFrames = GetSFXLength(nSFX);
+//#else
 	// Sound is disabled -- estimate length from the number of lines.
 	Uint32 sfxFrames = numLines * 3000;
-#endif
+//#endif
+//  jmarshall end
 	assert(sfxFrames != 0);
 
 	uint32_t textHeight = LineHeight * numLines;

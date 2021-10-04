@@ -213,7 +213,8 @@ namespace ConversionTool
             "Towners\\TownWmn1\\Witch.CEL",
             "Towners\\TownWmn1\\WmnN.CEL",
             "Towners\\TownBoy\\PegKid1.CEL",
-            "Towners\\Animals\\Cow.CEL"
-        };
+            "Towners\\Animals\\Cow.CEL",
+			"towners\\priest\\priest8.cel"
+		};
     }
 }
