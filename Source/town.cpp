@@ -171,15 +171,15 @@ void DrlgTPass3()
 	FillSector("Levels\\TownData\\Sector4s.duntext", 0, 0);
 
 	if (!IsWarpOpen(DTYPE_CATACOMBS)) {
-		FillTile(48, 20, 320);
+		FillTile(48, 32, 320);
 	}
 	if (!IsWarpOpen(DTYPE_CAVES)) {
-		FillTile(16, 68, 332);
-		FillTile(16, 70, 331);
+		FillTile(16, 80, 332);
+		FillTile(16, 82, 331);
 	}
 	if (!IsWarpOpen(DTYPE_HELL)) {
-		for (int x = 36; x < 46; x++) {
-			FillTile(x, 78, GenerateRnd(4) + 1);
+		for (int x = 18; x < 28; x++) {
+			FillTile(x, 18, GenerateRnd(4) + 1);
 		}
 	}
 	if (gbIsHellfire) {
