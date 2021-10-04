@@ -843,12 +843,12 @@ const TownerInit TownerInitList[] = {
 	{ TOWN_WITCH,   DIR_S,  InitWitch,     TalkToWitch       },
 	{ TOWN_BMAID,   DIR_S,  InitBarmaid,   TalkToBarmaid     },
 	{ TOWN_PEGBOY,  DIR_S,  InitBoy,       TalkToBoy         },
-	{ TOWN_COW,     DIR_SW, InitCows,      TalkToCow         },
-	{ TOWN_COW,     DIR_NW, InitCows,      TalkToCow         },
-	{ TOWN_COW,     DIR_N,  InitCows,      TalkToCow         },
-	{ TOWN_COWFARM, DIR_SW, InitCowFarmer, TalkToCowFarmer   },
-	{ TOWN_FARMER,  DIR_S,  InitFarmer,    TalkToFarmer      },
-	{ TOWN_GIRL,    DIR_S,  InitGirl,      TalkToGirl        },
+	//{ TOWN_COW,     DIR_SW, InitCows,      TalkToCow         },
+	//{ TOWN_COW,     DIR_NW, InitCows,      TalkToCow         },
+	//{ TOWN_COW,     DIR_N,  InitCows,      TalkToCow         },
+	//{ TOWN_COWFARM, DIR_SW, InitCowFarmer, TalkToCowFarmer   },
+	//{ TOWN_FARMER,  DIR_S,  InitFarmer,    TalkToFarmer      },
+	//{ TOWN_GIRL,    DIR_S,  InitGirl,      TalkToGirl        },
 	// clang-format on
 };
 
