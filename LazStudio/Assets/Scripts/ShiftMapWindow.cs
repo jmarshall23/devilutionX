@@ -57,7 +57,7 @@ public class ShiftMapWindow : EditorWindow
 
 							int tile = 0;
 
-							for (int y = 0; y < mapHeight; y++)
+							for (int y = 0; y < mapHeight  + 1; y++)
 							{
 								for (int x = 0; x < mapWidth + 1; x++)
 								{
