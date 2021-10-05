@@ -1934,6 +1934,8 @@ void FillChambers()
 			}
 		}
 	}
+
+	int setPieceRoom = -1;
 	if (L5setloadflag) {
 		if (VR1 || VR2 || VR3) {
 			int c = 1;
@@ -1951,6 +1953,8 @@ void FillChambers()
 
 			if (VR1 && VR2 && VR3)
 				c = GenerateRnd(3);
+
+			setPieceRoom = c;
 
 			switch (c) {
 			case 0:
@@ -1980,6 +1984,8 @@ void FillChambers()
 			if (HR1 && HR2 && HR3)
 				c = GenerateRnd(3);
 
+			setPieceRoom = c;
+
 			switch (c) {
 			case 0:
 				SetRoom(2, 16);
@@ -1994,14 +2000,24 @@ void FillChambers()
 		}
 	} else {
 		if (VR1 || VR2 || VR3) {
-			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 2);
-			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 16);
-			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 30);
+			if (setPieceRoom != 0)
+				SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 2);
+
+			if (setPieceRoom != 1)
+				SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 16);
+
+			if (setPieceRoom != 2)
+				SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 30);
 		}
 		else {
-			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 2, 16);
-			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 16);
-			SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 30, 16);
+			if (setPieceRoom != 0)
+				SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 2, 16);
+
+			if (setPieceRoom != 1)
+				SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 16, 16);
+
+			if (setPieceRoom != 2)
+				SetRandomSetRoom(GenerateRnd(DRLG1_NUM_RANDOM_PIECES), 30, 16);
 		}
 	}
 }
