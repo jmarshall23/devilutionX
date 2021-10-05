@@ -444,16 +444,16 @@ namespace devilution
 							switch (d)
 							{
 							case 0:
-								testMicro = megaTile.micro1 = (image->megaTiles.size() * 4) + 0;
+								testMicro = megaTile.micro1 = image->frames.size();
 								break;
 							case 1:
-								testMicro = megaTile.micro2 = (image->megaTiles.size() * 4) + 1;
+								testMicro = megaTile.micro2 = image->frames.size();
 								break;
 							case 2:
-								testMicro = megaTile.micro3 = (image->megaTiles.size() * 4) + 2;
+								testMicro = megaTile.micro3 = image->frames.size();
 								break;
 							case 3:
-								testMicro = megaTile.micro4 = (image->megaTiles.size() * 4) + 3;
+								testMicro = megaTile.micro4 = image->frames.size();
 								break;
 							default:
 								devilution::app_fatal("Invalid micro");
