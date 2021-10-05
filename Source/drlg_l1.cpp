@@ -1728,6 +1728,14 @@ void SetRandomSetRoom(int setpiece, int rx1, int ry1)
 
 	for (int j = 0; j < height; j++) {
 		for (int i = 0; i < width; i++) {
+			if (!(L5dflags[rx1 + i][ry1 + j] & DLRG_CHAMBER)) {
+				return;
+			}
+		}
+	}
+
+	for (int j = 0; j < height; j++) {
+		for (int i = 0; i < width; i++) {
 			uint8_t tileId = SDL_SwapLE16(tileLayer[j * width + i]);
 			if (tileId != 0) {
 				dungeon[rx1 + i][ry1 + j] = tileId;
