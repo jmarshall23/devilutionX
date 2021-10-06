@@ -39,9 +39,7 @@ char hero_names[MAX_CHARACTERS][PLR_NAME_LEN];
 std::string GetSavePath(uint32_t saveNum)
 {
 	std::string path = paths::PrefPath();
-	const char *ext = ".sv";
-	if (gbIsHellfire)
-		ext = ".hsv";
+	const char *ext = ".hsv2";
 
 	if (gbIsSpawn) {
 		if (!gbIsMultiplayer) {
