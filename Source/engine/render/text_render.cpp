@@ -154,8 +154,7 @@ void DrawChar(const Surface &out, Point position, GameFontTables size, int nCel,
 		GL_SetColor(218, 198, 153);
 		break;
 	case ColorBlack:
-		//LightTableIndex = 15;
-		return;
+		GL_SetColor(128, 128, 128);
 	}
 
 	fonts[size]->ClipRenderNoLighting(out, position.x, position.y, nCel);
