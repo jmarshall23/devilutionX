@@ -36,6 +36,7 @@ TMenuItem sgSingleMenu[] = {
 	{ GMENU_ENABLED, N_("Options"),       &GamemenuOptions    },
 	{ GMENU_ENABLED, N_("New Game"),      &GamemenuNewGame   },
 	{ GMENU_ENABLED, N_("Load Game"),     &gamemenu_load_game  },
+	{ GMENU_ENABLED, N_("Restart In Town"), &GamemenuRestartTown },
 	{ GMENU_ENABLED, N_("Quit Game"),     &gamemenu_quit_game  },
 	{ GMENU_ENABLED, nullptr,              nullptr             }
 	// clang-format on
@@ -80,6 +81,8 @@ void GamemenuUpdateSingle()
 	bool enable = Players[MyPlayerId]._pmode != PM_DEATH && !MyPlayerIsDead;
 
 	gmenu_enable(&sgSingleMenu[0], enable);
+
+	gmenu_enable(&sgSingleMenu[4], MyPlayerIsDead);
 }
 
 void GamemenuUpdateMulti()
