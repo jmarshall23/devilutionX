@@ -115,6 +115,8 @@ public class LevelEditorWindow : EditorWindow
 						if (i + tileSliderPosition >= tilesets[tileSetSelected].tiles.Count)
 							break;
 
+						GUILayout.Label("Tile " + (i + (int)tileSliderPosition));
+
 						if(GUILayout.Button(tilesets[tileSetSelected].tiles[i + (int)tileSliderPosition]))
 						{
 							Level.currentSelectedTileForPainting = i + (int)tileSliderPosition; 
