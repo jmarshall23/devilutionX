@@ -47,7 +47,7 @@ public class ObjectEditorWindow : EditorWindow
 
 					byte[] bytes = texture.EncodeToPNG();
 
-					string fileName = EditorUtility.SaveFilePanel("Render Object to PNG", LevelEditorWindow.path, "newobject", "png");
+					string fileName = EditorUtility.SaveFilePanel("Render Object to PNG", Config.GamePath, "newobject", "png");
 					if(fileName != null && fileName.Length > 0)
 					{
 						File.WriteAllBytes(fileName, bytes);

@@ -10,6 +10,8 @@ public class Tileset
 	public Tileset(string path)
 	{
 		tileSetPath = path + "\\tiles\\";
+		modTileSetPath = tileSetPath.Replace("base", "mod");
+
 		tileSetFilename = Path.GetFileName(path);
 
 		transTile = TGALoader.LoadPNG(path + "../../../../mod/levels/trans.png");
@@ -21,13 +23,31 @@ public class Tileset
 		if (tiles.Count != 0)
 			return;
 
-		string[] files = Directory.GetFiles(tileSetPath, "*.png");
-		Array.Sort(files, new AlphanumComparatorFast());
+		List<string> files = new List<string>();
+		while(true)
+		{
+			string baseFilePath = tileSetPath + "tile" + files.Count + ".png";
+			string modFilePath = modTileSetPath + "tile" + files.Count + ".png";
+
+			if(File.Exists(modFilePath))
+			{
+				files.Add(modFilePath);
+				continue;
+			}
+
+			if(File.Exists(baseFilePath))
+			{
+				files.Add(baseFilePath);
+				continue;
+			}
+
+			break;
+		}
 
 		int currentFile = 0;
 		foreach (string file in files)
 		{
-			EditorUtility.DisplayProgressBar("Loading tileset " + tileSetFilename, file, currentFile / files.Length);
+			EditorUtility.DisplayProgressBar("Loading tileset " + tileSetFilename, file, currentFile / files.Count);
 
 			Texture2D tex = TGALoader.LoadPNG(file);
 
@@ -38,9 +58,9 @@ public class Tileset
 		EditorUtility.ClearProgressBar();
 	}
 
-	public static Tileset[] LoadTilesetsFromFolder(string folder)
+	public static Tileset[] LoadGameTilesets()
 	{
-		string[] tileFolders = Directory.GetDirectories(folder);
+		string[] tileFolders = Directory.GetDirectories(Config.GamePath + "\\base\\levels\\");
 		Tileset[] tilesets = new Tileset[tileFolders.Length];
 
 		int index = 0;
@@ -53,6 +73,7 @@ public class Tileset
 	}
 
 	public readonly string tileSetPath;
+	public readonly string modTileSetPath;
 	public readonly string tileSetFilename;
 
 	public Texture2D transTile;

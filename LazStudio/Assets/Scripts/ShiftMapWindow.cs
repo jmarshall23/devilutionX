@@ -35,12 +35,12 @@ public class ShiftMapWindow : EditorWindow
 					return;
 				} 
 
-				string sourceFileName = EditorUtility.OpenFilePanel("Open Dungeon File", LevelEditorWindow.path, "duntext");
+				string sourceFileName = EditorUtility.OpenFilePanel("Open Dungeon File", Config.GamePath, "duntext");
 				string destFileName = null;
 				if (sourceFileName != null && sourceFileName.Length > 0)
 				{
 					DataTable dataTable = new DataTable(sourceFileName);
-					destFileName = EditorUtility.SaveFilePanel("Save Dungeon File", LevelEditorWindow.path, "newdungeon", "duntext");
+					destFileName = EditorUtility.SaveFilePanel("Save Dungeon File", Config.GamePath, "newdungeon", "duntext");
 
 					if (dataTable != null && destFileName != null && destFileName.Length > 0)
 					{

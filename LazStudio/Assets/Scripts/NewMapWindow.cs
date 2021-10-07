@@ -30,7 +30,7 @@ public class NewMapWindow : EditorWindow
 			GUILayout.BeginHorizontal();
 				if(GUILayout.Button("Create Map"))
 				{
-					string fileName = EditorUtility.SaveFilePanel("New Dungeon File", LevelEditorWindow.path, "newdungeon", "duntext");
+					string fileName = EditorUtility.SaveFilePanel("New Dungeon File", Config.GamePath, "newdungeon", "duntext");
 					if(fileName.Length != null && fileName.Length > 0)
 					{
 						using (StreamWriter writer = File.CreateText(fileName))
