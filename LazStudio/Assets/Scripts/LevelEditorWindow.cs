@@ -11,8 +11,6 @@ public class LevelEditorWindow : EditorWindow
 	GameObject level = null;
 	Level lvl = null;
 
-	public static string path;
-
 	public static Tileset currentTileset = null;
 
     [MenuItem("LazStudio/Level Editor")]
@@ -26,13 +24,13 @@ public class LevelEditorWindow : EditorWindow
 	void OnGUI()
 	{
 		GUILayout.BeginArea(new Rect(10, 10, 300, 130));
-			GUILayout.Label("Diablo Base Folder");
-			path = GUILayout.TextField("C:\\Projects\\Diablo\\build\\base");
+			GUILayout.Label("Diablo Game Folder(edit in Config.cs)");
+			GUILayout.Label(Config.GamePath);
 			if(tilesets == null)
 			{
 				if(GUILayout.Button("Load Tilesets"))
 				{
-					tilesets = Tileset.LoadTilesetsFromFolder(path + "\\levels\\");
+					tilesets = Tileset.LoadGameTilesets();
 				}
 			}
 			else
@@ -72,7 +70,7 @@ public class LevelEditorWindow : EditorWindow
 					if (lastGameObject != null)
 						GameObject.DestroyImmediate(lastGameObject);
 
-					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", path, "duntext");
+					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", Config.GamePath, "duntext");
 					if(fileName != null)
 					{
 						level = new GameObject("__dungeon__", typeof(LevelEditor));
@@ -114,6 +112,8 @@ public class LevelEditorWindow : EditorWindow
 					{
 						if (i + tileSliderPosition >= tilesets[tileSetSelected].tiles.Count)
 							break;
+
+						GUILayout.Label("Tile " + (i + (int)tileSliderPosition));
 
 						if(GUILayout.Button(tilesets[tileSetSelected].tiles[i + (int)tileSliderPosition]))
 						{
