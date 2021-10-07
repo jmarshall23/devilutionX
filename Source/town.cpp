@@ -195,9 +195,9 @@ void DrlgTPass3()
 	}
 
 	if (Quests[Q_PWATER]._qactive != QUEST_DONE && Quests[Q_PWATER]._qactive != QUEST_NOTAVAIL) {
-		FillTile(60, 70, 342);
+		FillTile(60, 81, 342);
 	} else {
-		FillTile(60, 70, 71);
+		FillTile(60, 81, 71);
 	}
 }
 
