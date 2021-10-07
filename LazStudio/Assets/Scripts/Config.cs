@@ -4,5 +4,5 @@ using System;
 
 public class Config
 {
-	public static string GamePath = "C:\\Projects\\Diablo\\build";
+	public static string GamePath = "C:\\Projects\\HellfireDR\\build";
 }
