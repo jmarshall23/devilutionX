@@ -66,13 +66,13 @@ public class LevelEditorWindow : EditorWindow
 				GUILayout.EndHorizontal();
 				if(GUILayout.Button("Load Map"))
 				{
-					GameObject lastGameObject = GameObject.Find("__dungeon__");
-					if (lastGameObject != null)
-						GameObject.DestroyImmediate(lastGameObject);
-
 					string fileName = EditorUtility.OpenFilePanel("Open Dungeon File", Config.GamePath, "duntext");
-					if(fileName != null)
+					if(fileName != null && fileName.Length > 0)
 					{
+						GameObject lastGameObject = GameObject.Find("__dungeon__");
+						if (lastGameObject != null)
+							GameObject.DestroyImmediate(lastGameObject);
+
 						level = new GameObject("__dungeon__", typeof(LevelEditor));
 						lvl = level.AddComponent<Level>();
 						lvl.Init(fileName, tilesets[tileSetSelected]);
