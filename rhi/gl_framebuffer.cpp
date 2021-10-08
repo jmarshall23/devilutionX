@@ -21,6 +21,8 @@ namespace devilution
 			AddRenderImage(colorImage);
 		}
 		this->depthImage = depthImage;
+
+		InitRenderTexture();
 	}
 
 	/*

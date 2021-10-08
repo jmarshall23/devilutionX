@@ -2,6 +2,8 @@
 //
 
 #include "gl_render.h"
+#include "image.h"
+#include "gl_framebuffer.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
@@ -35,14 +37,45 @@ int global_alpha = 255;
 void GL_Backend_SetLightingParams(float* attributes, int numValues);
 void GL_Backend_ToggleLightRender(bool toggle);
 
+devilution::StormImage* gameDrawImage = nullptr;
+static devilution::StormRenderTexture* gameRenderTexture = nullptr;
+
 namespace devilution
 {
+	extern Uint16 gnScreenWidth;
+	extern Uint16 gnScreenHeight;
+
 	void app_fatal(const char* pszFmt, ...);
 
 	SDL_Surface* DiabloUiSurface()
 	{
 		return uiSurface;
 	}
+}
+
+void GL_Private_BindGameRenderTexture(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	gameRenderTexture->MakeCurrent();
+}
+
+void GL_Private_DisableRenderTexture(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	devilution::StormRenderTexture::BindNull();
+}
+
+void GL_BindLevelRenderTexture(void)
+{
+	if (gameRenderTexture == nullptr) {
+		gameDrawImage = devilution::StormImage::AllocateSytemImage("__screenbuf", devilution::gnScreenWidth, devilution::gnScreenHeight);
+		gameRenderTexture = new devilution::StormRenderTexture(gameDrawImage, nullptr);
+	}
+
+	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_BindGameRenderTexture, nullptr);
+}
+
+void GL_BindNullRenderTexture(void)
+{
+	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_DisableRenderTexture, nullptr);
 }
 
 void GL_SetColor(float r, float g, float b) {
@@ -221,6 +254,21 @@ void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int
 	ImVec2 endUV;
 	endUV.x = 1;
 	endUV.y = 1.0f - start_uvy;
+
+	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV, IM_COL32(global_red, global_green, global_blue, global_alpha));
+}
+
+void GL_RenderImageUpsideDown(unsigned int image, int x, int y, int width, int height, int startx, int starty, float start_uvx, float start_uvy) {
+	ImVec2 mi(x + startx, y);
+	ImVec2 ma(x + width, y + height - starty);
+
+	ImVec2 startUV;
+	startUV.x = start_uvx;
+	startUV.y = 1.0f - start_uvy;
+
+	ImVec2 endUV;
+	endUV.x = 1;
+	endUV.y = 0;
 
 	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV, IM_COL32(global_red, global_green, global_blue, global_alpha));
 }
