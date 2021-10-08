@@ -416,7 +416,7 @@ void PrintInfo(const Surface &out)
 	if (talkflag)
 		return;
 
-	Rectangle line { { PANEL_X + 177, PANEL_Y + LineOffsets[pnumlines][0] }, { 288, 0 } };
+	Rectangle line { { PANEL_X + 177, 35 }, { 288, 0 } };
 
 	int yo = 0;
 	int lo = 1;
@@ -427,7 +427,7 @@ void PrintInfo(const Surface &out)
 	}
 
 	for (int i = 0; i < pnumlines; i++) {
-		line.position.y = PANEL_Y + LineOffsets[pnumlines - lo][i + yo];
+		line.position.y = 35 + (i * 15);
 		DrawString(out, panelstr[i], line, InfoColor | UiFlags::AlignCenter | UiFlags::KerningFitSpacing, 2);
 	}
 }
@@ -674,7 +674,7 @@ bool IsChatAvailable()
 
 } // namespace
 
-void DrawSpell(const Surface &out)
+void DrawSpell(const Surface &out, int xoffset)
 {
 	auto &myPlayer = Players[MyPlayerId];
 	spell_id spl = myPlayer._pRSpell;
@@ -692,7 +692,7 @@ void DrawSpell(const Surface &out)
 		st = RSPLTYPE_INVALID;
 	SetSpellTrans(st);
 	const int nCel = (spl != SPL_INVALID) ? SpellITbl[spl] : 27;
-	const Point position { PANEL_X + 446, PANEL_Y + 138 };
+	const Point position { PANEL_X + xoffset, PANEL_Y + 138 };
 	DrawSpellCel(out, position, nCel);
 }
 
@@ -887,11 +887,13 @@ Point GetPanelPosition(UiPanels panel, Point offset)
 
 void DrawPlayerHud(const Surface &out)
 {
-	#define HUD_PANEL_X (gnScreenWidth - 588) / 2
+	#define HUD_PANEL_WIDTH 557
+
+	#define HUD_PANEL_X (gnScreenWidth - HUD_PANEL_WIDTH) / 2
 	#define HUD_PANEL_Y (gnScreenHeight - 104)
 
 	constexpr int LifeFlaskUpperOffset = 0;
-	constexpr int ManaFlaskUpperOffset = 474;
+	constexpr int ManaFlaskUpperOffset = HUD_PANEL_WIDTH - 114;
 
 	float lifeHeight, manaHeight;
 
@@ -905,7 +907,7 @@ void DrawPlayerHud(const Surface &out)
 	P8Bulbs->ClipRenderUI(out, HUD_PANEL_X + LifeFlaskUpperOffset, HUD_PANEL_Y, 1, 0, lifeHeight);
 	P8Bulbs->ClipRenderUI(out, HUD_PANEL_X + ManaFlaskUpperOffset, HUD_PANEL_Y, 2, 0, manaHeight);
 
-	DrawSpell(out);
+	DrawSpell(out, ManaFlaskUpperOffset - 12);
 
 	DrawInvBelt(out);
 
