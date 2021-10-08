@@ -75,6 +75,15 @@ namespace devilution
 
 	std::vector<StormImage*> globalImageList;
 
+	void StormImage::ClipRenderUpsidedown(const Surface& out, int sx, int sy, int frame, int width, int height) const
+	{
+		GL_ToggleLighting(false);
+
+		const ImageFrame_t& image = frames[frame - 1];
+
+		GL_RenderImageUpsideDown(image.glHandle, sx, sy, width, height, 0, 0, 0, 0);
+	}
+
 	/*
 	=======================
 	StormImage::ClipRenderNoLighting
@@ -244,6 +253,8 @@ namespace devilution
 		memset(frame.buffer, 255, width * height);
 		frame.width = width;
 		frame.height = height;
+
+		frame.glHandle = GL_CreateTexture2D(nullptr, width, height, 32);
 
 		image->frames.push_back(frame);
 		globalImageList.push_back(image);

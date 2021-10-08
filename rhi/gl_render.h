@@ -2,6 +2,8 @@
 //
 
 #include <windows.h>
+#include "image.h"
+
 
 void GL_Init(const char* name, void *sdl_window, HWND hwnd, int width, int height);
 
@@ -11,6 +13,7 @@ void GL_UploadTexture(unsigned int image, unsigned char* data, int width, int he
 
 void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int startx = 0, int starty = 0, float start_uvx = 0, float start_uvy = 0);
 void GL_RenderImageScaledUV(unsigned int image, int x, int y, int width, int height, int startx, int starty, int uvwidth, int uvheight, int imagewidth, int imageheight);
+void GL_RenderImageUpsideDown(unsigned int image, int x, int y, int width, int height, int startx, int starty, float start_uvx, float start_uvy);
 
 void GL_BeginFrame(void);
 void GL_EndFrame(unsigned char* finalScreenBuffer, unsigned char* palette);
@@ -25,3 +28,8 @@ void GL_UpdateLights(float* lightParams, int numLights);
 
 void GL_ToggleLighting(bool toggle);
 void GL_ResetForLevelChange(void);
+
+void GL_BindLevelRenderTexture(void);
+void GL_BindNullRenderTexture(void);
+
+extern devilution::StormImage* gameDrawImage;
