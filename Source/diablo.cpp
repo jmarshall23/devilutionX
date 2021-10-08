@@ -141,7 +141,7 @@ bool was_snd_init = false;
 
 void StartGame(interface_mode uMsg)
 {
-	zoomflag = true;
+	zoomflag = false;
 	CalcViewportGeometry();
 	cineflag = false;
 #ifdef _DEBUG
