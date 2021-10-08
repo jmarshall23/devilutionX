@@ -75,13 +75,13 @@ namespace devilution
 
 	std::vector<StormImage*> globalImageList;
 
-	void StormImage::ClipRenderUpsidedown(const Surface& out, int sx, int sy, int frame) const
+	void StormImage::ClipRenderUpsidedown(const Surface& out, int sx, int sy, int frame, int width, int height) const
 	{
 		GL_ToggleLighting(false);
 
 		const ImageFrame_t& image = frames[frame - 1];
 
-		GL_RenderImageUpsideDown(image.glHandle, sx, sy, image.width, image.height, 0, 0, 0, 0);
+		GL_RenderImageUpsideDown(image.glHandle, sx, sy, width, height, 0, 0, 0, 0);
 	}
 
 	/*

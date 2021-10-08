@@ -1273,7 +1273,12 @@ void DrawView(const Surface &out, int startX, int startY)
 		DrawGame(out, startX, startY);
 	GL_BindNullRenderTexture();
 
-	gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1);
+	if (zoomflag) {
+		gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth, gnScreenHeight);
+	} else {
+		gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth * 2, gnScreenHeight * 2);
+	}
+	
 
 	if (AutomapActive) {
 		DrawAutomap(out.subregionY(0, gnViewportHeight));
