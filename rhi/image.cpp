@@ -80,16 +80,13 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderUI(const Surface& out, int sx, int sy, int frame, int startx, int starty) const
+	void StormImage::ClipRenderUI(const Surface& out, int sx, int sy, int frame, float startx, float starty) const
 	{
 		GL_ToggleLighting(false);
 
 		const ImageFrame_t& image = frames[frame - 1];
 
-		float start_u = (float)startx / image.width;
-		float start_v = (float)starty / image.height;
-
-		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height, startx, starty, start_u, start_v );
+		GL_RenderImage(image.glHandle, sx + (startx * image.width), sy + (starty * image.height), image.width, image.height, startx * image.width, starty * image.height, startx, starty);
 	}
 
 	/*

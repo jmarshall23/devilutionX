@@ -887,48 +887,29 @@ Point GetPanelPosition(UiPanels panel, Point offset)
 
 void DrawPlayerHud(const Surface &out)
 {
-	constexpr int LifeFlaskUpperOffset = 98;
-	constexpr int ManaFlaskUpperOffset = 464;
+	#define HUD_PANEL_X (gnScreenWidth - 588) / 2
+	#define HUD_PANEL_Y (gnScreenHeight - 104)
+
+	constexpr int LifeFlaskUpperOffset = 0;
+	constexpr int ManaFlaskUpperOffset = 474;
 
 	float lifeHeight, manaHeight;
 
 	float lifeFilled = Players[MyPlayerId]._pHPPer;
 	float manaFilled = Players[MyPlayerId]._pManaPer;
 
-	lifeHeight = (lifeFilled / 80) * P8Bulbs->GetFrame(1).height;
-	manaHeight = (manaFilled / 80) * P8Bulbs->GetFrame(2).height;
+	lifeHeight = 1.0f - (lifeFilled / 80);
+	manaHeight = 1.0f - (manaFilled / 80);
 
-	panel8->ClipRenderUI(out, PANEL_X, PANEL_Y - 16, 1);
-	P8Bulbs->ClipRenderUI(out, PANEL_X + LifeFlaskUpperOffset, PANEL_Y - 16, 1, 0, lifeHeight);
-	P8Bulbs->ClipRenderUI(out, PANEL_X + ManaFlaskUpperOffset, PANEL_Y - 16, 2, 0, manaHeight);
+	panel8->ClipRenderUI(out, HUD_PANEL_X, HUD_PANEL_Y, 1);
+	P8Bulbs->ClipRenderUI(out, HUD_PANEL_X + LifeFlaskUpperOffset, HUD_PANEL_Y, 1, 0, lifeHeight);
+	P8Bulbs->ClipRenderUI(out, HUD_PANEL_X + ManaFlaskUpperOffset, HUD_PANEL_Y, 2, 0, manaHeight);
 
 	DrawSpell(out);
 
 	DrawInvBelt(out);
 
 	DrawInfoBox(out);
-
-	for (int i = 0; i < 6; i++) {
-		if (PanelButtons[i])
-			pPanelButtons->ClipRenderNoLighting(out, PanBtnPos[i].x + PANEL_X, PanBtnPos[i].y + PANEL_Y + 18, i + 1);
-			//CelDrawTo(out, {  }, *pPanelButtons, i + 1);
-	}
-
-	//if (PanelButtonIndex == 8) {
-	//	CelDrawTo(out, { 87 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[6] ? 2 : 1);
-	//	if (gbFriendlyMode)
-	//		CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 4 : 3);
-	//	else
-	//		CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 6 : 5);
-	//}
-
-	if (PanelButtonIndex == 8) {
-		multiButtons->ClipRenderNoLighting(out, 87 + PANEL_X, 122 + PANEL_Y, PanelButtons[6] ? 2 : 1);
-		if (gbFriendlyMode)
-			multiButtons->ClipRenderNoLighting(out, 527 + PANEL_X, 122 + PANEL_Y, PanelButtons[7] ? 4 : 3);
-		else
-			multiButtons->ClipRenderNoLighting(out, 527 + PANEL_X, 122 + PANEL_Y, PanelButtons[7] ? 6 : 5);
-	}
 }
 
 void DrawPanelBox(const Surface &out, SDL_Rect srcRect, Point targetPosition)
