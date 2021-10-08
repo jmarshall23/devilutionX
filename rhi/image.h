@@ -62,7 +62,7 @@ namespace devilution {
 
 		void ClipRenderWithLighting2(const Surface& out, int sx, int sy, int frame, int light) const;
 		void ClipRenderWithLighting(const Surface& out, int sx, int sy, int frame, bool upbright = false) const;
-		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx = 0, int starty = 0) const;
+		void ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx = 0, int starty = 0, int customwidth = -1, int customheight = -1) const;
 		void ClipRenderUI(const Surface& out, int sx, int sy, int frame, float startx = 0, float starty = 0) const;
 		void ClipRenderOutline(const Surface& out, int r, int g, int b,int sx, int sy, int frame) const;
 

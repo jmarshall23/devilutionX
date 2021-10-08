@@ -259,7 +259,7 @@ void DrawSpellCel(const Surface &out, Point position, int nCel)
 {
 	//position.y -= pSpellCels->GetFrame(nCel).height;
 	//pSpellCels->Draw(out, position.x, position.y, 0, 0, nCel, false, true, (byte *)SplTransTbl);
-	pSpellCels->ClipRenderNoLighting(out, position.x, position.y, nCel);
+	pSpellCels->ClipRenderNoLighting(out, position.x, position.y, nCel, 0, 0, 47, 47);
 }
 
 void SetSpellTrans(spell_type t)
@@ -692,7 +692,7 @@ void DrawSpell(const Surface &out)
 		st = RSPLTYPE_INVALID;
 	SetSpellTrans(st);
 	const int nCel = (spl != SPL_INVALID) ? SpellITbl[spl] : 27;
-	const Point position { PANEL_X + 565, PANEL_Y + 119 };
+	const Point position { PANEL_X + 446, PANEL_Y + 138 };
 	DrawSpellCel(out, position, nCel);
 }
 
