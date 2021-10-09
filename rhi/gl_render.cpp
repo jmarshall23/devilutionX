@@ -39,6 +39,8 @@ void GL_Backend_ToggleLightRender(bool toggle);
 void GL_InitFSR(void);
 void GL_Compute_SetRCAS(int displayWidth, int displayHeight);
 
+static bool isLightRenderEnabled = false;
+
 devilution::StormImage* gameDrawImage = nullptr;
 static devilution::StormRenderTexture* gameRenderTexture = nullptr;
 
@@ -53,6 +55,16 @@ namespace devilution
 	{
 		return uiSurface;
 	}
+}
+
+void GL_Private_EnableLighting(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	GL_Backend_ToggleLightRender(true);
+}
+
+void GL_Private_DisableLighting(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	GL_Backend_ToggleLightRender(false);
 }
 
 void GL_Private_SetFSR(const ImDrawList* parent_list, const ImDrawCmd* cmd)
@@ -93,7 +105,8 @@ void GL_SetFSR(void)
 void GL_ResetFSR(void)
 {
 	ImGui::GetBackgroundDrawList()->AddCallback(ImDrawCallback_ResetRenderState, nullptr);
-	GL_ResetForLevelChange();
+	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_DisableLighting, nullptr);
+	isLightRenderEnabled = false;
 }
 
 void GL_SetColor(float r, float g, float b) {
@@ -219,18 +232,6 @@ void GL_UpdateLights(float* lightParams, int numLights)
 {
 	GL_Backend_SetLightingParams(lightParams, numLights);
 }
-
-void GL_Private_EnableLighting(const ImDrawList* parent_list, const ImDrawCmd* cmd)
-{
-	GL_Backend_ToggleLightRender(true);
-}
-
-void GL_Private_DisableLighting(const ImDrawList* parent_list, const ImDrawCmd* cmd)
-{
-	GL_Backend_ToggleLightRender(false);
-}
-
-static bool isLightRenderEnabled = false;
 
 void GL_ResetForLevelChange(void)
 {
