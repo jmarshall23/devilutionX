@@ -65,10 +65,7 @@ void main()
 		vec4 diffuse = texture(Texture, Frag_UV.st);
 
 		lit = ColorShiftLightingBytes(lit.x, lit.y, lit.z);
-		
-		if(Frag_Color.g != 0)
-			lit = lit + 0.15;
-		
+
 		diffuse.xyz *= mix(ambient, lit, dot(lit, lit)); //clamp(lit, 0.0, 1.0) + ambient;
 		diffuse.a *= Frag_Color.a;
 		Out_Color = diffuse;				
