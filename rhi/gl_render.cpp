@@ -38,7 +38,6 @@ void GL_Backend_SetLightingParams(float* attributes, int numValues);
 void GL_Backend_ToggleLightRender(bool toggle);
 void GL_InitFSR(void);
 void GL_Compute_SetRCAS(int displayWidth, int displayHeight);
-void Imgui_Rebind_Program(void);
 
 devilution::StormImage* gameDrawImage = nullptr;
 static devilution::StormRenderTexture* gameRenderTexture = nullptr;
@@ -59,11 +58,6 @@ namespace devilution
 void GL_Private_SetFSR(const ImDrawList* parent_list, const ImDrawCmd* cmd)
 {
 	GL_Compute_SetRCAS(gameDrawImage->Width(), gameDrawImage->Height());
-}
-
-void GL_Private_ResetFSR(const ImDrawList* parent_list, const ImDrawCmd* cmd)
-{
-	Imgui_Rebind_Program();
 }
 
 void GL_Private_BindGameRenderTexture(const ImDrawList* parent_list, const ImDrawCmd* cmd)
@@ -98,7 +92,7 @@ void GL_SetFSR(void)
 
 void GL_ResetFSR(void)
 {
-	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_ResetFSR, nullptr);
+	ImGui::GetBackgroundDrawList()->AddCallback(ImDrawCallback_ResetRenderState, nullptr);
 }
 
 void GL_SetColor(float r, float g, float b) {
