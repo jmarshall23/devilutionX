@@ -93,6 +93,7 @@ void GL_SetFSR(void)
 void GL_ResetFSR(void)
 {
 	ImGui::GetBackgroundDrawList()->AddCallback(ImDrawCallback_ResetRenderState, nullptr);
+	GL_ResetForLevelChange();
 }
 
 void GL_SetColor(float r, float g, float b) {
