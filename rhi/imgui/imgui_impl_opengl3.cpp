@@ -99,6 +99,8 @@
 
 #include <memory>
 
+float global_ortho_projection[4][4];
+
 namespace devilution
 {
 	template <typename T = unsigned char>
@@ -304,6 +306,13 @@ void    ImGui_ImplOpenGL3_NewFrame()
         ImGui_ImplOpenGL3_CreateDeviceObjects();
 }
 
+void Imgui_Rebind_Program(void)
+{
+	ImGui_ImplOpenGL3_Data* bd = ImGui_ImplOpenGL3_GetBackendData();
+
+	glUseProgram(bd->ShaderHandle);
+}
+
 static void ImGui_ImplOpenGL3_SetupRenderState(ImDrawData* draw_data, int fb_width, int fb_height, GLuint vertex_array_object)
 {
     ImGui_ImplOpenGL3_Data* bd = ImGui_ImplOpenGL3_GetBackendData();
@@ -355,6 +364,8 @@ static void ImGui_ImplOpenGL3_SetupRenderState(ImDrawData* draw_data, int fb_wid
     glUseProgram(bd->ShaderHandle);
     glUniform1i(bd->AttribLocationTex, 0);
     glUniformMatrix4fv(bd->AttribLocationProjMtx, 1, GL_FALSE, &ortho_projection[0][0]);
+
+	memcpy(global_ortho_projection, ortho_projection, sizeof(global_ortho_projection));
 
 #ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_BIND_SAMPLER
     if (bd->GlVersion >= 330)
@@ -559,7 +570,7 @@ void ImGui_ImplOpenGL3_DestroyFontsTexture()
 }
 
 // If you get an error please report on github. You may try different GL context version or GLSL version. See GL<>GLSL version table at the top of this file.
-static bool CheckShader(GLuint handle, const char* desc)
+bool CheckShader(GLuint handle, const char* desc)
 {
     ImGui_ImplOpenGL3_Data* bd = ImGui_ImplOpenGL3_GetBackendData();
     GLint status = 0, log_length = 0;

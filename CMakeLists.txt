@@ -266,6 +266,7 @@ set(libdevilutionx_SRCS
   rhi/imgui/imgui_impl_sdl.cpp
   rhi/gl_framebuffer.cpp
   rhi/gl_render.cpp
+  rhi/gl_render_fsr.cpp
   rhi/image.cpp
   rhi/image_png.cpp
 
