@@ -266,15 +266,15 @@ void GL_DrawLine(float sx, float sy, float dx, float dy, float thickness) {
 
 void GL_RenderImage(unsigned int image, int x, int y, int width, int height, int startx, int starty, float start_uvx, float start_uvy) {
 	ImVec2 mi(x + startx, y);
-	ImVec2 ma(x + width, y + height - starty); 
+	ImVec2 ma(x + width, y + height - starty);
 
 	ImVec2 startUV;
 	startUV.x = start_uvx;
-	startUV.y = start_uvy;
+	startUV.y = 0;
 
 	ImVec2 endUV;
 	endUV.x = 1;
-	endUV.y = 1;
+	endUV.y = 1.0f - start_uvy;
 
 	ImGui::GetBackgroundDrawList()->AddImage((ImTextureID)image, mi, ma, startUV, endUV, IM_COL32(global_red, global_green, global_blue, global_alpha));
 }

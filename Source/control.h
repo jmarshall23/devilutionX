@@ -111,7 +111,7 @@ void control_update_life_mana();
  * @brief draws the current right mouse button spell.
  * @param out screen buffer representing the main UI panel
  */
-void DrawSpell(const Surface &out, int xoffset);
+void DrawSpell(const Surface &out);
 
 void InitControlPan();
 void DrawCtrlPan(const Surface &out);

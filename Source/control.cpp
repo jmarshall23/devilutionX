@@ -259,7 +259,7 @@ void DrawSpellCel(const Surface &out, Point position, int nCel)
 {
 	//position.y -= pSpellCels->GetFrame(nCel).height;
 	//pSpellCels->Draw(out, position.x, position.y, 0, 0, nCel, false, true, (byte *)SplTransTbl);
-	pSpellCels->ClipRenderNoLighting(out, position.x, position.y, nCel, 0, 0, 47, 47);
+	pSpellCels->ClipRenderNoLighting(out, position.x, position.y, nCel);
 }
 
 void SetSpellTrans(spell_type t)
@@ -416,7 +416,7 @@ void PrintInfo(const Surface &out)
 	if (talkflag)
 		return;
 
-	Rectangle line { { PANEL_X + 177, 35 }, { 288, 0 } };
+	Rectangle line { { PANEL_X + 177, PANEL_Y + LineOffsets[pnumlines][0] }, { 288, 0 } };
 
 	int yo = 0;
 	int lo = 1;
@@ -427,7 +427,7 @@ void PrintInfo(const Surface &out)
 	}
 
 	for (int i = 0; i < pnumlines; i++) {
-		line.position.y = 35 + (i * 15);
+		line.position.y = PANEL_Y + LineOffsets[pnumlines - lo][i + yo];
 		DrawString(out, panelstr[i], line, InfoColor | UiFlags::AlignCenter | UiFlags::KerningFitSpacing, 2);
 	}
 }
@@ -674,7 +674,7 @@ bool IsChatAvailable()
 
 } // namespace
 
-void DrawSpell(const Surface &out, int xoffset)
+void DrawSpell(const Surface &out)
 {
 	auto &myPlayer = Players[MyPlayerId];
 	spell_id spl = myPlayer._pRSpell;
@@ -692,7 +692,7 @@ void DrawSpell(const Surface &out, int xoffset)
 		st = RSPLTYPE_INVALID;
 	SetSpellTrans(st);
 	const int nCel = (spl != SPL_INVALID) ? SpellITbl[spl] : 27;
-	const Point position { PANEL_X + xoffset, PANEL_Y + 138 };
+	const Point position { PANEL_X + 565, PANEL_Y + 119 };
 	DrawSpellCel(out, position, nCel);
 }
 
@@ -887,31 +887,48 @@ Point GetPanelPosition(UiPanels panel, Point offset)
 
 void DrawPlayerHud(const Surface &out)
 {
-	#define HUD_PANEL_WIDTH 557
-
-	#define HUD_PANEL_X (gnScreenWidth - HUD_PANEL_WIDTH) / 2
-	#define HUD_PANEL_Y (gnScreenHeight - 104)
-
-	constexpr int LifeFlaskUpperOffset = 0;
-	constexpr int ManaFlaskUpperOffset = HUD_PANEL_WIDTH - 114;
+	constexpr int LifeFlaskUpperOffset = 98;
+	constexpr int ManaFlaskUpperOffset = 464;
 
 	float lifeHeight, manaHeight;
 
 	float lifeFilled = Players[MyPlayerId]._pHPPer;
 	float manaFilled = Players[MyPlayerId]._pManaPer;
 
-	lifeHeight = 1.0f - (lifeFilled / 80);
-	manaHeight = 1.0f - (manaFilled / 80);
+	lifeHeight = (lifeFilled / 80) * P8Bulbs->GetFrame(1).height;
+	manaHeight = (manaFilled / 80) * P8Bulbs->GetFrame(2).height;
 
-	panel8->ClipRenderUI(out, HUD_PANEL_X, HUD_PANEL_Y, 1);
-	P8Bulbs->ClipRenderUI(out, HUD_PANEL_X + LifeFlaskUpperOffset, HUD_PANEL_Y, 1, 0, lifeHeight);
-	P8Bulbs->ClipRenderUI(out, HUD_PANEL_X + ManaFlaskUpperOffset, HUD_PANEL_Y, 2, 0, manaHeight);
+	panel8->ClipRenderUI(out, PANEL_X, PANEL_Y - 16, 1);
+	P8Bulbs->ClipRenderUI(out, PANEL_X + LifeFlaskUpperOffset, PANEL_Y - 16, 1, 0, lifeHeight);
+	P8Bulbs->ClipRenderUI(out, PANEL_X + ManaFlaskUpperOffset, PANEL_Y - 16, 2, 0, manaHeight);
 
-	DrawSpell(out, ManaFlaskUpperOffset - 12);
+	DrawSpell(out);
 
 	DrawInvBelt(out);
 
 	DrawInfoBox(out);
+
+	for (int i = 0; i < 6; i++) {
+		if (PanelButtons[i])
+			pPanelButtons->ClipRenderNoLighting(out, PanBtnPos[i].x + PANEL_X, PanBtnPos[i].y + PANEL_Y + 18, i + 1);
+			//CelDrawTo(out, {  }, *pPanelButtons, i + 1);
+	}
+
+	//if (PanelButtonIndex == 8) {
+	//	CelDrawTo(out, { 87 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[6] ? 2 : 1);
+	//	if (gbFriendlyMode)
+	//		CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 4 : 3);
+	//	else
+	//		CelDrawTo(out, { 527 + PANEL_X, 122 + PANEL_Y }, *multiButtons, PanelButtons[7] ? 6 : 5);
+	//}
+
+	if (PanelButtonIndex == 8) {
+		multiButtons->ClipRenderNoLighting(out, 87 + PANEL_X, 122 + PANEL_Y, PanelButtons[6] ? 2 : 1);
+		if (gbFriendlyMode)
+			multiButtons->ClipRenderNoLighting(out, 527 + PANEL_X, 122 + PANEL_Y, PanelButtons[7] ? 4 : 3);
+		else
+			multiButtons->ClipRenderNoLighting(out, 527 + PANEL_X, 122 + PANEL_Y, PanelButtons[7] ? 6 : 5);
+	}
 }
 
 void DrawPanelBox(const Surface &out, SDL_Rect srcRect, Point targetPosition)

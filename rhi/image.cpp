@@ -89,13 +89,16 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderUI(const Surface& out, int sx, int sy, int frame, float startx, float starty) const
+	void StormImage::ClipRenderUI(const Surface& out, int sx, int sy, int frame, int startx, int starty) const
 	{
 		GL_ToggleLighting(false);
 
 		const ImageFrame_t& image = frames[frame - 1];
 
-		GL_RenderImage(image.glHandle, sx + (startx * image.width), sy + (starty * image.height), image.width, image.height, startx * image.width, starty * image.height, startx, starty);
+		float start_u = (float)startx / image.width;
+		float start_v = (float)starty / image.height;
+
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height, startx, starty, start_u, start_v );
 	}
 
 	/*
@@ -103,20 +106,14 @@ namespace devilution
 	StormImage::ClipRenderNoLighting
 	=======================
 	*/
-	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx, int starty, int customwidth, int customheight) const
+	void StormImage::ClipRenderNoLighting(const Surface& out, int sx, int sy, int frame, int startx, int starty) const
 	{
 		GL_ToggleLighting(false);
 		const ImageFrame_t& image = frames[frame - 1];
 
 		sy -= image.height;
 
-		if (customwidth == -1)
-			customwidth = image.width;
-
-		if (customheight == -1)
-			customheight = image.height;
-
-		GL_RenderImage(image.glHandle, sx, sy, customwidth, customheight);
+		GL_RenderImage(image.glHandle, sx, sy, image.width, image.height);
 	}
 
 	/*
