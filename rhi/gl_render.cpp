@@ -36,6 +36,9 @@ int global_alpha = 255;
 
 void GL_Backend_SetLightingParams(float* attributes, int numValues);
 void GL_Backend_ToggleLightRender(bool toggle);
+void GL_InitFSR(void);
+void GL_Compute_SetRCAS(int displayWidth, int displayHeight);
+void Imgui_Rebind_Program(void);
 
 devilution::StormImage* gameDrawImage = nullptr;
 static devilution::StormRenderTexture* gameRenderTexture = nullptr;
@@ -51,6 +54,16 @@ namespace devilution
 	{
 		return uiSurface;
 	}
+}
+
+void GL_Private_SetFSR(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	GL_Compute_SetRCAS(gameDrawImage->Width(), gameDrawImage->Height());
+}
+
+void GL_Private_ResetFSR(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	Imgui_Rebind_Program();
 }
 
 void GL_Private_BindGameRenderTexture(const ImDrawList* parent_list, const ImDrawCmd* cmd)
@@ -76,6 +89,16 @@ void GL_BindLevelRenderTexture(void)
 void GL_BindNullRenderTexture(void)
 {
 	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_DisableRenderTexture, nullptr);
+}
+
+void GL_SetFSR(void)
+{
+	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_SetFSR, nullptr);
+}
+
+void GL_ResetFSR(void)
+{
+	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_ResetFSR, nullptr);
 }
 
 void GL_SetColor(float r, float g, float b) {
@@ -171,6 +194,8 @@ void GL_Init(const char* name, void* sdl_window, HWND hwnd, int width, int heigh
 	mainScreenBufferTex = GL_CreateTexture2D(outputbuffer, width, height, 32);
 
 	uiSurface = SDL_CreateRGBSurfaceWithFormat(SDL_SWSURFACE, width, height, 1, SDL_PIXELFORMAT_RGBA8888);
+
+	GL_InitFSR();
 
 	GL_BeginFrame();
 }

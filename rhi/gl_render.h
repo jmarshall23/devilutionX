@@ -31,5 +31,8 @@ void GL_ResetForLevelChange(void);
 
 void GL_BindLevelRenderTexture(void);
 void GL_BindNullRenderTexture(void);
+void GL_SetFSR(void);
+void GL_ResetFSR(void);
 
 extern devilution::StormImage* gameDrawImage;
+extern float global_ortho_projection[4][4];
