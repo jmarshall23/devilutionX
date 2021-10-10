@@ -4435,6 +4435,31 @@ void UseItem(int p, item_misc_id mid, spell_id spl)
 		ModifyPlrDex(p, 3);
 		ModifyPlrVit(p, 3);
 		break;
+	case IMISC_RUNEF:
+		player._pTSpell = SPL_RUNEFIRE;
+		if (p == MyPlayerId)
+			NewCursor(CURSOR_TELEPORT);
+		break;
+	case IMISC_RUNEL:
+		player._pTSpell = SPL_RUNELIGHT;
+		if (p == MyPlayerId)
+			NewCursor(CURSOR_TELEPORT);
+		break;
+	case IMISC_GR_RUNEL:
+		player._pTSpell = SPL_RUNENOVA;
+		if (p == MyPlayerId)
+			NewCursor(CURSOR_TELEPORT);
+		break;
+	case IMISC_GR_RUNEF:
+		player._pTSpell = SPL_RUNEIMMOLAT;
+		if (p == MyPlayerId)
+			NewCursor(CURSOR_TELEPORT);
+		break;
+	case IMISC_RUNES:
+		player._pTSpell = SPL_RUNESTONE;
+		if (p == MyPlayerId)
+			NewCursor(CURSOR_TELEPORT);
+		break;
 	default:
 		break;
 	}

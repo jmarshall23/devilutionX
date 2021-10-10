@@ -222,7 +222,7 @@ SpellCheckResult CheckSpell(int id, spell_id sn, spell_type st, bool manaonly)
 void CastSpell(int id, int spl, int sx, int sy, int dx, int dy, int spllvl)
 {
 	Direction dir = Players[id]._pdir;
-	if (spl == SPL_FIREWALL) {
+	if (spl == SPL_FIREWALL || spl == SPL_LIGHTWALL) {
 		dir = Players[id].tempDirection;
 	}
 

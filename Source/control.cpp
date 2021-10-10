@@ -222,6 +222,7 @@ spell_id SpellPages[6][7] = {
 	{ SPL_RESURRECT, SPL_FIREWALL, SPL_TELEKINESIS, SPL_LIGHTNING, SPL_TOWN, SPL_FLASH, SPL_STONE },
 	{ SPL_RNDTELEPORT, SPL_MANASHIELD, SPL_ELEMENT, SPL_FIREBALL, SPL_WAVE, SPL_CHAIN, SPL_GUARDIAN },
 	{ SPL_NOVA, SPL_GOLEM, SPL_TELEPORT, SPL_APOCA, SPL_BONESPIRIT, SPL_FLARE, SPL_ETHEREALIZE },
+	{ SPL_LIGHTWALL, SPL_IMMOLAT, SPL_WARP, SPL_REFLECT, SPL_BERSERK, SPL_FIRERING, SPL_SEARCH },
 	{ SPL_INVALID, SPL_INVALID, SPL_INVALID, SPL_INVALID, SPL_INVALID, SPL_INVALID, SPL_INVALID }
 };
 
@@ -482,6 +483,8 @@ void PrintSBookStr(const Surface &out, Point position, const char *text)
 spell_type GetSBookTrans(spell_id ii, bool townok)
 {
 	auto &myPlayer = Players[MyPlayerId];
+	if ((myPlayer._pClass == HeroClass::Monk) && (ii == SPL_SEARCH))
+		return RSPLTYPE_SKILL;
 	spell_type st = RSPLTYPE_SPELL;
 	if ((myPlayer._pISpells & GetSpellBitmask(ii)) != 0) {
 		st = RSPLTYPE_CHARGES;
@@ -651,7 +654,8 @@ bool GetSpellListSelection(spell_id &pSpell, spell_type &pSplType)
 		if (spellListItem.isSelected) {
 			pSpell = spellListItem.id;
 			pSplType = spellListItem.type;
-			
+			if (myPlayer._pClass == HeroClass::Monk && spellListItem.id == SPL_SEARCH)
+				pSplType = RSPLTYPE_SKILL;
 			return true;
 		}
 	}
@@ -1004,6 +1008,8 @@ void InitControlPan()
 		SpellPages[0][0] = SPL_DISARM;
 	} else if (myPlayer._pClass == HeroClass::Sorcerer) {
 		SpellPages[0][0] = SPL_RECHARGE;
+	} else if (myPlayer._pClass == HeroClass::Monk) {
+		SpellPages[0][0] = SPL_SEARCH;
 	} else if (myPlayer._pClass == HeroClass::Bard) {
 		SpellPages[0][0] = SPL_IDENTIFY;
 	} else if (myPlayer._pClass == HeroClass::Barbarian) {
