@@ -1,7 +1,7 @@
 name,filename,str,magic,dex,vit,block,maxstr,maxmagic,maxdex,maxvit,invgraphic,startskill,startspell,startspellvl
-Warrior,Warrior,30,10,20,25,30,250,50,60,100,Data\Inv\Inv,SPL_REPAIR,SPL_INVALID,0
-Rogue,Rogue,20,15,30,20,20,55,70,250,80,Data\Inv\Inv_rog,SPL_DISARM,SPL_INVALID,0
-Sorceror,Sorceror,15,35,15,20,10,45,250,85,80,Data\Inv\Inv_Sor,SPL_RECHARGE,SPL_FIREBOLT,2
-Monk,Monk,25,15,25,20,25,150,80,150,80,Data\Inv\Inv_Sor,SPL_SEARCH,SPL_INVALID,0
-Bard,Rogue,20,20,25,20,25,120,120,120,100,Data\Inv\Inv_rog,SPL_IDENTIFY,SPL_INVALID,0
-Barbarian,Warrior,40,0,20,25,30,255,0,55,150,Data\Inv\Inv,SPL_BLODBOIL,SPL_INVALID,0
+Warrior,Warrior,30,10,20,25,30,250,50,60,100,Data\Inv\Inv,SPL_INVALID,SPL_INVALID,0
+Rogue,Rogue,20,15,30,20,20,55,70,250,80,Data\Inv\Inv_rog,SPL_INVALID,SPL_INVALID,0
+Sorceror,Sorceror,15,35,15,20,10,45,250,85,80,Data\Inv\Inv_Sor,SPL_INVALID,SPL_INVALID,0
+Monk,Monk,25,15,25,20,25,150,80,150,80,Data\Inv\Inv_Sor,SPL_INVALID,SPL_INVALID,0
+Bard,Rogue,20,20,25,20,25,120,120,120,100,Data\Inv\Inv_rog,SPL_INVALID,SPL_INVALID,0
+Barbarian,Warrior,40,0,20,25,30,255,0,55,150,Data\Inv\Inv,SPL_INVALID,SPL_INVALID,0

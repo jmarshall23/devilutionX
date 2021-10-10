@@ -2379,9 +2379,11 @@ void CreatePlayer(int playerId, HeroClass c)
 	
 
 	spell_id startSkill = SpellIdFromString(playerTable->GetValue("startskill", (int)c));
-	player._pRSplType = RSPLTYPE_SKILL;
-	player._pAblSpells = GetSpellBitmask(startSkill);
-	player._pRSpell = startSkill;
+	if (startSkill != SPL_INVALID) {
+		player._pRSplType = RSPLTYPE_SKILL;
+		player._pAblSpells = GetSpellBitmask(startSkill);
+		player._pRSpell = startSkill;
+	}
 
 	spell_id startSpell = SpellIdFromString(playerTable->GetValue("startspell", (int)c));
 
@@ -2652,7 +2654,10 @@ void InitPlayer(Player &player, bool firstTime)
 	}
 
 	spell_id startSkill = SpellIdFromString(playerTable->GetValue("startskill", (int)player._pClass));
-	player._pAblSpells = GetSpellBitmask(startSkill);
+
+	if (startSkill != SPL_INVALID) {
+		player._pAblSpells = GetSpellBitmask(startSkill);
+	}
 
 #ifdef _DEBUG
 	if (debug_mode_key_inverted_v && firstTime) {
