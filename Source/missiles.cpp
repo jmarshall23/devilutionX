@@ -789,7 +789,6 @@ void GetDamageAmt(int i, int *mind, int *maxd)
 		*maxd = AddClassHealingBonus((4 * myPlayer._pLevel) + (6 * sl) + 10, myPlayer._pClass) - 1;
 		break;
 	case SPL_LIGHTNING:
-	case SPL_RUNELIGHT:
 		*mind = 2;
 		*maxd = 2 + myPlayer._pLevel;
 		break;
@@ -816,22 +815,14 @@ void GetDamageAmt(int i, int *mind, int *maxd)
 	case SPL_RESURRECT:
 	case SPL_TELEKINESIS:
 	case SPL_BONESPIRIT:
-	case SPL_WARP:
-	case SPL_REFLECT:
-	case SPL_BERSERK:
-	case SPL_SEARCH:
-	case SPL_RUNESTONE:
 		*mind = -1;
 		*maxd = -1;
 		break;
 	case SPL_FIREWALL:
-	case SPL_LIGHTWALL:
-	case SPL_FIRERING:
 		*mind = 2 * myPlayer._pLevel + 4;
 		*maxd = *mind + 36;
 		break;
-	case SPL_FIREBALL:
-	case SPL_RUNEFIRE: {
+	case SPL_FIREBALL:{
 		int base = (2 * myPlayer._pLevel) + 4;
 		*mind = ScaleSpellEffect(base, sl);
 		*maxd = ScaleSpellEffect(base + 36, sl);
@@ -850,9 +841,6 @@ void GetDamageAmt(int i, int *mind, int *maxd)
 		*maxd = *mind + 54;
 		break;
 	case SPL_NOVA:
-	case SPL_IMMOLAT:
-	case SPL_RUNEIMMOLAT:
-	case SPL_RUNENOVA:
 		*mind = ScaleSpellEffect((myPlayer._pLevel + 5) / 2, sl) * 5;
 		*maxd = ScaleSpellEffect((myPlayer._pLevel + 30) / 2, sl) * 5;
 		break;
@@ -1301,72 +1289,6 @@ void AddStoneRune(Missile &missile, Point dst, Direction /*midir*/)
 	AddRune(missile, dst, MIS_STONE);
 }
 
-void AddReflection(Missile &missile, Point /*dst*/, Direction /*midir*/)
-{
-	missile._miDelFlag = true;
-
-	if (missile._misource < 0)
-		return;
-
-	auto &player = Players[missile._misource];
-
-	int add = (missile._mispllvl != 0 ? missile._mispllvl : 2) * player._pLevel;
-	if (player.wReflections + add >= std::numeric_limits<uint16_t>::max())
-		add = 0;
-	player.wReflections += add;
-	if (missile._misource == MyPlayerId)
-		NetSendCmdParam1(true, CMD_SETREFLECT, player.wReflections);
-
-	UseMana(missile._misource, SPL_REFLECT);
-}
-
-void AddBerserk(Missile &missile, Point dst, Direction /*midir*/)
-{
-	missile._miDelFlag = true;
-
-	if (missile._misource < 0)
-		return;
-
-	for (int i = 0; i < 6; i++) {
-		int k = CrawlNum[i];
-		int ck = k + 2;
-		for (auto j = static_cast<uint8_t>(CrawlTable[k]); j > 0; j--, ck += 2) {
-			Point target = dst + Displacement { CrawlTable[ck - 1], CrawlTable[ck] };
-			if (!InDungeonBounds(target))
-				continue;
-
-			int dm = dMonster[target.x][target.y];
-			dm = dm > 0 ? dm - 1 : -(dm + 1);
-			if (dm < MAX_PLRS)
-				continue;
-			auto &monster = Monsters[dm];
-
-			if (monster._uniqtype != 0 || monster._mAi == AI_DIABLO)
-				continue;
-			if (IsAnyOf(monster._mmode, MonsterMode::FadeIn, MonsterMode::FadeOut))
-				continue;
-			if ((monster.mMagicRes & IMMUNE_MAGIC) != 0)
-				continue;
-			if ((monster.mMagicRes & RESIST_MAGIC) != 0 && ((monster.mMagicRes & RESIST_MAGIC) != 1 || GenerateRnd(2) != 0))
-				continue;
-			if (monster._mmode == MonsterMode::Charge)
-				continue;
-
-			i = 6;
-			auto slvl = GetSpellLevel(missile._misource, SPL_BERSERK);
-			monster._mFlags |= MFLAG_BERSERK | MFLAG_GOLEM;
-			monster.mMinDamage = (GenerateRnd(10) + 120) * monster.mMinDamage / 100 + slvl;
-			monster.mMaxDamage = (GenerateRnd(10) + 120) * monster.mMaxDamage / 100 + slvl;
-			monster.mMinDamage2 = (GenerateRnd(10) + 120) * monster.mMinDamage2 / 100 + slvl;
-			monster.mMaxDamage2 = (GenerateRnd(10) + 120) * monster.mMaxDamage2 / 100 + slvl;
-			int r = (currlevel < 17 || currlevel > 20) ? 3 : 9;
-			monster.mlid = AddLight(monster.position.tile, r);
-			UseMana(missile._misource, SPL_BERSERK);
-			break;
-		}
-	}
-}
-
 /**
  * var1: Direction to place the spawn
  */
@@ -1542,37 +1464,6 @@ void AddSpecArrow(Missile &missile, Point dst, Direction /*midir*/)
 	missile.var3 = av;
 }
 
-void AddWarp(Missile &missile, Point /*dst*/, Direction /*midir*/)
-{
-	int minDistanceSq = std::numeric_limits<int>::max();
-	Point src = missile.position.start;
-	Point tile = src;
-	if (missile._misource >= 0) {
-		tile = Players[missile._misource].position.tile;
-	}
-
-	for (int i = 0; i < numtrigs && i < MAXTRIGGERS; i++) {
-		TriggerStruct *trg = &trigs[i];
-		if (trg->_tmsg == WM_DIABTWARPUP || trg->_tmsg == WM_DIABPREVLVL || trg->_tmsg == WM_DIABNEXTLVL || trg->_tmsg == WM_DIABRTNLVL) {
-			Point candidate = trg->position;
-			if ((leveltype == DTYPE_CATHEDRAL || leveltype == DTYPE_CATACOMBS) && (trg->_tmsg == WM_DIABNEXTLVL || trg->_tmsg == WM_DIABPREVLVL || trg->_tmsg == WM_DIABRTNLVL)) {
-				candidate += Displacement { 0, 1 };
-			} else {
-				candidate += Displacement { 1, 0 };
-			}
-			Displacement off = src - candidate;
-			int distanceSq = off.deltaY * off.deltaY + off.deltaX * off.deltaX;
-			if (distanceSq < minDistanceSq) {
-				minDistanceSq = distanceSq;
-				tile = candidate;
-			}
-		}
-	}
-	missile._mirange = 2;
-	missile.position.tile = tile;
-	if (missile._micaster == TARGET_MONSTERS)
-		UseMana(missile._misource, SPL_WARP);
-}
 
 void AddLightningWall(Missile &missile, Point dst, Direction /*midir*/)
 {
@@ -1640,78 +1531,6 @@ void AddLightningArrow(Missile &missile, Point dst, Direction midir)
 		missile.var2 = Players[missile._misource].position.tile.y;
 	}
 	missile._midam <<= 6;
-}
-
-void AddMana(Missile &missile, Point /*dst*/, Direction /*midir*/)
-{
-	auto &player = Players[missile._misource];
-
-	int manaAmount = (GenerateRnd(10) + 1) << 6;
-	for (int i = 0; i < player._pLevel; i++) {
-		manaAmount += (GenerateRnd(4) + 1) << 6;
-	}
-	for (int i = 0; i < missile._mispllvl; i++) {
-		manaAmount += (GenerateRnd(6) + 1) << 6;
-	}
-	if (player._pClass == HeroClass::Sorcerer)
-		manaAmount *= 2;
-	if (player._pClass == HeroClass::Rogue || player._pClass == HeroClass::Bard)
-		manaAmount += manaAmount / 2;
-	player._pMana += manaAmount;
-	if (player._pMana > player._pMaxMana)
-		player._pMana = player._pMaxMana;
-	player._pManaBase += manaAmount;
-	if (player._pManaBase > player._pMaxManaBase)
-		player._pManaBase = player._pMaxManaBase;
-	UseMana(missile._misource, SPL_MANA);
-	missile._miDelFlag = true;
-	drawmanaflag = true;
-}
-
-void AddMagi(Missile &missile, Point /*dst*/, Direction /*midir*/)
-{
-	auto &player = Players[missile._misource];
-
-	player._pMana = player._pMaxMana;
-	player._pManaBase = player._pMaxManaBase;
-	UseMana(missile._misource, SPL_MAGI);
-	missile._miDelFlag = true;
-	drawmanaflag = true;
-}
-
-void AddRing(Missile &missile, Point /*dst*/, Direction /*midir*/)
-{
-	if (missile._micaster == TARGET_MONSTERS)
-		UseMana(missile._misource, SPL_FIRERING);
-	missile.var1 = missile.position.start.x;
-	missile.var2 = missile.position.start.y;
-	missile._mirange = 7;
-}
-
-void AddSearch(Missile &missile, Point /*dst*/, Direction /*midir*/)
-{
-	AutoMapShowItems = true;
-	int lvl = 2;
-	if (missile._misource >= 0)
-		lvl = Players[missile._misource]._pLevel * 2;
-	missile._mirange = lvl + 10 * missile._mispllvl + 245;
-	if (missile._micaster == TARGET_MONSTERS)
-		UseMana(missile._misource, SPL_SEARCH);
-
-	for (int i = 0; i < ActiveMissileCount; i++) {
-		int mx = ActiveMissiles[i];
-		if (&Missiles[mx] != &missile) {
-			auto &other = Missiles[mx];
-			if (other._misource == missile._misource && other._mitype == MIS_SEARCH) {
-				int r1 = missile._mirange;
-				int r2 = other._mirange;
-				if (r2 < INT_MAX - r1)
-					other._mirange = r1 + r2;
-				missile._miDelFlag = true;
-				break;
-			}
-		}
-	}
 }
 
 void AddCboltArrow(Missile &missile, Point dst, Direction midir)

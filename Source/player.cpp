@@ -3414,7 +3414,7 @@ void CheckPlrSpell()
 		return;
 	}
 
-	if (myPlayer._pRSpell == SPL_FIREWALL || myPlayer._pRSpell == SPL_LIGHTWALL) {
+	if (myPlayer._pRSpell == SPL_FIREWALL) {
 		LastMouseButtonAction = MouseActionType::Spell;
 		Direction sd = GetDirection(myPlayer.position.tile, cursPosition);
 		sl = GetSpellLevel(MyPlayerId, myPlayer._pRSpell);
