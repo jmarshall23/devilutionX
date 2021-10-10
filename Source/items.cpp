@@ -3044,6 +3044,10 @@ void SetPlrHandItem(Item &item, int itemData)
 		item._iCharges = gbIsHellfire ? 18 : 40;
 	}
 
+	if (itemData == IDI_SORCERER) {
+		item._iCharges = 66;
+	}
+
 	item._iMaxCharges = item._iCharges;
 	item._iDurability = pAllItem.iDurability;
 	item._iMaxDur = pAllItem.iDurability;
@@ -3157,7 +3161,7 @@ void CreatePlrItems(int playerId)
 		GetPlrHandSeed(&player.SpdList[1]);
 		break;
 	case HeroClass::Sorcerer:
-		SetPlrHandItem(player.InvBody[INVLOC_HAND_LEFT], gbIsHellfire ? IDI_SORCERER : 166);
+		SetPlrHandItem(player.InvBody[INVLOC_HAND_LEFT], IDI_SORCERER);
 		GetPlrHandSeed(&player.InvBody[INVLOC_HAND_LEFT]);
 
 		SetPlrHandItem(player.SpdList[0], IDI_HEAL);
