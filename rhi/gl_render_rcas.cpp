@@ -38,7 +38,7 @@ bool str_replace(std::string& str, const std::string& from, const std::string& t
 
 GLuint fsr_program = 0;
 
-void GL_InitFSR(void)
+void GL_InitRCAS(void)
 {
 	size_t ffx_a_len, ffx_fsr1_len, fsr_upscale_len, fsr_vertex_len;
 	std::string ffx_a = (char *)devilution::LoadFileInMem<unsigned char>("shaders/ffx_a.h", &ffx_a_len).get();
