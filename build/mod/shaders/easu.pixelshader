@@ -38,5 +38,8 @@ void main()
 {
 	AF3 c;
 	FsrEasuF(c, uvec2(Frag_UV * textureSize(InputTexture, 0)), Const0, Const1, Const2, Const3);
+	c.r = pow(c.r, 0.75);
+	c.g = pow(c.g, 0.75);
+	c.b = pow(c.b, 0.75);
 	Out_Color = AF4(c, 1);
 }
