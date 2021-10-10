@@ -29,10 +29,12 @@ void GL_UpdateLights(float* lightParams, int numLights);
 void GL_ToggleLighting(bool toggle);
 void GL_ResetForLevelChange(void);
 
-void GL_BindLevelRenderTexture(void);
+void GL_BindLevelRenderTexture(bool bindTemp);
 void GL_BindNullRenderTexture(void);
-void GL_SetFSR(void);
+void GL_SetRCAS(void);
+void GL_SetEASU(void);
 void GL_ResetFSR(void);
 
 extern devilution::StormImage* gameDrawImage;
+extern devilution::StormImage* gameUpscaledTempImage;
 extern float global_ortho_projection[4][4];

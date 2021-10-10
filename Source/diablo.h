@@ -62,6 +62,7 @@ extern Point MousePosition;
 extern bool gbRunGame;
 extern bool gbRunGameResult;
 extern bool zoomflag;
+extern bool fsrFlag;
 extern bool gbProcessPlayers;
 extern bool gbLoadGame;
 extern bool cineflag;
