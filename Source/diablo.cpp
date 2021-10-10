@@ -78,6 +78,7 @@ Point MousePosition;
 bool gbRunGame;
 bool gbRunGameResult;
 bool zoomflag;
+bool fsrFlag = true;
 /** Enable updating of player character, set to false once Diablo dies */
 bool gbProcessPlayers;
 bool gbLoadGame;
@@ -1466,6 +1467,14 @@ void InitKeymapActions()
 	    [] {
 		    zoomflag = !zoomflag;
 		    CalcViewportGeometry();
+	    },
+	    [&]() { return !IsPlayerDead(); },
+	});
+	keymapper.AddAction({
+	    "FSR",
+	    'X',
+	    [] {
+		    fsrFlag = !fsrFlag;
 	    },
 	    [&]() { return !IsPlayerDead(); },
 	});

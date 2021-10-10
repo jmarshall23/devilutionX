@@ -11,12 +11,12 @@
 
 bool CheckShader(GLuint handle, const char* desc);
 
-GLint uniform_texture_input;
-GLint uniform_const0;
-GLint uniform_const1;
-GLint uniform_const2;
-GLint uniform_const3;
-GLint uniform_proj_matrix;
+static GLint uniform_texture_input;
+static GLint uniform_const0;
+static GLint uniform_const1;
+static GLint uniform_const2;
+static GLint uniform_const3;
+static GLint uniform_proj_matrix;
 
 namespace devilution
 {
@@ -26,7 +26,7 @@ namespace devilution
 	void app_fatal(const char* pszFmt, ...);
 }
 
-bool str_replace(std::string& str, const std::string& from, const std::string& to) {
+static bool str_replace(std::string& str, const std::string& from, const std::string& to) {
 	size_t start_pos = str.find(from);
 	if (start_pos == std::string::npos)
 		return false;
@@ -36,14 +36,14 @@ bool str_replace(std::string& str, const std::string& from, const std::string& t
 	return true;
 }
 
-GLuint fsr_program = 0;
+static GLuint fsr_program = 0;
 
-void GL_InitFSR(void)
+void GL_InitRCAS(void)
 {
 	size_t ffx_a_len, ffx_fsr1_len, fsr_upscale_len, fsr_vertex_len;
 	std::string ffx_a = (char *)devilution::LoadFileInMem<unsigned char>("shaders/ffx_a.h", &ffx_a_len).get();
 	std::string ffx_fsr1 = (char*)devilution::LoadFileInMem<unsigned char>("shaders/ffx_fsr1.h", &ffx_fsr1_len).get();
-	std::string fsr_upscale_shader_buffer = (char*)devilution::LoadFileInMem<unsigned char>("shaders/fsrupscale.pixelshader", &fsr_upscale_len).get();
+	std::string fsr_upscale_shader_buffer = (char*)devilution::LoadFileInMem<unsigned char>("shaders/rcas.pixelshader", &fsr_upscale_len).get();
 	std::string fsr_upscale_shader_buffer_vertex = (char*)devilution::LoadFileInMem<unsigned char>("shaders/render.vertexshader", &fsr_vertex_len).get();
 
 	ffx_a[ffx_a_len] = 0;

@@ -1269,19 +1269,27 @@ void DrawGame(const Surface &fullOut, int x, int y)
 void DrawView(const Surface &out, int startX, int startY)
 {
 	// Render the game to the level render texture.
-	GL_BindLevelRenderTexture();
+	GL_BindLevelRenderTexture(!zoomflag && fsrFlag);
 		DrawGame(out, startX, startY);
 	GL_BindNullRenderTexture();
 
-	GL_SetFSR();
+	if (!zoomflag) {
+		if (fsrFlag) {
+			GL_BindLevelRenderTexture(false);
+			GL_SetEASU();
+			gameUpscaledTempImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth * 2, gnScreenHeight * 2);
 
-	if (zoomflag) {
-		gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth, gnScreenHeight);
+			GL_BindNullRenderTexture();
+			GL_SetRCAS();
+			gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth, gnScreenHeight);
+
+			GL_ResetFSR();
+		} else {
+			gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth * 2, gnScreenHeight * 2);
+		}
 	} else {
-		gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth * 2, gnScreenHeight * 2);
+		gameDrawImage->ClipRenderUpsidedown(out, 0, 0, 1, gnScreenWidth, gnScreenHeight);
 	}
-
-	GL_ResetFSR();
 
 	if (AutomapActive) {
 		DrawAutomap(out.subregionY(0, gnViewportHeight));

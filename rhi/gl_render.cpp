@@ -36,13 +36,17 @@ int global_alpha = 255;
 
 void GL_Backend_SetLightingParams(float* attributes, int numValues);
 void GL_Backend_ToggleLightRender(bool toggle);
-void GL_InitFSR(void);
+void GL_InitRCAS(void);
+void GL_InitEASU(void);
 void GL_Compute_SetRCAS(int displayWidth, int displayHeight);
+void GL_Compute_SetEASU(int displayWidth, int displayHeight);
 
 static bool isLightRenderEnabled = false;
 
 devilution::StormImage* gameDrawImage = nullptr;
+devilution::StormImage* gameUpscaledTempImage = nullptr;
 static devilution::StormRenderTexture* gameRenderTexture = nullptr;
+static devilution::StormRenderTexture* gameUpscaledTempRenderTexture = nullptr;
 
 namespace devilution
 {
@@ -67,14 +71,25 @@ void GL_Private_DisableLighting(const ImDrawList* parent_list, const ImDrawCmd* 
 	GL_Backend_ToggleLightRender(false);
 }
 
-void GL_Private_SetFSR(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+void GL_Private_SetRCAS(const ImDrawList* parent_list, const ImDrawCmd* cmd)
 {
 	GL_Compute_SetRCAS(gameDrawImage->Width(), gameDrawImage->Height());
 }
 
+void GL_Private_SetEASU(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	GL_Compute_SetEASU(gameDrawImage->Width(), gameDrawImage->Height());
+}
+
+
 void GL_Private_BindGameRenderTexture(const ImDrawList* parent_list, const ImDrawCmd* cmd)
 {
 	gameRenderTexture->MakeCurrent();
+}
+
+void GL_Private_BindTempGameRenderTexture(const ImDrawList* parent_list, const ImDrawCmd* cmd)
+{
+	gameUpscaledTempRenderTexture->MakeCurrent();
 }
 
 void GL_Private_DisableRenderTexture(const ImDrawList* parent_list, const ImDrawCmd* cmd)
@@ -82,14 +97,21 @@ void GL_Private_DisableRenderTexture(const ImDrawList* parent_list, const ImDraw
 	devilution::StormRenderTexture::BindNull();
 }
 
-void GL_BindLevelRenderTexture(void)
+void GL_BindLevelRenderTexture(bool bindTemp)
 {
 	if (gameRenderTexture == nullptr) {
 		gameDrawImage = devilution::StormImage::AllocateSytemImage("__screenbuf", devilution::gnScreenWidth, devilution::gnScreenHeight);
+		gameUpscaledTempImage = devilution::StormImage::AllocateSytemImage("__screenbuftemp", devilution::gnScreenWidth, devilution::gnScreenHeight);
 		gameRenderTexture = new devilution::StormRenderTexture(gameDrawImage, nullptr);
+		gameUpscaledTempRenderTexture = new devilution::StormRenderTexture(gameUpscaledTempImage, nullptr);
 	}
 
-	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_BindGameRenderTexture, nullptr);
+	if (bindTemp) {
+		ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_BindTempGameRenderTexture, nullptr);
+	}
+	else {
+		ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_BindGameRenderTexture, nullptr);
+	}
 }
 
 void GL_BindNullRenderTexture(void)
@@ -97,9 +119,14 @@ void GL_BindNullRenderTexture(void)
 	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_DisableRenderTexture, nullptr);
 }
 
-void GL_SetFSR(void)
+void GL_SetRCAS(void)
 {
-	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_SetFSR, nullptr);
+	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_SetRCAS, nullptr);
+}
+
+void GL_SetEASU(void)
+{
+	ImGui::GetBackgroundDrawList()->AddCallback(GL_Private_SetEASU, nullptr);
 }
 
 void GL_ResetFSR(void)
@@ -203,7 +230,9 @@ void GL_Init(const char* name, void* sdl_window, HWND hwnd, int width, int heigh
 
 	uiSurface = SDL_CreateRGBSurfaceWithFormat(SDL_SWSURFACE, width, height, 1, SDL_PIXELFORMAT_RGBA8888);
 
-	GL_InitFSR();
+	GL_InitRCAS();
+
+	GL_InitEASU();
 
 	GL_BeginFrame();
 }
