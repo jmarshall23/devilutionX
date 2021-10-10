@@ -3160,10 +3160,10 @@ void CreatePlrItems(int playerId)
 		SetPlrHandItem(player.InvBody[INVLOC_HAND_LEFT], gbIsHellfire ? IDI_SORCERER : 166);
 		GetPlrHandSeed(&player.InvBody[INVLOC_HAND_LEFT]);
 
-		SetPlrHandItem(player.SpdList[0], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+		SetPlrHandItem(player.SpdList[0], IDI_HEAL);
 		GetPlrHandSeed(&player.SpdList[0]);
 
-		SetPlrHandItem(player.SpdList[1], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+		SetPlrHandItem(player.SpdList[1], IDI_HEAL);
 		GetPlrHandSeed(&player.SpdList[1]);
 		break;
 
