@@ -37,6 +37,7 @@ int global_alpha = 255;
 void GL_Backend_SetLightingParams(float* attributes, int numValues);
 void GL_Backend_ToggleLightRender(bool toggle);
 void GL_InitRCAS(void);
+void GL_InitEASU(void);
 void GL_Compute_SetRCAS(int displayWidth, int displayHeight);
 
 static bool isLightRenderEnabled = false;
@@ -204,6 +205,8 @@ void GL_Init(const char* name, void* sdl_window, HWND hwnd, int width, int heigh
 	uiSurface = SDL_CreateRGBSurfaceWithFormat(SDL_SWSURFACE, width, height, 1, SDL_PIXELFORMAT_RGBA8888);
 
 	GL_InitRCAS();
+
+	GL_InitEASU();
 
 	GL_BeginFrame();
 }

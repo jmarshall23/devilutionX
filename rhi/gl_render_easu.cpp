@@ -38,12 +38,12 @@ static bool str_replace(std::string& str, const std::string& from, const std::st
 
 static GLuint fsr_program = 0;
 
-void GL_InitRCAS(void)
+void GL_InitEASU(void)
 {
 	size_t ffx_a_len, ffx_fsr1_len, fsr_upscale_len, fsr_vertex_len;
-	std::string ffx_a = (char *)devilution::LoadFileInMem<unsigned char>("shaders/ffx_a.h", &ffx_a_len).get();
+	std::string ffx_a = (char*)devilution::LoadFileInMem<unsigned char>("shaders/ffx_a.h", &ffx_a_len).get();
 	std::string ffx_fsr1 = (char*)devilution::LoadFileInMem<unsigned char>("shaders/ffx_fsr1.h", &ffx_fsr1_len).get();
-	std::string fsr_upscale_shader_buffer = (char*)devilution::LoadFileInMem<unsigned char>("shaders/rcas.pixelshader", &fsr_upscale_len).get();
+	std::string fsr_upscale_shader_buffer = (char*)devilution::LoadFileInMem<unsigned char>("shaders/easu.pixelshader", &fsr_upscale_len).get();
 	std::string fsr_upscale_shader_buffer_vertex = (char*)devilution::LoadFileInMem<unsigned char>("shaders/render.vertexshader", &fsr_vertex_len).get();
 
 	ffx_a[ffx_a_len] = 0;
@@ -104,7 +104,7 @@ struct XMUINT4 {
 	uint32_t  w;
 };
 
-void GL_Compute_SetRCAS(int displayWidth, int displayHeight)
+void GL_Compute_SetEASU(int displayWidth, int displayHeight)
 {
 	glUseProgram(fsr_program);
 
