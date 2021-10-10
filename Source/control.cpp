@@ -954,7 +954,11 @@ void InitControlPan()
 	SetSpellTrans(RSPLTYPE_SKILL);
 	//CelDrawUnsafeTo(*pBtmBuff, { 0, (PANEL_HEIGHT + 16) - 1 }, LoadCel("CtrlPan\\Panel8.CEL", PANEL_WIDTH), 1);
 
-	panel8 = StormImage::LoadImageSequence("CtrlPan\\Panel8", false, false);
+	if (Players[MyPlayerId]._pClass == HeroClass::Sorcerer)
+		panel8 = StormImage::LoadImageSequence("CtrlPan\\Panel8", false, false);
+	else
+		panel8 = StormImage::LoadImageSequence("CtrlPan\\panel8_stam", false, false);
+
 	P8Bulbs = StormImage::LoadImageSequence("CtrlPan\\P8Bulbs", false, false); // 1 life, 2 mana
 
 	talkflag = false;
@@ -1169,7 +1173,7 @@ void CheckPanelInfo()
 		AddPanelString(tempstr);
 		auto &myPlayer = Players[MyPlayerId];
 		spell_id v = myPlayer._pRSpell;
-		if (v != SPL_INVALID) {
+		if (v != SPL_INVALID && v != SPL_NULL) {
 			switch (myPlayer._pRSplType) {
 			case RSPLTYPE_SKILL:
 				strcpy(tempstr, fmt::format(_("{:s} Skill"), _(spelldata[v].sSkillText)).c_str());
