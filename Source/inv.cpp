@@ -2044,6 +2044,11 @@ bool UseInvItem(int pnum, int cii)
 		return true;
 	}
 
+	if (player._pClass != HeroClass::Sorcerer && item->_iMiscId == IMISC_MANA) {
+		player.Say(HeroSpeech::ICantUseThisYet);
+		return false;
+	}
+
 	int idata = ItemCAnimTbl[item->_iCurs];
 	if (item->_iMiscId == IMISC_BOOK)
 		PlaySFX(IS_RBOOK);

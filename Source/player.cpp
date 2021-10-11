@@ -3355,8 +3355,12 @@ void CheckPlrSpell()
 	auto &myPlayer = Players[MyPlayerId];
 
 	spell_id rspell = myPlayer._pRSpell;
-	if (rspell == SPL_INVALID) {
+	if ((rspell == SPL_INVALID || rspell == SPL_NULL) && myPlayer._pClass == HeroClass::Sorcerer) {
 		myPlayer.Say(HeroSpeech::IDontHaveASpellReady);
+		return;
+	}
+
+	if (rspell == SPL_INVALID || rspell == SPL_NULL) {
 		return;
 	}
 
