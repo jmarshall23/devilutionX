@@ -164,10 +164,20 @@ PanelEntry panelEntries[] = {
 	    []() { return StyledText { (MyPlayer->_pHitPoints != MyPlayer->_pMaxHP ? UiFlags::ColorRed : GetMaxHealthColor()), fmt::format("{:d}", MyPlayer->_pHitPoints >> 6) }; } },
 
 	{ N_("Mana"), { 88, 315 }, 33, { -3, 0 }, 0, 0, 1, false, false,
-	    []() { return StyledText { GetMaxManaColor(), fmt::format("{:d}", MyPlayer->_pMaxMana >> 6) }; } },
+	    []() {
+	        if (MyPlayer->_pClass == HeroClass::Sorcerer)
+				return StyledText { GetMaxManaColor(), fmt::format("{:d}", MyPlayer->_pMaxMana >> 6) };
+	        else
+		        return StyledText { GetMaxManaColor(), fmt::format("{:d}", MyPlayer->_pVitality) };
+		} },
 
 	{ "", { 135, 315 }, 33, { 0, 0 }, 0, 0, 1, false, false,
-	    []() { return StyledText { (MyPlayer->_pMana != MyPlayer->_pMaxMana ? UiFlags::ColorRed : GetMaxManaColor()), fmt::format("{:d}", MyPlayer->_pMana >> 6) }; } },
+	    []() {
+			if (MyPlayer->_pClass == HeroClass::Sorcerer)
+				return StyledText { (MyPlayer->_pMana != MyPlayer->_pMaxMana ? UiFlags::ColorRed : GetMaxManaColor()), fmt::format("{:d}", MyPlayer->_pMana >> 6) };
+	       else
+		        return StyledText { GetMaxManaColor(), fmt::format("{:d}", MyPlayer->_pStamina) };
+		} },
 
 	{ "", { 161, 14 }, 134, { 0, 0 }, 0, 0, 1, false, false,
 	    []() { return StyledText { UiFlags::ColorSilver, playerTable->GetValue("name", static_cast<std::size_t>(MyPlayer->_pClass)) }; } },

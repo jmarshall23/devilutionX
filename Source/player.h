@@ -291,6 +291,9 @@ struct Player {
 	uint8_t pDiabloKillLevel;
 	_difficulty pDifficulty;
 	uint32_t pDamAcFlags;
+// jmarshall
+	int _pStamina;
+// jmarshall end
 
 	void CalcScrolls();
 

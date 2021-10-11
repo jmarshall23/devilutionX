@@ -2356,6 +2356,8 @@ void CreatePlayer(int playerId, HeroClass c)
 	player._pHPBase = player._pHitPoints;
 	player._pMaxHPBase = player._pHitPoints;
 
+	player._pStamina = player._pVitality;
+
 	player._pMana = player._pMagic << 6;
 	if (player._pClass == HeroClass::Sorcerer) {
 		player._pMana *= 2;

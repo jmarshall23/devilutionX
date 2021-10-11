@@ -893,10 +893,17 @@ void DrawPlayerHud(const Surface &out)
 	float lifeHeight, manaHeight;
 
 	float lifeFilled = Players[MyPlayerId]._pHPPer;
-	float manaFilled = Players[MyPlayerId]._pManaPer;
 
 	lifeHeight = (lifeFilled / 80) * P8Bulbs->GetFrame(1).height;
-	manaHeight = (manaFilled / 80) * P8Bulbs->GetFrame(2).height;
+	
+
+	// Stamina for Warrior and rogue.
+	if (Players[MyPlayerId]._pClass == HeroClass::Sorcerer) {
+		float manaFilled = Players[MyPlayerId]._pManaPer;
+		manaHeight = (manaFilled / 80) * P8Bulbs->GetFrame(2).height;		
+	} else {
+		manaHeight = (Players[MyPlayerId]._pStamina / (Players[MyPlayerId]._pVitality)) * P8Bulbs->GetFrame(2).height; 
+	}
 
 	panel8->ClipRenderUI(out, PANEL_X, PANEL_Y - 16, 1);
 	P8Bulbs->ClipRenderUI(out, PANEL_X + LifeFlaskUpperOffset, PANEL_Y - 16, 1, 0, lifeHeight);
