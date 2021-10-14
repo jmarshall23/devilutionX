@@ -2449,8 +2449,8 @@ void GenerateLevel(lvl_entry entry)
 	}
 
 	if (currlevel < 21) {
-		ApplyShadowsPatterns();
-		PlaceMiniSet(LAMPS, 5, 10, 0, 0, false, -1);
+		//ApplyShadowsPatterns();
+		//PlaceMiniSet(LAMPS, 5, 10, 0, 0, false, -1);
 		FillFloor();
 	}
 
