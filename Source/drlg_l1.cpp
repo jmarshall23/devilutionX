@@ -2452,10 +2452,9 @@ void GenerateLevel(lvl_entry entry)
 		//ApplyShadowsPatterns();
 		//PlaceMiniSet(LAMPS, 5, 10, 0, 0, false, -1);
 		FillFloor();
-
-		for (int j = 1; j < DMAXY; j++) {
-			for (int i = 1; i < DMAXX; i++) {
-				if (dungeon[i][j - 1] == 1 && dungeon [i][j] == 1 && GenerateRnd(4) >= 2) {
+		for (int i = 0; i < DMAXX; i++) {
+			for (int j = 0; j < DMAXY; j++) {			
+				if (dungeon [i][j] == 1 && GenerateRnd(4) >= 2) {
 					switch (GenerateRnd(2)) {
 					case 1:
 						dungeon[i][j] = 209;
@@ -2464,18 +2463,25 @@ void GenerateLevel(lvl_entry entry)
 						dungeon[i][j] = 212;
 						break;
 					}
-				}
 
-				if (dungeon[i][j] == 2 && dungeon [i - 1][j] == 2 && GenerateRnd(4) >= 2) {
-					switch (GenerateRnd(2)) {						
-					    case 1:
-						    dungeon[i][j] = 211;
-						    break;
-					    default:
-						    dungeon[i][j] = 210;
-						    break;
+					j++;
+				}
+			}
+		}
+
+		for (int j = 0; j < DMAXY; j++) {
+			for (int i = 0; i < DMAXX; i++) {
+				if (dungeon[i][j] == 2 && GenerateRnd(4) >= 2) {
+					switch (GenerateRnd(2)) {
+					case 1:
+						dungeon[i][j] = 211;
+						break;
+					default:
+						dungeon[i][j] = 210;
+						break;
 					}
-					
+
+					i++;
 				}
 			}
 		}
