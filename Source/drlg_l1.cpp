@@ -1106,9 +1106,9 @@ void FirstRoom()
 		int ys = 1;
 		int ye = DMAXY - 1;
 
-		VR1 = (GenerateRnd(2) != 0);
-		VR2 = (GenerateRnd(2) != 0);
-		VR3 = (GenerateRnd(2) != 0);
+		VR1 = true;
+		VR2 = true;
+		VR3 = true;
 
 		if (!VR1 || !VR3)
 			VR2 = true;
@@ -1147,9 +1147,9 @@ void FirstRoom()
 		int xs = 1;
 		int xe = DMAXX - 1;
 
-		HR1 = GenerateRnd(2) != 0;
-		HR2 = GenerateRnd(2) != 0;
-		HR3 = GenerateRnd(2) != 0;
+		HR1 = true;
+		HR2 = true;
+		HR3 = true;
 
 		if (!HR1 || !HR3)
 			HR2 = true;
@@ -2452,6 +2452,8 @@ void GenerateLevel(lvl_entry entry)
 		//ApplyShadowsPatterns();
 		//PlaceMiniSet(LAMPS, 5, 10, 0, 0, false, -1);
 		FillFloor();
+
+		int numBodyParts = 0;
 		for (int i = 0; i < DMAXX; i++) {
 			for (int j = 0; j < DMAXY; j++) {			
 				if (dungeon [i][j] == 1 && GenerateRnd(4) >= 2) {
@@ -2465,10 +2467,17 @@ void GenerateLevel(lvl_entry entry)
 					}
 
 					j++;
+					numBodyParts++;
 				}
 			}
+
+			if (numBodyParts > 2) {
+				i += GenerateRnd(1) + 1;
+				numBodyParts = 0;
+			}			
 		}
 
+		numBodyParts = 0;
 		for (int j = 0; j < DMAXY; j++) {
 			for (int i = 0; i < DMAXX; i++) {
 				if (dungeon[i][j] == 2 && GenerateRnd(4) >= 2) {
@@ -2482,8 +2491,14 @@ void GenerateLevel(lvl_entry entry)
 					}
 
 					i++;
+					numBodyParts++;
 				}
 			}
+
+			if (numBodyParts > 2) {
+				j += GenerateRnd(1) + 1;
+				numBodyParts = 0;
+			}	
 		}
 	}
 
