@@ -1883,6 +1883,13 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 
 	auto &myPlayer = Players[MyPlayerId];
 
+// jmarshall - example to force into butcherlair
+	//if (leveltype != DTYPE_TOWN) {
+	//	setlevel = true;
+	//	setlvlnum = SL_BUTCHERLAIR;
+	//}
+// jmarshall end
+
 	if (!setlevel) {
 		CreateLevel(lvldir);
 		IncProgress();

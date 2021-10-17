@@ -27,6 +27,7 @@ namespace devilution {
 
 enum _setlevels : int8_t {
 	SL_NONE,
+	SL_BUTCHERLAIR,
 	SL_SKELKING,
 	SL_BONECHAMB,
 	SL_MAZE,

@@ -1,6 +1,7 @@
 id,name,path,CustomPalette,StartX,StartY
 DUNGEON_NEWRND1,Random1,levels\l1data\newrnd1.duntext,None,0,0
 DUNGEON_NEWRND2,Random1,levels\l1data\newrnd2.duntext,None,0,0
+DUNGEON_BUTCHER_LAIR,The Butcher's Lair,Levels\L1Data\butcher1.duntext,None,5,9
 DUNGEON_BUTCHER,The Butcher's Chamber,Levels\L1Data\rnd6.duntext,None,0,0
 DUNGEON_SKELKING_ENTRANCE,King Leoric's Tomb Entrance,Levels\L1Data\SKngDO.duntext,None,0,0
 DUNGEON_SKELKING_PREL1,King Leoric's Tomb,Levels\L1Data\SklKng1.duntext,None,0,0

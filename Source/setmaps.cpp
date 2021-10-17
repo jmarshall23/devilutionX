@@ -155,6 +155,15 @@ Object &ObjectAtPosition(Point position)
 void LoadSetMap()
 {
 	switch (setlvlnum) {
+	case SL_BUTCHERLAIR:
+		LoadPreL1Dungeon(DUNGEON_BUTCHER_LAIR);
+		LoadL1Dungeon(DUNGEON_BUTCHER_LAIR, lvlSetPiecesTables->GetInt("StartX", DUNGEON_VILE_L1), lvlSetPiecesTables->GetInt("StartY", DUNGEON_VILE_L1));
+		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_VILE_L1));
+		AddL1Objs(0, 0, MAXDUNX, MAXDUNY);
+		SetmapTransparancy(DUNGEON_BUTCHER_LAIR);
+		InitNoTriggers();
+		break;
+
 	case SL_SKELKING:
 		if (Quests[Q_SKELKING]._qactive == QUEST_INIT) {
 			Quests[Q_SKELKING]._qactive = QUEST_ACTIVE;

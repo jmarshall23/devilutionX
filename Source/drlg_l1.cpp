@@ -2566,8 +2566,10 @@ void LoadL1Dungeon(DungeonLevelId levelId, int vx, int vy)
 	if (currlevel < 17)
 		InitDungeonPieces();
 
-	SetMapMonsters(dunData.get(), { 0, 0 });
-	SetMapObjects(dunData.get(), 0, 0);
+	if (levelId != DUNGEON_BUTCHER_LAIR) {
+		SetMapMonsters(dunData.get(), { 0, 0 });
+		SetMapObjects(dunData.get(), 0, 0);
+	}	
 }
 
 void LoadPreL1Dungeon(DungeonLevelId levelId)
