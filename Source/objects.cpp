@@ -43,6 +43,8 @@ StormImage *GetObjectImage(int objectId)
 	return pObjCels[objectId];
 }
 
+int globalFrameOverride = -1;
+
 /**
  * Specifies the game type for which each shrine may appear.
  * ShrineTypeAny - sp & mp
@@ -234,6 +236,22 @@ void InitObjectDefinitionTable(void)
 	}
 }
 
+object_graphic_id ObjFileList[40];
+int numobjfiles;
+void LoadObj(object_graphic_id graphicId)
+{
+	ObjFileList[numobjfiles] = static_cast<object_graphic_id>(graphicId);
+	char filestr[32];
+	sprintf(filestr, "Objects\\%s", ObjMasterLoadList[graphicId]);
+	//if (currlevel >= 17 && currlevel < 21)
+	//	sprintf(filestr, "Objects\\%s", ObjHiveLoadList[i]);
+	//else if (currlevel >= 21)
+	//	sprintf(filestr, "Objects\\%s", ObjCryptLoadList[i]);
+	pObjCels[numobjfiles] = StormImage::LoadImageSequence(filestr, false, true);
+	//			LoadFileInMem(filestr);
+	numobjfiles++;
+}
+
 namespace {
 
 enum shrine_type : uint8_t {
@@ -277,10 +295,10 @@ enum shrine_type : uint8_t {
 int trapid;
 int trapdir;
 
-object_graphic_id ObjFileList[40];
+
 /** Specifies the number of active objects. */
 int leverid;
-int numobjfiles;
+
 
 /** Tracks progress through the tome sequence that spawns Na-Krul (see OperateNakrulBook()) */
 int NaKrulTomeSequence;
@@ -289,7 +307,6 @@ int NaKrulTomeSequence;
 int bxadd[8] = { -1, 0, 1, -1, 1, -1, 0, 1 };
 /** Specifies the Y-coordinate delta between barrels. */
 int byadd[8] = { -1, -1, -1, 0, 0, 1, 1, 1 };
-
 
 /** Maps from book_id to book name. */
 const char *const StoryBookName[] = {
@@ -840,6 +857,7 @@ void AddCryptObject(int i, int a2)
 	Objects[i]._oVar4 = Objects[i]._oAnimFrame + 1;
 }
 
+
 void SetupObject(int i, Point position, _object_id ot)
 {
 	Objects[i]._otype = ot;
@@ -867,6 +885,10 @@ void SetupObject(int i, Point position, _object_id ot)
 		Objects[i]._oAnimLen = AllObjects[ot].oAnimLen;
 		Objects[i]._oAnimFrame = AllObjects[ot].oAnimDelay;
 	}
+
+	if (globalFrameOverride != -1)
+		Objects[i]._oAnimFrame = globalFrameOverride;
+
 	Objects[i]._oAnimWidth = AllObjects[ot].oAnimWidth;
 	Objects[i]._oSolidFlag = AllObjects[ot].oSolidFlag;
 	Objects[i]._oMissFlag = AllObjects[ot].oMissFlag;
@@ -4697,6 +4719,13 @@ void SetMapObjects(const uint16_t *dunData, int startx, int starty)
 	}
 
 	ApplyObjectLighting = false;
+}
+
+void AddObjectWithFrame(_object_id ot, Point objPos, int frame)
+{
+	globalFrameOverride = frame;
+	AddObject(ot, objPos);
+	globalFrameOverride = -1;
 }
 
 void AddObject(_object_id objType, Point objPos)

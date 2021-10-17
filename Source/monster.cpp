@@ -60,8 +60,6 @@ Direction right[8] = { DIR_SW, DIR_W, DIR_NW, DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_
 /** Maps from direction to the opposite direction. */
 Direction opposite[8] = { DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_S, DIR_SW, DIR_W, DIR_NW };
 
-namespace {
-
 /** Tracks which missile files are already loaded */
 int totalmonsters;
 int monstimgtot;
@@ -455,12 +453,8 @@ void PlaceUniqueMonst(int uniqindex, int miniontype, int bosspacksize)
 		}
 	}
 	if (uniqindex == UMT_BUTCHER) {
-		bool done = false;
-		for (yp = 0; yp < MAXDUNY && !done; yp++) {
-			for (xp = 0; xp < MAXDUNX && !done; xp++) {
-				done = dPiece[xp][yp] == 367;
-			}
-		}
+		xp = 24;
+		yp = 27;
 	}
 
 	if (uniqindex == UMT_NAKRUL) {
@@ -672,11 +666,12 @@ void PlaceQuestMonsters()
 {
 	int skeltype;
 
-	if (!setlevel) {
-		if (Quests[Q_BUTCHER].IsAvailable()) {
-			PlaceUniqueMonst(UMT_BUTCHER, 0, 0);
-		}
+	if (setlevel && setlvlnum == SL_BUTCHERLAIR) {
+		AddMonsterType(UniqMonst[UMT_BUTCHER].mtype, PLACE_SPECIAL);
+		PlaceUniqueMonst(UMT_BUTCHER, 0, 0);
+	}
 
+	if (!setlevel) {		
 		if (currlevel == Quests[Q_SKELKING]._qlevel && gbIsMultiplayer) {
 			skeltype = 0;
 
@@ -3528,8 +3523,6 @@ void (*AiProc[])(int i) = {
 	&NecromorbAi,
 	&BoneDemonAi
 };
-
-} // namespace
 
 void InitLevelMonsters()
 {

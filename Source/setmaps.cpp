@@ -150,6 +150,23 @@ Object &ObjectAtPosition(Point position)
 	app_fatal("ObjectAtPosition: Active object not found at (%i,%i)", position.x, position.y);
 }
 
+void AddButcherObjs(void)
+{
+//	LoadObj(OFILE_TNUDEM);
+	LoadObj(OFILE_TNUDEW);
+
+	AddObjectWithFrame(OBJ_TNUDEW1, { 24, 24 }, 1);
+	AddObjectWithFrame(OBJ_TNUDEW1, { 27, 24 }, 1);
+
+	//AddObjectWithFrame(OBJ_TNUDEW1, { 23, 26 }, 0);
+	//AddObjectWithFrame(OBJ_TNUDEW1, { 23, 28 }, 2);
+	AddObjectWithFrame(OBJ_TNUDEW1, { 23, 30 }, 0);
+
+	//AddObjectWithFrame(OBJ_TNUDEW1, { 28, 26 }, 2);
+	//AddObjectWithFrame(OBJ_TNUDEW1, { 28, 28 }, 0);
+	AddObjectWithFrame(OBJ_TNUDEW1, { 28, 30 }, 2);
+}
+
 /**
  * @brief Load a quest map, the given map is specified via the global setlvlnum
  */
@@ -161,7 +178,7 @@ void LoadSetMap()
 		LoadL1Dungeon(DUNGEON_BUTCHER_LAIR, lvlSetPiecesTables->GetInt("StartX", DUNGEON_VILE_L1), lvlSetPiecesTables->GetInt("StartY", DUNGEON_VILE_L1));
 		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_BUTCHER_LAIR));
 		AddL1Objs(0, 0, MAXDUNX, MAXDUNY);
-		//SetmapTransparancy(DUNGEON_BUTCHER_LAIR);
+		AddButcherObjs();
 		InitNoTriggers();
 		SetAmbient(lvlSetPiecesTables->GetInt("LevelAmbientR", DUNGEON_BUTCHER_LAIR), lvlSetPiecesTables->GetInt("LevelAmbientG", DUNGEON_BUTCHER_LAIR), lvlSetPiecesTables->GetInt("LevelAmbientB", DUNGEON_BUTCHER_LAIR));
 		break;
