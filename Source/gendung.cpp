@@ -539,6 +539,10 @@ void DRLG_LPass3(int lv, int floor)
 
 			bool entireTileIsFloor = pDungeonCels->IsFloorTile(v1) && pDungeonCels->IsFloorTile(v2) && pDungeonCels->IsFloorTile(v3) && pDungeonCels->IsFloorTile(v4);
 
+			// Don't create floor tiles were lava is. 
+			if (leveltype == DTYPE_CATHEDRAL && dungeon[i][j] == 214)
+				entireTileIsFloor = true;
+
 			dPiece[xx + 0][yy + 0] = v1;
 			dPiece[xx + 1][yy + 0] = v2;
 			dPiece[xx + 0][yy + 1] = v3;
