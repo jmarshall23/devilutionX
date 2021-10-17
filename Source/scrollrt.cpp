@@ -36,8 +36,9 @@
 namespace devilution {
 
 void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns);
+void SetAmbient(float r, float g, float b);
 
-/**
+    /**
  * Specifies the current light entry.
  */
 int LightTableIndex;

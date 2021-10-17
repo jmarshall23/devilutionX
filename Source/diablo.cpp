@@ -1883,11 +1883,14 @@ void LoadGameLevel(bool firstflag, lvl_entry lvldir)
 
 	auto &myPlayer = Players[MyPlayerId];
 
+	// Reset the ambient.
+	SetAmbient(0, 0, 0);
+
 // jmarshall - example to force into butcherlair
-	//if (leveltype != DTYPE_TOWN) {
-	//	setlevel = true;
-	//	setlvlnum = SL_BUTCHERLAIR;
-	//}
+//	if (leveltype != DTYPE_TOWN) {
+//		setlevel = true;
+//		setlvlnum = SL_BUTCHERLAIR;
+//	}
 // jmarshall end
 
 	if (!setlevel) {

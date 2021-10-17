@@ -29,6 +29,10 @@ std::array<uint8_t, LIGHTSIZE> LightTables;
 bool DisableLighting;
 bool UpdateLighting;
 
+float LevelAmbientR = 0;
+float LevelAmbientG = 0;
+float LevelAmbientB = 0;
+
 /**
  * CrawlTable specifies X- and Y-coordinate deltas from a missile target coordinate.
  *
@@ -529,12 +533,23 @@ void DoLighting(Point position, int nRadius, int lnum)
 	SetLight(position, 20 + nRadius);
 }
 
+void SetAmbient(float r, float g, float b)
+{
+	LevelAmbientR = r / 255;
+	LevelAmbientG = g / 255;
+	LevelAmbientB = b / 255;
+}
+
 void UpdateHardwareLighting(int x, int y, int sx, int sy, int rows, int columns)
 {
 	static float lightInfoData[128][4];
 
 	memset(&lightInfoData[0][0], 0, sizeof(lightInfoData));
-	int numLights = 0;
+	int numLights = 1;
+
+	lightInfoData[0][0] = LevelAmbientR;
+	lightInfoData[0][1] = LevelAmbientG;
+	lightInfoData[0][2] = LevelAmbientB;
 
 	rows += MicroTileLen;
 	for (int i = 0; i < rows; i++) {

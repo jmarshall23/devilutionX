@@ -71,6 +71,8 @@ void ChangeVisionXY(int id, Point position);
 void ProcessVisionList();
 void lighting_color_cycling();
 
+void SetAmbient(float r, float g, float b);
+
 /* rdata */
 
 extern const int8_t CrawlTable[2749];

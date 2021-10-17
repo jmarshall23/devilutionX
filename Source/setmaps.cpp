@@ -17,6 +17,7 @@
 #include "utils/language.h"
 
 #include "datatable.h"
+#include "lighting.h"
 
 namespace devilution {
 
@@ -158,10 +159,11 @@ void LoadSetMap()
 	case SL_BUTCHERLAIR:
 		LoadPreL1Dungeon(DUNGEON_BUTCHER_LAIR);
 		LoadL1Dungeon(DUNGEON_BUTCHER_LAIR, lvlSetPiecesTables->GetInt("StartX", DUNGEON_VILE_L1), lvlSetPiecesTables->GetInt("StartY", DUNGEON_VILE_L1));
-		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_VILE_L1));
+		LoadPalette(lvlSetPiecesTables->GetValue("CustomPalette", DUNGEON_BUTCHER_LAIR));
 		AddL1Objs(0, 0, MAXDUNX, MAXDUNY);
-		SetmapTransparancy(DUNGEON_BUTCHER_LAIR);
+		//SetmapTransparancy(DUNGEON_BUTCHER_LAIR);
 		InitNoTriggers();
+		SetAmbient(lvlSetPiecesTables->GetInt("LevelAmbientR", DUNGEON_BUTCHER_LAIR), lvlSetPiecesTables->GetInt("LevelAmbientG", DUNGEON_BUTCHER_LAIR), lvlSetPiecesTables->GetInt("LevelAmbientB", DUNGEON_BUTCHER_LAIR));
 		break;
 
 	case SL_SKELKING:

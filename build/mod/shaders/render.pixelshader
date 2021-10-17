@@ -49,7 +49,9 @@ void main()
 		vec3 lit;
 		vec2 currentPixelPosition = vec2(gl_FragCoord.x, gl_FragCoord.y);
 
-		for(int i = 0; i < MAX_LIGHTS; i++)
+		vec3 ambientlevellight = LightInfo[0].xyz;
+
+		for(int i = 1; i < MAX_LIGHTS; i++)
 		{
 			float dist = distance(ScreenToIsometricCoordinates(currentPixelPosition.x, currentPixelPosition.y), ScreenToIsometricCoordinates(LightInfo[i].x, LightInfo[i].y));
 			float atten = clamp( 1.0 - (dist * dist)/LightInfo[i].z, 0.0, 1.0);
@@ -64,7 +66,14 @@ void main()
 		vec3 ambient = (vec3(79.0/ 255.0, 105.0/ 255.0, 136.0/ 255.0) ) * 0.3;
 		vec4 diffuse = texture(Texture, Frag_UV.st);
 
+		lit += ambientlevellight * dot(diffuse.xyz, ambientlevellight);
 		lit = ColorShiftLightingBytes(lit.x, lit.y, lit.z);
+
+		if(dot(ambientlevellight, ambientlevellight) != 0)
+		{
+			float ambientLen = dot(ambientlevellight, ambientlevellight);
+			ambient = vec3(ambientLen, ambientLen, ambientLen);	
+		}
 
 		diffuse.xyz *= mix(ambient, lit, dot(lit, lit)); //clamp(lit, 0.0, 1.0) + ambient;
 		diffuse.a *= Frag_Color.a;
