@@ -1,12 +1,12 @@
 id,name,path,numframes,width,delay,x,y,greetingsfx
-TOWN_SMITH,Griswold the Blacksmith,Towners\Smith\SmithN,16,96,3,62,76,TEXT_GRISWOLD1
-TOWN_HEALER,Pepin the Healer,Towners\Healer\Healer,20,96,6,55,90,TEXT_PEPIN1
-TOWN_DEADGUY,Wounded Townsman,Towners\Butch\Deadguy,8,96,6,20,46,TEXT_NONE
-TOWN_TAVERN,Ogden the Tavern owner,Towners\TwnF\TwnFN,16,96,3,55,74,TEXT_OGDEN1
-TOWN_STORY,Cain the Elder,Towners\Strytell\Strytell,25,96,3,62,82,TEXT_STORY1
-TOWN_DRUNK,Farnham the Drunk,Towners\Drunk\TwnDrunk,18,96,3,58,79,TEXT_FARNHAM1
-TOWN_WITCH,Adria the Witch,Towners\TownWmn1\Witch,19,96,6,16,67,TEXT_ADRIA1
-TOWN_BMAID,Gillian the Barmaid,Towners\TownWmn1\WmnN,18,96,6,53,75,TEXT_GILLIAN1
+TOWN_SMITH,Griswold the Blacksmith,Towners\Smith\SmithN,16,96,3,78,85,TEXT_GRISWOLD1
+TOWN_HEALER,Pepin the Healer,Towners\Healer\Healer,20,96,6,71,99,TEXT_PEPIN1
+TOWN_DEADGUY,Wounded Townsman,Towners\Butch\Deadguy,8,96,6,73,61,TEXT_NONE
+TOWN_TAVERN,Ogden the Tavern owner,Towners\TwnF\TwnFN,16,96,3,69,85,TEXT_OGDEN1
+TOWN_STORY,Cain the Elder,Towners\Strytell\Strytell,25,96,3,76,91,TEXT_STORY1
+TOWN_DRUNK,Farnham the Drunk,Towners\Drunk\TwnDrunk,18,96,3,82,89,TEXT_FARNHAM1
+TOWN_WITCH,Adria the Witch,Towners\TownWmn1\Witch,19,96,6,100,72,TEXT_ADRIA1
+TOWN_BMAID,Gillian the Barmaid,Towners\TownWmn1\WmnN,18,96,6,68,86,TEXT_GILLIAN1
 TOWN_PEGBOY,Wirt the Peg-legged boy,Towners\TownBoy\PegKid1,20,96,6,43,25,TEXT_WIRT1
-TOWN_PRIEST,Tremain the Priest,Towners\priestfl1\priest8,32,96,6,42,76,TEXT_PRIEST1
+TOWN_PRIEST,Tremain the Priest,Towners\priestfl1\priest8,32,96,6,94,59,TEXT_PRIEST1
 TOWN_COW,Cow,Towners\Animals\Cow,12,128,3,-1,-1,TEXT_NONE

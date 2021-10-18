@@ -19,7 +19,7 @@ public class NewMapWindow : EditorWindow
 
 	void OnGUI()
 	{
-		string[] dimensions = new string[] { "2", "3", "4", "6", "8", "12", "16", "24" };
+		string[] dimensions = new string[] { "2", "3", "4", "6", "8", "12", "16", "24", "28", "32", "36", "40", "44", "48", "52", "56", "58", "62", "66", "70", "74", "78", "82", "86", "90" };
 
 		GUILayout.BeginArea(new Rect(10, 10, 300, 130));
 			GUILayout.BeginHorizontal();

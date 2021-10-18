@@ -1,4 +1,5 @@
 id,name,path,CustomPalette,StartX,StartY,LevelAmbientR,LevelAmbientG,LevelAmbientB
+DUNGEON_TOWN,Town,levels\towndata\newtown.duntext,None,0,0,0,0,0
 DUNGEON_NEWRND1,Random1,levels\l1data\newrnd1.duntext,None,0,0,0,0,0
 DUNGEON_NEWRND2,Random1,levels\l1data\newrnd2.duntext,None,0,0,0,0,0
 DUNGEON_BUTCHER_LAIR,The Butcher's Lair,Levels\L1Data\butcher1.duntext,None,5,9,150,0,0

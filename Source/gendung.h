@@ -16,8 +16,8 @@
 
 namespace devilution {
 
-#define DMAXX 40
-#define DMAXY 40
+#define DMAXX 90
+#define DMAXY 90
 
 #define MAXDUNX (16 + DMAXX * 2 + 16)
 #define MAXDUNY (16 + DMAXY * 2 + 16)

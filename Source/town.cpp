@@ -165,10 +165,7 @@ void DrlgTPass3()
 		}
 	}
 
-	FillSector("Levels\\TownData\\Sector1s.duntext", 46, 57);
-	FillSector("Levels\\TownData\\Sector2s.duntext", 46, 0);
-	FillSector("Levels\\TownData\\Sector3s.duntext", 0, 57);
-	FillSector("Levels\\TownData\\Sector4s.duntext", 0, 0);
+	FillSector("Levels\\TownData\\newtown.duntext", 0, 0);
 
 	if (!IsWarpOpen(DTYPE_CATACOMBS)) {
 		FillTile(48, 32, 320);
@@ -195,10 +192,8 @@ void DrlgTPass3()
 	}
 
 	if (Quests[Q_PWATER]._qactive != QUEST_DONE && Quests[Q_PWATER]._qactive != QUEST_NOTAVAIL) {
-		FillTile(60, 81, 342);
-	} else {
-		FillTile(60, 81, 71);
-	}
+		FillTile(74, 90, 342);
+	} 
 }
 
 } // namespace
@@ -271,10 +266,10 @@ void TownOpenGrave()
 
 void CreateTown(lvl_entry entry)
 {
-	dminx = 10;
-	dminy = 10;
-	dmaxx = 84;
-	dmaxy = 84;
+	dminx = 0;
+	dminy = 0;
+	dmaxx = 90;
+	dmaxy = 90;
 	DRLG_InitTrans();
 	DRLG_Init_Globals();
 
